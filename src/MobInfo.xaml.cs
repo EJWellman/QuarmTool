@@ -57,7 +57,6 @@ namespace EQTool
                         }
                     }
                 }
-
             }
             catch (Exception ex)
             {

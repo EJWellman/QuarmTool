@@ -82,10 +82,10 @@ namespace EQTool
             return true;
         }
 
-        public void CheckForUpdates(object sender, EventArgs e)
-        {
-            new UpdateService().CheckForUpdates(Version);
-        }
+        //public void CheckForUpdates(object sender, EventArgs e)
+        //{
+        //    new UpdateService().CheckForUpdates(Version);
+        //}
 
         public class ExceptionRequest
         {
@@ -291,7 +291,7 @@ namespace EQTool
                     MobInfoMenuItem,
                     SettingsMenuItem,
                     gitHubMenuItem,
-                    updates,
+                    //updates,
                     version,
                     new System.Windows.Forms.MenuItem("Exit", OnExit)
                 }),
@@ -391,17 +391,17 @@ namespace EQTool
                     var idletime = GetIdleTime();
                     var spellstuff = container.Resolve<SpellWindowViewModel>();
                     var logParser = container.Resolve<LogParser>();
-                    if (spellstuff != null)
-                    {
-                        if (spellstuff.SpellList.Count() < 2 && (DateTime.UtcNow - logParser.LastYouActivity).TotalMinutes > 10 && idletime.TotalMinutes > 10)
-                        {
-                            new UpdateService().CheckForUpdates(Version);
-                        }
-                    }
-                    else if ((DateTime.UtcNow - logParser.LastYouActivity).TotalMinutes > 10 && idletime.TotalMinutes > 10)
-                    {
-                        new UpdateService().CheckForUpdates(Version);
-                    }
+                    //if (spellstuff != null)
+                    //{
+                    //    if (spellstuff.SpellList.Count() < 2 && (DateTime.UtcNow - logParser.LastYouActivity).TotalMinutes > 10 && idletime.TotalMinutes > 10)
+                    //    {
+                    //        new UpdateService().CheckForUpdates(Version);
+                    //    }
+                    //}
+                    //else if ((DateTime.UtcNow - logParser.LastYouActivity).TotalMinutes > 10 && idletime.TotalMinutes > 10)
+                    //{
+                    //    new UpdateService().CheckForUpdates(Version);
+                    //}
                 }
                 finally
                 {
