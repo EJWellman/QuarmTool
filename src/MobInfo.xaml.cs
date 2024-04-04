@@ -18,16 +18,16 @@ namespace EQTool
     {
         private readonly LogParser logParser;
         private readonly ViewModels.MobInfoViewModel mobInfoViewModel;
-        private readonly WikiApi wikiApi;
+        private readonly JsonDataService _jsonService;
         private readonly PigParseApi pigParseApi;
         private readonly ActivePlayer activePlayer;
-        public MobInfo(ActivePlayer activePlayer, PigParseApi pigParseApi, WikiApi wikiApi, LogParser logParser, EQToolSettings settings, EQToolSettingsLoad toolSettingsLoad, LoggingService loggingService)
+        public MobInfo(ActivePlayer activePlayer, PigParseApi pigParseApi, JsonDataService jsonService, LogParser logParser, EQToolSettings settings, EQToolSettingsLoad toolSettingsLoad, LoggingService loggingService)
             : base(settings.MobWindowState, toolSettingsLoad, settings)
         {
             loggingService.Log(string.Empty, EventType.OpenMobInfo, activePlayer?.Player?.Server);
             this.activePlayer = activePlayer;
             this.pigParseApi = pigParseApi;
-            this.wikiApi = wikiApi;
+            this._jsonService = jsonService;
             this.logParser = logParser;
             DataContext = mobInfoViewModel = new ViewModels.MobInfoViewModel();
             InitializeComponent();
@@ -41,21 +41,21 @@ namespace EQTool
             {
                 if (e.Name != mobInfoViewModel.Name)
                 {
-                    mobInfoViewModel.Results = wikiApi.GetData(e.Name);
+                    mobInfoViewModel.Results = _jsonService.GetData(e.Name);
                     var items = mobInfoViewModel.KnownLoot.Where(a => a.HaseUrl == Visibility.Visible).Select(a => a.Name?.Trim()).Where(a => !string.IsNullOrWhiteSpace(a)).ToList();
-                    if (activePlayer?.Player?.Server != null && items.Any())
-                    {
-                        var itemprices = pigParseApi.GetData(items, activePlayer.Player.Server.Value);
-                        foreach (var item in itemprices)
-                        {
-                            var loot = mobInfoViewModel.KnownLoot.FirstOrDefault(a => a.Name.Equals(item.ItemName, StringComparison.OrdinalIgnoreCase));
-                            if (loot != null)
-                            {
-                                loot.Price = item.TotalWTSLast6MonthsAverage.ToString();
-                                loot.PriceUrl = $"https://pigparse.azurewebsites.net/ItemDetails/{item.EQitemId}";
-                            }
-                        }
-                    }
+                    //if (activePlayer?.Player?.Server != null && items.Any())
+                    //{
+                    //    var itemprices = pigParseApi.GetData(items, activePlayer.Player.Server.Value);
+                    //    foreach (var item in itemprices)
+                    //    {
+                    //        var loot = mobInfoViewModel.KnownLoot.FirstOrDefault(a => a.Name.Equals(item.ItemName, StringComparison.OrdinalIgnoreCase));
+                    //        if (loot != null)
+                    //        {
+                    //            loot.Price = item.TotalWTSLast6MonthsAverage.ToString();
+                    //            loot.PriceUrl = $"https://pigparse.azurewebsites.net/ItemDetails/{item.EQitemId}";
+                    //        }
+                    //    }
+                    //}
                 }
             }
             catch (Exception ex)

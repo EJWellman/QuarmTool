@@ -374,6 +374,7 @@
       <DependentUpon>MobInfo.xaml</DependentUpon>
     </Compile>
     <Compile Include="Models\EQMapColor.cs" />
+    <Compile Include="Models\JsonMonster.cs" />
     <Compile Include="Models\PlayerRequest.cs" />
     <Compile Include="PanAndZoomCanvas.xaml.cs">
       <DependentUpon>PanAndZoomCanvas.xaml</DependentUpon>
@@ -414,7 +415,7 @@
     <Compile Include="Services\Parsing\EnterWorldParser.cs" />
     <Compile Include="Services\PlayerGroupService.cs" />
     <Compile Include="Services\SignalrPlayerHub.cs" />
-    <Compile Include="Services\PqdiApi.cs" />
+    <Compile Include="Services\JsonDataService.cs" />
     <Compile Include="Services\ZoneActivityTrackingService.cs" />
     <Compile Include="Services\PlayerTrackerService.cs" />
     <Compile Include="Services\Spells\Log\PlayerWhoLogParse.cs" />
@@ -442,6 +443,7 @@
     <Compile Include="Shapes\ArrowEnds.cs" />
     <Compile Include="Shapes\ArrowLine.cs" />
     <Compile Include="Shapes\ArrowLineBase.cs" />
+    <Compile Include="Tools\DataTableConverter.cs" />
     <Compile Include="ViewModels\ActivePlayerInfo.cs" />
     <Compile Include="Services\TimersService.cs" />
     <Compile Include="ViewModels\ZoneViewModel.cs" />

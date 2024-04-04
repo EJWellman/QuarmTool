@@ -1,7 +1,12 @@
-﻿using EQTool.ViewModels;
+﻿using EQTool.Models;
+using EQTool.Tools;
+using EQTool.ViewModels;
 using EQToolShared.Map;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Data;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -9,13 +14,42 @@ using System.Web;
 
 namespace EQTool.Services
 {
-    public class PqdiApi
+    public class JsonDataService
     {
         private readonly ActivePlayer activePlayer;
-        public PqdiApi(ActivePlayer activePlayer)
+		private static DataTable monsterTable;
+        public JsonDataService(ActivePlayer activePlayer)
         {
             this.activePlayer = activePlayer;
         }
+
+		public bool LoadMonsterDataTable(string zoneName)
+		{
+			//REPLACE THIS WITH CONFIG OPTION
+			string filename = "B:\\Hobby Stuff\\QuarmTool Data\\json\\Initial NPC set.json";
+			FileStream fs = new FileStream(filename, FileMode.Open, FileAccess.Read);
+
+			string jsonContents;
+			using (StreamReader sr = new StreamReader(fs))
+			{
+				jsonContents = sr.ReadToEnd();
+			}
+
+			List<JsonMonster> monsterList = JsonConvert.DeserializeObject<List<JsonMonster>>(jsonContents);
+			DataTable tempMonsterTable = monsterList.ToDataTable();
+			string columnFilter = "zone_code";
+
+			monsterTable = tempMonsterTable.AsEnumerable().Where(r =>
+				r.Field<string>(columnFilter) == zoneName
+			).CopyToDataTable();
+
+			if(monsterTable.Rows.Count > 0 )
+			{
+				return true;
+			}
+
+			return false;
+		}
 
         public class DisambigData
         {
@@ -103,7 +137,15 @@ namespace EQTool.Services
             try
             {
                 name = HttpUtility.UrlEncode(name.Trim().Replace(' ', '_'));
-                var url = $"https://wiki.project1999.com/{name}?action=raw";
+
+				var matchedMonster = monsterTable.AsEnumerable().FirstOrDefault(r =>
+					r.Field<string>("name") == name
+				);
+
+				var test = DataTableConverter.CreateItemFromRow<JsonMonster>(matchedMonster);
+
+
+				var url = $"https://wiki.project1999.com/{name}?action=raw";
                 var res = App.httpclient.GetAsync(url).Result;
                 if (res.StatusCode == System.Net.HttpStatusCode.OK)
                 {

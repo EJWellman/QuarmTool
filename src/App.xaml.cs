@@ -253,7 +253,7 @@ namespace EQTool
             MobInfoMenuItem = new System.Windows.Forms.MenuItem("Mob Info", ToggleMobInfoWindow);
             var gitHubMenuItem = new System.Windows.Forms.MenuItem("Suggestions", Suggestions);
             var whythepig = new System.Windows.Forms.MenuItem("Pigparse Discord", WhyThePig);
-            var updates = new System.Windows.Forms.MenuItem("Check for Update", CheckForUpdates);
+            //var updates = new System.Windows.Forms.MenuItem("Check for Update", CheckForUpdates);
             var versionstring = Assembly.GetExecutingAssembly().GetName().Version.ToString();
             var beta = false;
 

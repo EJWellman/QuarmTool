@@ -37,18 +37,6 @@ namespace EQTool.Services
             try
             {
                 Debug.WriteLine($"Zone activity seen: {e.Name}");
-                pigParseApi.SendNPCActivity(new NPCActivityRequest
-                {
-                    NPCData = new NPCData
-                    {
-                        LocX = LastLocation.HasValue ? LastLocation.Value.X : (double?)null,
-                        LocY = LastLocation.HasValue ? LastLocation.Value.Y : (double?)null,
-                        Zone = activePlayer.Player.Zone,
-                        Name = e.Name
-                    },
-                    Server = activePlayer.Player.Server.Value,
-                    IsDeath = false
-                });
             }
             catch (Exception ex)
             {
