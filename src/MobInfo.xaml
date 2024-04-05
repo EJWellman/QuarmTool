@@ -84,11 +84,11 @@
                         <TextBlock Text="{Binding Level}"></TextBlock>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="AgroRadius" Width="100"></TextBlock>
-                        <TextBlock Text="{Binding AgroRadius}"></TextBlock>
+                        <TextBlock Text="Primary Faction" Width="100"></TextBlock>
+                        <TextBlock Text="{Binding PrimaryFaction}"></TextBlock>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="RunSpeed" Width="100"></TextBlock>
+                        <TextBlock Text="Run Speed" Width="100"></TextBlock>
                         <TextBlock Text="{Binding RunSpeed}"></TextBlock>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal">

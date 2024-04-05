@@ -1,12 +1,16 @@
-﻿using EQTool.Services.Parsing;
+﻿using EQTool.Models;
+using EQTool.Services.Parsing;
+using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text.RegularExpressions;
 using System.Web;
 using System.Windows;
+using System.Xml.Linq;
 
 namespace EQTool.ViewModels
 {
@@ -101,7 +105,22 @@ namespace EQTool.ViewModels
             }
         }
 
-        private string _ErrorResults = string.Empty;
+		private JsonMonster newResults;
+		public JsonMonster NewResults
+		{
+			get => newResults;
+			set
+			{
+				newResults = value;
+				_ErrorResults = string.Empty;
+				ConvertToViewModel(value);
+				OnPropertyChanged();
+				OnPropertyChanged(nameof(HasErrors));
+				OnPropertyChanged(nameof(HasNoErrors));
+			}
+		}
+
+		private string _ErrorResults = string.Empty;
 
         public string ErrorResults
         {
@@ -127,11 +146,11 @@ namespace EQTool.ViewModels
             {
                 _Url = value;
                 OnPropertyChanged();
-                OnPropertyChanged(nameof(HaseUrl));
+                OnPropertyChanged(nameof(HasUrl));
             }
         }
 
-        public Visibility HaseUrl => string.IsNullOrWhiteSpace(Url) ? Visibility.Collapsed : Visibility.Visible;
+        public Visibility HasUrl => string.IsNullOrWhiteSpace(Url) ? Visibility.Collapsed : Visibility.Visible;
 
         private string _ImageUrl = string.Empty;
 
@@ -193,14 +212,14 @@ namespace EQTool.ViewModels
             }
         }
 
-        private string _AgroRadius = string.Empty;
+        private string _AggroRadius = string.Empty;
 
-        public string AgroRadius
+        public string AggroRadius
         {
-            get => _AgroRadius;
+            get => _AggroRadius;
             set
             {
-                _AgroRadius = value;
+                _AggroRadius = value;
                 OnPropertyChanged();
             }
         }
@@ -293,9 +312,21 @@ namespace EQTool.ViewModels
                 _DamagePerHit = value;
                 OnPropertyChanged();
             }
-        }
+		}
 
-        private ObservableCollection<TestUriViewModel> _Specials = new ObservableCollection<TestUriViewModel>();
+		private string primaryFaction = string.Empty;
+
+		public string PrimaryFaction
+		{
+			get => primaryFaction;
+			set
+			{
+				primaryFaction = value;
+				OnPropertyChanged();
+			}
+		}
+
+		private ObservableCollection<TestUriViewModel> _Specials = new ObservableCollection<TestUriViewModel>();
 
         public ObservableCollection<TestUriViewModel> Specials
         {
@@ -355,7 +386,7 @@ namespace EQTool.ViewModels
             }
         }
 
-        public static string StripHTML(string input)
+		public static string StripHTML(string input)
         {
             return Regex.Replace(input, "<.*?>", string.Empty);
         }
@@ -371,8 +402,8 @@ namespace EQTool.ViewModels
             {
                 _ = Specials.Remove(item);
             }
-            var knwonloot = KnownLoot.ToList();
-            foreach (var item in knwonloot)
+            var knownLoot = KnownLoot.ToList();
+            foreach (var item in knownLoot)
             {
                 _ = KnownLoot.Remove(item);
             }
@@ -410,7 +441,7 @@ namespace EQTool.ViewModels
                 Level = new string(lvl);
             }
 
-            AgroRadius = GetValue("agro_radius", splits);
+            AggroRadius = GetValue("agro_radius", splits);
             RunSpeed = GetValue("run_speed", splits);
             AC = GetValue("AC", splits);
             HP = GetValue("HP", splits);
@@ -431,7 +462,7 @@ namespace EQTool.ViewModels
             }
 
             var knownloot = MobInfoParsing.ParseKnownLoot(splits);
-            foreach (var item in knownloot)
+            foreach (var item in knownLoot)
             {
                 KnownLoot.Add(item);
             }
@@ -480,7 +511,61 @@ namespace EQTool.ViewModels
             }
         }
 
-        private string GetValue(string propname, List<string> lines)
+		public void ConvertToViewModel(JsonMonster monster)
+		{
+			Name = monster.name;
+			Race = monster.race;
+			Class = monster.npc_class;
+			Level = (monster.maxlevel != 0 ? $"{monster.level}-{monster.maxlevel}" : $"{monster.level}");
+			RunSpeed = monster.runspeed.ToString();
+			AC = monster.AC.ToString();
+			HP = monster.hp.ToString();
+			HPRegen = monster.combat_hp_regen.ToString();
+			ManaRegen = monster.combat_mana_regen.ToString();
+			AttacksPerRound = monster.attack_count.ToString();
+			AttackSpeed = monster.attack_delay.ToString();
+			DamagePerHit = $"{monster.mindmg}-{monster.maxdmg}";
+			PrimaryFaction = monster.primary_faction;
+
+			//var infos = MobInfoParsing.ParseSpecials(splits);
+			//foreach (var item in infos)
+			//{
+			//	Specials.Add(item);
+			//}
+
+			//var knownloot = MobInfoParsing.ParseKnownLoot(splits);
+			//foreach (var item in knownLoot)
+			//{
+			//	KnownLoot.Add(item);
+			//}
+
+			//infos = MobInfoParsing.ParseFactions(splits);
+			//foreach (var item in infos)
+			//{
+			//	Factions.Add(item);
+			//}
+
+			//infos = MobInfoParsing.ParseOpposingFactions(splits);
+			//foreach (var item in infos)
+			//{
+			//	OpposingFactions.Add(item);
+			//}
+
+			//infos = MobInfoParsing.ParseRelatedQuests(splits);
+			//foreach (var item in infos)
+			//{
+			//	RelatedQuests.Add(item);
+			//}
+
+			string pqdi_url = @"https://www.pqdi.cc/";
+
+			Url = $"{pqdi_url}npc/{monster.id}";
+
+			//var imageurl = GetValue("imagefilename", splits);
+
+		}
+
+		private string GetValue(string propname, List<string> lines)
         {
             var ret = lines.FirstOrDefault(a => a.StartsWith(propname));
             if (string.IsNullOrWhiteSpace(ret))
@@ -496,5 +581,9 @@ namespace EQTool.ViewModels
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
         }
+		public void PokeMe()
+		{
+			OnPropertyChanged();
+		}
     }
 }

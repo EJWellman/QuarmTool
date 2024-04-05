@@ -114,7 +114,7 @@ namespace EQTool.Services
             return data.FirstOrDefault()?.Name;
         }
 
-        public string GetData(string name)
+        public JsonMonster GetData(string name)
         {
             var currentzone = activePlayer?.Player?.Zone;
             if (name == "Snitch" && currentzone == "mischiefplane")
@@ -138,49 +138,17 @@ namespace EQTool.Services
             {
                 name = HttpUtility.UrlEncode(name.Trim().Replace(' ', '_'));
 
-				var matchedMonster = monsterTable.AsEnumerable().FirstOrDefault(r =>
+				DataRow matchedMonster = monsterTable.AsEnumerable().FirstOrDefault(r =>
 					r.Field<string>("name") == name
 				);
 
-				var test = DataTableConverter.CreateItemFromRow<JsonMonster>(matchedMonster);
+				if (matchedMonster != null)
+				{
+					JsonMonster match = DataTableConverter.CreateItemFromRow<JsonMonster>(matchedMonster);
+					match.name = match.name.Trim().Replace('_', ' ');
+					return match;
+				}
 
-
-				var url = $"https://wiki.project1999.com/{name}?action=raw";
-                var res = App.httpclient.GetAsync(url).Result;
-                if (res.StatusCode == System.Net.HttpStatusCode.OK)
-                {
-                    var response = res.Content.ReadAsStringAsync().Result;
-                    if (response.StartsWith("#REDIRECT"))
-                    {
-                        name = response.Replace("#REDIRECT", string.Empty)?.Replace("[[:", string.Empty)?.Replace("[[", string.Empty)?.Replace("]]", string.Empty)?.Trim();
-                        name = HttpUtility.UrlEncode(name.Replace(' ', '_'));
-                        url = $"https://wiki.project1999.com/{name}?action=raw";
-                        res = App.httpclient.GetAsync(url).Result;
-                        if (res.StatusCode == System.Net.HttpStatusCode.OK)
-                        {
-                            return res.Content.ReadAsStringAsync().Result;
-                        }
-                    }
-                    else if (response.StartsWith("Disambig"))
-                    {
-                        name = Disambig(response, currentzone);
-                        if (!string.IsNullOrWhiteSpace(name))
-                        {
-                            name = HttpUtility.UrlEncode(name.Replace(' ', '_'));
-                            url = $"https://wiki.project1999.com/{name}?action=raw";
-                            res = App.httpclient.GetAsync(url).Result;
-                            if (res.StatusCode == System.Net.HttpStatusCode.OK)
-                            {
-                                return res.Content.ReadAsStringAsync().Result;
-                            }
-                        }
-
-                    }
-                    else
-                    {
-                        return response;
-                    }
-                }
             }
             catch (System.AggregateException er)
             {
@@ -204,7 +172,7 @@ namespace EQTool.Services
                 throw new System.Exception(msg + e.Message);
             }
 
-            return string.Empty;
+            return null;
         }
     }
 }
