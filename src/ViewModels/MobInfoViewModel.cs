@@ -28,7 +28,26 @@ namespace EQTool.ViewModels
             }
         }
 
-        private string _Url = string.Empty;
+		private int value;
+		public int Value
+		{
+			get => value;
+			set
+			{
+				this.value = value;
+				OnPropertyChanged();
+				OnPropertyChanged(nameof(HasUrl));
+				OnPropertyChanged(nameof(HasNoUrl));
+
+			}
+		}
+
+		public string DisplayText
+		{
+			get => Value > 0 ? $"+{Value} - {Name}" : $"{Value} - {Name}";
+		}
+
+		private string _Url = string.Empty;
 
         public string Url
         {
@@ -37,14 +56,14 @@ namespace EQTool.ViewModels
             {
                 _Url = value;
                 OnPropertyChanged();
-                OnPropertyChanged(nameof(HaseUrl));
-                OnPropertyChanged(nameof(HaseNoUrl));
+                OnPropertyChanged(nameof(HasUrl));
+                OnPropertyChanged(nameof(HasNoUrl));
             }
         }
 
-        public Visibility HaseNoUrl => string.IsNullOrWhiteSpace(Url) ? Visibility.Visible : Visibility.Collapsed;
+        public Visibility HasNoUrl => string.IsNullOrWhiteSpace(Url) ? Visibility.Visible : Visibility.Collapsed;
 
-        public Visibility HaseUrl => string.IsNullOrWhiteSpace(Url) ? Visibility.Collapsed : Visibility.Visible;
+        public Visibility HasUrl => string.IsNullOrWhiteSpace(Url) ? Visibility.Collapsed : Visibility.Visible;
 
         public event PropertyChangedEventHandler PropertyChanged;
         protected void OnPropertyChanged([CallerMemberName] string name = null)
@@ -513,6 +532,9 @@ namespace EQTool.ViewModels
 
 		public void ConvertToViewModel(JsonMonster monster)
 		{
+			string pqdi_url = @"https://www.pqdi.cc/";
+
+
 			Name = monster.name;
 			Race = monster.race;
 			Class = monster.npc_class;
@@ -526,6 +548,15 @@ namespace EQTool.ViewModels
 			AttackSpeed = monster.attack_delay.ToString();
 			DamagePerHit = $"{monster.mindmg}-{monster.maxdmg}";
 			PrimaryFaction = monster.primary_faction;
+			foreach (JsonMonsterFaction faction in monster.Factions)
+			{
+				Factions.Add(new TestUriViewModel
+				{
+					Name = faction.faction_name,
+					Value = faction.faction_hit,
+					Url = $"{pqdi_url}faction/{faction.faction_id}"
+				});
+			}
 
 			//var infos = MobInfoParsing.ParseSpecials(splits);
 			//foreach (var item in infos)
@@ -557,7 +588,6 @@ namespace EQTool.ViewModels
 			//	RelatedQuests.Add(item);
 			//}
 
-			string pqdi_url = @"https://www.pqdi.cc/";
 
 			Url = $"{pqdi_url}npc/{monster.id}";
 

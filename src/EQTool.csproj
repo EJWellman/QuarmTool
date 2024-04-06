@@ -375,6 +375,7 @@
     </Compile>
     <Compile Include="Models\EQMapColor.cs" />
     <Compile Include="Models\JsonMonster.cs" />
+    <Compile Include="Models\JsonMonsterFaction.cs" />
     <Compile Include="Models\PlayerRequest.cs" />
     <Compile Include="PanAndZoomCanvas.xaml.cs">
       <DependentUpon>PanAndZoomCanvas.xaml</DependentUpon>

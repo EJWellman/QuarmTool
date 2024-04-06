@@ -54,6 +54,8 @@ namespace EQTool.Models
 		public int see_improved_hide { get; set; }
 		public string special_abilities { get; set; }
 		public int unique_spawn_by_name { get; set; }
+
+		public List<JsonMonsterFaction> Factions { get; set; }
 		#endregion
 
 		
