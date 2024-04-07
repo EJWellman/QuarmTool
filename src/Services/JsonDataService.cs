@@ -19,6 +19,7 @@ namespace EQTool.Services
 		private readonly ActivePlayer activePlayer;
 		private static DataTable monsterTable;
 		private static DataTable factionTable;
+		private static DataTable dropsTable;
 		public JsonDataService(ActivePlayer activePlayer)
 		{
 			this.activePlayer = activePlayer;
@@ -48,7 +49,8 @@ namespace EQTool.Services
 			{
 				//If monsters were found, load additional data
 				LoadFactionDataTable(zoneCode);
-
+				List<int> lootTableIds = monsterTable.AsEnumerable().Select(r => r.Field<int>("loottable_id")).ToList();
+				LoadDropsDataTable(lootTableIds);
 
 				return true;
 			}
@@ -77,6 +79,34 @@ namespace EQTool.Services
 			).CopyToDataTable();
 
 			if (factionTable.Rows.Count > 0)
+			{
+				return true;
+			}
+
+			return false;
+		}
+
+		private bool LoadDropsDataTable(List<int> loottableIds)
+		{
+			//REPLACE THIS WITH CONFIG OPTION
+			string factionFilename = "B:\\Hobby Stuff\\QuarmTool Data\\json\\Initial Drops set.json";
+			FileStream fs = new FileStream(factionFilename, FileMode.Open, FileAccess.Read);
+
+			string jsonContents;
+			using (StreamReader sr = new StreamReader(fs))
+			{
+				jsonContents = sr.ReadToEnd();
+			}
+
+			List<JsonMonsterDrops> dropsList = JsonConvert.DeserializeObject<List<JsonMonsterDrops>>(jsonContents);
+			DataTable tempDropsTable = dropsList.ToDataTable();
+			string columnFilter = "loottable_id";
+
+			dropsTable = tempDropsTable.AsEnumerable().Where(r =>
+				loottableIds.Contains(r.Field<int>(columnFilter))
+			).CopyToDataTable();
+
+			if (dropsTable.Rows.Count > 0)
 			{
 				return true;
 			}
@@ -181,19 +211,33 @@ namespace EQTool.Services
 					match.name = match.name.Trim().Replace('_', ' ');
 
 					List<JsonMonsterFaction> matchedFactions = factionTable.AsEnumerable().Where(f =>
-						f.Field<int>("npc_id") == match.id
-					).Select(row => new JsonMonsterFaction
-					{
-						npc_id = (int)row["npc_id"],
-						zone_code = (string)row["zone_code"],
-						faction_id = (int)row["faction_id"],
-						faction_name = (string)row["faction_name"],
-						faction_hit = (int)row["faction_hit"]
-					}
+						f.Field<int>("npc_id") == match.id)
+						.Select(row => new JsonMonsterFaction
+						{
+							npc_id = (int)row["npc_id"],
+							zone_code = (string)row["zone_code"],
+							faction_id = (int)row["faction_id"],
+							faction_name = (string)row["faction_name"],
+							faction_hit = (int)row["faction_hit"]
+						}
 					).ToList();
 					if (matchedFactions != null && matchedFactions.Count > 0)
 					{
 						match.Factions = matchedFactions;
+					}
+					List<JsonMonsterDrops> matchedDrops = dropsTable.AsEnumerable().Where(d =>
+						d.Field<int>("loottable_id") == match.loottable_id)
+						.Select(row => new JsonMonsterDrops
+						{
+							loottable_id = (int)row["loottable_id"],
+							drop_chance = (float)row["drop_chance"],
+							item_id = (int)row["item_id"],
+							item_name = (string)row["item_name"]
+						}
+					).ToList();
+					if(matchedDrops != null && matchedDrops.Count > 0)
+					{
+						match.Drops = matchedDrops;
 					}
 
 					return match;

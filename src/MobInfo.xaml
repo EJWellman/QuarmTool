@@ -59,7 +59,7 @@
                         <TextBlock FontSize="16" Foreground="Red" Text="{Binding ErrorResults}"></TextBlock>
                     </StackPanel>
                 </StackPanel>
-                <StackPanel Orientation="Vertical" Margin="0, 0, 8, 0" Width="200" Visibility="{Binding HasNoErrors}">
+                <StackPanel Orientation="Vertical" Margin="0, 0, 8, 0" Width="245" Visibility="{Binding HasNoErrors}">
                     <StackPanel Orientation="Horizontal">
                         <TextBlock Text="Name" Width="100"></TextBlock>
                         <TextBlock>
@@ -127,42 +127,8 @@
                                 <StackPanel>
                                     <TextBlock>
                                          <Hyperlink NavigateUri="{Binding Url}" RequestNavigate="Hyperlink_RequestNavigate">
-                                          <TextBlock Text="{Binding DisplayText}" Style="{StaticResource MyMobUrlSyle}"></TextBlock>     
-                                             <!--<Button Visibility="{Binding HasUrl}" Margin="1" FontSize="7" Width="14" Height="14" Padding="0" ToolTip="Open in Web Browser" Click="Hyperlink_RequestNavigatebutton">
-                                                <Image Source="pack://application:,,,/HyperlinkForward.png"/>
-                                            </Button>-->
+                                          <TextBlock Text="{Binding DisplayText}" Style="{StaticResource MyMobUrlSyle}"></TextBlock>
                                          </Hyperlink> 
-                                    </TextBlock>
-                                </StackPanel>
-                            </DataTemplate>
-                        </ListView.ItemTemplate>
-                        <ListView.ItemContainerStyle>
-                            <Style TargetType="{x:Type ListViewItem}">
-                                <Setter Property="Background" Value="Transparent" />
-                                <Setter Property="Template">
-                                    <Setter.Value>
-                                        <ControlTemplate TargetType="{x:Type ListViewItem}">
-                                            <ContentPresenter />
-                                        </ControlTemplate>
-                                    </Setter.Value>
-                                </Setter>
-                            </Style>
-                        </ListView.ItemContainerStyle>
-                    </ListView>
-                    <TextBlock>Opposing Factions</TextBlock>
-                    <ListView Margin="10, 0, 0, 0" Style="{StaticResource MyListViewStyle}" ItemsSource="{Binding OpposingFactions}">
-                        <ListView.ItemTemplate>
-                            <DataTemplate>
-                                <StackPanel>
-                                    <TextBlock Visibility="{Binding HasUrl}">
-                                         <Hyperlink NavigateUri="{Binding Url}" RequestNavigate="Hyperlink_RequestNavigate">
-                                          <TextBlock Text="{Binding Name}" Style="{StaticResource MyMobUrlSyle}"></TextBlock>     
-                                             <Button Visibility="{Binding HasUrl}" Margin="1" FontSize="7" Width="14" Height="14" Padding="0" ToolTip="Open in Web Browser" Click="Hyperlink_RequestNavigatebutton">
-                                                <Image Source="pack://application:,,,/HyperlinkForward.png"/>
-                                            </Button>
-                                         </Hyperlink> 
-                                        </TextBlock>
-                                    <TextBlock Visibility="{Binding HasNoUrl}" Text="{Binding Name}">
                                     </TextBlock>
                                 </StackPanel>
                             </DataTemplate>
@@ -212,55 +178,30 @@
                         </ListView.ItemContainerStyle>
                     </ListView>
                 </StackPanel>
-                <StackPanel Orientation="Vertical" Visibility="{Binding HasNoErrors}">
+                <StackPanel Orientation="Vertical" Visibility="{Binding HasNoErrors}" Width="245">
                     <TextBlock>Known Loot</TextBlock>
-                    <ListView Margin="10, 0, 0, 0" Style="{StaticResource MyListViewStyle}" ItemsSource="{Binding KnownLoot}" MaxHeight="300">
-                        <ListView.View>
-                            <GridView>
-                                <GridViewColumn Header="Name">
-                                    <GridViewColumn.CellTemplate>
-                                        <DataTemplate>
-                                            <StackPanel Orientation="Horizontal" MinWidth="100">
-                                                <TextBlock Visibility="{Binding HasUrl}">
-                                                    <Hyperlink NavigateUri="{Binding Url}" RequestNavigate="Hyperlink_RequestNavigate">
-                                                        <TextBlock Text="{Binding Name}" Style="{StaticResource MyMobUrlSyle}"></TextBlock>     
-                                                    </Hyperlink> 
-                                                </TextBlock>
-                                                <TextBlock Visibility="{Binding HasNoUrl}" Text="{Binding Name}" Style="{StaticResource MyMobTextBoxWindowSyle}"></TextBlock>
-                                            </StackPanel>
-                                        </DataTemplate>
-                                    </GridViewColumn.CellTemplate>
-                                </GridViewColumn>
-                                <GridViewColumn Header="Price">
-                                    <GridViewColumn.CellTemplate>
-                                        <DataTemplate>
-                                            <StackPanel Orientation="Horizontal" MinWidth="40">
-                                                <TextBlock Visibility="{Binding HasePriceUrl}">
-                                                    <Hyperlink NavigateUri="{Binding PriceUrl}" RequestNavigate="Hyperlink_RequestNavigate">
-                                                        <TextBlock Text="{Binding Price}" Style="{StaticResource MyMobUrlSyle}"></TextBlock>     
-                                                    </Hyperlink> 
-                                                </TextBlock>
-
-                                                <TextBlock Visibility="{Binding HasePriceUrlNoUrl}" Text="{Binding Price}" Style="{StaticResource MyMobTextBoxWindowSyle}"></TextBlock>
-
-                                            </StackPanel>
-                                        </DataTemplate>
-                                    </GridViewColumn.CellTemplate>
-                                </GridViewColumn>
-                            </GridView>
-                        </ListView.View>
-                        <ListView.ItemContainerStyle>
-                            <Style TargetType="{x:Type ListViewItem}">
-                                <Setter Property="Background" Value="Transparent" />
-                                <Setter Property="Template">
-                                    <Setter.Value>
-                                        <ControlTemplate TargetType="{x:Type ListViewItem}">
-                                            <GridViewRowPresenter   />
-                                        </ControlTemplate>
-                                    </Setter.Value>
-                                </Setter>
-                            </Style>
-                        </ListView.ItemContainerStyle>
+                    <ListView Margin="10, 0, 0, 0" Style="{StaticResource MyListViewStyle}" ItemsSource="{Binding KnownLoot}" 
+                              ScrollViewer.VerticalScrollBarVisibility="Visible" ScrollViewer.CanContentScroll="False"
+                              MaxHeight="245">
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal" MinWidth="100">
+                                    <TextBlock Visibility="{Binding HasUrl}">
+                                        <Hyperlink NavigateUri="{Binding Url}" RequestNavigate="Hyperlink_RequestNavigate">
+                                            <TextBlock Style="{StaticResource MyMobUrlSyle}">
+                                                <TextBlock.Text>
+                                                    <MultiBinding StringFormat="{}{0} - {1}%">
+                                                        <Binding Path="Name"/>
+                                                        <Binding Path="Value"/>
+                                                    </MultiBinding>
+                                                </TextBlock.Text>
+                                            </TextBlock>
+                                            <!--<TextBlock Text="{Binding Name}" Style="{StaticResource MyMobUrlSyle}"></TextBlock>-->     
+                                        </Hyperlink> 
+                                    </TextBlock>
+                                </StackPanel>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
                     </ListView>
                     <TextBlock>Specials</TextBlock>
                     <ListView Margin="10, 0, 0, 0" Style="{StaticResource MyListViewStyle}" ItemsSource="{Binding Specials}">

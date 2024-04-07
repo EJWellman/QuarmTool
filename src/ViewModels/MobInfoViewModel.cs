@@ -70,9 +70,119 @@ namespace EQTool.ViewModels
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
         }
-    }
+	}
+	public class FactionHitViewModel : INotifyPropertyChanged
+	{
+		private string _Name = string.Empty;
 
-    public class PricingUriViewModel : TestUriViewModel
+		public string Name
+		{
+			get => _Name;
+			set
+			{
+				_Name = !string.IsNullOrWhiteSpace(value) ? Regex.Replace(value, " {2,}", " ").Trim() : value;
+				OnPropertyChanged();
+			}
+		}
+
+		private int value;
+		public int Value
+		{
+			get => value;
+			set
+			{
+				this.value = value;
+				OnPropertyChanged();
+				OnPropertyChanged(nameof(HasUrl));
+				OnPropertyChanged(nameof(HasNoUrl));
+
+			}
+		}
+
+		public string DisplayText
+		{
+			get => Value > 0 ? $"+{Value} - {Name}" : $"{Value} - {Name}";
+		}
+
+		private string _Url = string.Empty;
+
+		public string Url
+		{
+			get => _Url;
+			set
+			{
+				_Url = value;
+				OnPropertyChanged();
+				OnPropertyChanged(nameof(HasUrl));
+				OnPropertyChanged(nameof(HasNoUrl));
+			}
+		}
+
+		public Visibility HasNoUrl => string.IsNullOrWhiteSpace(Url) ? Visibility.Visible : Visibility.Collapsed;
+
+		public Visibility HasUrl => string.IsNullOrWhiteSpace(Url) ? Visibility.Collapsed : Visibility.Visible;
+
+		public event PropertyChangedEventHandler PropertyChanged;
+		protected void OnPropertyChanged([CallerMemberName] string name = null)
+		{
+			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
+		}
+	}
+	public class MobDropViewModel : INotifyPropertyChanged
+	{
+		private string _Name = string.Empty;
+
+		public string Name
+		{
+			get => _Name;
+			set
+			{
+				_Name = !string.IsNullOrWhiteSpace(value) ? Regex.Replace(value, " {2,}", " ").Trim() : value;
+				OnPropertyChanged();
+			}
+		}
+
+		private float value;
+		public float Value
+		{
+			get => value;
+			set
+			{
+				this.value = value;
+				OnPropertyChanged();
+				OnPropertyChanged(nameof(HasUrl));
+				OnPropertyChanged(nameof(HasNoUrl));
+
+			}
+		}
+
+
+		private string _Url = string.Empty;
+
+		public string Url
+		{
+			get => _Url;
+			set
+			{
+				_Url = value;
+				OnPropertyChanged();
+				OnPropertyChanged(nameof(HasUrl));
+				OnPropertyChanged(nameof(HasNoUrl));
+			}
+		}
+
+		public Visibility HasNoUrl => string.IsNullOrWhiteSpace(Url) ? Visibility.Visible : Visibility.Collapsed;
+
+		public Visibility HasUrl => string.IsNullOrWhiteSpace(Url) ? Visibility.Collapsed : Visibility.Visible;
+
+		public event PropertyChangedEventHandler PropertyChanged;
+		protected void OnPropertyChanged([CallerMemberName] string name = null)
+		{
+			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
+		}
+	}
+
+	public class PricingUriViewModel : TestUriViewModel
     {
         private string _Price = string.Empty;
 
@@ -117,7 +227,7 @@ namespace EQTool.ViewModels
             {
                 _Results = value;
                 _ErrorResults = string.Empty;
-                Parse();
+                //Parse();
                 OnPropertyChanged();
                 OnPropertyChanged(nameof(HasErrors));
                 OnPropertyChanged(nameof(HasNoErrors));
@@ -357,9 +467,9 @@ namespace EQTool.ViewModels
             }
         }
 
-        private ObservableCollection<PricingUriViewModel> _KnownLoot = new ObservableCollection<PricingUriViewModel>();
+        private ObservableCollection<MobDropViewModel> _KnownLoot = new ObservableCollection<MobDropViewModel>();
 
-        public ObservableCollection<PricingUriViewModel> KnownLoot
+        public ObservableCollection<MobDropViewModel> KnownLoot
         {
             get => _KnownLoot;
             set
@@ -369,9 +479,9 @@ namespace EQTool.ViewModels
             }
         }
 
-        private ObservableCollection<TestUriViewModel> _Factions = new ObservableCollection<TestUriViewModel>();
+        private ObservableCollection<FactionHitViewModel> _Factions = new ObservableCollection<FactionHitViewModel>();
 
-        public ObservableCollection<TestUriViewModel> Factions
+        public ObservableCollection<FactionHitViewModel> Factions
         {
             get => _Factions;
             set
@@ -410,6 +520,7 @@ namespace EQTool.ViewModels
             return Regex.Replace(input, "<.*?>", string.Empty);
         }
 
+		/*
         private void Parse()
         {
             if (string.IsNullOrWhiteSpace(Results))
@@ -529,6 +640,7 @@ namespace EQTool.ViewModels
                 ImageUrl = $"https://wiki.project1999.com/images/{imageurl}";
             }
         }
+		*/
 
 		public void ConvertToViewModel(JsonMonster monster)
 		{
@@ -548,13 +660,30 @@ namespace EQTool.ViewModels
 			AttackSpeed = monster.attack_delay.ToString();
 			DamagePerHit = $"{monster.mindmg}-{monster.maxdmg}";
 			PrimaryFaction = monster.primary_faction;
+			if(Factions.Count > 0)
+			{
+				Factions.Clear();
+			}
+			if (KnownLoot.Count > 0)
+			{
+				KnownLoot.Clear();
+			}
 			foreach (JsonMonsterFaction faction in monster.Factions)
 			{
-				Factions.Add(new TestUriViewModel
+				Factions.Add(new FactionHitViewModel
 				{
 					Name = faction.faction_name,
 					Value = faction.faction_hit,
 					Url = $"{pqdi_url}faction/{faction.faction_id}"
+				});
+			}
+			foreach(JsonMonsterDrops drop in monster.Drops)
+			{
+				KnownLoot.Add(new MobDropViewModel
+				{
+					Name = drop.item_name,
+					Value = drop.drop_chance,
+					Url = $"{pqdi_url}item/{drop.item_id}"
 				});
 			}
 

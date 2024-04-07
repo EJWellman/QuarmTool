@@ -55,7 +55,8 @@ namespace EQTool.Models
 		public string special_abilities { get; set; }
 		public int unique_spawn_by_name { get; set; }
 
-		public List<JsonMonsterFaction> Factions { get; set; }
+		public List<JsonMonsterFaction> Factions { get; set; } = new List<JsonMonsterFaction>();
+		public List<JsonMonsterDrops> Drops { get; set; } = new List<JsonMonsterDrops>();
 		#endregion
 
 		
