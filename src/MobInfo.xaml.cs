@@ -57,6 +57,14 @@ namespace EQTool
 					//        }
 					//    }
 					//}
+					FactionHitsStack.Visibility = mobInfoViewModel.HasFactionHits;
+					QuestsStack.Visibility = mobInfoViewModel.HasQuests;
+					KnownLootStack.Visibility = mobInfoViewModel.HasKnownLoot;
+					SpecialAbilitiesStack.Visibility = mobInfoViewModel.HasSpecials;
+					invis_rad.IsChecked = mobInfoViewModel.See_Invis;
+					ivu_rad.IsChecked = mobInfoViewModel.See_Invis_Undead;
+					sneak_rad.IsChecked = mobInfoViewModel.See_Sneak;
+					ihide_rad.IsChecked = mobInfoViewModel.See_Imp_Hide;
 				}
             }
             catch (Exception ex)

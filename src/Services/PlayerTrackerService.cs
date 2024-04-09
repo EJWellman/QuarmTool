@@ -147,7 +147,8 @@ namespace EQTool.Services
             lock (ContainerLock)
             {
                 CurrentZone = activePlayer.Player?.Zone;
-                Debug.WriteLine("Clearing zone Players");
+				_jsonDataService.LoadMonsterDataTable(CurrentZone);
+				Debug.WriteLine("Clearing zone Players");
                 PlayersInZones.Clear();
             }
         }

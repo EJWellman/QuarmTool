@@ -14,19 +14,19 @@ using System.Xml.Linq;
 
 namespace EQTool.ViewModels
 {
-    public class TestUriViewModel : INotifyPropertyChanged
-    {
-        private string _Name = string.Empty;
+	public class TestUriViewModel : INotifyPropertyChanged
+	{
+		private string _Name = string.Empty;
 
-        public string Name
-        {
-            get => _Name;
-            set
-            {
-                _Name = !string.IsNullOrWhiteSpace(value) ? Regex.Replace(value, " {2,}", " ").Trim() : value;
-                OnPropertyChanged();
-            }
-        }
+		public string Name
+		{
+			get => _Name;
+			set
+			{
+				_Name = !string.IsNullOrWhiteSpace(value) ? Regex.Replace(value, " {2,}", " ").Trim() : value;
+				OnPropertyChanged();
+			}
+		}
 
 		private int value;
 		public int Value
@@ -49,27 +49,27 @@ namespace EQTool.ViewModels
 
 		private string _Url = string.Empty;
 
-        public string Url
-        {
-            get => _Url;
-            set
-            {
-                _Url = value;
-                OnPropertyChanged();
-                OnPropertyChanged(nameof(HasUrl));
-                OnPropertyChanged(nameof(HasNoUrl));
-            }
-        }
+		public string Url
+		{
+			get => _Url;
+			set
+			{
+				_Url = value;
+				OnPropertyChanged();
+				OnPropertyChanged(nameof(HasUrl));
+				OnPropertyChanged(nameof(HasNoUrl));
+			}
+		}
 
-        public Visibility HasNoUrl => string.IsNullOrWhiteSpace(Url) ? Visibility.Visible : Visibility.Collapsed;
+		public Visibility HasNoUrl => string.IsNullOrWhiteSpace(Url) ? Visibility.Visible : Visibility.Collapsed;
 
-        public Visibility HasUrl => string.IsNullOrWhiteSpace(Url) ? Visibility.Collapsed : Visibility.Visible;
+		public Visibility HasUrl => string.IsNullOrWhiteSpace(Url) ? Visibility.Collapsed : Visibility.Visible;
 
-        public event PropertyChangedEventHandler PropertyChanged;
-        protected void OnPropertyChanged([CallerMemberName] string name = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
-        }
+		public event PropertyChangedEventHandler PropertyChanged;
+		protected void OnPropertyChanged([CallerMemberName] string name = null)
+		{
+			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
+		}
 	}
 	public class FactionHitViewModel : INotifyPropertyChanged
 	{
@@ -183,56 +183,56 @@ namespace EQTool.ViewModels
 	}
 
 	public class PricingUriViewModel : TestUriViewModel
-    {
-        private string _Price = string.Empty;
+	{
+		private string _Price = string.Empty;
 
-        public string Price
-        {
-            get => _Price;
-            set
-            {
-                _Price = value;
-                OnPropertyChanged();
-            }
-        }
+		public string Price
+		{
+			get => _Price;
+			set
+			{
+				_Price = value;
+				OnPropertyChanged();
+			}
+		}
 
-        private string _PriceUrl = string.Empty;
+		private string _PriceUrl = string.Empty;
 
-        public string PriceUrl
-        {
-            get => _PriceUrl;
-            set
-            {
-                _PriceUrl = value;
-                OnPropertyChanged();
-                OnPropertyChanged(nameof(HasePriceUrl));
-                OnPropertyChanged(nameof(HasePriceUrlNoUrl));
-            }
-        }
+		public string PriceUrl
+		{
+			get => _PriceUrl;
+			set
+			{
+				_PriceUrl = value;
+				OnPropertyChanged();
+				OnPropertyChanged(nameof(HasePriceUrl));
+				OnPropertyChanged(nameof(HasePriceUrlNoUrl));
+			}
+		}
 
-        public Visibility HasePriceUrlNoUrl => string.IsNullOrWhiteSpace(PriceUrl) ? Visibility.Visible : Visibility.Collapsed;
+		public Visibility HasePriceUrlNoUrl => string.IsNullOrWhiteSpace(PriceUrl) ? Visibility.Visible : Visibility.Collapsed;
 
-        public Visibility HasePriceUrl => string.IsNullOrWhiteSpace(PriceUrl) ? Visibility.Collapsed : Visibility.Visible;
-    }
+		public Visibility HasePriceUrl => string.IsNullOrWhiteSpace(PriceUrl) ? Visibility.Collapsed : Visibility.Visible;
+	}
 
-    public class MobInfoViewModel : INotifyPropertyChanged
-    {
-        public string Title { get; set; } = "Mob Info v" + App.Version;
-        private string _Results = string.Empty;
+	public class MobInfoViewModel : INotifyPropertyChanged
+	{
+		public string Title { get; set; } = "Mob Info v" + App.Version;
+		private string _Results = string.Empty;
 
-        public string Results
-        {
-            get => _Results;
-            set
-            {
-                _Results = value;
-                _ErrorResults = string.Empty;
-                //Parse();
-                OnPropertyChanged();
-                OnPropertyChanged(nameof(HasErrors));
-                OnPropertyChanged(nameof(HasNoErrors));
-            }
-        }
+		public string Results
+		{
+			get => _Results;
+			set
+			{
+				_Results = value;
+				_ErrorResults = string.Empty;
+				//Parse();
+				OnPropertyChanged();
+				OnPropertyChanged(nameof(HasErrors));
+				OnPropertyChanged(nameof(HasNoErrors));
+			}
+		}
 
 		private JsonMonster newResults;
 		public JsonMonster NewResults
@@ -251,196 +251,196 @@ namespace EQTool.ViewModels
 
 		private string _ErrorResults = string.Empty;
 
-        public string ErrorResults
-        {
-            get => _ErrorResults;
-            set
-            {
-                _ErrorResults = value;
-                OnPropertyChanged();
-                OnPropertyChanged(nameof(HasErrors));
-                OnPropertyChanged(nameof(HasNoErrors));
-            }
-        }
+		public string ErrorResults
+		{
+			get => _ErrorResults;
+			set
+			{
+				_ErrorResults = value;
+				OnPropertyChanged();
+				OnPropertyChanged(nameof(HasErrors));
+				OnPropertyChanged(nameof(HasNoErrors));
+			}
+		}
 
-        public Visibility HasNoErrors => !string.IsNullOrWhiteSpace(_ErrorResults) ? Visibility.Collapsed : Visibility.Visible;
-        public Visibility HasErrors => !string.IsNullOrWhiteSpace(_ErrorResults) ? Visibility.Visible : Visibility.Collapsed;
+		public Visibility HasNoErrors => !string.IsNullOrWhiteSpace(_ErrorResults) ? Visibility.Collapsed : Visibility.Visible;
+		public Visibility HasErrors => !string.IsNullOrWhiteSpace(_ErrorResults) ? Visibility.Visible : Visibility.Collapsed;
 
-        private string _Url = string.Empty;
+		private string _Url = string.Empty;
 
-        public string Url
-        {
-            get => _Url;
-            set
-            {
-                _Url = value;
-                OnPropertyChanged();
-                OnPropertyChanged(nameof(HasUrl));
-            }
-        }
+		public string Url
+		{
+			get => _Url;
+			set
+			{
+				_Url = value;
+				OnPropertyChanged();
+				OnPropertyChanged(nameof(HasUrl));
+			}
+		}
 
-        public Visibility HasUrl => string.IsNullOrWhiteSpace(Url) ? Visibility.Collapsed : Visibility.Visible;
+		public Visibility HasUrl => string.IsNullOrWhiteSpace(Url) ? Visibility.Collapsed : Visibility.Visible;
 
-        private string _ImageUrl = string.Empty;
+		private string _ImageUrl = string.Empty;
 
-        public string ImageUrl
-        {
-            get => _ImageUrl;
-            set
-            {
-                _ImageUrl = value;
-                OnPropertyChanged();
-            }
-        }
+		public string ImageUrl
+		{
+			get => _ImageUrl;
+			set
+			{
+				_ImageUrl = value;
+				OnPropertyChanged();
+			}
+		}
 
-        private string _Name = string.Empty;
+		private string _Name = string.Empty;
 
-        public string Name
-        {
-            get => _Name;
-            set
-            {
-                _Name = value?.Trim();
-                OnPropertyChanged();
-            }
-        }
+		public string Name
+		{
+			get => _Name;
+			set
+			{
+				_Name = value?.Trim();
+				OnPropertyChanged();
+			}
+		}
 
-        private string _Race = string.Empty;
+		private string _Race = string.Empty;
 
-        public string Race
-        {
-            get => _Race;
-            set
-            {
-                _Race = value;
-                OnPropertyChanged();
-            }
-        }
+		public string Race
+		{
+			get => _Race;
+			set
+			{
+				_Race = value;
+				OnPropertyChanged();
+			}
+		}
 
-        private string _Class = string.Empty;
+		private string _Class = string.Empty;
 
-        public string Class
-        {
-            get => _Class;
-            set
-            {
-                _Class = value;
-                OnPropertyChanged();
-            }
-        }
+		public string Class
+		{
+			get => _Class;
+			set
+			{
+				_Class = value;
+				OnPropertyChanged();
+			}
+		}
 
-        private string _Level = string.Empty;
+		private string _Level = string.Empty;
 
-        public string Level
-        {
-            get => _Level;
-            set
-            {
-                _Level = value;
-                OnPropertyChanged();
-            }
-        }
+		public string Level
+		{
+			get => _Level;
+			set
+			{
+				_Level = value;
+				OnPropertyChanged();
+			}
+		}
 
-        private string _AggroRadius = string.Empty;
+		private string _AggroRadius = string.Empty;
 
-        public string AggroRadius
-        {
-            get => _AggroRadius;
-            set
-            {
-                _AggroRadius = value;
-                OnPropertyChanged();
-            }
-        }
+		public string AggroRadius
+		{
+			get => _AggroRadius;
+			set
+			{
+				_AggroRadius = value;
+				OnPropertyChanged();
+			}
+		}
 
-        private string _RunSpeed = string.Empty;
+		private string _RunSpeed = string.Empty;
 
-        public string RunSpeed
-        {
-            get => _RunSpeed;
-            set
-            {
-                _RunSpeed = value;
-                OnPropertyChanged();
-            }
-        }
-        private string _AC = string.Empty;
+		public string RunSpeed
+		{
+			get => _RunSpeed;
+			set
+			{
+				_RunSpeed = value;
+				OnPropertyChanged();
+			}
+		}
+		private string _AC = string.Empty;
 
-        public string AC
-        {
-            get => _AC;
-            set
-            {
-                _AC = value;
-                OnPropertyChanged();
-            }
-        }
-        private string _HP = string.Empty;
+		public string AC
+		{
+			get => _AC;
+			set
+			{
+				_AC = value;
+				OnPropertyChanged();
+			}
+		}
+		private string _HP = string.Empty;
 
-        public string HP
-        {
-            get => _HP;
-            set
-            {
-                _HP = value;
-                OnPropertyChanged();
-            }
-        }
-        private string _HPRegen = string.Empty;
+		public string HP
+		{
+			get => _HP;
+			set
+			{
+				_HP = value;
+				OnPropertyChanged();
+			}
+		}
+		private string _HPRegen = string.Empty;
 
-        public string HPRegen
-        {
-            get => _HPRegen;
-            set
-            {
-                _HPRegen = value;
-                OnPropertyChanged();
-            }
-        }
+		public string HPRegen
+		{
+			get => _HPRegen;
+			set
+			{
+				_HPRegen = value;
+				OnPropertyChanged();
+			}
+		}
 
-        private string _ManaRegen = string.Empty;
+		private string _ManaRegen = string.Empty;
 
-        public string ManaRegen
-        {
-            get => _ManaRegen;
-            set
-            {
-                _ManaRegen = value;
-                OnPropertyChanged();
-            }
-        }
-        private string _AttacksPerRound = string.Empty;
+		public string ManaRegen
+		{
+			get => _ManaRegen;
+			set
+			{
+				_ManaRegen = value;
+				OnPropertyChanged();
+			}
+		}
+		private string _AttacksPerRound = string.Empty;
 
-        public string AttacksPerRound
-        {
-            get => _AttacksPerRound;
-            set
-            {
-                _AttacksPerRound = value;
-                OnPropertyChanged();
-            }
-        }
-        private string _AttackSpeed = string.Empty;
+		public string AttacksPerRound
+		{
+			get => _AttacksPerRound;
+			set
+			{
+				_AttacksPerRound = value;
+				OnPropertyChanged();
+			}
+		}
+		private string _AttackSpeed = string.Empty;
 
-        public string AttackSpeed
-        {
-            get => _AttackSpeed;
-            set
-            {
-                _AttackSpeed = value;
-                OnPropertyChanged();
-            }
-        }
-        private string _DamagePerHit = string.Empty;
+		public string AttackSpeed
+		{
+			get => _AttackSpeed;
+			set
+			{
+				_AttackSpeed = value;
+				OnPropertyChanged();
+			}
+		}
+		private string _DamagePerHit = string.Empty;
 
-        public string DamagePerHit
-        {
-            get => _DamagePerHit;
-            set
-            {
-                _DamagePerHit = value;
-                OnPropertyChanged();
-            }
+		public string DamagePerHit
+		{
+			get => _DamagePerHit;
+			set
+			{
+				_DamagePerHit = value;
+				OnPropertyChanged();
+			}
 		}
 
 		private string primaryFaction = string.Empty;
@@ -455,70 +455,182 @@ namespace EQTool.ViewModels
 			}
 		}
 
+		private string resist_Poison = string.Empty;
+
+		public string Resist_Poison
+		{
+			get => resist_Poison;
+			set
+			{
+				resist_Poison = value;
+				OnPropertyChanged();
+			}
+		}
+
+		private string resist_Disease = string.Empty;
+
+		public string Resist_Disease
+		{
+			get => resist_Disease;
+			set
+			{
+				resist_Disease = value;
+				OnPropertyChanged();
+			}
+		}
+
+		private string resist_Magic = string.Empty;
+
+		public string Resist_Magic
+		{
+			get => resist_Magic;
+			set
+			{
+				resist_Magic = value;
+				OnPropertyChanged();
+			}
+		}
+
+		private string resist_Fire = string.Empty;
+
+		public string Resist_Fire
+		{
+			get => resist_Fire;
+			set
+			{
+				resist_Fire = value;
+				OnPropertyChanged();
+			}
+		}
+
+		private string resist_Cold = string.Empty;
+
+		public string Resist_Cold
+		{
+			get => resist_Cold;
+			set
+			{
+				resist_Cold = value;
+				OnPropertyChanged();
+			}
+		}
+
+		private bool see_Invis;
+		public bool See_Invis
+		{
+			get => see_Invis;
+			set
+			{
+				see_Invis = value;
+				OnPropertyChanged();
+			}
+		}
+
+		private bool see_Invis_Undead;
+		public bool See_Invis_Undead
+		{
+			get => see_Invis_Undead;
+			set
+			{
+				see_Invis_Undead = value;
+				OnPropertyChanged();
+			}
+		}
+
+		private bool see_Sneak;
+		public bool See_Sneak
+		{
+			get => see_Sneak;
+			set
+			{
+				see_Sneak = value;
+				OnPropertyChanged();
+			}
+		}
+
+		private bool see_Imp_Hide;
+		public bool See_Imp_Hide
+		{
+			get => see_Imp_Hide;
+			set
+			{
+				see_Imp_Hide = value;
+				OnPropertyChanged();
+			}
+		}
+
+		public Visibility HasSpecials
+		{
+			get => _Specials.Count > 0 ? Visibility.Visible : Visibility.Collapsed;
+		}
+
 		private ObservableCollection<TestUriViewModel> _Specials = new ObservableCollection<TestUriViewModel>();
 
-        public ObservableCollection<TestUriViewModel> Specials
-        {
-            get => _Specials;
-            set
-            {
-                _Specials = value;
-                OnPropertyChanged();
-            }
-        }
+		public ObservableCollection<TestUriViewModel> Specials
+		{
+			get => _Specials;
+			set
+			{
+				_Specials = value;
+				OnPropertyChanged();
+			}
+		}
 
-        private ObservableCollection<MobDropViewModel> _KnownLoot = new ObservableCollection<MobDropViewModel>();
+		public Visibility HasKnownLoot
+		{
+			get => _KnownLoot.Count > 0 ? Visibility.Visible : Visibility.Collapsed;
+		}
 
-        public ObservableCollection<MobDropViewModel> KnownLoot
-        {
-            get => _KnownLoot;
-            set
-            {
-                _KnownLoot = value;
-                OnPropertyChanged();
-            }
-        }
+		private ObservableCollection<MobDropViewModel> _KnownLoot = new ObservableCollection<MobDropViewModel>();
 
-        private ObservableCollection<FactionHitViewModel> _Factions = new ObservableCollection<FactionHitViewModel>();
+		public ObservableCollection<MobDropViewModel> KnownLoot
+		{
+			get => _KnownLoot;
+			set
+			{
+				_KnownLoot = value;
+				OnPropertyChanged();
+			}
+		}
 
-        public ObservableCollection<FactionHitViewModel> Factions
-        {
-            get => _Factions;
-            set
-            {
-                _Factions = value;
-                OnPropertyChanged();
-            }
-        }
+		public Visibility HasFactionHits
+		{
+			get => _Factions.Count > 0 ? Visibility.Visible : Visibility.Collapsed;
+		}
 
-        private ObservableCollection<TestUriViewModel> _OpposingFactions = new ObservableCollection<TestUriViewModel>();
+		private ObservableCollection<FactionHitViewModel> _Factions = new ObservableCollection<FactionHitViewModel>();
 
-        public ObservableCollection<TestUriViewModel> OpposingFactions
-        {
-            get => _OpposingFactions;
-            set
-            {
-                _OpposingFactions = value;
-                OnPropertyChanged();
-            }
-        }
+		public ObservableCollection<FactionHitViewModel> Factions
+		{
+			get => _Factions;
+			set
+			{
+				_Factions = value;
+				OnPropertyChanged();
+			}
+		}
 
-        private ObservableCollection<TestUriViewModel> _RelatedQuests = new ObservableCollection<TestUriViewModel>();
+		public Visibility HasQuests
+		{
+			get => _RelatedQuests.Count > 0 ? Visibility.Visible : Visibility.Collapsed;
+		}
 
-        public ObservableCollection<TestUriViewModel> RelatedQuests
-        {
-            get => _RelatedQuests;
-            set
-            {
-                _RelatedQuests = value;
-                OnPropertyChanged();
-            }
-        }
+		private ObservableCollection<TestUriViewModel> _RelatedQuests = new ObservableCollection<TestUriViewModel>();
+
+		public ObservableCollection<TestUriViewModel> RelatedQuests
+		{
+			get => _RelatedQuests;
+			set
+			{
+				_RelatedQuests = value;
+				OnPropertyChanged();
+			}
+		}
 
 		public static string StripHTML(string input)
-        {
-            return Regex.Replace(input, "<.*?>", string.Empty);
-        }
+		{
+			return Regex.Replace(input, "<.*?>", string.Empty);
+		}
 
 		/*
         private void Parse()
@@ -644,105 +756,134 @@ namespace EQTool.ViewModels
 
 		public void ConvertToViewModel(JsonMonster monster)
 		{
-			string pqdi_url = @"https://www.pqdi.cc/";
+			if (monster != null)
+			{
+				string pqdi_url = @"https://www.pqdi.cc/";
+
+				Name = monster.name;
+				Race = monster.race;
+				Class = monster.npc_class;
+				Level = (monster.maxlevel != 0 ? $"{monster.level}-{monster.maxlevel}" : $"{monster.level}");
+				RunSpeed = monster.runspeed.ToString();
+				AC = monster.AC.ToString();
+				HP = monster.hp.ToString();
+				HPRegen = monster.combat_hp_regen.ToString();
+				ManaRegen = monster.combat_mana_regen.ToString();
+				AttacksPerRound = monster.attack_count.ToString();
+				AttackSpeed = monster.attack_delay.ToString();
+				DamagePerHit = $"{monster.mindmg}-{monster.maxdmg}";
+				PrimaryFaction = monster.primary_faction;
+				Resist_Cold = monster.CR.ToString();
+				Resist_Fire = monster.FR.ToString();
+				Resist_Magic = monster.MR.ToString();
+				Resist_Poison = monster.PR.ToString();
+				Resist_Disease = monster.DR.ToString();
+				See_Invis			= monster.see_invis == 1 ? true : false;
+				See_Invis_Undead	= monster.see_invis_undead == 1 ? true : false;
+				See_Sneak			= monster.see_sneak == 1 ? true : false;
+				See_Imp_Hide		= monster.see_improved_hide == 1 ? true : false;
 
 
-			Name = monster.name;
-			Race = monster.race;
-			Class = monster.npc_class;
-			Level = (monster.maxlevel != 0 ? $"{monster.level}-{monster.maxlevel}" : $"{monster.level}");
-			RunSpeed = monster.runspeed.ToString();
-			AC = monster.AC.ToString();
-			HP = monster.hp.ToString();
-			HPRegen = monster.combat_hp_regen.ToString();
-			ManaRegen = monster.combat_mana_regen.ToString();
-			AttacksPerRound = monster.attack_count.ToString();
-			AttackSpeed = monster.attack_delay.ToString();
-			DamagePerHit = $"{monster.mindmg}-{monster.maxdmg}";
-			PrimaryFaction = monster.primary_faction;
-			if(Factions.Count > 0)
-			{
-				Factions.Clear();
-			}
-			if (KnownLoot.Count > 0)
-			{
-				KnownLoot.Clear();
-			}
-			foreach (JsonMonsterFaction faction in monster.Factions)
-			{
-				Factions.Add(new FactionHitViewModel
+				#region Clear existing Data
+				if (Factions.Count > 0)
 				{
-					Name = faction.faction_name,
-					Value = faction.faction_hit,
-					Url = $"{pqdi_url}faction/{faction.faction_id}"
-				});
-			}
-			foreach(JsonMonsterDrops drop in monster.Drops)
-			{
-				KnownLoot.Add(new MobDropViewModel
+					Factions.Clear();
+				}
+				if (KnownLoot.Count > 0)
 				{
-					Name = drop.item_name,
-					Value = drop.drop_chance,
-					Url = $"{pqdi_url}item/{drop.item_id}"
-				});
+					KnownLoot.Clear();
+				}
+				if (Specials.Count > 0)
+				{
+					Specials.Clear();
+				}
+				#endregion
+
+				foreach (JsonMonsterFaction faction in monster.Factions)
+				{
+					Factions.Add(new FactionHitViewModel
+					{
+						Name = faction.faction_name,
+						Value = faction.faction_hit,
+						Url = $"{pqdi_url}faction/{faction.faction_id}"
+					});
+				}
+				foreach (JsonMonsterDrops drop in monster.Drops)
+				{
+					KnownLoot.Add(new MobDropViewModel
+					{
+						Name = drop.item_name,
+						Value = (float)System.Math.Round(drop.drop_chance, 2),
+						Url = $"{pqdi_url}item/{drop.item_id}"
+					});
+				}
+				List<string> specials = monster.GetSpecialAttacks().Split(',').ToList();
+				foreach (string special in specials)
+				{
+					Specials.Add(new TestUriViewModel
+					{
+						Name = special
+					});
+				}
+
+				//var infos = MobInfoParsing.ParseSpecials(splits);
+				//foreach (var item in infos)
+				//{
+				//	Specials.Add(item);
+				//}
+
+				//var knownloot = MobInfoParsing.ParseKnownLoot(splits);
+				//foreach (var item in knownLoot)
+				//{
+				//	KnownLoot.Add(item);
+				//}
+
+				//infos = MobInfoParsing.ParseFactions(splits);
+				//foreach (var item in infos)
+				//{
+				//	Factions.Add(item);
+				//}
+
+				//infos = MobInfoParsing.ParseOpposingFactions(splits);
+				//foreach (var item in infos)
+				//{
+				//	OpposingFactions.Add(item);
+				//}
+
+				//infos = MobInfoParsing.ParseRelatedQuests(splits);
+				//foreach (var item in infos)
+				//{
+				//	RelatedQuests.Add(item);
+				//}
+
+
+				Url = $"{pqdi_url}npc/{monster.id}";
+
+				//var imageurl = GetValue("imagefilename", splits);
+
+
 			}
-
-			//var infos = MobInfoParsing.ParseSpecials(splits);
-			//foreach (var item in infos)
-			//{
-			//	Specials.Add(item);
-			//}
-
-			//var knownloot = MobInfoParsing.ParseKnownLoot(splits);
-			//foreach (var item in knownLoot)
-			//{
-			//	KnownLoot.Add(item);
-			//}
-
-			//infos = MobInfoParsing.ParseFactions(splits);
-			//foreach (var item in infos)
-			//{
-			//	Factions.Add(item);
-			//}
-
-			//infos = MobInfoParsing.ParseOpposingFactions(splits);
-			//foreach (var item in infos)
-			//{
-			//	OpposingFactions.Add(item);
-			//}
-
-			//infos = MobInfoParsing.ParseRelatedQuests(splits);
-			//foreach (var item in infos)
-			//{
-			//	RelatedQuests.Add(item);
-			//}
-
-
-			Url = $"{pqdi_url}npc/{monster.id}";
-
-			//var imageurl = GetValue("imagefilename", splits);
-
 		}
 
 		private string GetValue(string propname, List<string> lines)
-        {
-            var ret = lines.FirstOrDefault(a => a.StartsWith(propname));
-            if (string.IsNullOrWhiteSpace(ret))
-            {
-                return string.Empty;
-            }
-            var index = ret.IndexOf('=');
-            return index != -1 ? ret.Substring(index + 1).Trim() : string.Empty;
-        }
+		{
+			var ret = lines.FirstOrDefault(a => a.StartsWith(propname));
+			if (string.IsNullOrWhiteSpace(ret))
+			{
+				return string.Empty;
+			}
+			var index = ret.IndexOf('=');
+			return index != -1 ? ret.Substring(index + 1).Trim() : string.Empty;
+		}
 
-        public event PropertyChangedEventHandler PropertyChanged;
-        protected void OnPropertyChanged([CallerMemberName] string name = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
-        }
+		public event PropertyChangedEventHandler PropertyChanged;
+		protected void OnPropertyChanged([CallerMemberName] string name = null)
+		{
+			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
+		}
 		public void PokeMe()
 		{
 			OnPropertyChanged();
 		}
-    }
+	}
 }
