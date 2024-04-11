@@ -27,9 +27,8 @@
     <UpdatePeriodically>false</UpdatePeriodically>
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
-    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationRevision>1</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
-    <IsWebBootstrapper>false</IsWebBootstrapper>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
@@ -373,7 +372,9 @@
     <Compile Include="MobInfo.xaml.cs">
       <DependentUpon>MobInfo.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Models\DataFileInfo.cs" />
     <Compile Include="Models\EQMapColor.cs" />
+    <Compile Include="Models\JsonMerchantItems.cs" />
     <Compile Include="Models\JsonMonster.cs" />
     <Compile Include="Models\JsonMonsterFaction.cs" />
     <Compile Include="Models\JsonMonsterDrops.cs" />

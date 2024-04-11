@@ -210,7 +210,7 @@
                         <TextBlock>Known Loot</TextBlock>
                         <ListView Margin="10, 0, 0, 0" Style="{StaticResource MyListViewStyle}" ItemsSource="{Binding KnownLoot}" 
                               ScrollViewer.VerticalScrollBarVisibility="Visible" ScrollViewer.CanContentScroll="False"
-                              MaxHeight="245">
+                              MaxHeight="145">
                             <ListView.ItemTemplate>
                                 <DataTemplate>
                                     <StackPanel Orientation="Horizontal" MinWidth="100">
@@ -227,6 +227,24 @@
                                             <!--<TextBlock Text="{Binding Name}" Style="{StaticResource MyMobUrlSyle}"></TextBlock>-->     
                                         </Hyperlink> 
                                     </TextBlock>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                        </ListView>
+                    </StackPanel>
+                    <StackPanel Name="MerchandiseStack">
+                        <TextBlock>Merchandise</TextBlock>
+                        <ListView Margin="10, 0, 0, 0" Style="{StaticResource MyListViewStyle}" ItemsSource="{Binding MerchantItems}" 
+                          ScrollViewer.VerticalScrollBarVisibility="Visible" ScrollViewer.CanContentScroll="False"
+                          MaxHeight="145">
+                            <ListView.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal" MinWidth="100">
+                                        <TextBlock Visibility="{Binding HasUrl}">
+                                            <Hyperlink NavigateUri="{Binding Url}" RequestNavigate="Hyperlink_RequestNavigate">
+                                                <TextBlock Text="{Binding Name}"  Style="{StaticResource MyMobUrlSyle}"></TextBlock> 
+                                            </Hyperlink> 
+                                        </TextBlock>
                                     </StackPanel>
                                 </DataTemplate>
                             </ListView.ItemTemplate>

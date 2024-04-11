@@ -6,30 +6,36 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
-using System.Web;
+using static EQTool.Services.FindEq;
 
 namespace EQTool.Services
 {
 	public class JsonDataService
 	{
-		private readonly ActivePlayer activePlayer;
+		private readonly ActivePlayer _activePlayer;
 		private static DataTable monsterTable;
 		private static DataTable factionTable;
 		private static DataTable dropsTable;
+		private static DataTable merchantTable;
+		private static DataFileInfo FileLocations;
 		public JsonDataService(ActivePlayer activePlayer)
 		{
-			this.activePlayer = activePlayer;
+			this._activePlayer = activePlayer;
 		}
 
 		public bool LoadMonsterDataTable(string zoneCode)
 		{
-			//REPLACE THIS WITH CONFIG OPTION
-			string monsterFilename = "B:\\Hobby Stuff\\QuarmTool Data\\json\\Initial NPC set.json";
-			FileStream fs = new FileStream(monsterFilename, FileMode.Open, FileAccess.Read);
+			FileLocations = GetDataLocation();
+			if(FileLocations == null)
+			{
+				return false;
+			}
+			FileStream fs = new FileStream(FileLocations.NPC_File, FileMode.Open, FileAccess.Read);
 
 			string jsonContents;
 			using (StreamReader sr = new StreamReader(fs))
@@ -48,9 +54,11 @@ namespace EQTool.Services
 			if (monsterTable.Rows.Count > 0)
 			{
 				//If monsters were found, load additional data
-				LoadFactionDataTable(zoneCode);
+				bool factionsLoaded = LoadFactionDataTable(zoneCode);
 				List<int> lootTableIds = monsterTable.AsEnumerable().Select(r => r.Field<int>("loottable_id")).ToList();
-				LoadDropsDataTable(lootTableIds);
+				bool dropsLoaded = LoadDropsDataTable(lootTableIds);
+				List<int> merchantIds = monsterTable.AsEnumerable().Select(r => r.Field<int>("merchant_id")).Where(r => r != 0).ToList();
+				bool merchantInfoLoaded = LoadMerchantsDataTable(merchantIds);
 
 				return true;
 			}
@@ -60,9 +68,7 @@ namespace EQTool.Services
 
 		private bool LoadFactionDataTable(string zoneCode)
 		{
-			//REPLACE THIS WITH CONFIG OPTION
-			string factionFilename = "B:\\Hobby Stuff\\QuarmTool Data\\json\\Initial Faction set.json";
-			FileStream fs = new FileStream(factionFilename, FileMode.Open, FileAccess.Read);
+			FileStream fs = new FileStream(FileLocations.Faction_File, FileMode.Open, FileAccess.Read);
 
 			string jsonContents;
 			using (StreamReader sr = new StreamReader(fs))
@@ -88,9 +94,7 @@ namespace EQTool.Services
 
 		private bool LoadDropsDataTable(List<int> loottableIds)
 		{
-			//REPLACE THIS WITH CONFIG OPTION
-			string factionFilename = "B:\\Hobby Stuff\\QuarmTool Data\\json\\Initial Drops set.json";
-			FileStream fs = new FileStream(factionFilename, FileMode.Open, FileAccess.Read);
+			FileStream fs = new FileStream(FileLocations.Loot_File, FileMode.Open, FileAccess.Read);
 
 			string jsonContents;
 			using (StreamReader sr = new StreamReader(fs))
@@ -114,9 +118,35 @@ namespace EQTool.Services
 			return false;
 		}
 
+		private bool LoadMerchantsDataTable(List<int> merchantIds)
+		{
+			FileStream fs = new FileStream(FileLocations.Merchant_File, FileMode.Open, FileAccess.Read);
+
+			string jsonContents;
+			using (StreamReader sr = new StreamReader(fs))
+			{
+				jsonContents = sr.ReadToEnd();
+			}
+
+			List<JsonMerchantItems> merchantList = JsonConvert.DeserializeObject<List<JsonMerchantItems>>(jsonContents);
+			DataTable tempMerchantTable = merchantList.ToDataTable();
+			string columnFilter = "merchantid";
+
+			merchantTable = tempMerchantTable.AsEnumerable().Where(r =>
+				merchantIds.Contains(r.Field<int>(columnFilter))
+			).CopyToDataTable();
+
+			if (merchantTable.Rows.Count > 0)
+			{
+				return true;
+			}
+
+			return false;
+		}
+
 		public JsonMonster GetData(string name)
 		{
-			var currentzone = activePlayer?.Player?.Zone;
+			var currentzone = _activePlayer?.Player?.Zone;
 
 			try
 			{
@@ -157,9 +187,26 @@ namespace EQTool.Services
 							item_name = (string)row["item_name"]
 						}
 					).ToList();
-					if(matchedDrops != null && matchedDrops.Count > 0)
+					if (matchedDrops != null && matchedDrops.Count > 0)
 					{
 						match.Drops = matchedDrops;
+					}
+					if(merchantTable is DataTable)
+					{
+						List<JsonMerchantItems> matchedMerchantItems = merchantTable.AsEnumerable().Where(m =>
+							m.Field<int>("merchantid") == match.merchant_id)
+							.Select(row => new JsonMerchantItems
+							{
+								merchantid = (int)row["merchantid"],
+								item_id = (int)row["item_id"],
+								item_name = (string)row["item_name"],
+								slot = (int)row["slot"]
+							}
+						).ToList();
+						if (matchedMerchantItems != null && matchedMerchantItems.Count > 0)
+						{
+							match.MerchantItems = matchedMerchantItems;
+						}
 					}
 
 					return match;

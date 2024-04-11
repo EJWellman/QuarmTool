@@ -61,6 +61,7 @@ namespace EQTool.Models
 
 		public List<JsonMonsterFaction> Factions { get; set; } = new List<JsonMonsterFaction>();
 		public List<JsonMonsterDrops> Drops { get; set; } = new List<JsonMonsterDrops>();
+		public List<JsonMerchantItems> MerchantItems { get; set; } = new List<JsonMerchantItems>();
 
 
 

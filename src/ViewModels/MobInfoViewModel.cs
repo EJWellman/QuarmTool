@@ -593,6 +593,22 @@ namespace EQTool.ViewModels
 			}
 		}
 
+		public Visibility HasMerchandise {
+			get => _MerchantItems.Count > 0 ? Visibility.Visible : Visibility.Collapsed;
+		}
+
+		private ObservableCollection<MobDropViewModel> _MerchantItems = new ObservableCollection<MobDropViewModel>();
+
+		public ObservableCollection<MobDropViewModel> MerchantItems
+		{
+			get => _MerchantItems;
+			set
+			{
+				_MerchantItems = value;
+				OnPropertyChanged();
+			}
+		}
+
 		public Visibility HasFactionHits
 		{
 			get => _Factions.Count > 0 ? Visibility.Visible : Visibility.Collapsed;
@@ -778,11 +794,10 @@ namespace EQTool.ViewModels
 				Resist_Magic = monster.MR.ToString();
 				Resist_Poison = monster.PR.ToString();
 				Resist_Disease = monster.DR.ToString();
-				See_Invis			= monster.see_invis == 1 ? true : false;
-				See_Invis_Undead	= monster.see_invis_undead == 1 ? true : false;
-				See_Sneak			= monster.see_sneak == 1 ? true : false;
-				See_Imp_Hide		= monster.see_improved_hide == 1 ? true : false;
-
+				See_Invis = monster.see_invis == 1 ? true : false;
+				See_Invis_Undead = monster.see_invis_undead == 1 ? true : false;
+				See_Sneak = monster.see_sneak == 1 ? true : false;
+				See_Imp_Hide = monster.see_improved_hide == 1 ? true : false;
 
 				#region Clear existing Data
 				if (Factions.Count > 0)
@@ -796,6 +811,10 @@ namespace EQTool.ViewModels
 				if (Specials.Count > 0)
 				{
 					Specials.Clear();
+				}
+				if(MerchantItems.Count > 0)
+				{
+					MerchantItems.Clear();
 				}
 				#endregion
 
@@ -823,6 +842,15 @@ namespace EQTool.ViewModels
 					Specials.Add(new TestUriViewModel
 					{
 						Name = special
+					});
+				}
+				foreach (JsonMerchantItems item in monster.MerchantItems)
+				{
+					MerchantItems.Add(new MobDropViewModel
+					{
+						Name = item.item_name,
+						Value = item.slot,
+						Url = $"{pqdi_url}item/{item.item_id}"
 					});
 				}
 
