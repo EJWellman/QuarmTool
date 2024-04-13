@@ -447,6 +447,7 @@
     <Compile Include="Shapes\ArrowLine.cs" />
     <Compile Include="Shapes\ArrowLineBase.cs" />
     <Compile Include="Tools\DataTableConverter.cs" />
+    <Compile Include="Utilities\ZoneSwapper.cs" />
     <Compile Include="ViewModels\ActivePlayerInfo.cs" />
     <Compile Include="Services\TimersService.cs" />
     <Compile Include="ViewModels\ZoneViewModel.cs" />

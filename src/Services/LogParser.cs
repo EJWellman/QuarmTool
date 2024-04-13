@@ -2,6 +2,7 @@
 using EQTool.Services.Map;
 using EQTool.Services.Parsing;
 using EQTool.Services.Spells.Log;
+using EQTool.Utilities;
 using EQTool.ViewModels;
 using EQToolShared.HubModels;
 using EQToolShared.Map;
@@ -463,7 +464,20 @@ namespace EQTool.Services
                 {
                     var b4matchedzone = matchedzone;
 
-                    matchedzone = ZoneParser.TranslateToMapName(matchedzone);
+					if (!string.IsNullOrWhiteSpace(activePlayer.Player?.LastZoneEntered) 
+						&& ZoneSwapper.GetSwappedZoneName(activePlayer.Player?.LastZoneEntered) == b4matchedzone)
+					{
+						matchedzone = activePlayer.Player?.LastZoneEntered;
+					}
+					else
+					{
+						if(activePlayer.Player != null)
+						{
+							activePlayer.Player.LastZoneEntered = b4matchedzone;
+						}
+					}
+
+					matchedzone = ZoneParser.TranslateToMapName(matchedzone);
                     Debug.WriteLine($"Zone Change Detected {matchedzone}--{b4matchedzone}");
                     var p = activePlayer.Player;
                     if (p != null)

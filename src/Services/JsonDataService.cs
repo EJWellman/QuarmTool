@@ -28,7 +28,7 @@ namespace EQTool.Services
 			this._activePlayer = activePlayer;
 		}
 
-		public bool LoadMonsterDataTable(string zoneCode)
+		public bool LoadMonsterDataTable(string zoneCode/*, string lastZoneEntered*/)
 		{
 			FileLocations = GetDataLocation();
 			if(FileLocations == null)
@@ -80,9 +80,18 @@ namespace EQTool.Services
 			DataTable tempFactionTable = factionList.ToDataTable();
 			string columnFilter = "zone_code";
 
-			factionTable = tempFactionTable.AsEnumerable().Where(r =>
+			var tempResults  = tempFactionTable.AsEnumerable().Where(r =>
 				r.Field<string>(columnFilter) == zoneCode
-			).CopyToDataTable();
+			);
+
+			if (tempResults.Count() != 0)
+			{
+				factionTable = tempResults.CopyToDataTable();
+			}
+			else
+			{
+				factionTable = new DataTable();
+			}
 
 			if (factionTable.Rows.Count > 0)
 			{
@@ -106,9 +115,18 @@ namespace EQTool.Services
 			DataTable tempDropsTable = dropsList.ToDataTable();
 			string columnFilter = "loottable_id";
 
-			dropsTable = tempDropsTable.AsEnumerable().Where(r =>
+			var tempResults = tempDropsTable.AsEnumerable().Where(r =>
 				loottableIds.Contains(r.Field<int>(columnFilter))
-			).CopyToDataTable();
+			);
+
+			if (tempResults.Count() != 0)
+			{
+				dropsTable = tempResults.CopyToDataTable();
+			}
+			else
+			{
+				dropsTable = new DataTable();
+			}
 
 			if (dropsTable.Rows.Count > 0)
 			{
@@ -132,11 +150,21 @@ namespace EQTool.Services
 			DataTable tempMerchantTable = merchantList.ToDataTable();
 			string columnFilter = "merchantid";
 
-			merchantTable = tempMerchantTable.AsEnumerable().Where(r =>
+			var tempResults = tempMerchantTable.AsEnumerable().Where(r =>
 				merchantIds.Contains(r.Field<int>(columnFilter))
-			).CopyToDataTable();
+			);
 
-			if (merchantTable.Rows.Count > 0)
+			if (tempResults.Count() != 0)
+			{
+				merchantTable = tempResults.CopyToDataTable();
+			}
+			else
+			{
+				merchantTable = new DataTable();
+			}
+
+
+			if (merchantTable != null &&  merchantTable.Rows.Count > 0)
 			{
 				return true;
 			}

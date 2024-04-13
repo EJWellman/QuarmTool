@@ -1,5 +1,6 @@
 ﻿using EQTool.Models;
 using EQTool.Services;
+using EQTool.Utilities;
 using EQTool.ViewModels;
 using EQToolShared.Enums;
 using EQToolShared.Map;
@@ -19,8 +20,9 @@ namespace EQTool
         private readonly IAppDispatcher appDispatcher;
         private readonly ISignalrPlayerHub signalrPlayerHub;
         private readonly System.Timers.Timer UITimer;
+		private JsonDataService _jsonDataService;
 
-        public MappingWindow(
+		public MappingWindow(
             ISignalrPlayerHub signalrPlayerHub,
             MapViewModel mapViewModel,
             ActivePlayer activePlayer,
@@ -29,7 +31,8 @@ namespace EQTool
             PlayerTrackerService playerTrackerService,
             EQToolSettingsLoad toolSettingsLoad,
             IAppDispatcher appDispatcher,
-            LoggingService loggingService) : base(settings.MapWindowState, toolSettingsLoad, settings)
+            LoggingService loggingService,
+			JsonDataService jsonDataService) : base(settings.MapWindowState, toolSettingsLoad, settings)
         {
             loggingService.Log(string.Empty, EventType.OpenMap, activePlayer?.Player?.Server);
             this.activePlayer = activePlayer;
@@ -61,6 +64,8 @@ namespace EQTool
             UITimer.Elapsed += UITimer_Elapsed;
             UITimer.Enabled = true;
             //   this.SetCenerMap();
+
+			_jsonDataService = jsonDataService;
         }
 
         private void SignalrPlayerHub_PlayerDisconnected(object sender, SignalrPlayer e)
@@ -161,12 +166,16 @@ namespace EQTool
         private void LogParser_EnteredWorldEvent(object sender, LogParser.EnteredWorldArgs e)
         {
             if (mapViewModel.LoadDefaultMap(Map))
-            {
-                Map.ZoneName = mapViewModel.ZoneName;
+			{
+				Map.ZoneName = mapViewModel.ZoneName;
                 Map.Height = Math.Abs(mapViewModel.AABB.MaxHeight);
                 Map.Width = Math.Abs(mapViewModel.AABB.MaxWidth);
-            }
-        }
+			}
+			if(mapViewModel.ZoneName != null)
+			{
+				_jsonDataService.LoadMonsterDataTable(mapViewModel.ZoneName);
+			}
+		}
 
         private void LogParser_PlayerZonedEvent(object sender, LogParser.PlayerZonedEventArgs e)
         {

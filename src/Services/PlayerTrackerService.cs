@@ -1,5 +1,6 @@
 ﻿using EQTool.ViewModels;
 using EQToolShared.Enums;
+using EQToolShared.Map;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -14,7 +15,7 @@ namespace EQTool.Services
         internal readonly ActivePlayer activePlayer;
         private readonly LoggingService loggingService;
         private readonly PlayerGroupService playerGroupService;
-		JsonDataService _jsonDataService;
+		private JsonDataService _jsonDataService;
         private readonly Dictionary<string, EQToolShared.APIModels.PlayerControllerModels.Player> Player = new Dictionary<string, EQToolShared.APIModels.PlayerControllerModels.Player>(StringComparer.InvariantCultureIgnoreCase);
         private readonly Dictionary<string, EQToolShared.APIModels.PlayerControllerModels.Player> PlayersInZones = new Dictionary<string, EQToolShared.APIModels.PlayerControllerModels.Player>(StringComparer.InvariantCultureIgnoreCase);
         private readonly Dictionary<string, EQToolShared.APIModels.PlayerControllerModels.Player> DirtyPlayers = new Dictionary<string, EQToolShared.APIModels.PlayerControllerModels.Player>(StringComparer.InvariantCultureIgnoreCase);
@@ -80,7 +81,8 @@ namespace EQTool.Services
         {
             lock (ContainerLock)
             {
-                if (CurrentZone != activePlayer.Player?.Zone)
+                if (CurrentZone != activePlayer.Player?.Zone
+					&& CurrentZone != ZoneParser.ZoneNameMapper[activePlayer.Player?.LastZoneEntered])
                 {
                     CurrentZone = activePlayer.Player?.Zone;
 					_jsonDataService.LoadMonsterDataTable(CurrentZone);
@@ -89,7 +91,6 @@ namespace EQTool.Services
                 }
                 else
 				{
-					_jsonDataService.LoadMonsterDataTable(CurrentZone);
 					Debug.WriteLine("NOT Clearing zone Players");
                 }
             }
@@ -146,8 +147,7 @@ namespace EQTool.Services
         {
             lock (ContainerLock)
             {
-                CurrentZone = activePlayer.Player?.Zone;
-				_jsonDataService.LoadMonsterDataTable(CurrentZone);
+				_jsonDataService.LoadMonsterDataTable(activePlayer.Player?.Zone/*, activePlayer.Player?.LastZoneEntered*/);
 				Debug.WriteLine("Clearing zone Players");
                 PlayersInZones.Clear();
             }

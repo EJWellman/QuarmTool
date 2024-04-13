@@ -187,6 +187,17 @@ namespace EQTool.Models
             }
         }
 
+		private string _LastZoneEntered;
+		public string LastZoneEntered
+		{
+			get => _LastZoneEntered;
+			set
+			{
+				_LastZoneEntered = value;
+				OnPropertyChanged();
+			}
+		}
+
         private bool _SpellDebuffShare;
         public bool SpellDebuffShare
         {

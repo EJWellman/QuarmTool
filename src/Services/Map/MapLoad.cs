@@ -1,4 +1,5 @@
 ﻿using EQTool.Models;
+using EQTool.Utilities;
 using EQTool.ViewModels;
 using EQToolShared.Enums;
 using System;
@@ -22,8 +23,10 @@ namespace EQTool.Services
             this.loggingService = loggingService;
             this.activePlayer = activePlayer;
         }
-        public ParsedData Load(string zone)
+        public ParsedData Load(string zone, string lastZone = "")
         {
+			zone = ZoneSwapper.GetSwappedZoneCode(zone);
+
             var stop = new Stopwatch();
             stop.Start();
             if (string.IsNullOrWhiteSpace(zone))

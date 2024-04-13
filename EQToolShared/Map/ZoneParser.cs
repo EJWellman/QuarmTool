@@ -528,7 +528,7 @@ namespace EQToolShared.Map
             ZoneInfoMap.Add("droga", new ZoneInfo
             {
                 Name = "droga",
-                ShowAllMapLevels = true,
+                ShowAllMapLevels = false,
                 ZoneLevelHeight = 10,
                 NotableNPCs = new List<string>()
                 {
@@ -737,7 +737,7 @@ namespace EQToolShared.Map
             ZoneInfoMap.Add("frozenshadow", new ZoneInfo
             {
                 Name = "frozenshadow",
-                ShowAllMapLevels = true,
+                ShowAllMapLevels = false,
                 ZoneLevelHeight = 10,
                 NotableNPCs = new List<string>()
                 {
@@ -1057,7 +1057,7 @@ namespace EQToolShared.Map
             ZoneInfoMap.Add("kurn", new ZoneInfo
             {
                 Name = "kurn",
-                ShowAllMapLevels = true,
+                ShowAllMapLevels = false,
                 ZoneLevelHeight = 10,
                 NotableNPCs = new List<string>()
                 {
@@ -1276,7 +1276,7 @@ namespace EQToolShared.Map
             ZoneInfoMap.Add("nurga", new ZoneInfo
             {
                 Name = "nurga",
-                ShowAllMapLevels = true,
+                ShowAllMapLevels = false,
                 ZoneLevelHeight = 10,
                 NotableNPCs = new List<string>() { "Overseer Dlubish", "A Sleeping Ogre", "Trunt", },
                 RespawnTime = new TimeSpan(0, 20, 30)
@@ -2021,8 +2021,27 @@ namespace EQToolShared.Map
                  },
                 RespawnTime = new TimeSpan(0, 6, 40)
             });
-            // add customer timers here for PQ
-            if (isProjectQ)
+			ZoneInfoMap.Add("towerfrost", new ZoneInfo
+			{
+				Name = "towerfrost",
+				ShowAllMapLevels = false,
+				ZoneLevelHeight = 10,
+				NotableNPCs = new List<string>()
+				{
+					"Fragment of Bargynn","Avatar of Finance", "Arch Icebone Skeleton"
+				},
+				RespawnTime = new TimeSpan(0, 4, 0)
+			});
+			ZoneInfoMap.Add("myriah", new ZoneInfo
+			{
+				Name = "myriah",
+				ShowAllMapLevels = true,
+				ZoneLevelHeight = 10,
+				NotableNPCs = new List<string>(),
+				RespawnTime = new TimeSpan(0, 4, 0)
+			});
+			// add customer timers here for PQ
+			if (isProjectQ)
             {
                 ZoneInfoMap["unrest"].RespawnTime = new TimeSpan(0, 8, 0);
                 ZoneInfoMap["mistmoore"].RespawnTime = new TimeSpan(0, 8, 0);
@@ -2106,7 +2125,8 @@ namespace EQToolShared.Map
             ZoneNameMapper.Add("surefall glade", "qrg");
             ZoneNameMapper.Add("innothule swamp", "innothule");
             ZoneNameMapper.Add("halas", "halas");
-            ZoneNameMapper.Add("solusek's eye", "soldunga");
+			ZoneNameMapper.Add("domain of frost", "myriah");
+			ZoneNameMapper.Add("solusek's eye", "soldunga");
             ZoneNameMapper.Add("estate of unrest", "unrest");
             ZoneNameMapper.Add("blackburrow", "blackburrow");
             ZoneNameMapper.Add("gorge of king xorbb", "beholder");
@@ -2146,7 +2166,8 @@ namespace EQToolShared.Map
             ZoneNameMapper.Add("cabilis west", "cabwest");
             ZoneNameMapper.Add("lake rathetear", "lakerathe");
             ZoneNameMapper.Add("kurn's tower", "kurn");
-            ZoneNameMapper.Add("dagnor's cauldron", "cauldron");
+			ZoneNameMapper.Add("oops, all icebones!", "towerfrost");
+			ZoneNameMapper.Add("dagnor's cauldron", "cauldron");
             ZoneNameMapper.Add("western wastes", "westwastes");
             ZoneNameMapper.Add("temple of veeshan", "templeveeshan");
             ZoneNameMapper.Add("lesser faydark", "lfaydark");
