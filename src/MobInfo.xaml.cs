@@ -5,9 +5,13 @@ using EQToolShared.Enums;
 using System;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Drawing;
 using System.Linq;
+using System.Reflection.Emit;
 using System.Windows;
+using System.Windows.Documents;
 using System.Windows.Navigation;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace EQTool
 {
@@ -67,6 +71,7 @@ namespace EQTool
 					ivu_rad.IsChecked = mobInfoViewModel.See_Invis_Undead;
 					sneak_rad.IsChecked = mobInfoViewModel.See_Sneak;
 					ihide_rad.IsChecked = mobInfoViewModel.See_Imp_Hide;
+
 				}
             }
             catch (Exception ex)

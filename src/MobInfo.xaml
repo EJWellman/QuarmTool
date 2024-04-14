@@ -124,13 +124,16 @@
                     </StackPanel>
                     <StackPanel Orientation="Horizontal">
                         <TextBlock Text="MR FR CR PR DR" Width="100"></TextBlock>
-                        <TextBlock>
-                            <Run Foreground="White" Text="{Binding Resist_Magic}"/>
-                            <Run Foreground="Red" Text="{Binding Resist_Fire}"/>
-                            <Run Foreground="Aqua" Text="{Binding Resist_Cold}"/>
-                            <Run Foreground="GreenYellow" Text="{Binding Resist_Poison}"/>
-                            <Run Foreground="ForestGreen" Text="{Binding Resist_Disease}"/>
-                        </TextBlock>
+                        <StackPanel Orientation="Horizontal">
+                            <Label Foreground="White" Content="{Binding Resist_Magic}"  Padding="5,0,5,0"/>
+                            <Label Foreground="Red" Content="{Binding Resist_Fire}"  Padding="5,0,5,0"/>
+                            <Label Foreground="Aqua" Content="{Binding Resist_Cold}"  Padding="5,0,5,0"/>
+                            <Label Foreground="GreenYellow" Content="{Binding Resist_Poison}"  Padding="5,0,5,0"/>
+                            <Label Foreground="ForestGreen" Content="{Binding Resist_Disease}"  Padding="5,0,5,0"/>
+                            
+                        </StackPanel>
+                            <!--<TextBlock VerticalAlignment="Center">
+                            </TextBlock>-->
                     </StackPanel>
                     <StackPanel Orientation="Horizontal">
                         <TextBlock Text="See: Invis" Margin="0, 0, 4, 0" Width="50"></TextBlock>
