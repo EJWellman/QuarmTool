@@ -1,17 +1,11 @@
-# PigParse
-<img width="1892" alt="image" src="https://github.com/smasherprog/EqTool/blob/main/Example.png?raw=true">
-
+# QuarmTool
 <h2>THIS PROGRAM WORKS SOLELY BY READING YOUR LOG FILE.</h2>
  
 Instructions:
 <ul>
 <li>
-<h2>Project 1999: Download <a href="https://github.com/smasherprog/EqTool/releases/download/3.24.310.2/EQTool_Project19993.24.310.2.zip">EQTool_Project1999.zip</a>, Unzip it and run EQTool.exe</h2>
+<h2>Project Quarm: Download <a href="https://github.com/EJWellman/QuarmTool/releases/download/Release/QuarmTool.zip">QuarmTool.zip</a>, Unzip it and run PQTool.exe</h2>
 </li>
-<li>
-<h2>Project Quarm: Download <a href="https://github.com/smasherprog/EqTool/releases/download/4.24.310.2/EQTool_Quarm4.24.310.2.zip">EQTool_Quarm.zip</a>, Unzip it and run PQTool.exe</h2>
-</li>
- <li><h3><a href="https://discord.gg/R7vJrNtB">Discord</a></h3></li>
 <li>The program runs in the system tray. Look there to reopen spells window or settings! Program will check for updates on startup and self update if required, but if you want to check for a new Update, use the menu in the system tray!</li>
 </ul>
 Features:
@@ -19,7 +13,6 @@ Features:
 <ul>
  <li>The TOP 5 Random rolls show up in the triggers window. </li> 
  <li>See others on the map in real time. Also support for NParse map location sharing automatically if location sharing is set to everyone. </li> 
-<li>Kael faction pull timer Automatically added for everyone regardless of what zone you are in. </li> 
 <li>Automatically add timers on death of npc so you dont have to!</li> 
 <li>Detect EQ directory location instead of user required to enter it.</li> 
 <li>Detect Spells cast on others (this is a best guess as I am reading the log file so chloroplast and Regrowth of the growth have the same message)</li>
@@ -37,7 +30,7 @@ Features:
 <li>Pricing information in Mob info window.</li>
 <li>Save spells cast on you when you log out so when you log back in they resume counter!</li>
 <li>Maps</li>
-<li>Automatic self update.</li>
+
 <li>Timers (Only Minutes are supported)</li>
 </ul>
 <h5>Ch format is loosely: TAG POSITION CH TARGET</h5>
@@ -80,45 +73,22 @@ Features:
 <li>Timer Cancel Crypt Camp</li>
 <li>Cancel Timer Crypt Camp</li>
 </ul>
-<img width="1624" alt="image" src="https://github.com/smasherprog/EqTool/assets/3393733/3c53a1d8-44c4-499b-9e92-ea5d5f38275e">
-<h4>CH Chain overlay Below</h4>
- <img width="1174" alt="update1" src="https://github.com/smasherprog/EqTool/assets/3393733/86c08360-48d9-42c4-9a86-7fea652d8133">
- <h4>FTE Overlay (includes Guild)</h4>
-<img width="1548" alt="image" src="https://github.com/smasherprog/EqTool/assets/3393733/92446f74-3f7b-4957-a712-43fe9d6a3191">
 
-<h4>System Tray Icon</h4>
-<img width="152" alt="image" src="https://user-images.githubusercontent.com/3393733/212717141-6e26b9af-660a-493d-9f73-2c3464b7c224.png">
-
-<h4>TO DO List EQTool</h4>
+<h4>TO DO List</h4>
 <ul>     
-  <li>Add option to ONLY show spells YOU have cast on yourself and others. </li>   
- <li>Centralized friends list. </li>  
- <li>Add text message sending when npc is seen in game. (You can go FD and received a Text message on your phone that VD has spawned for example) </li>  
- <li>Sharing of triggers for those nearby. </li>  
- <li>Add ring war triggers. </li>  
+ <li>Add option to ONLY show spells YOU have cast on yourself and others. </li>   
  <li>Map center on you.</li>  
  <li>Add Window Snapping code so windows can be grouped and all moved together.</li>   
- <li>Remove timers from map when timers removed from list and visa versa.</li>   
- <li>Add code to show MOB hits per second.</li>   
- <li>Port application to be cross platform(mac, win, linux).</li>   
- <li>Add Ability to bind a hotkey to toggle a window open/close.</li>    
- <li>Add group suggestions for each raid mob in game.</li>     
+ <li>Remove timers from map when timers removed from list and visa versa.</li>
  <li>Fix buff timers when updating, when update occurs buffs dissapear.</li> 
- <li>Add zone dump of names.</li> 
-<li>Add option to enable OTHERS hits for DPS meter. </li>  
-<li>Add option to auto prune eq log file. EQ logfiles can cause issues with EQ itself if they get too large!</li>
-</ul>
-
-<h4>TO DO List PigParse Pricing</h4>
-<ul>
-<li>N/A </li> 
 </ul>
 
 <h3>FAQS</h3>
 <h4>Why does chrome warn me?</h4> 
 <img alt="image" src="https://user-images.githubusercontent.com/3393733/223326270-a079946d-57dc-41dd-a58e-f46a0c776b54.png">
 <ul>
-<li>Ignore it and download!</li> 
+<li>TL;DR: Ignore it and download!
+But really, it's just that it's a 'new' thing, and it's untrusted for that reason.</li> 
 </ul>
 <h4>Why does windows pop up a blue screen?</h4> 
 <img height="300" alt="image" src="https://user-images.githubusercontent.com/3393733/223328194-0946d278-09dc-4504-bed8-172d63fa98e0.png">
@@ -133,14 +103,14 @@ Features:
 <h4>Why does my settings window say Configuration missing?</h4> 
 <img alt="image" src="https://user-images.githubusercontent.com/3393733/222051822-fc4b750d-2efa-4eb9-bc00-589d3cc5b781.png">
 <ul>
-<li>EQTool was unable to automatically detect your P99 install folder. You must specify it yourself!</li>
-<li>EQTool detected that eq logging is turned off. You must click enable logging. This will turn on EQ's logging which is where EQTool gets information from.</li>
+<li>QuarmTool was unable to automatically detect your PQ/Takp install folder. You must specify it yourself!</li>
+<li>QuarmTool detected that eq logging is turned off. You must click enable logging. This will turn on EQ's logging which is where QuarmTool gets information from.</li>
 </ul>
 
 <h4>Do I have to set my class and level?</h4> 
 <ul>
-<li>If you cast spells eqtool will automatically detect your class and level once you start casting spells.</li>
-<li>You should still enter your class and level. It helps ensure calculations on spell durations are accurate.</li>
+<li>If you cast spells QuarmTool will automatically detect your class and level once you start casting spells.</li>
+<li>You should still enter your class and level. It helps ensure calculations on spell durations are (more) accurate.</li>
 </ul>
 
 <h4>I only care about spells cast on me, not everyone else!</h4> 
@@ -157,24 +127,21 @@ Features:
 <ul>
 <li>You need to type /loc into chat so that your location is feed to the log file.</li> 
 <li>Normally, players create a hotkey that is bound to their movement keys. Then add a /loc so that each time you move, the macro for /loc is called.</li> 
-<li>I set up my movement keys 'a' and 'd' to activate my hotbar 1 macro which has a /loc in it.</li> 
 </ul>
 
 <h4>How do i get the latest update?</h4> 
 <ul>
-<li>Goto the system tray, click the pig icon and goto check for updates.</li> 
-<li>Updates are checked for every timee the application starts as well.</li> 
-<li>If an update is available it will download and start the new version. The old version will be deleted.</li> 
+<li>Come back here, and check for a new release. Auto-updates are a feature I'm looking into.</li> 
 </ul>
 
 <h4>Why do the spell effect still show for dead npcs?</h4> 
 <ul>
-<li>This program reads your log file. So, if you were too far away to see the 'slain' message, then there is no way for EQTool to know the npc is dead.</li> 
+<li>This program reads your log file. So, if you were too far away to see the 'slain' message, then there is no way for QuarmTool to know the npc is dead.</li> 
 </ul>
 
 <h4>Why do the see spell effects for others even though I checked the box 'Only show spells that effect you?'</h4> 
 <ul>
-<li>EQTool will ALWAYS show detrimental spell effects on everyone. The reason is that EQTool CANNOT tell the difference between an NPC and a PC. This means that in order to show spell effects on NPC, like slow/tash, etc, i must show ALL detrimental spell effects on all NPS/PC alike.</li> 
+<li>QuarmTool will ALWAYS show detrimental spell effects on everyone. The reason is that QuarmTool CANNOT tell the difference between an NPC and a PC. This means that in order to show spell effects on NPC, like slow/tash, etc, I must show ALL detrimental spell effects on all NPS/PC alike.</li> 
 </ul>
 
 <h4>How do I remove an NPC/Player from the spell list?</h4> 
