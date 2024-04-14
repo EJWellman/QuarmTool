@@ -1,4 +1,4 @@
-# PigParse
+# QuarmTool
 <h2>THIS PROGRAM WORKS SOLELY BY READING YOUR LOG FILE.</h2>
  
 Instructions:
