@@ -19,7 +19,9 @@ namespace EQTool.Utilities
 				{ "hate_instanced", "hateplane" },
 				{ "fear_instanced", "fearplane" },
 				{ "hole_instanced", "hole" },
-				{ "soldungb_tryout", "soldungb" }
+				{ "soldungb_tryout", "soldungb" },
+				{ "kedge_tryout", "kedge" },
+				{ "perma_tryout", "permafrost" }
 			};
 
 			if(checkValue)
@@ -49,7 +51,9 @@ namespace EQTool.Utilities
 				{ "plane of hate (instanced)", "plane of hate" },
 				{ "plane of fear (instanced)", "plane of fear" },
 				{ "the hole (instanced)", "the hole" },
-				{ "nagafen's lair (tryout)", "nagafens lair"}
+				{ "nagafen's lair (tryout)", "nagafens lair"},
+				{ "kedge keep (instanced)", "kedge keep" },
+				{ "permafrost caverns (instanced)", "permafrost caverns" }
 			};
 
 			if(checkValue)

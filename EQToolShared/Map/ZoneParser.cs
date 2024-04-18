@@ -1088,7 +1088,18 @@ namespace EQToolShared.Map
                 },
                 RespawnTime = new TimeSpan(0, 22, 0)
             });
-            ZoneInfoMap.Add("kerraridge", new ZoneInfo
+			ZoneInfoMap.Add("kedge_tryout", new ZoneInfo
+			{
+				Name = "kedge_tryout",
+				ShowAllMapLevels = false,
+				ZoneLevelHeight = 10,
+				NotableNPCs = new List<string>()
+				{
+					"Phinigel Autropos","Cauldronboil","Cauldronbubble","Coralyn Kelpmaiden","Estrella of Gloomwater","Fierce Impaler","a ferocious cauldron shark","Frenzied Cauldron Shark","Golden Haired Mermaid","Stiletto Fang Piranha","Seahorse Patriarch","Seahorse Matriarch","Shellara Ebbhunter","Undertow","Swirlspine",
+				},
+				RespawnTime = new TimeSpan(18, 0, 0)
+			});
+			ZoneInfoMap.Add("kerraridge", new ZoneInfo
             {
                 Name = "kerraridge",
                 ShowAllMapLevels = true,
@@ -1517,7 +1528,15 @@ namespace EQToolShared.Map
                 NotableNPCs = new List<string>() { "Lady Vox", "Priest of Nagafen", "High Priest Zaharn", "A goblin alchemist (Permafrost)", "King Thex'Ka IV", "Goblin Archeologist", "Goblin Patriarch", "Goblin Preacher", "Goblin Jail Master", "Goblin Scryer", "Elite Honor Guard", "Injured Polar Bear", "Ice Goblin Champion", "Ice Giant Diplomat", },
                 RespawnTime = new TimeSpan(0, 22, 0)
             });
-            ZoneInfoMap.Add("qcat", new ZoneInfo
+			ZoneInfoMap.Add("perma_tryout", new ZoneInfo
+			{
+				Name = "perma_tryout",
+				ShowAllMapLevels = false,
+				ZoneLevelHeight = 10,
+				NotableNPCs = new List<string>() { "Lady Vox", "Priest of Nagafen", "High Priest Zaharn", "Ice Giant Diplomat", },
+				RespawnTime = new TimeSpan(18, 0, 0)
+			});
+			ZoneInfoMap.Add("qcat", new ZoneInfo
             {
                 Name = "qcat",
                 ShowAllMapLevels = false,
