@@ -14,7 +14,12 @@ namespace EQTool.Utilities
 			{
 				{ "towerfrost", "kurn" },
 				{ "myriah", "halas"},
-				{ "sodecay", "codecay"}
+				{ "sodecay", "codecay"},
+				{ "air_instanced", "airplane" },
+				{ "hate_instanced", "hateplane" },
+				{ "fear_instanced", "fearplane" },
+				{ "hole_instanced", "hole" },
+				{ "soldungb_tryout", "soldungb" }
 			};
 
 			if(checkValue)
@@ -39,7 +44,12 @@ namespace EQTool.Utilities
 			{
 				{ "oops, all icebones!", "kurn's tower" },
 				{ "domain of frost", "halas"},
-				{ "shard of decay", "the crypt of decay"}
+				{ "shard of decay", "the crypt of decay"},
+				{ "plane of sky (instanced)", "plane of sky" },
+				{ "plane of hate (instanced)", "plane of hate" },
+				{ "plane of fear (instanced)", "plane of fear" },
+				{ "the hole (instanced)", "the hole" },
+				{ "nagafen's lair (tryout)", "nagafens lair"}
 			};
 
 			if(checkValue)

@@ -48,7 +48,7 @@ namespace EQTool.Services
 			string columnFilter = "zone_code";
 
 			monsterTable = tempMonsterTable.AsEnumerable().Where(r =>
-				r.Field<string>(columnFilter) == zoneCode
+				r.Field<string>(columnFilter).Contains(zoneCode)
 			).CopyToDataTable();
 
 			if (monsterTable.Rows.Count > 0)

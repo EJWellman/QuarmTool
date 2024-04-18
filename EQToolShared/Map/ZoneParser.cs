@@ -76,7 +76,27 @@ namespace EQToolShared.Map
                 },
                 RespawnTime = new TimeSpan(8, 0, 0)
             });
-            ZoneInfoMap.Add("akanon", new ZoneInfo
+			ZoneInfoMap.Add("air_instanced", new ZoneInfo
+			{
+				Name = "air_instanced",
+				ShowAllMapLevels = true,
+				ZoneLevelHeight = 10,
+				NotableNPCs = new List<string>()
+				{
+					"Thunder Spirit Princess",
+					"Noble Dojorn",
+					"Protector of Sky",
+					"Gorgalosk",
+					"Keeper of Souls",
+					"The Spiroc Lord",
+					"The Spiroc Guardian",
+					"Bazzt Zzzt",
+					"Sister of the Spire",
+					"Eye of Veeshan"
+				},
+				RespawnTime = new TimeSpan(18, 0, 0)
+			});
+			ZoneInfoMap.Add("akanon", new ZoneInfo
             {
 
                 Name = "akanon",
@@ -635,7 +655,18 @@ namespace EQToolShared.Map
                 },
                 RespawnTime = new TimeSpan(8, 0, 0)
             });
-            ZoneInfoMap.Add("feerrott", new ZoneInfo
+			ZoneInfoMap.Add("fear_instanced", new ZoneInfo
+			{
+				Name = "fear_instanced",
+				ShowAllMapLevels = true,
+				ZoneLevelHeight = 10,
+				NotableNPCs = new List<string>()
+				{
+					"Fright","Dread", "Terror", "Dracoliche", "Cazic Thule"
+				},
+				RespawnTime = new TimeSpan(18, 0, 0)
+			});
+			ZoneInfoMap.Add("feerrott", new ZoneInfo
             {
                 Name = "feerrott",
                 ShowAllMapLevels = true,
@@ -840,7 +871,18 @@ namespace EQToolShared.Map
                 },
                 RespawnTime = new TimeSpan(8, 0, 0)
             });
-            ZoneInfoMap.Add("highkeep", new ZoneInfo
+			ZoneInfoMap.Add("hate_instanced", new ZoneInfo
+			{
+				Name = "hate_instanced",
+				ShowAllMapLevels = false,
+				ZoneLevelHeight = 10,
+				NotableNPCs = new List<string>()
+				{
+					"Ashenbone Broodmaster", "Avatar of Abhorrence", "Coercer T`vala", "Grandmaster R`Tal", "High Priest M`kari", "Lord of Ire", "Lord of Loathing", "Magi P`Tasa", "Master of Spite", "Mistress of Scorn", "Maestro of Rancor", "Innoruuk"
+				},
+				RespawnTime = new TimeSpan(18, 0, 0)
+			});
+			ZoneInfoMap.Add("highkeep", new ZoneInfo
             {
                 Name = "highkeep",
                 ShowAllMapLevels = false,
@@ -937,7 +979,18 @@ namespace EQToolShared.Map
                 },
                 RespawnTime = new TimeSpan(0, 21, 30)
             });
-            ZoneInfoMap.Add("iceclad", new ZoneInfo
+			ZoneInfoMap.Add("hole_instanced", new ZoneInfo
+			{
+				Name = "hole_instanced",
+				ShowAllMapLevels = false,
+				ZoneLevelHeight = 10,
+				NotableNPCs = new List<string>()
+				{
+					"Bejeweled Elemental","Commander Yarik","Caradon","Dartain the Lost","Ghost of Kindle","Ghost of Glohnor","Gibartik","High Scale Kirn","Initiate Sirlis","Irslak the Wretched","Jaeil the Wretched","Keeper of the Tombs","Kejar the Mighty","Master Yael","Niltoth the Unholy","Nortlav the Scalekeeper","Polzin Mrid","a ratman guard","Rocksoul","Schnozz the Flighty","Stonegrinder Minion","Stonesoul the Unmoving","Ulrik the Devout",
+				},
+				RespawnTime = new TimeSpan(18, 0, 0)
+			});
+			ZoneInfoMap.Add("iceclad", new ZoneInfo
             {
                 Name = "iceclad",
                 ShowAllMapLevels = true,
@@ -2040,6 +2093,14 @@ namespace EQToolShared.Map
 				NotableNPCs = new List<string>(),
 				RespawnTime = new TimeSpan(0, 4, 0)
 			});
+			ZoneInfoMap.Add("soldungb_tryout", new ZoneInfo
+			{
+				Name = "soldungb_tryout",
+				ShowAllMapLevels = false,
+				ZoneLevelHeight = 10,
+				NotableNPCs = new List<string>() { "King Tranix", "Lord Nagafen", "Magi Rokyl", "Warlord Skarlon" },
+				RespawnTime = new TimeSpan(18, 0, 0)
+			});
 			// add customer timers here for PQ
 			if (isProjectQ)
             {
@@ -2065,10 +2126,12 @@ namespace EQToolShared.Map
             ZoneWhoMapper.Add("the wakening land", "the wakening lands");
             ZoneWhoMapper.Add("siren's grotto", "sirens grotto");
             ZoneWhoMapper.Add("the plane of hate", "plane of hate");
-            ZoneWhoMapper.Add("burning woods", "the burning wood");
+			ZoneWhoMapper.Add("plane of hate (instanced)", "plane of hate  (instanced)");
+			ZoneWhoMapper.Add("burning woods", "the burning wood");
             ZoneWhoMapper.Add("south ro", "southern desert of ro");
-            ZoneWhoMapper.Add("plane of sky", "plane of air");
-            ZoneWhoMapper.Add("south karana", "southern plains of karana");
+            ZoneWhoMapper.Add("plane of sky", "plane of sky");
+			ZoneWhoMapper.Add("plane of sky (instanced)", "plane of sky (instanced)");
+			ZoneWhoMapper.Add("south karana", "southern plains of karana");
             ZoneWhoMapper.Add("sleeper's tomb", "sleepers tomb");
             ZoneWhoMapper.Add("mountains of rathe", "rathe mountains");
             ZoneWhoMapper.Add("nektulos forest", "the nektulos forest");
@@ -2131,15 +2194,17 @@ namespace EQToolShared.Map
             ZoneNameMapper.Add("blackburrow", "blackburrow");
             ZoneNameMapper.Add("gorge of king xorbb", "beholder");
             ZoneNameMapper.Add("plane of hate", "hateplane");
-            ZoneNameMapper.Add("plane of hate (Instanced)", "hateplane");
-            ZoneNameMapper.Add("west commonlands", "commons");
+            ZoneNameMapper.Add("plane of hate (nstanced)", "hate_instanced");
+			ZoneNameMapper.Add("plane of sky", "airplane");
+			ZoneNameMapper.Add("plane of sky (instanced)", "air_instanced");
+			ZoneNameMapper.Add("west commonlands", "commons");
             ZoneNameMapper.Add("north qeynos", "qeynos2");
             ZoneNameMapper.Add("cobalt scar", "cobaltscar");
             ZoneNameMapper.Add("befallen", "befallen");
             ZoneNameMapper.Add("paineel", "paineel");
             ZoneNameMapper.Add("north freeport", "freportn");
             ZoneNameMapper.Add("nagafen's lair", "soldungb");
-            ZoneNameMapper.Add("nagafen's lair (Instance)", "soldungb");
+            ZoneNameMapper.Add("nagafen's lair (tryout)", "soldungb_tryout");
             ZoneNameMapper.Add("runnyeye citadel", "runnyeye");
             ZoneNameMapper.Add("frontier mountains", "frontiermtns");
             ZoneNameMapper.Add("the city of mist", "citymist");
@@ -2159,8 +2224,6 @@ namespace EQToolShared.Map
             ZoneNameMapper.Add("neriak - foreign quarter", "neriaka");
             ZoneNameMapper.Add("infected paw", "paw");
             ZoneNameMapper.Add("lair of the splitpaw", "paw");
-            ZoneNameMapper.Add("plane of air", "airplane");
-            ZoneNameMapper.Add("plane of air (Instanced)", "airplane");
             ZoneNameMapper.Add("southern felwithe", "felwitheb");
             ZoneNameMapper.Add("velketor's labyrinth", "velketor");
             ZoneNameMapper.Add("cabilis west", "cabwest");
@@ -2178,7 +2241,7 @@ namespace EQToolShared.Map
             ZoneNameMapper.Add("dreadlands", "dreadlands");
             ZoneNameMapper.Add("south qeynos", "qeynos");
             ZoneNameMapper.Add("plane of fear", "fearplane");
-            ZoneNameMapper.Add("plane of fear (Instanced)", "fearplane");
+            ZoneNameMapper.Add("plane of fear (instanced)", "fear_instanced");
             ZoneNameMapper.Add("rathe mountains", "rathemtn");
             ZoneNameMapper.Add("the wakening lands", "wakening");
             ZoneNameMapper.Add("southern desert of ro", "sro");
