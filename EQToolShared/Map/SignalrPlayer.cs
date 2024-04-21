@@ -8,7 +8,8 @@ namespace EQToolShared.Map
     public enum MapLocationSharing
     {
         Everyone,
-        GuildOnly
+        GuildOnly,
+		None
     }
 
     public class NParseStateData

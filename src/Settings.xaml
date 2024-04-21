@@ -192,7 +192,13 @@
                     <CheckBox IsChecked="{Binding ActivePlayer.Player.ChChainWarningAudio}" Click="Savesettings" MinWidth="30"></CheckBox>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal">
-                    <TextBlock Text="Above will warn you when its your turn to cast CH" Foreground="Red"/> 
+                    <TextBlock Text="Above will warn you when its your turn to cast CH" Foreground="Red"/>
+                </StackPanel>
+                <StackPanel Orientation="Vertical" Margin="0, 0, 0, 8">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="Always on top" VerticalAlignment="Center"  FontWeight="Bold"  MinWidth="100"/>
+                        <CheckBox IsChecked="{Binding OverlayAlwaysOnTop}" Click="SaveAlwaysOntopCheckBoxSettings" ></CheckBox>
+                    </StackPanel>
                 </StackPanel>
             </StackPanel>
         </TabItem>

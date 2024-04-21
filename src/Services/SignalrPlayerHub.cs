@@ -135,7 +135,7 @@ namespace EQTool.Models
 
         private async Task SignalrConnectWithRetry()
         {
-            while (!cancellationTokenSource.IsCancellationRequested)
+            while (!cancellationTokenSource.IsCancellationRequested && this.activePlayer?.Player?.MapLocationSharing != MapLocationSharing.None)
             {
                 try
                 {
@@ -159,7 +159,7 @@ namespace EQTool.Models
 
         private async Task NparseConnectWithRetry()
         {
-            while (!cancellationTokenSource.IsCancellationRequested)
+            while (!cancellationTokenSource.IsCancellationRequested && this.activePlayer?.Player?.MapLocationSharing != MapLocationSharing.None)
             {
                 try
                 {
@@ -186,7 +186,7 @@ namespace EQTool.Models
         }
         private async Task NparseStartReceiveLoopAsync()
         {
-            while (!cancellationTokenSource.IsCancellationRequested)
+            while (!cancellationTokenSource.IsCancellationRequested && this.activePlayer?.Player?.MapLocationSharing != MapLocationSharing.None)
             {
                 Thread.Sleep(100);
                 if (NParseWebsocketConnection.State == WebSocketState.Open)
@@ -366,7 +366,7 @@ namespace EQTool.Models
 
         private void LogParser_PlayerLocationEvent(object sender, LogParser.PlayerLocationEventArgs e)
         {
-            if (this.activePlayer?.Player?.Server != null)
+            if (this.activePlayer?.Player?.Server != null && this.activePlayer?.Player?.MapLocationSharing != MapLocationSharing.None)
             {
                 this.LastPlayer = new SignalrPlayer
                 {

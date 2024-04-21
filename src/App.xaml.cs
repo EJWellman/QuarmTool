@@ -658,6 +658,11 @@ namespace EQTool
                 {
                     w3.Topmost = EQToolSettings.SpellWindowState.AlwaysOnTop;
                 }
+				else if (item is EventOverlay w4)
+				{
+					w4.Topmost = EQToolSettings.OverlayWindowState.AlwaysOnTop;
+					w4.Activate();
+				}
             }
         }
     }

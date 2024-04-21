@@ -150,6 +150,19 @@ namespace EQTool.ViewModels
             }
         }
 
+		public bool OverlayAlwaysOnTop
+		{
+			get
+			{
+				return this.toolSettings.OverlayWindowState.AlwaysOnTop;
+			}
+			set
+			{
+				this.toolSettings.OverlayWindowState.AlwaysOnTop = value;
+				OnPropertyChanged();
+			}
+		}
+
         public bool ShowRandomRolls
         {
             get
