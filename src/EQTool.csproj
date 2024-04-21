@@ -119,7 +119,7 @@
     <ErrorReport>prompt</ErrorReport>
     <Prefer32Bit>true</Prefer32Bit>
     <ApplicationIcon>clipboard.ico</ApplicationIcon>
-    <AssemblyName>PQTool</AssemblyName>
+    <AssemblyName>QuarmTool</AssemblyName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Quarm|x86'">
     <OutputPath>bin\x86\Quarm\</OutputPath>
@@ -131,7 +131,7 @@
     <ErrorReport>prompt</ErrorReport>
     <Prefer32Bit>true</Prefer32Bit>
     <ApplicationIcon>clipboard.ico</ApplicationIcon>
-    <AssemblyName>PQTool</AssemblyName>
+    <AssemblyName>QuarmTool</AssemblyName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Test|AnyCPU'">
     <DebugSymbols>true</DebugSymbols>
@@ -165,7 +165,7 @@
     <LangVersion>7.3</LangVersion>
     <ErrorReport>prompt</ErrorReport>
     <Prefer32Bit>true</Prefer32Bit>
-    <AssemblyName>PQTool</AssemblyName>
+    <AssemblyName>QuarmTool</AssemblyName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug_Quarm|x86'">
     <DebugSymbols>true</DebugSymbols>
@@ -176,7 +176,7 @@
     <LangVersion>7.3</LangVersion>
     <ErrorReport>prompt</ErrorReport>
     <Prefer32Bit>true</Prefer32Bit>
-    <AssemblyName>PQTool</AssemblyName>
+    <AssemblyName>QuarmTool</AssemblyName>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Autofac, Version=7.1.0.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">

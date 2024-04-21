@@ -11,7 +11,7 @@ namespace EQTool
     public class Program
     {
 #if QUARM
-        private const string programName = "PQTool.exe";
+        private const string programName = "QuarmTool.exe";
 #else
         private const string programName = "EQTool.exe";
 #endif

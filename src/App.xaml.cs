@@ -57,7 +57,7 @@ namespace EQTool
 
         public static List<BaseSaveStateWindow> WindowList = new List<BaseSaveStateWindow>();
 #if QUARM
-        private const string programName = "pqtool";
+        private const string programName = "quarmtool";
 #else
         private const string programName = "eqtool";
 #endif
