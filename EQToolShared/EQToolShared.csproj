@@ -110,6 +110,10 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <None Include="DataQueries\Faction Json Creation Query.sql" />
+    <None Include="DataQueries\Merchant Json Creation Query.sql" />
+    <None Include="DataQueries\Mob Json Creation Query.sql" />
+    <None Include="DataQueries\MobDrop Json Creation Query.sql" />
     <Content Include="MasterItemList.txt" />
     <Content Include="MasterNPCList.txt" />
   </ItemGroup>
