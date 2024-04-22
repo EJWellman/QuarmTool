@@ -46,9 +46,14 @@ namespace EQTool.Services
 			List<JsonMonster> monsterList = JsonConvert.DeserializeObject<List<JsonMonster>>(jsonContents);
 			DataTable tempMonsterTable = monsterList.ToDataTable();
 			string columnFilter = "zone_code";
+			string backupColumnFilter = "zone_code_guess";
 
 			monsterTable = tempMonsterTable.AsEnumerable().Where(r =>
-				r.Field<string>(columnFilter).Contains(zoneCode)
+				(r.Field<string>(columnFilter) != null 
+					&& r.Field<string>(columnFilter).Contains(zoneCode))
+				|| 
+				(r.Field<string>(columnFilter) == null
+					&& r.Field<string>(backupColumnFilter).Contains(zoneCode))
 			).CopyToDataTable();
 
 			if (monsterTable.Rows.Count > 0)

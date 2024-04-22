@@ -1,6 +1,8 @@
 ﻿using EQTool.Models;
 using EQTool.Services.Parsing;
+using EQToolShared.Enums;
 using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -778,7 +780,7 @@ namespace EQTool.ViewModels
 
 				Name = monster.name;
 				Race = monster.race;
-				Class = monster.npc_class;
+				Class = Enum.GetName(typeof(Classes), monster.npc_class_id);
 				Level = (monster.maxlevel != 0 ? $"{monster.level}-{monster.maxlevel}" : $"{monster.level}");
 				RunSpeed = monster.runspeed.ToString();
 				AC = monster.AC.ToString();

@@ -1,0 +1,40 @@
+﻿namespace EQToolShared.Enums
+{
+    public enum Classes
+    {
+		Warrior				= 1,
+		Cleric				= 2,
+		Paladin				= 3,
+		Ranger				= 4,
+		Shadowknight		= 5,
+		Druid				= 6,
+		Monk				= 7,
+		Bard				= 8,
+		Rogue				= 9,
+		Shaman				= 10,
+		Necromancer			= 11,
+		Wizard				= 12,
+		Magician			= 13,
+		Enchanter			= 14,
+		Beastlord			= 15,
+		WarriorGM			= 20,
+		ClericGM			= 21,
+		PaladinGM			= 22,
+		RangerGM			= 23,
+		ShadowknightGM		= 24,
+		DruidGM				= 25,
+		MonkGM				= 26,
+		BardGM				= 27,
+		RogueGM				= 28,
+		ShamanGM			= 29,
+		NecromancerGM		= 30,
+		WizardGM			= 31,
+		MagicianGM			= 32,
+		EnchanterGM			= 33,
+		BeastlordGM			= 34,
+		Banker				= 40,
+		Merchant			= 41,
+		Discord_Merchant	= 59,
+		Corpse_Class		= 62
+	}
+}

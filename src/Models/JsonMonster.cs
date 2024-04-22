@@ -31,7 +31,7 @@ namespace EQTool.Models
 		public int mana { get; set; }
 		public string name { get; set; }
 		public string race { get; set; }
-		public string npc_class { get; set; }
+		public int npc_class_id { get; set; }
 		public int greed { get; set; }
 		public int level { get; set; }
 		public int maxdmg { get; set; }
@@ -58,6 +58,8 @@ namespace EQTool.Models
 		public int see_improved_hide { get; set; }
 		public string special_abilities { get; set; }
 		public int unique_spawn_by_name { get; set; }
+		public string zone_name_guess { get; set; }
+		public string zone_code_guess { get; set; }
 
 		public List<JsonMonsterFaction> Factions { get; set; } = new List<JsonMonsterFaction>();
 		public List<JsonMonsterDrops> Drops { get; set; } = new List<JsonMonsterDrops>();
