@@ -81,9 +81,22 @@ namespace EQTool.ViewModels
                 this.toolSettings.DpsWindowState.AlwaysOnTop = value;
                 OnPropertyChanged();
             }
-        }
+		}
 
-        public double DPSWindowOpacity
+		public int OverlayFontSize
+		{
+			get
+			{
+				return this.toolSettings.OverlayFontSize.Value;
+			}
+			set
+			{
+				this.toolSettings.OverlayFontSize = value;
+				OnPropertyChanged();
+			}
+		}
+
+		public double DPSWindowOpacity
         {
             get
             {

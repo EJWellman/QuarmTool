@@ -70,6 +70,7 @@ namespace EQTool
                 var target = e.isYou ? "You " : "Your target ";
                 this.appDispatcher.DispatchUI(() =>
                 {
+					CenterText.FontSize = settings.OverlayFontSize.Value;
                     CenterText.Text = $"{target} resisted the {e.Spell.name} spell";
                     CenterText.Foreground = Brushes.Red;
                 });
@@ -110,8 +111,9 @@ namespace EQTool
                 System.Threading.Tasks.Task.Factory.StartNew(() =>
                 {
                     this.appDispatcher.DispatchUI(() =>
-                    {
-                        CenterText.Text = $"{e.SpellName} has worn off!";
+					{
+						CenterText.FontSize = settings.OverlayFontSize.Value;
+						CenterText.Text = $"{e.SpellName} has worn off!";
                         CenterText.Foreground = Brushes.Red;
                     });
                     System.Threading.Thread.Sleep(3000);
@@ -136,38 +138,44 @@ namespace EQTool
             {
                 System.Threading.Thread.Sleep(1000 * 30);
                 this.appDispatcher.DispatchUI(() =>
-                {
-                    CenterText.Text = "Dragon Roar in 6 Seconds!";
+				{
+					CenterText.FontSize = settings.OverlayFontSize.Value;
+					CenterText.Text = "Dragon Roar in 6 Seconds!";
                     CenterText.Foreground = Brushes.Red;
                 });
                 System.Threading.Thread.Sleep(1000);
                 this.appDispatcher.DispatchUI(() =>
-                {
-                    CenterText.Text = "Dragon Roar in 5 Seconds!";
+				{
+					CenterText.FontSize = settings.OverlayFontSize.Value;
+					CenterText.Text = "Dragon Roar in 5 Seconds!";
                     CenterText.Foreground = Brushes.Red;
                 });
                 System.Threading.Thread.Sleep(1000);
                 this.appDispatcher.DispatchUI(() =>
-                {
-                    CenterText.Text = "Dragon Roar in 4 Seconds!";
+				{
+					CenterText.FontSize = settings.OverlayFontSize.Value;
+					CenterText.Text = "Dragon Roar in 4 Seconds!";
                     CenterText.Foreground = Brushes.Red;
                 });
                 System.Threading.Thread.Sleep(1000);
                 this.appDispatcher.DispatchUI(() =>
-                {
-                    CenterText.Text = "Dragon Roar in 3 Seconds!";
+				{
+					CenterText.FontSize = settings.OverlayFontSize.Value;
+					CenterText.Text = "Dragon Roar in 3 Seconds!";
                     CenterText.Foreground = Brushes.Red;
                 });
                 System.Threading.Thread.Sleep(1000);
                 this.appDispatcher.DispatchUI(() =>
-                {
-                    CenterText.Text = "Dragon Roar in 2 Seconds!";
+				{
+					CenterText.FontSize = settings.OverlayFontSize.Value;
+					CenterText.Text = "Dragon Roar in 2 Seconds!";
                     CenterText.Foreground = Brushes.Red;
                 });
                 System.Threading.Thread.Sleep(1000);
                 this.appDispatcher.DispatchUI(() =>
-                {
-                    CenterText.Text = "Dragon Roar in 1 Seconds!";
+				{
+					CenterText.FontSize = settings.OverlayFontSize.Value;
+					CenterText.Text = "Dragon Roar in 1 Seconds!";
                     CenterText.Foreground = Brushes.Red;
                 });
                 System.Threading.Thread.Sleep(1000);
@@ -190,14 +198,15 @@ namespace EQTool
             System.Threading.Tasks.Task.Factory.StartNew(() =>
             {
                 this.appDispatcher.DispatchUI(() =>
-                {
-                    CenterText.Text = e;
+				{
+					CenterText.FontSize = settings.OverlayFontSize.Value;
+					CenterText.Text = e;
                     CenterText.Foreground = Brushes.Red;
                 });
                 System.Threading.Thread.Sleep(1000 * 5);
                 this.appDispatcher.DispatchUI(() =>
-                {
-                    CenterText.Text = string.Empty;
+				{
+					CenterText.Text = string.Empty;
                     CenterText.Foreground = Brushes.Red;
                 });
             });
@@ -214,8 +223,9 @@ namespace EQTool
             System.Threading.Tasks.Task.Factory.StartNew(() =>
             {
                 this.appDispatcher.DispatchUI(() =>
-                {
-                    CenterText.Text = "Feign Failed Death!";
+				{
+					CenterText.FontSize = settings.OverlayFontSize.Value;
+					CenterText.Text = "Feign Failed Death!";
                     CenterText.Foreground = Brushes.Red;
                 });
                 System.Threading.Thread.Sleep(1000 * 5);
@@ -238,8 +248,9 @@ namespace EQTool
             System.Threading.Tasks.Task.Factory.StartNew(() =>
             {
                 this.appDispatcher.DispatchUI(() =>
-                {
-                    CenterText.Text = "Charm Break";
+				{
+					CenterText.FontSize = settings.OverlayFontSize.Value;
+					CenterText.Text = "Charm Break";
                     CenterText.Foreground = Brushes.Red;
                 });
                 System.Threading.Thread.Sleep(1000 * 5);
@@ -265,13 +276,15 @@ namespace EQTool
                 this.appDispatcher.DispatchUI(() =>
                 {
                     if (fteperson == null)
-                    {
-                        CenterText.Text = $"{e.FTEPerson} FTE {e.NPCName}";
+					{
+						CenterText.FontSize = settings.OverlayFontSize.Value;
+						CenterText.Text = $"{e.FTEPerson} FTE {e.NPCName}";
                         CenterText.Foreground = Brushes.Yellow;
                     }
                     else
-                    {
-                        CenterText.Text = $"{fteperson.Name} <{fteperson.GuildName}> FTE {e.NPCName}";
+					{
+						CenterText.FontSize = settings.OverlayFontSize.Value;
+						CenterText.Text = $"{fteperson.Name} <{fteperson.GuildName}> FTE {e.NPCName}";
                         CenterText.Foreground = Brushes.Yellow;
                     }
                 });
@@ -295,8 +308,9 @@ namespace EQTool
             System.Threading.Tasks.Task.Factory.StartNew(() =>
             {
                 this.appDispatcher.DispatchUI(() =>
-                {
-                    CenterText.Text = "Invis Fading";
+				{
+					CenterText.FontSize = settings.OverlayFontSize.Value;
+					CenterText.Text = "Invis Fading";
                     CenterText.Foreground = Brushes.Red;
                 });
                 System.Threading.Thread.Sleep(1000 * 5);
@@ -319,8 +333,9 @@ namespace EQTool
             System.Threading.Tasks.Task.Factory.StartNew(() =>
             {
                 this.appDispatcher.DispatchUI(() =>
-                {
-                    CenterText.Text = "Levitate Fading";
+				{
+					CenterText.FontSize = settings.OverlayFontSize.Value;
+					CenterText.Text = "Levitate Fading";
                     CenterText.Foreground = Brushes.Red;
                 });
                 System.Threading.Thread.Sleep(1000 * 5);
@@ -352,8 +367,9 @@ namespace EQTool
                         System.Threading.Tasks.Task.Factory.StartNew(() =>
                         {
                             this.appDispatcher.DispatchUI(() =>
-                            {
-                                CenterText.Text = "CH Chain Warning";
+							{
+								CenterText.FontSize = settings.OverlayFontSize.Value;
+								CenterText.Text = "CH Chain Warning";
                                 CenterText.Foreground = Brushes.Red;
                             });
                             System.Threading.Thread.Sleep(1000 * 2);
@@ -531,8 +547,9 @@ namespace EQTool
                 return;
             }
             appDispatcher.DispatchUI(() =>
-            {
-                CenterText.Text = e.NpcName + " ENRAGED";
+			{
+				CenterText.FontSize = settings.OverlayFontSize.Value;
+				CenterText.Text = e.NpcName + " ENRAGED";
                 CenterText.Foreground = Brushes.Red;
             });
 
@@ -540,8 +557,9 @@ namespace EQTool
             {
                 System.Threading.Thread.Sleep(1000 * 12);
                 this.appDispatcher.DispatchUI(() =>
-                {
-                    CenterText.Text = "ENGRAGE OFF";
+				{
+					CenterText.FontSize = settings.OverlayFontSize.Value;
+					CenterText.Text = "ENGRAGE OFF";
                     CenterText.Foreground = Brushes.Red;
                 });
                 System.Threading.Thread.Sleep(1000 * 3);

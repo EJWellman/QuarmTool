@@ -106,6 +106,10 @@
                     <Button Content="▶" Margin="1" FontSize="7" Width="14" Height="14" Padding="0" Click="textvoice" ToolTip="Test Voice" />
                 </StackPanel>
                 <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="Overlay Font Size" ToolTip="Example: GG or CA. Other tags will be ignored" VerticalAlignment="Center" FontWeight="Bold"  MinWidth="100"/>
+                    <ComboBox SelectedItem="{Binding OverlayFontSize}" ItemsSource="{Binding FontSizes}" MinWidth="105"></ComboBox>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
                     <TextBlock VerticalAlignment="Center" FontWeight="Bold"  MinWidth="75"/>
                     <TextBlock Text="Visual Alert" VerticalAlignment="Center" FontWeight="Bold"  MinWidth="75"/>
                     <TextBlock Text="Audio Alert" VerticalAlignment="Center" FontWeight="Bold"  />

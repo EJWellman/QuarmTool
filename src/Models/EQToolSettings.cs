@@ -45,6 +45,20 @@ namespace EQTool.Models
             }
         }
 
+		private int? _OverlayFontSize = 18;
+		public int? OverlayFontSize
+		{
+			get
+			{
+				return _OverlayFontSize;
+			}
+			set
+			{
+				_OverlayFontSize = value ?? 18;
+				_OverlayFontSize = _OverlayFontSize < 18 ? 18 : _OverlayFontSize;
+			}
+		}
+
         private WindowState _OverlayWindowState;
         public WindowState OverlayWindowState
         {
