@@ -20,6 +20,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Forms;
 using System.Windows.Navigation;
+using Xceed.Wpf.Toolkit;
 
 namespace EQTool
 {
@@ -249,6 +250,52 @@ namespace EQTool
             settings.BestGuessSpells = s.IsChecked ?? false;
             SaveConfig();
         }
+
+		private void OverlayColor_Selected(object sender, RoutedEventArgs e)
+		{
+			var s = sender as ColorPicker;
+			if(s.Name == "LevFadingOverlayColor")
+			{
+				settings.LevFadingOverlayColor = s.SelectedColor.Value;
+			}
+			else if(s.Name == "InvisFadingOverlayColor")
+			{
+				settings.InvisFadingOverlayColor = s.SelectedColor.Value;
+			}
+			else if(s.Name == "EnrageOverlayColor")
+			{
+				settings.EnrageOverlayColor = s.SelectedColor.Value;
+			}
+			else if(s.Name == "FTEOverlayColor")
+			{
+				settings.FTEOverlayColor = s.SelectedColor.Value;
+			}
+			else if(s.Name == "CharmBreakOverlayColor")
+			{
+				settings.CharmBreakOverlayColor = s.SelectedColor.Value;
+			}
+			else if(s.Name == "FailedFeignOverlayColor")
+			{
+				settings.FailedFeignOverlayColor = s.SelectedColor.Value;
+			}
+			else if(s.Name == "GroupInviteOverlayColor")
+			{
+				settings.GroupInviteOverlayColor = s.SelectedColor.Value;
+			}
+			else if(s.Name == "DragonRoarOverlayColor")
+			{
+				settings.DragonRoarOverlayColor = s.SelectedColor.Value;
+			}
+			else if(s.Name == "RootWarningOverlayColor")
+			{
+				settings.RootWarningOverlayColor = s.SelectedColor.Value;
+			}
+			else if(s.Name == "ResistWarningOverlayColor")
+			{
+				settings.ResistWarningOverlayColor = s.SelectedColor.Value;
+			}
+			SaveConfig();
+		}
 
         private void testspellsclicked(object sender, RoutedEventArgs e)
         {

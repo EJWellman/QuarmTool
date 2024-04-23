@@ -32,9 +32,10 @@ namespace EQTool
         private readonly List<ChainOverlayData> chainDatas = new List<ChainOverlayData>();
         private readonly PigParseApi pigParseApi;
         private readonly IAppDispatcher appDispatcher;
+		private BrushConverter converter = new BrushConverter();
 
 
-        public EventOverlay(LogParser logParser, EQToolSettings settings, PigParseApi pigParseApi, EQToolSettingsLoad toolSettingsLoad, ActivePlayer activePlayer, IAppDispatcher appDispatcher)
+		public EventOverlay(LogParser logParser, EQToolSettings settings, PigParseApi pigParseApi, EQToolSettingsLoad toolSettingsLoad, ActivePlayer activePlayer, IAppDispatcher appDispatcher)
             : base(settings.OverlayWindowState, toolSettingsLoad, settings)
         {
             this.pigParseApi = pigParseApi;
@@ -279,14 +280,14 @@ namespace EQTool
 					{
 						CenterText.FontSize = settings.OverlayFontSize.Value;
 						CenterText.Text = $"{e.FTEPerson} FTE {e.NPCName}";
-                        CenterText.Foreground = Brushes.Yellow;
+                        CenterText.Foreground = (Brush)converter.ConvertFromString(settings.FTEOverlayColor.ToString());
                     }
                     else
 					{
 						CenterText.FontSize = settings.OverlayFontSize.Value;
 						CenterText.Text = $"{fteperson.Name} <{fteperson.GuildName}> FTE {e.NPCName}";
-                        CenterText.Foreground = Brushes.Yellow;
-                    }
+						CenterText.Foreground = (Brush)converter.ConvertFromString(settings.FTEOverlayColor.ToString());
+					}
                 });
                 System.Threading.Thread.Sleep(1000 * 5);
                 this.appDispatcher.DispatchUI(() =>
@@ -336,8 +337,8 @@ namespace EQTool
 				{
 					CenterText.FontSize = settings.OverlayFontSize.Value;
 					CenterText.Text = "Levitate Fading";
-                    CenterText.Foreground = Brushes.Red;
-                });
+                    CenterText.Foreground = (Brush)converter.ConvertFromString(settings.LevFadingOverlayColor.ToString());
+				});
                 System.Threading.Thread.Sleep(1000 * 5);
                 this.appDispatcher.DispatchUI(() =>
                 {

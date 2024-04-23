@@ -4,8 +4,8 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:properties="clr-namespace:EQTool.Properties"
-        Style="{StaticResource MySettingsWindowSyle}"
+        xmlns:properties="clr-namespace:EQTool.Properties" xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+                            Style="{StaticResource MySettingsWindowSyle}"
         mc:Ignorable="d"
         SizeToContent="WidthAndHeight"
         Title="Settings">
@@ -110,67 +110,77 @@
                     <ComboBox SelectedItem="{Binding OverlayFontSize}" ItemsSource="{Binding FontSizes}" MinWidth="105"></ComboBox>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal">
-                    <TextBlock VerticalAlignment="Center" FontWeight="Bold"  MinWidth="75"/>
-                    <TextBlock Text="Visual Alert" VerticalAlignment="Center" FontWeight="Bold"  MinWidth="75"/>
-                    <TextBlock Text="Audio Alert" VerticalAlignment="Center" FontWeight="Bold"  />
+                    <TextBlock VerticalAlignment="Center" FontWeight="Bold"  MinWidth="90"/>
+                    <TextBlock Text="Visual" FontWeight="Bold"  MinWidth="95" Width="34"/>
+                    <TextBlock Text="Audio" VerticalAlignment="Center" FontWeight="Bold"  />
                 </StackPanel>
                 <StackPanel Orientation="Horizontal">
                     <TextBlock Text="Enraged"  VerticalAlignment="Center" FontWeight="Bold"  MinWidth="100"/>
-                    <CheckBox IsChecked="{Binding ActivePlayer.Player.EnrageOverlay}" Click="Savesettings" MinWidth="75"></CheckBox>
+                    <CheckBox IsChecked="{Binding ActivePlayer.Player.EnrageOverlay}" Click="Savesettings" MinWidth="20"></CheckBox>
+                    <xctk:ColorPicker Name="EnrageOverlayColor" SelectedColorChanged="OverlayColor_Selected" MinWidth="70" MaxWidth="70" Margin="0, 0, 5, 0" > </xctk:ColorPicker>
                     <CheckBox IsChecked="{Binding ActivePlayer.Player.EnrageAudio}" Click="Savesettings" MinWidth="30"></CheckBox>
                     <Button Content="▶" Margin="1" FontSize="7" Width="14" Height="14" Padding="0" Click="testenrage" ToolTip="Test Enrage" />
                 </StackPanel>
                 <StackPanel Orientation="Horizontal">
                     <TextBlock Text="Levitate Fading" VerticalAlignment="Center" FontWeight="Bold"  MinWidth="100"/>
-                    <CheckBox IsChecked="{Binding ActivePlayer.Player.LevFadingOverlay}" Click="Savesettings" MinWidth="75"></CheckBox>
+                    <CheckBox IsChecked="{Binding ActivePlayer.Player.LevFadingOverlay}" Click="Savesettings" MinWidth="20"></CheckBox>
+                    <xctk:ColorPicker Name="LevFadingOverlayColor" SelectedColorChanged="OverlayColor_Selected" MinWidth="70" MaxWidth="70" Margin="0, 0, 5, 0" ></xctk:ColorPicker>
                     <CheckBox IsChecked="{Binding ActivePlayer.Player.LevFadingAudio}" Click="Savesettings" MinWidth="30"></CheckBox>
                     <Button Content="▶" Margin="1" FontSize="7" Width="14" Height="14" Padding="0" Click="testlevfading" ToolTip="Test Levitate fading" />
                 </StackPanel>
                 <StackPanel Orientation="Horizontal">
                     <TextBlock Text="Invis Fading" VerticalAlignment="Center" FontWeight="Bold"  MinWidth="100"/>
-                    <CheckBox IsChecked="{Binding ActivePlayer.Player.InvisFadingOverlay}" Click="Savesettings" MinWidth="75"></CheckBox>
+                    <CheckBox IsChecked="{Binding ActivePlayer.Player.InvisFadingOverlay}" Click="Savesettings" MinWidth="20"></CheckBox>
+                    <xctk:ColorPicker Name="InvisFadingOverlayColor" SelectedColorChanged="OverlayColor_Selected" MinWidth="70" MaxWidth="70" Margin="0, 0, 5, 0" ></xctk:ColorPicker>
                     <CheckBox IsChecked="{Binding ActivePlayer.Player.InvisFadingAudio}" Click="Savesettings" MinWidth="30"></CheckBox>
                     <Button Content="▶" Margin="1" FontSize="7" Width="14" Height="14" Padding="0" Click="testinvisfading" ToolTip="Test Invis Fading" />
                 </StackPanel>
                 <StackPanel Orientation="Horizontal">
                     <TextBlock Text="FTE" VerticalAlignment="Center" FontWeight="Bold"  MinWidth="100"/>
-                    <CheckBox IsChecked="{Binding ActivePlayer.Player.FTEOverlay}" Click="Savesettings" MinWidth="75"></CheckBox>
+                    <CheckBox IsChecked="{Binding ActivePlayer.Player.FTEOverlay}" Click="Savesettings" MinWidth="20"></CheckBox>
+                    <xctk:ColorPicker Name="FTEOverlayColor" SelectedColorChanged="OverlayColor_Selected" MinWidth="70" MaxWidth="70" Margin="0, 0, 5, 0" ></xctk:ColorPicker>
                     <CheckBox IsChecked="{Binding ActivePlayer.Player.FTEAudio}" Click="Savesettings" MinWidth="30"></CheckBox>
                     <Button Content="▶" Margin="1" FontSize="7" Width="14" Height="14" Padding="0" Click="testFTE" ToolTip="Test FTE" />
                 </StackPanel>
                 <StackPanel Orientation="Horizontal">
                     <TextBlock Text="Charm Break" VerticalAlignment="Center" FontWeight="Bold"  MinWidth="100"/>
-                    <CheckBox IsChecked="{Binding ActivePlayer.Player.CharmBreakOverlay}" Click="Savesettings" MinWidth="75"></CheckBox>
+                    <CheckBox IsChecked="{Binding ActivePlayer.Player.CharmBreakOverlay}" Click="Savesettings" MinWidth="20"></CheckBox>
+                    <xctk:ColorPicker Name="CharmBreakOverlayColor" SelectedColorChanged="OverlayColor_Selected" MinWidth="70" MaxWidth="70" Margin="0, 0, 5, 0" ></xctk:ColorPicker>
                     <CheckBox IsChecked="{Binding ActivePlayer.Player.CharmBreakAudio}" Click="Savesettings" MinWidth="30"></CheckBox>
                     <Button Content="▶" Margin="1" FontSize="7" Width="14" Height="14" Padding="0" Click="testCharmBreak" ToolTip="Test Charm Break" />
                 </StackPanel>
                 <StackPanel Orientation="Horizontal">
                     <TextBlock Text="Failed Feign" VerticalAlignment="Center" FontWeight="Bold"  MinWidth="100"/>
-                    <CheckBox IsChecked="{Binding ActivePlayer.Player.FailedFeignOverlay}" Click="Savesettings" MinWidth="75"></CheckBox>
+                    <CheckBox IsChecked="{Binding ActivePlayer.Player.FailedFeignOverlay}" Click="Savesettings" MinWidth="20"></CheckBox>
+                    <xctk:ColorPicker Name="FailedFeignOverlayColor" SelectedColorChanged="OverlayColor_Selected" MinWidth="70" MaxWidth="70" Margin="0, 0, 5, 0" ></xctk:ColorPicker>
                     <CheckBox IsChecked="{Binding ActivePlayer.Player.FailedFeignAudio}" Click="Savesettings" MinWidth="30"></CheckBox>
                     <Button Content="▶" Margin="1" FontSize="7" Width="14" Height="14" Padding="0" Click="testFailedFeign" ToolTip="Test Failed Feign" />
                 </StackPanel>
                 <StackPanel Orientation="Horizontal">
                     <TextBlock Text="Group Invite" VerticalAlignment="Center" FontWeight="Bold"  MinWidth="100"/>
-                    <CheckBox IsChecked="{Binding ActivePlayer.Player.GroupInviteOverlay}" Click="Savesettings" MinWidth="75"></CheckBox>
+                    <CheckBox IsChecked="{Binding ActivePlayer.Player.GroupInviteOverlay}" Click="Savesettings" MinWidth="20"></CheckBox>
+                    <xctk:ColorPicker Name="GroupInviteOverlayColor" SelectedColorChanged="OverlayColor_Selected" MinWidth="70" MaxWidth="70" Margin="0, 0, 5, 0" ></xctk:ColorPicker>
                     <CheckBox IsChecked="{Binding ActivePlayer.Player.GroupInviteAudio}" Click="Savesettings" MinWidth="30"></CheckBox>
                     <Button Content="▶" Margin="1" FontSize="7" Width="14" Height="14" Padding="0" Click="testGroupInvite" ToolTip="Test Group Invite" />
                 </StackPanel>
                 <StackPanel Orientation="Horizontal">
                     <TextBlock Text="Dragon Roar" VerticalAlignment="Center" FontWeight="Bold"  MinWidth="100"/>
-                    <CheckBox IsChecked="{Binding ActivePlayer.Player.DragonRoarOverlay}" Click="Savesettings" MinWidth="75"></CheckBox>
+                    <CheckBox IsChecked="{Binding ActivePlayer.Player.DragonRoarOverlay}" Click="Savesettings" MinWidth="20"></CheckBox>
+                    <xctk:ColorPicker Name="DragonRoarOverlayColor" SelectedColorChanged="OverlayColor_Selected" MinWidth="70" MaxWidth="70" Margin="0, 0, 5, 0" ></xctk:ColorPicker>
                     <CheckBox IsChecked="{Binding ActivePlayer.Player.DragonRoarAudio}" Click="Savesettings" MinWidth="30"></CheckBox>
                     <Button Content="▶" Margin="1" FontSize="7" Width="14" Height="14" Padding="0" Click="testDragonRoar" ToolTip="Test Dragon Roar" />
                 </StackPanel>
                 <StackPanel Orientation="Horizontal">
                     <TextBlock Text="Root Breaks" VerticalAlignment="Center" FontWeight="Bold"  MinWidth="100"/>
-                    <CheckBox IsChecked="{Binding ActivePlayer.Player.RootWarningOverlay}" Click="Savesettings" MinWidth="75"></CheckBox>
+                    <CheckBox IsChecked="{Binding ActivePlayer.Player.RootWarningOverlay}" Click="Savesettings" MinWidth="20"></CheckBox>
+                    <xctk:ColorPicker Name="RootWarningOverlayColor" SelectedColorChanged="OverlayColor_Selected" MinWidth="70" MaxWidth="70" Margin="0, 0, 5, 0" ></xctk:ColorPicker>
                     <CheckBox IsChecked="{Binding ActivePlayer.Player.RootWarningAudio}" Click="Savesettings" MinWidth="30"></CheckBox>
                     <Button Content="▶" Margin="1" FontSize="7" Width="14" Height="14" Padding="0" Click="testRootBreak" ToolTip="Test Root Break" />
                 </StackPanel>
                 <StackPanel Orientation="Horizontal">
                     <TextBlock Text="Resists" VerticalAlignment="Center" FontWeight="Bold"  MinWidth="100"/>
-                    <CheckBox IsChecked="{Binding ActivePlayer.Player.ResistWarningOverlay}" Click="Savesettings" MinWidth="75"></CheckBox>
+                    <CheckBox IsChecked="{Binding ActivePlayer.Player.ResistWarningOverlay}" Click="Savesettings" MinWidth="20"></CheckBox>
+                    <xctk:ColorPicker Name="ResistWarningOverlayColor" SelectedColorChanged="OverlayColor_Selected" MinWidth="70" MaxWidth="70" Margin="0, 0, 5, 0" ></xctk:ColorPicker>
                     <CheckBox IsChecked="{Binding ActivePlayer.Player.ResistWarningAudio}" Click="Savesettings" MinWidth="30"></CheckBox>
                     <Button Content="▶" Margin="1" FontSize="7" Width="14" Height="14" Padding="0" Click="testResists" ToolTip="Test Resist" />
                 </StackPanel>
