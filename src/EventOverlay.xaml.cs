@@ -73,8 +73,8 @@ namespace EQTool
                 {
 					CenterText.FontSize = settings.OverlayFontSize.Value;
                     CenterText.Text = $"{target} resisted the {e.Spell.name} spell";
-                    CenterText.Foreground = Brushes.Red;
-                });
+                    CenterText.Foreground = (Brush)converter.ConvertFromString(settings.ResistWarningOverlayColor.ToString());
+				});
                 System.Threading.Thread.Sleep(3000);
                 this.appDispatcher.DispatchUI(() =>
                 {
@@ -115,8 +115,8 @@ namespace EQTool
 					{
 						CenterText.FontSize = settings.OverlayFontSize.Value;
 						CenterText.Text = $"{e.SpellName} has worn off!";
-                        CenterText.Foreground = Brushes.Red;
-                    });
+                        CenterText.Foreground = (Brush)converter.ConvertFromString(settings.RootWarningOverlayColor.ToString());
+					});
                     System.Threading.Thread.Sleep(3000);
                     this.appDispatcher.DispatchUI(() =>
                     {
@@ -142,43 +142,43 @@ namespace EQTool
 				{
 					CenterText.FontSize = settings.OverlayFontSize.Value;
 					CenterText.Text = "Dragon Roar in 6 Seconds!";
-                    CenterText.Foreground = Brushes.Red;
+                    CenterText.Foreground = (Brush)converter.ConvertFromString(settings.DragonRoarOverlayColor.ToString());
                 });
                 System.Threading.Thread.Sleep(1000);
                 this.appDispatcher.DispatchUI(() =>
 				{
 					CenterText.FontSize = settings.OverlayFontSize.Value;
 					CenterText.Text = "Dragon Roar in 5 Seconds!";
-                    CenterText.Foreground = Brushes.Red;
+                    CenterText.Foreground = (Brush)converter.ConvertFromString(settings.DragonRoarOverlayColor.ToString());
                 });
                 System.Threading.Thread.Sleep(1000);
                 this.appDispatcher.DispatchUI(() =>
 				{
 					CenterText.FontSize = settings.OverlayFontSize.Value;
 					CenterText.Text = "Dragon Roar in 4 Seconds!";
-                    CenterText.Foreground = Brushes.Red;
+                    CenterText.Foreground = (Brush)converter.ConvertFromString(settings.DragonRoarOverlayColor.ToString());
                 });
                 System.Threading.Thread.Sleep(1000);
                 this.appDispatcher.DispatchUI(() =>
 				{
 					CenterText.FontSize = settings.OverlayFontSize.Value;
 					CenterText.Text = "Dragon Roar in 3 Seconds!";
-                    CenterText.Foreground = Brushes.Red;
+                    CenterText.Foreground = (Brush)converter.ConvertFromString(settings.DragonRoarOverlayColor.ToString());
                 });
                 System.Threading.Thread.Sleep(1000);
                 this.appDispatcher.DispatchUI(() =>
 				{
 					CenterText.FontSize = settings.OverlayFontSize.Value;
 					CenterText.Text = "Dragon Roar in 2 Seconds!";
-                    CenterText.Foreground = Brushes.Red;
+                    CenterText.Foreground = (Brush)converter.ConvertFromString(settings.DragonRoarOverlayColor.ToString());
                 });
                 System.Threading.Thread.Sleep(1000);
                 this.appDispatcher.DispatchUI(() =>
 				{
 					CenterText.FontSize = settings.OverlayFontSize.Value;
 					CenterText.Text = "Dragon Roar in 1 Seconds!";
-                    CenterText.Foreground = Brushes.Red;
-                });
+                    CenterText.Foreground = (Brush)converter.ConvertFromString(settings.DragonRoarOverlayColor.ToString());
+				});
                 System.Threading.Thread.Sleep(1000);
                 this.appDispatcher.DispatchUI(() =>
                 {
@@ -202,8 +202,8 @@ namespace EQTool
 				{
 					CenterText.FontSize = settings.OverlayFontSize.Value;
 					CenterText.Text = e;
-                    CenterText.Foreground = Brushes.Red;
-                });
+                    CenterText.Foreground = (Brush)converter.ConvertFromString(settings.GroupInviteOverlayColor.ToString());
+				});
                 System.Threading.Thread.Sleep(1000 * 5);
                 this.appDispatcher.DispatchUI(() =>
 				{
@@ -227,8 +227,8 @@ namespace EQTool
 				{
 					CenterText.FontSize = settings.OverlayFontSize.Value;
 					CenterText.Text = "Feign Failed Death!";
-                    CenterText.Foreground = Brushes.Red;
-                });
+                    CenterText.Foreground = (Brush)converter.ConvertFromString(settings.FailedFeignOverlayColor.ToString());
+				});
                 System.Threading.Thread.Sleep(1000 * 5);
                 this.appDispatcher.DispatchUI(() =>
                 {
@@ -252,8 +252,8 @@ namespace EQTool
 				{
 					CenterText.FontSize = settings.OverlayFontSize.Value;
 					CenterText.Text = "Charm Break";
-                    CenterText.Foreground = Brushes.Red;
-                });
+                    CenterText.Foreground = (Brush)converter.ConvertFromString(settings.CharmBreakOverlayColor.ToString());
+				});
                 System.Threading.Thread.Sleep(1000 * 5);
                 this.appDispatcher.DispatchUI(() =>
                 {
@@ -312,8 +312,8 @@ namespace EQTool
 				{
 					CenterText.FontSize = settings.OverlayFontSize.Value;
 					CenterText.Text = "Invis Fading";
-                    CenterText.Foreground = Brushes.Red;
-                });
+                    CenterText.Foreground = (Brush)converter.ConvertFromString(settings.InvisFadingOverlayColor.ToString());
+				});
                 System.Threading.Thread.Sleep(1000 * 5);
                 this.appDispatcher.DispatchUI(() =>
                 {
