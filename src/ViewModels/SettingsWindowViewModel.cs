@@ -96,6 +96,127 @@ namespace EQTool.ViewModels
 			}
 		}
 
+		public System.Windows.Media.Color EnrageOverlayColor 
+		{
+			get
+			{
+				return this.toolSettings.EnrageOverlayColor;
+			}
+			set
+			{
+				this.toolSettings.EnrageOverlayColor = value;
+				OnPropertyChanged();
+			}
+		}
+		public System.Windows.Media.Color LevFadingOverlayColor 
+		{
+			get
+			{
+				return this.toolSettings.LevFadingOverlayColor;
+			}
+			set
+			{
+				this.toolSettings.LevFadingOverlayColor = value;
+				OnPropertyChanged();
+			}
+		}
+		public System.Windows.Media.Color InvisFadingOverlayColor 
+		{ 
+			get
+			{
+				return this.toolSettings.InvisFadingOverlayColor;
+			}
+			set
+			{
+				this.toolSettings.InvisFadingOverlayColor = value;
+				OnPropertyChanged();
+			}
+		}
+		public System.Windows.Media.Color FTEOverlayColor 
+		{ 
+			get 
+			{ 
+				return this.toolSettings.FTEOverlayColor;
+			}
+			set
+			{
+				this.toolSettings.FTEOverlayColor = value;
+				OnPropertyChanged();
+			}
+		}
+		public System.Windows.Media.Color CharmBreakOverlayColor 
+		{ 
+			get 
+			{ 
+				return this.toolSettings.CharmBreakOverlayColor;
+			}
+			set
+			{
+				this.toolSettings.CharmBreakOverlayColor = value;
+				OnPropertyChanged();
+			}
+		}
+		public System.Windows.Media.Color FailedFeignOverlayColor 
+		{ 
+			get 
+			{
+				return this.toolSettings.FailedFeignOverlayColor;
+			}
+			set
+			{
+				this.toolSettings.FailedFeignOverlayColor = value;
+				OnPropertyChanged();
+			}
+		}
+		public System.Windows.Media.Color GroupInviteOverlayColor 
+		{ 
+			get 
+			{
+				return this.toolSettings.GroupInviteOverlayColor;
+			}
+			set
+			{
+				this.toolSettings.GroupInviteOverlayColor = value;
+				OnPropertyChanged();
+			}
+		}
+		public System.Windows.Media.Color DragonRoarOverlayColor 
+		{ 
+			get 
+			{
+				return this.toolSettings.DragonRoarOverlayColor;
+			}
+			set
+			{
+				this.toolSettings.DragonRoarOverlayColor = value;
+				OnPropertyChanged();
+			}
+		}
+		public System.Windows.Media.Color RootWarningOverlayColor 
+		{ 
+			get 
+			{
+				return this.toolSettings.RootWarningOverlayColor;
+			}
+			set
+			{
+				this.toolSettings.RootWarningOverlayColor = value;
+				OnPropertyChanged();
+			}
+		}
+		public System.Windows.Media.Color ResistWarningOverlayColor 
+		{ 
+			get 
+			{
+				return this.toolSettings.ResistWarningOverlayColor;
+			}
+			set
+			{
+				this.toolSettings.ResistWarningOverlayColor = value;
+				OnPropertyChanged();
+			}
+		}
+
 		public double DPSWindowOpacity
         {
             get
