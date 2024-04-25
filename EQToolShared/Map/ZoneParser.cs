@@ -174,184 +174,74 @@ namespace EQToolShared.Map
                  {
                      new NpcSpawnTime
                     {
-                        Name = "Guard Armandin",
-                        RespawnTime = new TimeSpan(0, 24, 0)
-                    },
-                    new NpcSpawnTime
-                    {
-                        Name = "Guard Belg",
-                        RespawnTime = new TimeSpan(0, 24, 0)
-                    },
-                    new NpcSpawnTime
-                    {
-                        Name = "Guard Burr",
-                        RespawnTime = new TimeSpan(0, 24, 0)
-                    },
-                    new NpcSpawnTime
-                    {
-                        Name = "Guard Clendin",
-                        RespawnTime = new TimeSpan(0, 24, 0)
-                    },
-                    new NpcSpawnTime
-                    {
-                        Name = "Guard Dunil",
-                        RespawnTime = new TimeSpan(0, 24, 0)
-                    },
-                    new NpcSpawnTime
-                    {
-                        Name = "Guard Dunn",
-                        RespawnTime = new TimeSpan(0, 24, 0)
-                    },
-                    new NpcSpawnTime
-                    {
-                        Name = "Guard Gabel",
-                        RespawnTime = new TimeSpan(0, 24, 0)
-                    },
-                    new NpcSpawnTime
-                    {
-                        Name = "Guard Gonin",
-                        RespawnTime = new TimeSpan(0, 24, 0)
-                    },
-                    new NpcSpawnTime
-                    {
-                        Name = "Guard Grae",
-                        RespawnTime = new TimeSpan(0, 24, 0)
-                    },
-                    new NpcSpawnTime
-                    {
-                        Name = "Guard Haendar",
-                        RespawnTime = new TimeSpan(0, 24, 0)
-                    },
-                    new NpcSpawnTime
-                    {
-                        Name = "Guard Haldin",
-                        RespawnTime = new TimeSpan(0, 24, 0)
-                    },
-                    new NpcSpawnTime
-                    {
-                        Name = "Guard Hartt",
-                        RespawnTime = new TimeSpan(0, 24, 0)
-                    },
-                    new NpcSpawnTime
-                    {
-                        Name = "Guard Kizzburr",
-                        RespawnTime = new TimeSpan(0, 24, 0)
-                    },
-                    new NpcSpawnTime
-                    {
-                        Name = "Guard Kyte",
-                        RespawnTime = new TimeSpan(0, 24, 0)
-                    },
-                    new NpcSpawnTime
-                    {
-                        Name = "Guard Mandin",
-                        RespawnTime = new TimeSpan(0, 24, 0)
-                    },
-                    new NpcSpawnTime
-                    {
-                        Name = "Guard Norin",
-                        RespawnTime = new TimeSpan(0, 24, 0)
-                    },
-                    new NpcSpawnTime
-                    {
-                        Name = "Guard Rundul",
-                        RespawnTime = new TimeSpan(0, 24, 0)
-                    },
-                    new NpcSpawnTime
-                    {
-                        Name = "Guard Rylin",
-                        RespawnTime = new TimeSpan(0, 24, 0)
-                    },
-                    new NpcSpawnTime
-                    {
-                        Name = "Guard Sornn",
-                        RespawnTime = new TimeSpan(0, 24, 0)
-                    },
-                    new NpcSpawnTime
-                    {
-                        Name = "Guard Srinn",
-                        RespawnTime = new TimeSpan(0, 24, 0)
-                    },
-                    new NpcSpawnTime
-                    {
-                        Name = "Guard Zyburr",
-                        RespawnTime = new TimeSpan(0, 18, 40)
-                    },
-                      new NpcSpawnTime
-                    {
-                        Name = "Guard Zyburr",
-                        RespawnTime = new TimeSpan(0, 18, 40)
+                        Name = "Guard",
+                        RespawnTime = new TimeSpan(0, 9, 30)
                     },
                         new NpcSpawnTime
                     {
                         Name = "Peg Leg",
-                        RespawnTime = new TimeSpan(0, 6, 40)
+                        RespawnTime = new TimeSpan(0, 12, 0)
                     },
                     new NpcSpawnTime
                     {
-                        Name = "Keldyn Dunfire",
-                        RespawnTime = new TimeSpan(0,6, 40)
+                        Name = "Dunfire",
+                        RespawnTime = new TimeSpan(0, 12, 0)
                     },
                     new NpcSpawnTime
                     {
                         Name = "Margyl Darklin",
-                        RespawnTime = new TimeSpan(0, 6, 40)
-                    },
-                    new NpcSpawnTime
-                    {
-                        Name = "Crytil Dunfire",
-                        RespawnTime = new TimeSpan(0, 6, 40)
-                    },
+						RespawnTime = new TimeSpan(0, 12, 0)
+					},
                     new NpcSpawnTime
                     {
                         Name = "Qued",
-                        RespawnTime = new TimeSpan(0, 6, 40)
-                    },
-                    new NpcSpawnTime
-                    {
-                        Name = "Barma Dunfire",
-                        RespawnTime = new TimeSpan(0,6, 40)
-                    }
+						RespawnTime = new TimeSpan(0, 12, 0)
+					},
                  },
                 NpcSpawnTimes = new List<NpcSpawnTime>()
                  {
                       new NpcSpawnTime
                       {
                             Name ="Nyzil Bloodforge",
-                            RespawnTime = new TimeSpan(0,6, 40)
-                      },
+							RespawnTime = new TimeSpan(0, 9, 30)
+					  },
                          new NpcSpawnTime
                       {
                             Name ="Durkis Battlemore",
-                            RespawnTime = new TimeSpan(0,6, 40)
-                      },
+							RespawnTime = new TimeSpan(0, 9, 30)
+					  },
                          new NpcSpawnTime
                       {
                             Name ="Walnan",
-                            RespawnTime = new TimeSpan(0,6, 40)
-                      },
+							RespawnTime = new TimeSpan(0, 9, 30)
+					  },
                          new NpcSpawnTime
                       {
                             Name ="Happ Findlefinn",
-                            RespawnTime = new TimeSpan(0,6, 40)
-                      },
+							RespawnTime = new TimeSpan(0, 9, 30)
+					  },
                          new NpcSpawnTime
                       {
                             Name ="Atwin Keladryn",
-                            RespawnTime = new TimeSpan(0,6, 40)
-                      },
+							RespawnTime = new TimeSpan(0, 9, 30)
+					  },
                          new NpcSpawnTime
                       {
                             Name ="Balen Kalgunn",
-                            RespawnTime = new TimeSpan(0,6, 40)
-                      },
+							RespawnTime = new TimeSpan(0, 9, 30)
+					  },
                          new NpcSpawnTime
                       {
                             Name ="Thar Kelgand",
-                            RespawnTime = new TimeSpan(0,6, 40)
-                      }
-                 },
-                RespawnTime = new TimeSpan(0, 15, 0)
+                            RespawnTime = new TimeSpan(0, 9, 30)
+                      },
+						 new NpcSpawnTime
+					  {
+							Name ="Magnus Boran",
+							RespawnTime = new TimeSpan(0, 9, 30)
+					  }
+				 },
+                RespawnTime = new TimeSpan(0, 5, 50)
             });
             ZoneInfoMap.Add("cabeast", new ZoneInfo
             {
@@ -2145,7 +2035,7 @@ namespace EQToolShared.Map
             ZoneWhoMapper.Add("the wakening land", "the wakening lands");
             ZoneWhoMapper.Add("siren's grotto", "sirens grotto");
             ZoneWhoMapper.Add("the plane of hate", "plane of hate");
-			ZoneWhoMapper.Add("plane of hate (instanced)", "plane of hate  (instanced)");
+			ZoneWhoMapper.Add("plane of hate (instanced)", "plane of hate (instanced)");
 			ZoneWhoMapper.Add("burning woods", "the burning wood");
             ZoneWhoMapper.Add("south ro", "southern desert of ro");
             ZoneWhoMapper.Add("plane of sky", "plane of sky");
@@ -2167,7 +2057,7 @@ namespace EQToolShared.Map
             ZoneWhoMapper.Add("permafrost keep", "permafrost caverns");
             ZoneWhoMapper.Add("clan runnyeye", "runnyeye citadel");
             ZoneWhoMapper.Add("the ruins of old paineel", "the hole");
-            ZoneWhoMapper.Add("the warrens", "warrens");
+			ZoneWhoMapper.Add("the warrens", "warrens");
             ZoneWhoMapper.Add("thurgadin", "city of thurgadin");
             ZoneWhoMapper.Add("upper guk", "guk");
             ZoneWhoMapper.Add("warsliks wood", "warsliks woods");
@@ -2186,7 +2076,7 @@ namespace EQToolShared.Map
             ZoneNameMapper.Add("sleepers tomb", "sleeper");
             ZoneNameMapper.Add("erudin", "erudnext");
             ZoneNameMapper.Add("kedge keep", "kedge");
-            ZoneNameMapper.Add("kedge keep (Instance)", "kedge");
+            ZoneNameMapper.Add("kedge keep (instanced)", "kedge_tryout");
             ZoneNameMapper.Add("ak'anon", "akanon");
             ZoneNameMapper.Add("warsliks woods", "warslikswood");
             ZoneNameMapper.Add("castle mistmoore", "mistmoore");
@@ -2213,7 +2103,7 @@ namespace EQToolShared.Map
             ZoneNameMapper.Add("blackburrow", "blackburrow");
             ZoneNameMapper.Add("gorge of king xorbb", "beholder");
             ZoneNameMapper.Add("plane of hate", "hateplane");
-            ZoneNameMapper.Add("plane of hate (nstanced)", "hate_instanced");
+            ZoneNameMapper.Add("plane of hate (instanced)", "hate_instanced");
 			ZoneNameMapper.Add("plane of sky", "airplane");
 			ZoneNameMapper.Add("plane of sky (instanced)", "air_instanced");
 			ZoneNameMapper.Add("west commonlands", "commons");
@@ -2223,16 +2113,17 @@ namespace EQToolShared.Map
             ZoneNameMapper.Add("paineel", "paineel");
             ZoneNameMapper.Add("north freeport", "freportn");
             ZoneNameMapper.Add("nagafen's lair", "soldungb");
-            ZoneNameMapper.Add("nagafen's lair (tryout)", "soldungb_tryout");
+            ZoneNameMapper.Add("nagafen's lair (instanced)", "soldungb_tryout");
             ZoneNameMapper.Add("runnyeye citadel", "runnyeye");
             ZoneNameMapper.Add("frontier mountains", "frontiermtns");
             ZoneNameMapper.Add("the city of mist", "citymist");
             ZoneNameMapper.Add("west freeport", "freportw");
             ZoneNameMapper.Add("butcherblock mountains", "butcher");
             ZoneNameMapper.Add("permafrost caverns", "permafrost");
-            ZoneNameMapper.Add("permafrost caverns (Instance)", "permafrost");
+            ZoneNameMapper.Add("permafrost caverns (instanced)", "perma_tryout");
             ZoneNameMapper.Add("the hole", "hole");
-            ZoneNameMapper.Add("qeynos hills", "qeytoqrg");
+			ZoneNameMapper.Add("the hole (instanced)", "hole_instanced");
+			ZoneNameMapper.Add("qeynos hills", "qeytoqrg");
             ZoneNameMapper.Add("arena", "arena");
             ZoneNameMapper.Add("lavastorm mountains", "lavastorm");
             ZoneNameMapper.Add("plane of growth", "growthplane");
