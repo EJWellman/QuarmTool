@@ -778,28 +778,28 @@ namespace EQTool.ViewModels
 			{
 				string pqdi_url = @"https://www.pqdi.cc/";
 
-				Name = monster.name;
-				Race = monster.race;
-				Class = Enum.GetName(typeof(Classes), monster.npc_class_id);
-				Level = (monster.maxlevel != 0 ? $"{monster.level}-{monster.maxlevel}" : $"{monster.level}");
-				RunSpeed = monster.runspeed.ToString();
+				Name = monster.Name;
+				Race = monster.Race;
+				Class = Enum.GetName(typeof(Classes), monster.NPC_Class_ID);
+				Level = (monster.MaxLevel != 0 ? $"{monster.Level}-{monster.MaxLevel}" : $"{monster.Level}");
+				RunSpeed = monster.RunSpeed.ToString();
 				AC = monster.AC.ToString();
-				HP = monster.hp.ToString();
-				HPRegen = monster.combat_hp_regen.ToString();
-				ManaRegen = monster.combat_mana_regen.ToString();
-				AttacksPerRound = monster.attack_count.ToString();
-				AttackSpeed = monster.attack_delay.ToString();
-				DamagePerHit = $"{monster.mindmg}-{monster.maxdmg}";
-				PrimaryFaction = monster.primary_faction;
+				HP = monster.HP.ToString();
+				HPRegen = monster.Combat_HP_Regen.ToString();
+				ManaRegen = monster.Combat_Mana_Regen.ToString();
+				AttacksPerRound = monster.Attack_Count.ToString();
+				AttackSpeed = monster.Attack_Delay.ToString();
+				DamagePerHit = $"{monster.MinDmg}-{monster.MaxDmg}";
+				PrimaryFaction = monster.Primary_Faction;
 				Resist_Cold = monster.CR.ToString();
 				Resist_Fire = monster.FR.ToString();
 				Resist_Magic = monster.MR.ToString();
 				Resist_Poison = monster.PR.ToString();
 				Resist_Disease = monster.DR.ToString();
-				See_Invis = monster.see_invis == 1 ? true : false;
-				See_Invis_Undead = monster.see_invis_undead == 1 ? true : false;
-				See_Sneak = monster.see_sneak == 1 ? true : false;
-				See_Imp_Hide = monster.see_improved_hide == 1 ? true : false;
+				See_Invis = monster.See_Invis == 1 ? true : false;
+				See_Invis_Undead = monster.See_Invis_Undead == 1 ? true : false;
+				See_Sneak = monster.See_Sneak == 1 ? true : false;
+				See_Imp_Hide = monster.See_Improved_Hidee == 1 ? true : false;
 
 				#region Clear existing Data
 				if (Factions.Count > 0)
@@ -824,18 +824,18 @@ namespace EQTool.ViewModels
 				{
 					Factions.Add(new FactionHitViewModel
 					{
-						Name = faction.faction_name,
-						Value = faction.faction_hit,
-						Url = $"{pqdi_url}faction/{faction.faction_id}"
+						Name = faction.Faction_Name,
+						Value = faction.Faction_Hit,
+						Url = $"{pqdi_url}faction/{faction.Faction_ID}"
 					});
 				}
 				foreach (JsonMonsterDrops drop in monster.Drops)
 				{
 					KnownLoot.Add(new MobDropViewModel
 					{
-						Name = drop.item_name,
-						Value = (float)System.Math.Round(drop.drop_chance, 2),
-						Url = $"{pqdi_url}item/{drop.item_id}"
+						Name = drop.Item_Name,
+						Value = (float)System.Math.Round(drop.Drop_Chance, 2),
+						Url = $"{pqdi_url}item/{drop.Item_ID}"
 					});
 				}
 				List<string> specials = monster.GetSpecialAttacks().Split(',').ToList();
@@ -850,47 +850,13 @@ namespace EQTool.ViewModels
 				{
 					MerchantItems.Add(new MobDropViewModel
 					{
-						Name = item.item_name,
-						Value = item.slot,
-						Url = $"{pqdi_url}item/{item.item_id}"
+						Name = item.Item_Name,
+						Value = item.Slot,
+						Url = $"{pqdi_url}item/{item.Item_ID}"
 					});
 				}
 
-				//var infos = MobInfoParsing.ParseSpecials(splits);
-				//foreach (var item in infos)
-				//{
-				//	Specials.Add(item);
-				//}
-
-				//var knownloot = MobInfoParsing.ParseKnownLoot(splits);
-				//foreach (var item in knownLoot)
-				//{
-				//	KnownLoot.Add(item);
-				//}
-
-				//infos = MobInfoParsing.ParseFactions(splits);
-				//foreach (var item in infos)
-				//{
-				//	Factions.Add(item);
-				//}
-
-				//infos = MobInfoParsing.ParseOpposingFactions(splits);
-				//foreach (var item in infos)
-				//{
-				//	OpposingFactions.Add(item);
-				//}
-
-				//infos = MobInfoParsing.ParseRelatedQuests(splits);
-				//foreach (var item in infos)
-				//{
-				//	RelatedQuests.Add(item);
-				//}
-
-
-				Url = $"{pqdi_url}npc/{monster.id}";
-
-				//var imageurl = GetValue("imagefilename", splits);
-
+				Url = $"{pqdi_url}npc/{monster.ID}";
 
 			}
 		}

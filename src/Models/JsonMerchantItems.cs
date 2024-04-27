@@ -6,13 +6,12 @@ using System.Threading.Tasks;
 
 namespace EQTool.Models
 {
-
 	public class JsonMerchantItems
 	{
-		public int slot { get; set; }
-		public int item_id { get; set; }
-		public string item_name { get; set; }
-		public int merchantid { get; set; }
+		public int Slot { get; set; }
+		public int Item_ID { get; set; }
+		public string Item_Name { get; set; }
+		public int MerchantID { get; set; }
 	}
 
 }

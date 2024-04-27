@@ -85,7 +85,7 @@ namespace EQTool.Services
 					&& CurrentZone != ZoneParser.ZoneNameMapper[activePlayer.Player?.LastZoneEntered])
                 {
                     CurrentZone = activePlayer.Player?.Zone;
-					_jsonDataService.LoadMonsterDataTable(CurrentZone);
+					_jsonDataService.LoadMobDataForZone(CurrentZone);
 					Debug.WriteLine("Clearing zone Players");
                     PlayersInZones.Clear();
                 }
@@ -147,7 +147,7 @@ namespace EQTool.Services
         {
             lock (ContainerLock)
             {
-				_jsonDataService.LoadMonsterDataTable(activePlayer.Player?.Zone/*, activePlayer.Player?.LastZoneEntered*/);
+				_jsonDataService.LoadMobDataForZone(activePlayer.Player?.Zone/*, activePlayer.Player?.LastZoneEntered*/);
 				Debug.WriteLine("Clearing zone Players");
                 PlayersInZones.Clear();
             }

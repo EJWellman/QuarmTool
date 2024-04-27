@@ -55,10 +55,13 @@
                             <Image Source="pack://application:,,,/toolbox.png"/>
                         </Button>
                         <Button Margin="1" FontSize="7" Width="14" Height="14" Padding="0" Click="openspells" ToolTip="Open Spell Timer Window">
-                            <Image Source="pack://application:,,,/wizard.png"/>
+                            <Image Source="pack://application:,,,/hat.png"/>
                         </Button>
                         <Button Margin="1" FontSize="7" Width="14" Height="14" Padding="0" Click="OpenTimers" ToolTip="Open Timer Window">
                             <Image Source="pack://application:,,,/clock.png"/>
+                        </Button>
+                        <Button Margin="1" FontSize="7" Width="14" Height="14" Padding="0" Click="OpenComboTimers" ToolTip="Open Combo Timer Window">
+                            <Image Source="pack://application:,,,/combo.png"/>
                         </Button>
                         <Button Margin="1" FontSize="7" Width="14" Height="14" Padding="0" Click="opendps" ToolTip="Open DPS Window">
                             <Image Source="pack://application:,,,/dps.png"/>

@@ -26,40 +26,40 @@ namespace EQTool.Models
 		public int FR { get; set; }
 		public int MR { get; set; }
 		public int PR { get; set; }
-		public int hp { get; set; }
-		public int id { get; set; }
-		public int mana { get; set; }
-		public string name { get; set; }
-		public string race { get; set; }
-		public int npc_class_id { get; set; }
-		public int greed { get; set; }
-		public int level { get; set; }
-		public int maxdmg { get; set; }
-		public int mindmg { get; set; }
-		public int isquest { get; set; }
-		public int maxlevel { get; set; }
-		public float runspeed { get; set; }
-		public int see_invis { get; set; }
-		public int see_sneak { get; set; }
-		public string zone_code { get; set; }
-		public string zone_name { get; set; }
-		public int merchant_id { get; set; }
-		public int attack_count { get; set; }
-		public int attack_delay { get; set; }
-		public int loottable_id { get; set; }
-		public int npc_spells_id { get; set; }
-		public int mitigates_slow { get; set; }
-		public int npc_faction_id { get; set; }
-		public int combat_hp_regen { get; set; }
-		public string primary_faction { get; set; }
-		public int slow_mitigation { get; set; }
-		public int see_invis_undead { get; set; }
-		public int combat_mana_regen { get; set; }
-		public int see_improved_hide { get; set; }
-		public string special_abilities { get; set; }
-		public int unique_spawn_by_name { get; set; }
-		public string zone_name_guess { get; set; }
-		public string zone_code_guess { get; set; }
+		public int HP { get; set; }
+		public int ID { get; set; }
+		public int Mana { get; set; }
+		public string Name { get; set; }
+		public string Race { get; set; }
+		public int NPC_Class_ID { get; set; }
+		public int Greed { get; set; }
+		public int Level { get; set; }
+		public int MaxDmg { get; set; }
+		public int MinDmg { get; set; }
+		public int IsQuestNPC { get; set; }
+		public int MaxLevel { get; set; }
+		public float RunSpeed { get; set; }
+		public string Zone_Code { get; set; }
+		public string Zone_Name { get; set; }
+		public int Merchant_ID { get; set; }
+		public int Attack_Count { get; set; }
+		public int Attack_Delay { get; set; }
+		public int Loottable_ID { get; set; }
+		public int NPC_Spells_ID { get; set; }
+		public int Mitigates_Slow { get; set; }
+		public int NPC_Faction_ID { get; set; }
+		public int Combat_HP_Regen { get; set; }
+		public int Combat_Mana_Regen { get; set; }
+		public string Primary_Faction { get; set; }
+		public int Slow_Mitigation { get; set; }
+		public int See_Invis { get; set; }
+		public int See_Invis_Undead { get; set; }
+		public int See_Sneak { get; set; }
+		public int See_Improved_Hidee { get; set; }
+		public string Special_Abilities { get; set; }
+		public int Unique_Spawn_By_Name { get; set; }
+		public string Zone_Name_Guess { get; set; }
+		public string Zone_Code_Guess { get; set; }
 
 		public List<JsonMonsterFaction> Factions { get; set; } = new List<JsonMonsterFaction>();
 		public List<JsonMonsterDrops> Drops { get; set; } = new List<JsonMonsterDrops>();
@@ -76,9 +76,9 @@ namespace EQTool.Models
 		{
 			StringBuilder data = new StringBuilder();
 
-			if (!string.IsNullOrWhiteSpace(this.special_abilities))
+			if (!string.IsNullOrWhiteSpace(this.Special_Abilities))
 			{
-				string[] attacks = special_abilities.Split('^');
+				string[] attacks = Special_Abilities.Split('^');
 				string seperator = "";
 				string status = "0";
 				foreach (var attack in attacks)

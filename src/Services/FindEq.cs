@@ -312,17 +312,14 @@ namespace EQTool.Services
 		{
 			DataFileInfo ret = new DataFileInfo { Found = false };
 			string dataFolder = Path.Combine(AppContext.BaseDirectory, "Data");
-			string searchPattern = "*_Data.json";
+			string searchPattern = "QuarmTool_Data.db";
 
 			var foundFiles = Directory.EnumerateFiles(dataFolder, searchPattern, SearchOption.TopDirectoryOnly);
 			if (foundFiles.Any())
 			{
 				ret.Found = true;
 				ret.Location = dataFolder;
-				ret.NPC_File = foundFiles.FirstOrDefault(a => a.Contains("NPC")) ?? "";
-				ret.Merchant_File = foundFiles.FirstOrDefault(a => a.Contains("Merchant")) ?? "";
-				ret.Loot_File = foundFiles.FirstOrDefault(a => a.Contains("Drop")) ?? "";
-				ret.Faction_File = foundFiles.FirstOrDefault(a => a.Contains("Faction")) ?? "";
+				ret.Data_File = foundFiles.FirstOrDefault();
 			}
 			return ret;
 		}

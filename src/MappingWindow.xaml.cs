@@ -173,7 +173,7 @@ namespace EQTool
 			}
 			if(mapViewModel.ZoneName != null)
 			{
-				_jsonDataService.LoadMonsterDataTable(mapViewModel.ZoneName);
+				_jsonDataService.LoadMobDataForZone(mapViewModel.ZoneName);
 			}
 		}
 

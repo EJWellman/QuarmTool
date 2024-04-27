@@ -8,13 +8,13 @@ namespace EQTool.Models
 {
 	public class JsonMonsterFaction
 	{
-		public int npc_id { get; set; }
-		public string zone_code { get; set; }
-		public string zone_name { get; set; }
-		public int faction_id { get; set; }
-		public int sort_order { get; set; }
-		public int faction_hit { get; set; }
-		public string faction_name { get; set; }
+		public int NPC_ID { get; set; }
+		public string Zone_Code { get; set; }
+		public string Zone_Name { get; set; }
+		public int Faction_ID { get; set; }
+		public int Sort_Order { get; set; }
+		public int Faction_Hit { get; set; }
+		public string Faction_Name { get; set; }
 	}
 
 }
