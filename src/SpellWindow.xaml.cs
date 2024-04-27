@@ -51,12 +51,7 @@ namespace EQTool
             this.logParser.EnteredWorldEvent += LogParser_EnteredWorldEvent;
             this.logParser.SpellWornOffSelfEvent += LogParser_SpellWornOffSelfEvent;
             this.logParser.StartCastingEvent += LogParser_StartCastingEvent;
-            this.logParser.DeadEvent += LogParser_DeadEvent;
-            this.logParser.StartTimerEvent += LogParser_StartTimerEvent;
-            this.logParser.CancelTimerEvent += LogParser_CancelTimerEvent;
-            this.logParser.POFDTEvent += LogParser_POFDTEvent;
             this.logParser.ResistSpellEvent += LogParser_ResistSpellEvent;
-            this.logParser.RandomRollEvent += LogParser_RandomRollEvent;
             UITimer = new System.Timers.Timer(1000);
             UITimer.Elapsed += PollUI;
             UITimer.Enabled = true;
@@ -71,19 +66,6 @@ namespace EQTool
             view.LiveSortingProperties.Add(nameof(UISpell.SecondsLeftOnSpell));
         }
 
-        private void LogParser_RandomRollEvent(object sender, LogParser.RandomRollEventArgs e)
-        {
-            this.spellWindowViewModel.TryAddCustom(new CustomTimer
-            {
-                TargetName = $"Random -- {e.RandomRollData.MaxRoll}",
-                Name = e.RandomRollData.PlayerName,
-                SpellNameIcon = "Invisibility",
-                SpellType = EQToolShared.Enums.SpellTypes.RandomRoll,
-                Roll = e.RandomRollData.Roll,
-                DurationInSeconds = 60 * 3
-            });
-        }
-
         private void LogParser_ResistSpellEvent(object sender, ResistSpellParser.ResistSpellData e)
         {
             if (e.isYou)
@@ -96,17 +78,6 @@ namespace EQTool
                     TargetName = EQSpells.SpaceYou,
                 }, true);
             }
-        }
-
-        private void LogParser_POFDTEvent(object sender, POFDTParser.POF_DT_Event e)
-        {
-            this.spellWindowViewModel.TryAddCustom(new CustomTimer
-            {
-                DurationInSeconds = 45,
-                Name = $"--DT-- '{e.DTReceiver}'",
-                SpellNameIcon = "Disease Cloud",
-                SpellType = EQToolShared.Enums.SpellTypes.BadGuyCoolDown
-            });
         }
 
         private void LogParser_CampEvent(object sender, LogParser.CampEventArgs e)
@@ -140,43 +111,6 @@ namespace EQTool
             spellWindowViewModel.TryAdd(e.Spell, false);
         }
 
-        private int deathcounter = 1;
-        private void LogParser_DeadEvent(object sender, LogParser.DeadEventArgs e)
-        {
-            spellWindowViewModel.TryRemoveTarget(e.Name);
-            if (playerTrackerService.IsPlayer(e.Name) || !MasterNPCList.NPCs.Contains(e.Name))
-            {
-                return;
-            }
-            var zonetimer = ZoneSpawnTimes.GetSpawnTime(e.Name, activePlayer?.Player?.Zone);
-            var add = new CustomTimer
-            {
-                Name = "--Dead-- " + e.Name,
-                DurationInSeconds = (int)zonetimer.TotalSeconds,
-                SpellNameIcon = "Disease Cloud",
-                SpellType = EQToolShared.Enums.SpellTypes.RespawnTimer
-            };
-
-            var exisitngdeathentry = spellWindowViewModel.SpellList.FirstOrDefault(a => a.SpellName == add.Name && CustomTimer.CustomerTime == a.TargetName);
-            if (exisitngdeathentry != null)
-            {
-                deathcounter = ++deathcounter > 999 ? 1 : deathcounter;
-                add.Name += "_" + deathcounter;
-            }
-
-            spellWindowViewModel.TryAddCustom(add);
-        }
-
-        private void LogParser_CancelTimerEvent(object sender, LogParser.CancelTimerEventArgs e)
-        {
-            spellWindowViewModel.TryRemoveCustom(e.Name);
-        }
-
-        private void LogParser_StartTimerEvent(object sender, LogParser.StartTimerEventArgs e)
-        {
-            spellWindowViewModel.TryAddCustom(e.CustomTimer);
-        }
-
         protected override void OnClosing(CancelEventArgs e)
         {
             UITimer?.Stop();
@@ -188,12 +122,7 @@ namespace EQTool
                 logParser.EnteredWorldEvent -= LogParser_EnteredWorldEvent;
                 logParser.SpellWornOffSelfEvent -= LogParser_SpellWornOffSelfEvent;
                 logParser.StartCastingEvent -= LogParser_StartCastingEvent;
-                logParser.DeadEvent -= LogParser_DeadEvent;
-                logParser.StartTimerEvent -= LogParser_StartTimerEvent;
-                logParser.CancelTimerEvent -= LogParser_CancelTimerEvent;
-                logParser.POFDTEvent -= LogParser_POFDTEvent;
                 logParser.ResistSpellEvent -= LogParser_ResistSpellEvent;
-                logParser.RandomRollEvent -= LogParser_RandomRollEvent;
             }
             if (spellWindowViewModel != null)
             {

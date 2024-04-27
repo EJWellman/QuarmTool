@@ -152,9 +152,19 @@ namespace EQTool
         protected void openspells(object sender, RoutedEventArgs e)
         {
             (App.Current as App).OpenSpellsWindow();
-        }
+		}
 
-        protected void CloseWindow(object sender, RoutedEventArgs e)
+		protected void OpenTimers(object sender, RoutedEventArgs e)
+		{
+			(App.Current as App).OpenTimersWindow();
+		}
+
+		protected void OpenComboTimers(object sender, RoutedEventArgs e)
+		{
+			(App.Current as App).OpenComboTimersWindow();
+		}
+
+		protected void CloseWindow(object sender, RoutedEventArgs e)
         {
             this.CloseWindow();
         }

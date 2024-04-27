@@ -14,20 +14,20 @@ using System.Runtime.CompilerServices;
 
 namespace EQTool.ViewModels
 {
-    public class SpellWindowViewModel : INotifyPropertyChanged
+    public class ComboTimerWindowViewModel : INotifyPropertyChanged
     {
         private readonly ActivePlayer activePlayer;
         private readonly IAppDispatcher appDispatcher;
         private readonly EQToolSettings settings;
         private readonly EQSpells spells;
 
-        public SpellWindowViewModel(ActivePlayer activePlayer, IAppDispatcher appDispatcher, EQToolSettings settings, EQSpells spells)
+        public ComboTimerWindowViewModel(ActivePlayer activePlayer, IAppDispatcher appDispatcher, EQToolSettings settings, EQSpells spells)
         {
 
             this.activePlayer = activePlayer;
             this.appDispatcher = appDispatcher;
             this.settings = settings;
-            Title = "Spell Timers v" + App.Version;
+            Title = "Combined Timers v" + App.Version;
             this.spells = spells;
         }
 

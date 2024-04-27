@@ -395,7 +395,7 @@ namespace EQTool.Services
                     return;
                 }
 
-                var randomdata = randomParser.Parse(message);
+                var randomdata = randomParser.Parse1(message);
                 if (randomdata != null)
                 {
                     RandomRollEvent?.Invoke(this, new RandomRollEventArgs { RandomRollData = randomdata });

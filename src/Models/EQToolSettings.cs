@@ -152,6 +152,35 @@ namespace EQTool.Models
 			set => _SpellWindowState = value ?? new WindowState();
 		}
 
+		private WindowState _TimerWindowState;
+		public WindowState TimerWindowState
+		{
+			get
+			{
+				if (_TimerWindowState == null)
+				{
+					_TimerWindowState = new WindowState();
+				}
+				return _TimerWindowState;
+			}
+			set => _TimerWindowState = value ?? new WindowState();
+		}
+
+
+		private WindowState _ComboTimerWindowState;
+		public WindowState ComboTimerWindowState
+		{
+			get
+			{
+				if (_ComboTimerWindowState == null)
+				{
+					_ComboTimerWindowState = new WindowState();
+				}
+				return _ComboTimerWindowState;
+			}
+			set => _ComboTimerWindowState = value ?? new WindowState();
+		}
+
 		private WindowState _DpsWindowState;
 		public WindowState DpsWindowState
 		{

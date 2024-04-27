@@ -29,7 +29,9 @@ namespace EQTool
 
         private System.Windows.Forms.MenuItem MapMenuItem;
         private System.Windows.Forms.MenuItem SpellsMenuItem;
-        private System.Windows.Forms.MenuItem DpsMeterMenuItem;
+		private System.Windows.Forms.MenuItem TimerMenuItem;
+		private System.Windows.Forms.MenuItem ComboTimerMenuItem;
+		private System.Windows.Forms.MenuItem DpsMeterMenuItem;
         private System.Windows.Forms.MenuItem OverlayMenuItem;
         private System.Windows.Forms.MenuItem SettingsMenuItem;
         private System.Windows.Forms.MenuItem GroupSuggestionsMenuItem;
@@ -247,7 +249,9 @@ namespace EQTool
             var hotclericsparsegroup = new System.Windows.Forms.MenuItem("HOT Clerics Sparse Group", CreateHOTClericsSparseGroup);
             GroupSuggestionsMenuItem = new System.Windows.Forms.MenuItem("Group Suggestions", new System.Windows.Forms.MenuItem[] { standardgroup, hotclericsamegroup, hotclericsparsegroup });
             SpellsMenuItem = new System.Windows.Forms.MenuItem("Spells", ToggleSpellsWindow);
-            MapMenuItem = new System.Windows.Forms.MenuItem("Map", ToggleMapWindow);
+			TimerMenuItem = new System.Windows.Forms.MenuItem("Timers", ToggleTimerWindow);
+			ComboTimerMenuItem = new System.Windows.Forms.MenuItem("Combined Timers", ToggleComboTimerWindow);
+			MapMenuItem = new System.Windows.Forms.MenuItem("Map", ToggleMapWindow);
             DpsMeterMenuItem = new System.Windows.Forms.MenuItem("Dps", ToggleDPSWindow);
             OverlayMenuItem = new System.Windows.Forms.MenuItem("Overlay", ToggleOverlayWindow);
             MobInfoMenuItem = new System.Windows.Forms.MenuItem("Mob Info", ToggleMobInfoWindow);
@@ -288,6 +292,8 @@ namespace EQTool
                     DpsMeterMenuItem,
                     MapMenuItem,
                     SpellsMenuItem,
+					TimerMenuItem,
+					ComboTimerMenuItem,
                     MobInfoMenuItem,
                     SettingsMenuItem,
                     gitHubMenuItem,
@@ -596,9 +602,21 @@ namespace EQTool
         {
             var s = (System.Windows.Forms.MenuItem)sender;
             ToggleWindow<SpellWindow>(s);
-        }
+		}
 
-        public void OpenDPSWindow()
+		public void ToggleTimerWindow(object sender, EventArgs e)
+		{
+			var s = (System.Windows.Forms.MenuItem)sender;
+			ToggleWindow<TimerWindow>(s);
+		}
+
+		public void ToggleComboTimerWindow(object sender, EventArgs e)
+		{
+			var s = (System.Windows.Forms.MenuItem)sender;
+			ToggleWindow<ComboTimerWindow>(s);
+		}
+
+		public void OpenDPSWindow()
         {
             OpenWindow<DPSMeter>(DpsMeterMenuItem);
         }
@@ -631,9 +649,19 @@ namespace EQTool
         public void OpenSpellsWindow()
         {
             OpenWindow<SpellWindow>(SpellsMenuItem);
-        }
+		}
 
-        private void OnExit(object sender, EventArgs e)
+		public void OpenTimersWindow()
+		{
+			OpenWindow<TimerWindow>(TimerMenuItem);
+		}
+
+		public void OpenComboTimersWindow()
+		{
+			OpenWindow<ComboTimerWindow>(TimerMenuItem);
+		}
+
+		private void OnExit(object sender, EventArgs e)
         {
             System.Windows.Application.Current.Shutdown();
         }

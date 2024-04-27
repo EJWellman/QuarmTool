@@ -446,10 +446,18 @@
     <Compile Include="Shapes\ArrowEnds.cs" />
     <Compile Include="Shapes\ArrowLine.cs" />
     <Compile Include="Shapes\ArrowLineBase.cs" />
+    <Compile Include="ComboTimerWindow.xaml.cs">
+      <DependentUpon>ComboTimerWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="TimerWindow.xaml.cs">
+      <DependentUpon>TimerWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Tools\DataTableConverter.cs" />
     <Compile Include="Utilities\ZoneSwapper.cs" />
     <Compile Include="ViewModels\ActivePlayerInfo.cs" />
     <Compile Include="Services\TimersService.cs" />
+    <Compile Include="ViewModels\ComboTimerWindowViewModel.cs" />
+    <Compile Include="ViewModels\TimerWindowViewModel.cs" />
     <Compile Include="ViewModels\ZoneViewModel.cs" />
     <Compile Include="ViewModels\MobInfoViewModel.cs" />
     <Compile Include="ViewModels\MapViewModel.cs" />
@@ -514,6 +522,14 @@
     <Page Include="Settings.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ComboTimerWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="TimerWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="SpellWindow.xaml">
       <SubType>Designer</SubType>
@@ -1078,6 +1094,9 @@
   <ItemGroup>
     <Folder Include="UpdateImages\" />
     <Folder Include="Windows\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="clock.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="AfterResolveReferences">
