@@ -125,10 +125,13 @@ namespace EQTool
 
             if (activePlayer.Player?.MapKillTimers == true)
             {
-                var zonetimer = ZoneSpawnTimes.GetSpawnTime(e.Name, mapViewModel.ZoneName);
-                var mw = mapViewModel.AddTimer(zonetimer, e.Name, true);
-                mapViewModel.MoveToPlayerLocation(mw);
-            }
+				var deathTimer = _quarmDataService.GetMonsterTimer(e.Name);
+				if(deathTimer != null)
+				{
+					var mw = mapViewModel.AddTimer(TimeSpan.FromSeconds(deathTimer.RespawnTimer), e.Name, false);
+					mapViewModel.MoveToPlayerLocation(mw);
+				}
+			}
         }
 
         private void UITimer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)

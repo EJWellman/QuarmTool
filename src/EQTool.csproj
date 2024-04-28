@@ -396,6 +396,7 @@
     <Compile Include="Models\EQMapColor.cs" />
     <Compile Include="Models\QuarmMerchantItems.cs" />
     <Compile Include="Models\QuarmMonster.cs" />
+    <Compile Include="Models\QuarmMonsterTimer.cs" />
     <Compile Include="Models\QuarmMonsterFaction.cs" />
     <Compile Include="Models\QuarmMonsterDrops.cs" />
     <Compile Include="Models\PlayerRequest.cs" />

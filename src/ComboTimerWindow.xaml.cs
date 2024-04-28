@@ -22,6 +22,7 @@ namespace EQTool
         private readonly ActivePlayer activePlayer;
         private readonly TimersService timersService;
         private readonly PlayerTrackerService playerTrackerService;
+		private readonly QuarmDataService _quarmDataService;
 
         public ComboTimerWindow(
             PlayerTrackerService playerTrackerService,
@@ -31,6 +32,7 @@ namespace EQTool
             LogParser logParser,
             EQToolSettingsLoad toolSettingsLoad,
             ActivePlayer activePlayer,
+			QuarmDataService quarmDataService,
             LoggingService loggingService) : base(settings.SpellWindowState, toolSettingsLoad, settings)
         {
             loggingService.Log(string.Empty, EventType.OpenMap, activePlayer?.Player?.Server);
@@ -38,6 +40,7 @@ namespace EQTool
             this.timersService = timersService;
             this.logParser = logParser;
             this.activePlayer = activePlayer;
+			_quarmDataService = quarmDataService;
             comboTimerWindowViewModel.SpellList = new System.Collections.ObjectModel.ObservableCollection<UISpell>();
             DataContext = this.comboTimerWindowViewModel = comboTimerWindowViewModel;
             if (this.activePlayer.Player != null)
@@ -149,23 +152,26 @@ namespace EQTool
 			{
 				return;
 			}
-			var zonetimer = ZoneSpawnTimes.GetSpawnTime(e.Name, activePlayer?.Player?.Zone);
-			var add = new CustomTimer
+			var deathTimer = _quarmDataService.GetMonsterTimer(e.Name);
+			if (deathTimer != null)
 			{
-				Name = "--Dead-- " + e.Name,
-				DurationInSeconds = (int)zonetimer.TotalSeconds,
-				SpellNameIcon = "Disease Cloud",
-				SpellType = EQToolShared.Enums.SpellTypes.RespawnTimer
-			};
+				var add = new CustomTimer
+				{
+					Name = "--Dead-- " + e.Name,
+					DurationInSeconds = (int)deathTimer.RespawnTimer,
+					SpellNameIcon = "Disease Cloud",
+					SpellType = SpellTypes.RespawnTimer
+				};
 
-			var exisitngdeathentry = comboTimerWindowViewModel.SpellList.FirstOrDefault(a => a.SpellName == add.Name && CustomTimer.CustomerTime == a.TargetName);
-			if (exisitngdeathentry != null)
-			{
-				deathcounter = ++deathcounter > 999 ? 1 : deathcounter;
-				add.Name += "_" + deathcounter;
+				var exisitngdeathentry = comboTimerWindowViewModel.SpellList.FirstOrDefault(a => a.SpellName == add.Name && CustomTimer.CustomerTime == a.TargetName);
+				if (exisitngdeathentry != null)
+				{
+					deathcounter = ++deathcounter > 999 ? 1 : deathcounter;
+					add.Name += "_" + deathcounter;
+				}
+
+				comboTimerWindowViewModel.TryAddCustom(add);
 			}
-
-			comboTimerWindowViewModel.TryAddCustom(add);
 		}
 
 		private void LogParser_CancelTimerEvent(object sender, LogParser.CancelTimerEventArgs e)

@@ -15,10 +15,11 @@ namespace EQTool.Services
 	public class QuarmDataService
 	{
 		private readonly ActivePlayer _activePlayer;
-		private static List<QuarmMonster> monsterTable;
-		private static List<QuarmMonsterFaction> factionTable;
-		private static List<QuarmMonsterDrops> dropsTable;
-		private static List<QuarmMerchantItems> merchantTable;
+		private static List<QuarmMonster> monsters;
+		private static List<QuarmMonsterFaction> factions;
+		private static List<QuarmMonsterDrops> drops;
+		private static List<QuarmMerchantItems> merchantWares;
+		private static List<QuarmMonsterTimer> monsterTimers;
 		private static DataFileInfo FileLocations;
 		public QuarmDataService(ActivePlayer activePlayer)
 		{
@@ -54,12 +55,17 @@ namespace EQTool.Services
 					"FROM NPC_Wares"
 					+ " WHERE MerchantID IN (SELECT Merchant_ID FROM NPC WHERE Zone_Code = @Zone_Code)", new { Zone_Code = zoneCode });
 
-				monsterTable = mobsTemp.ToList();
-				factionTable = factionsTemp.ToList();
-				dropsTable = dropsTemp.ToList();
-				merchantTable = merchantItemsTemp.ToList();
+				var timersTemp = cnn.Query<QuarmMonsterTimer>("SELECT * " +
+					"FROM NPC_RespawnTimers"
+					+ " WHERE Zone_Code = @Zone_Code", new { Zone_Code = zoneCode });
 
-				if(monsterTable.Count > 0)
+				monsters = mobsTemp.ToList();
+				factions = factionsTemp.ToList();
+				drops = dropsTemp.ToList();
+				merchantWares = merchantItemsTemp.ToList();
+				monsterTimers = timersTemp.ToList();
+
+				if(monsters.Count > 0)
 				{
 					return true;
 				}
@@ -74,7 +80,7 @@ namespace EQTool.Services
 
 			try
 			{
-				QuarmMonster matchedMonster = monsterTable.FirstOrDefault(r =>
+				QuarmMonster matchedMonster = monsters.FirstOrDefault(r =>
 					r.Name == name
 					|| r.Name == name.Replace(' ', '_')
 				);
@@ -84,21 +90,21 @@ namespace EQTool.Services
 					QuarmMonster match = matchedMonster;
 					match.Name = match.Name.Trim().Replace('_', ' ');
 
-					List<QuarmMonsterFaction> matchedFactions = factionTable.Where(f =>
+					List<QuarmMonsterFaction> matchedFactions = factions.Where(f =>
 						f.NPC_ID == match.ID).ToList();
 					if (matchedFactions != null && matchedFactions.Count > 0)
 					{
 						match.Factions = matchedFactions;
 					}
-					List<QuarmMonsterDrops> matchedDrops = dropsTable.Where(d =>
+					List<QuarmMonsterDrops> matchedDrops = drops.Where(d =>
 						d.Loottable_ID == match.Loottable_ID).ToList();
 					if (matchedDrops != null && matchedDrops.Count > 0)
 					{
 						match.Drops = matchedDrops;
 					}
-					if(merchantTable.Count > 0)
+					if(merchantWares.Count > 0)
 					{
-						List<QuarmMerchantItems> matchedMerchantItems = merchantTable.Where(m =>
+						List<QuarmMerchantItems> matchedMerchantItems = merchantWares.Where(m =>
 							m.MerchantID == match.Merchant_ID).ToList();
 						if (matchedMerchantItems != null && matchedMerchantItems.Count > 0)
 						{
@@ -133,6 +139,19 @@ namespace EQTool.Services
 			}
 
 			return null;
+		}
+
+		public QuarmMonsterTimer GetMonsterTimer(string name)
+		{
+			QuarmMonsterTimer timer = monsterTimers.FirstOrDefault(t => t.Mob_Name == name || t.Mob_Name == name.Replace(" ", "_"));
+			if (timer != null)
+			{
+				return timer;
+			}
+			else
+			{
+				return null;
+			}
 		}
 	}
 }

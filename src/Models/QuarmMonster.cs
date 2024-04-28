@@ -1,19 +1,5 @@
-﻿using EQTool.Services.Parsing;
-using EQTool.ViewModels;
-using Newtonsoft.Json.Linq;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Security.Policy;
+﻿using System.Collections.Generic;
 using System.Text;
-using System.Text.Json.Serialization;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
-using System.Web;
-using System.Windows.Markup;
-using System.Xml.Linq;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace EQTool.Models
 {
