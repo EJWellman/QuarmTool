@@ -317,8 +317,16 @@ namespace EQTool
                 if (!EQToolSettings.SpellWindowState.Closed)
                 {
                     OpenSpellsWindow();
-                }
-                if (!EQToolSettings.DpsWindowState.Closed)
+				}
+				if (!EQToolSettings.TimerWindowState.Closed)
+				{
+					OpenSpellsWindow();
+				}
+				if (!EQToolSettings.ComboTimerWindowState.Closed)
+				{
+					OpenSpellsWindow();
+				}
+				if (!EQToolSettings.DpsWindowState.Closed)
                 {
                     OpenDPSWindow();
                 }
@@ -453,6 +461,8 @@ namespace EQTool
         {
             MapMenuItem.Enabled = value;
             SpellsMenuItem.Enabled = value;
+			TimerMenuItem.Enabled = value;
+			ComboTimerMenuItem.Enabled = value;
             DpsMeterMenuItem.Enabled = value;
             MobInfoMenuItem.Enabled = value;
             GroupSuggestionsMenuItem.Enabled = value;
