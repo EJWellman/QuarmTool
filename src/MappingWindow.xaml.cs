@@ -20,7 +20,7 @@ namespace EQTool
         private readonly IAppDispatcher appDispatcher;
         private readonly ISignalrPlayerHub signalrPlayerHub;
         private readonly System.Timers.Timer UITimer;
-		private JsonDataService _jsonDataService;
+		private QuarmDataService _quarmDataService;
 
 		public MappingWindow(
             ISignalrPlayerHub signalrPlayerHub,
@@ -32,7 +32,7 @@ namespace EQTool
             EQToolSettingsLoad toolSettingsLoad,
             IAppDispatcher appDispatcher,
             LoggingService loggingService,
-			JsonDataService jsonDataService) : base(settings.MapWindowState, toolSettingsLoad, settings)
+			QuarmDataService quarmDataService) : base(settings.MapWindowState, toolSettingsLoad, settings)
         {
             loggingService.Log(string.Empty, EventType.OpenMap, activePlayer?.Player?.Server);
             this.activePlayer = activePlayer;
@@ -65,7 +65,7 @@ namespace EQTool
             UITimer.Enabled = true;
             //   this.SetCenerMap();
 
-			_jsonDataService = jsonDataService;
+			_quarmDataService = quarmDataService;
         }
 
         private void SignalrPlayerHub_PlayerDisconnected(object sender, SignalrPlayer e)
@@ -173,7 +173,7 @@ namespace EQTool
 			}
 			if(mapViewModel.ZoneName != null)
 			{
-				_jsonDataService.LoadMobDataForZone(mapViewModel.ZoneName);
+				_quarmDataService.LoadMobDataForZone(mapViewModel.ZoneName);
 			}
 		}
 

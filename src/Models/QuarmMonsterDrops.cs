@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace EQTool.Models
 {
-	public class JsonMonsterDrops
+	public class QuarmMonsterDrops
 	{
 		public int Item_ID { get; set; }
 		public string Item_Name { get; set; }

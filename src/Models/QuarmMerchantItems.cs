@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace EQTool.Models
 {
-	public class JsonMerchantItems
+	public class QuarmMerchantItems
 	{
 		public int Slot { get; set; }
 		public int Item_ID { get; set; }

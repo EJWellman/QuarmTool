@@ -17,7 +17,7 @@ using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace EQTool.Models
 {
-	public class JsonMonster
+	public class QuarmMonster
 	{
 		#region Properties
 		public int AC { get; set; }
@@ -61,9 +61,9 @@ namespace EQTool.Models
 		public string Zone_Name_Guess { get; set; }
 		public string Zone_Code_Guess { get; set; }
 
-		public List<JsonMonsterFaction> Factions { get; set; } = new List<JsonMonsterFaction>();
-		public List<JsonMonsterDrops> Drops { get; set; } = new List<JsonMonsterDrops>();
-		public List<JsonMerchantItems> MerchantItems { get; set; } = new List<JsonMerchantItems>();
+		public List<QuarmMonsterFaction> Factions { get; set; } = new List<QuarmMonsterFaction>();
+		public List<QuarmMonsterDrops> Drops { get; set; } = new List<QuarmMonsterDrops>();
+		public List<QuarmMerchantItems> MerchantItems { get; set; } = new List<QuarmMerchantItems>();
 
 
 

@@ -1,10 +1,12 @@
 ﻿using EQTool.Properties;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Threading;
+using System.Windows.Documents;
 
 namespace EQTool
 {
@@ -46,7 +48,9 @@ namespace EQTool
                             return;
                         }
                     }
-                }
+					EnsureResourcesExist();
+
+				}
 
                 App.Main();
             }
@@ -96,5 +100,55 @@ namespace EQTool
                 return Assembly.Load(assemblyRawBytes);
             }
         }
+
+		private static bool EnsureResourcesExist()
+		{
+			string baseFolder = AppContext.BaseDirectory;
+			List<string> files = new List<string>()
+			{
+				"x64\\SQLite.Interop.dll",
+				"x86\\SQLite.Interop.dll"
+			};
+
+			if (!File.Exists(Path.Combine(baseFolder, "System.Data.SQLite.dll")))
+			{
+				using (var resource = Assembly.GetExecutingAssembly().GetManifestResourceStream("EQTool.Embeds.System.Data.SQLite.dll"))
+				{
+					if (resource == null)
+					{
+						return false;
+					}
+					using (var fileStream = File.Create($"{baseFolder}\\System.Data.SQLite.dll"))
+					{
+						resource.CopyTo(fileStream);
+					}
+				}
+			}
+			foreach(string file in files)
+			{
+				if (!File.Exists(Path.Combine(baseFolder, file)))
+				{
+					using (var resource = Assembly.GetExecutingAssembly().GetManifestResourceStream($"EQTool.Embeds.{file.Replace("\\", ".")}"))
+					{
+						if (resource == null)
+						{
+							return false;
+						}
+						FileInfo fi = new FileInfo(Path.Combine(baseFolder, file));
+						if (!fi.Directory.Exists)
+						{
+							Directory.CreateDirectory(fi.DirectoryName);
+						}
+
+						using (var fileStream = File.Create(Path.Combine(baseFolder, file)))
+						{
+							resource.CopyTo(fileStream);
+						}
+					}
+				}
+			}
+
+			return true;
+		}
     }
 }

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace EQTool.Models
 {
-	public class JsonMonsterFaction
+	public class QuarmMonsterFaction
 	{
 		public int NPC_ID { get; set; }
 		public string Zone_Code { get; set; }

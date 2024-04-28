@@ -22,16 +22,16 @@ namespace EQTool
     {
         private readonly LogParser logParser;
         private ViewModels.MobInfoViewModel mobInfoViewModel;
-        private readonly JsonDataService _jsonService;
+        private readonly QuarmDataService _quarmService;
         private readonly PigParseApi pigParseApi;
         private readonly ActivePlayer activePlayer;
-        public MobInfo(ActivePlayer activePlayer, PigParseApi pigParseApi, JsonDataService jsonService, LogParser logParser, EQToolSettings settings, EQToolSettingsLoad toolSettingsLoad, LoggingService loggingService)
+        public MobInfo(ActivePlayer activePlayer, PigParseApi pigParseApi, QuarmDataService quarmService, LogParser logParser, EQToolSettings settings, EQToolSettingsLoad toolSettingsLoad, LoggingService loggingService)
             : base(settings.MobWindowState, toolSettingsLoad, settings)
         {
             loggingService.Log(string.Empty, EventType.OpenMobInfo, activePlayer?.Player?.Server);
             this.activePlayer = activePlayer;
             this.pigParseApi = pigParseApi;
-            this._jsonService = jsonService;
+            this._quarmService = quarmService;
             this.logParser = logParser;
             DataContext = mobInfoViewModel = new ViewModels.MobInfoViewModel();
             InitializeComponent();
@@ -45,7 +45,7 @@ namespace EQTool
             {
                 if (e.Name != mobInfoViewModel.Name)
                 {
-					mobInfoViewModel.NewResults = _jsonService.GetData(e.Name);
+					mobInfoViewModel.NewResults = _quarmService.GetData(e.Name);
 					//mobInfoViewModel.Results = _jsonService.GetData(e.Name);
 					//var items = mobInfoViewModel.KnownLoot.Where(a => a.HaseUrl == Visibility.Visible).Select(a => a.Name?.Trim()).Where(a => !string.IsNullOrWhiteSpace(a)).ToList();
 					//if (activePlayer?.Player?.Server != null && items.Any())

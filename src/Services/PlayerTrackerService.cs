@@ -15,7 +15,7 @@ namespace EQTool.Services
         internal readonly ActivePlayer activePlayer;
         private readonly LoggingService loggingService;
         private readonly PlayerGroupService playerGroupService;
-		private JsonDataService _jsonDataService;
+		private QuarmDataService _quarmDataService;
         private readonly Dictionary<string, EQToolShared.APIModels.PlayerControllerModels.Player> Player = new Dictionary<string, EQToolShared.APIModels.PlayerControllerModels.Player>(StringComparer.InvariantCultureIgnoreCase);
         private readonly Dictionary<string, EQToolShared.APIModels.PlayerControllerModels.Player> PlayersInZones = new Dictionary<string, EQToolShared.APIModels.PlayerControllerModels.Player>(StringComparer.InvariantCultureIgnoreCase);
         private readonly Dictionary<string, EQToolShared.APIModels.PlayerControllerModels.Player> DirtyPlayers = new Dictionary<string, EQToolShared.APIModels.PlayerControllerModels.Player>(StringComparer.InvariantCultureIgnoreCase);
@@ -23,7 +23,7 @@ namespace EQTool.Services
         private readonly System.Timers.Timer UITimer;
         private readonly object ContainerLock = new object();
 
-        public PlayerTrackerService(LogParser logParser, ActivePlayer activePlayer, PigParseApi pigParseApi, LoggingService loggingService, PlayerGroupService playerGroupService, JsonDataService jsonDataService)
+        public PlayerTrackerService(LogParser logParser, ActivePlayer activePlayer, PigParseApi pigParseApi, LoggingService loggingService, PlayerGroupService playerGroupService, QuarmDataService quarmDataService)
         {
             _ = activePlayer.Update();
             CurrentZone = activePlayer.Player?.Zone;
@@ -38,7 +38,7 @@ namespace EQTool.Services
             this.pigParseApi = pigParseApi;
             this.activePlayer = activePlayer;
             this.loggingService = loggingService;
-			_jsonDataService = jsonDataService;
+			_quarmDataService = quarmDataService;
         }
 
         public bool IsPlayer(string name)
@@ -85,7 +85,7 @@ namespace EQTool.Services
 					&& CurrentZone != ZoneParser.ZoneNameMapper[activePlayer.Player?.LastZoneEntered])
                 {
                     CurrentZone = activePlayer.Player?.Zone;
-					_jsonDataService.LoadMobDataForZone(CurrentZone);
+					_quarmDataService.LoadMobDataForZone(CurrentZone);
 					Debug.WriteLine("Clearing zone Players");
                     PlayersInZones.Clear();
                 }
@@ -147,7 +147,7 @@ namespace EQTool.Services
         {
             lock (ContainerLock)
             {
-				_jsonDataService.LoadMobDataForZone(activePlayer.Player?.Zone/*, activePlayer.Player?.LastZoneEntered*/);
+				_quarmDataService.LoadMobDataForZone(activePlayer.Player?.Zone/*, activePlayer.Player?.LastZoneEntered*/);
 				Debug.WriteLine("Clearing zone Players");
                 PlayersInZones.Clear();
             }

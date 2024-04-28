@@ -236,8 +236,8 @@ namespace EQTool.ViewModels
 			}
 		}
 
-		private JsonMonster newResults;
-		public JsonMonster NewResults
+		private QuarmMonster newResults;
+		public QuarmMonster NewResults
 		{
 			get => newResults;
 			set
@@ -772,7 +772,7 @@ namespace EQTool.ViewModels
         }
 		*/
 
-		public void ConvertToViewModel(JsonMonster monster)
+		public void ConvertToViewModel(QuarmMonster monster)
 		{
 			if (monster != null)
 			{
@@ -820,7 +820,7 @@ namespace EQTool.ViewModels
 				}
 				#endregion
 
-				foreach (JsonMonsterFaction faction in monster.Factions)
+				foreach (QuarmMonsterFaction faction in monster.Factions)
 				{
 					Factions.Add(new FactionHitViewModel
 					{
@@ -829,7 +829,7 @@ namespace EQTool.ViewModels
 						Url = $"{pqdi_url}faction/{faction.Faction_ID}"
 					});
 				}
-				foreach (JsonMonsterDrops drop in monster.Drops)
+				foreach (QuarmMonsterDrops drop in monster.Drops)
 				{
 					KnownLoot.Add(new MobDropViewModel
 					{
@@ -846,7 +846,7 @@ namespace EQTool.ViewModels
 						Name = special
 					});
 				}
-				foreach (JsonMerchantItems item in monster.MerchantItems)
+				foreach (QuarmMerchantItems item in monster.MerchantItems)
 				{
 					MerchantItems.Add(new MobDropViewModel
 					{
