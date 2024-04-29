@@ -19,19 +19,44 @@ namespace EQTool.ViewModels
             TimerEndDateTime = endtime;
             TotalSecondsOnSpell = (int)(TimerEndDateTime - DateTime.Now).TotalSeconds;
             UpdateTimeLeft();
-        }
+		}
+		public UISpell(DateTime endTime, DateTime maxEndTime, bool isNPC)
+		{
+			this.IsNPC = isNPC;
+			TimerEndDateTime = endTime;
+			MaxTimerEndDateTime = maxEndTime;
+			TotalSecondsOnSpell = (int)(TimerEndDateTime - DateTime.Now).TotalSeconds;
+			NegativeSecondsOnSpell = (int)(maxEndTime - DateTime.Now).TotalSeconds;
+			UpdateTimeLeft();
+		}
 
-        public SpellIcon SpellIcon { get; set; }
+		public SpellIcon SpellIcon { get; set; }
 
         public DateTime UpdatedDateTime { get; set; }
 
+		private TimeSpan _NegativeDurationToShow;
+
         private TimeSpan _SecondsLeftOnSpell;
 
+		public int NegativeSecondsOnSpell { get; private set; }
         public int TotalSecondsOnSpell { get; private set; }
 
+		public TimeSpan NegativeDurationToShow => _NegativeDurationToShow;
         public TimeSpan SecondsLeftOnSpell => _SecondsLeftOnSpell;
 
-        private DateTime _TimerEndDateTime = DateTime.Now;
+		private DateTime _MaxTimerEndDateTime = DateTime.Now;
+		public DateTime MaxTimerEndDateTime
+		{
+			get { return _MaxTimerEndDateTime; }
+			set
+			{
+				_MaxTimerEndDateTime = value;
+				NegativeSecondsOnSpell = (int)(_MaxTimerEndDateTime - DateTime.Now).TotalSeconds;
+				UpdateTimeLeft();
+			}
+		}
+
+		private DateTime _TimerEndDateTime = DateTime.Now;
         public DateTime TimerEndDateTime
         {
             get { return _TimerEndDateTime; }
@@ -46,10 +71,12 @@ namespace EQTool.ViewModels
         public void UpdateTimeLeft()
         {
             _SecondsLeftOnSpell = TimerEndDateTime - DateTime.Now;
+			_NegativeDurationToShow = MaxTimerEndDateTime - DateTime.Now;
             if (TotalSecondsOnSpell > 0)
             {
                 PercentLeftOnSpell = (int)(_SecondsLeftOnSpell.TotalSeconds / TotalSecondsOnSpell * 100);
             }
+			OnPropertyChanged(nameof(NegativeSecondsOnSpell));
             OnPropertyChanged(nameof(SecondsLeftOnSpell));
             OnPropertyChanged(nameof(SecondsLeftOnSpellPretty));
             OnPropertyChanged(nameof(PercentLeftOnSpell));
@@ -224,20 +251,32 @@ namespace EQTool.ViewModels
                 {
                     st += _SecondsLeftOnSpell.Hours + "h ";
                 }
+				else if (_SecondsLeftOnSpell.Hours < 0)
+				{
+					st += "-" + _NegativeDurationToShow.Hours + "h ";
+				}
                 if (_SecondsLeftOnSpell.Minutes > 0)
                 {
                     st += _SecondsLeftOnSpell.Minutes + "m ";
                 }
+				else if (_SecondsLeftOnSpell.Minutes < 0)
+				{
+					st += "-" + _NegativeDurationToShow.Minutes + "m ";
+				}
                 if (_SecondsLeftOnSpell.Seconds > 0)
                 {
                     st += _SecondsLeftOnSpell.Seconds + "s";
                 }
+				else if (_SecondsLeftOnSpell.Seconds < 0)
+				{
+					st += "-" + _NegativeDurationToShow.Seconds + "s";
+				}
                 return st;
 
             }
-        }
+		}
 
-        public bool PersistentSpell { get; set; }
+		public bool PersistentSpell { get; set; }
         public string Sorting
         {
             get

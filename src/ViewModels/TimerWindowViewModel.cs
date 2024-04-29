@@ -90,7 +90,7 @@ namespace EQTool.ViewModels
                 foreach (var item in SpellList)
                 {
                     item.UpdateTimeLeft();
-                    if (item.SecondsLeftOnSpell.TotalSeconds <= 0 && !item.PersistentSpell)
+                    if (item.NegativeDurationToShow.TotalSeconds <= 0 && !item.PersistentSpell)
                     {
                         itemstoremove.Add(item);
                     }
@@ -172,6 +172,7 @@ namespace EQTool.ViewModels
                 }
 
                 var spellduration = match.DurationInSeconds;
+				var negativeDuration = match.NegativeDurationToShow;
                 var spellicon = spells.AllSpells.FirstOrDefault(a => a.name == match.SpellNameIcon);
                 var rollorder = 0;
                 if (match.SpellType == SpellTypes.RandomRoll)
@@ -190,7 +191,7 @@ namespace EQTool.ViewModels
                     }
                 }
 
-                SpellList.Add(new UISpell(DateTime.Now.AddSeconds(spellduration), false)
+                SpellList.Add(new UISpell(DateTime.Now.AddSeconds(spellduration), DateTime.Now.AddSeconds(negativeDuration > spellduration ? negativeDuration : spellduration), false)
                 {
                     UpdatedDateTime = DateTime.Now,
                     PercentLeftOnSpell = 100,

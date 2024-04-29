@@ -379,6 +379,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Constants\QuarmRules.cs" />
     <Compile Include="CustomTimeSpanUpDown.cs" />
     <Compile Include="EventOverlay.xaml.cs">
       <DependentUpon>EventOverlay.xaml</DependentUpon>
@@ -392,6 +393,7 @@
     <Compile Include="MobInfo.xaml.cs">
       <DependentUpon>MobInfo.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Models\QuarmZone.cs" />
     <Compile Include="Models\DataFileInfo.cs" />
     <Compile Include="Models\EQMapColor.cs" />
     <Compile Include="Models\QuarmMerchantItems.cs" />
@@ -473,7 +475,6 @@
     <Compile Include="TimerWindow.xaml.cs">
       <DependentUpon>TimerWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Tools\DataTableConverter.cs" />
     <Compile Include="Utilities\ZoneSwapper.cs" />
     <Compile Include="ViewModels\ActivePlayerInfo.cs" />
     <Compile Include="Services\TimersService.cs" />
@@ -1113,6 +1114,7 @@
     <Resource Include="update1.png" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Tools\" />
     <Folder Include="UpdateImages\" />
     <Folder Include="Windows\" />
   </ItemGroup>

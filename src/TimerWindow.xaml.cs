@@ -122,9 +122,11 @@ namespace EQTool
 				var add = new CustomTimer
 				{
 					Name = "--Dead-- " + e.Name,
-					DurationInSeconds = (int)deathTimer.RespawnTimer,
+					DurationInSeconds = (int)(deathTimer.RespawnTimer != 0 ? deathTimer.RespawnTimer : deathTimer.Min_RespawnTimer),
+					NegativeDurationToShow = (int)(deathTimer.Max_RespawnTimer),
 					SpellNameIcon = "Disease Cloud",
-					SpellType = SpellTypes.RespawnTimer
+					SpellType = SpellTypes.RespawnTimer,
+					TargetName = "Death Timers"
 				};
 
 				var exisitngdeathentry = timerWindowViewModel.SpellList.FirstOrDefault(a => a.SpellName == add.Name && CustomTimer.CustomerTime == a.TargetName);

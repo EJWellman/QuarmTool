@@ -90,8 +90,8 @@ namespace EQTool.ViewModels
                 foreach (var item in SpellList)
                 {
                     item.UpdateTimeLeft();
-                    if (item.SecondsLeftOnSpell.TotalSeconds <= 0 && !item.PersistentSpell)
-                    {
+					if (item.NegativeDurationToShow.TotalSeconds <= 0 && !item.PersistentSpell)
+					{
                         itemstoremove.Add(item);
                     }
                     else if (item.PersistentSpell && (d - item.UpdatedDateTime).TotalMinutes > 30)
@@ -264,7 +264,7 @@ namespace EQTool.ViewModels
                 var spellduration = TimeSpan.FromSeconds(SpellDurations.GetDuration_inSeconds(match.Spell, activePlayer.Player));
                 var duration = needscount ? 0 : match.TotalSecondsOverride ?? spellduration.TotalSeconds;
                 var isnpc = MasterNPCList.NPCs.Contains(match.TargetName);
-                var uispell = new UISpell(DateTime.Now.AddSeconds((int)duration), isnpc)
+                var uispell = new UISpell(DateTime.Now.AddSeconds((int)duration), DateTime.Now.AddSeconds((int)duration), isnpc)
                 {
                     UpdatedDateTime = DateTime.Now,
                     PercentLeftOnSpell = 100,
@@ -318,7 +318,8 @@ namespace EQTool.ViewModels
                 }
 
                 var spellduration = match.DurationInSeconds;
-                var spellicon = spells.AllSpells.FirstOrDefault(a => a.name == match.SpellNameIcon);
+				var negativeDuration = match.NegativeDurationToShow;
+				var spellicon = spells.AllSpells.FirstOrDefault(a => a.name == match.SpellNameIcon);
                 var rollorder = 0;
                 if (match.SpellType == SpellTypes.RandomRoll)
                 {
@@ -336,9 +337,9 @@ namespace EQTool.ViewModels
                     }
                 }
 
-                SpellList.Add(new UISpell(DateTime.Now.AddSeconds(spellduration), false)
-                {
-                    UpdatedDateTime = DateTime.Now,
+				SpellList.Add(new UISpell(DateTime.Now.AddSeconds(spellduration), DateTime.Now.AddSeconds(negativeDuration > spellduration ? negativeDuration : spellduration), false)
+				{
+					UpdatedDateTime = DateTime.Now,
                     PercentLeftOnSpell = 100,
                     SpellType = match.SpellType,
                     TargetName = match.TargetName,
