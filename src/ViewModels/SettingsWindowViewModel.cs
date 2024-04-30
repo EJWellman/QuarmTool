@@ -9,6 +9,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Speech.Synthesis;
 using System.Windows;
+using System.Windows.Data;
 
 namespace EQTool.ViewModels
 {
@@ -297,7 +298,15 @@ namespace EQTool.ViewModels
 			}
 		}
 
-        public bool ShowRandomRolls
+		public ObservableCollection<CustomOverlay> CustomOverlays
+		{
+			get
+			{
+				return this.toolSettings.CustomOverlays;
+			}
+		}
+
+		public bool ShowRandomRolls
         {
             get
             {

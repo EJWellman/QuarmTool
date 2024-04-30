@@ -186,6 +186,12 @@
     <Reference Include="Dapper, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Dapper.2.1.35\lib\net461\Dapper.dll</HintPath>
     </Reference>
+    <Reference Include="Dapper.Contrib, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Dapper.Contrib.2.0.78\lib\net461\Dapper.Contrib.dll</HintPath>
+    </Reference>
+    <Reference Include="DapperExtensions, Version=1.7.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\DapperExtensions.1.7.0\lib\net461\DapperExtensions.dll</HintPath>
+    </Reference>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.4.4\lib\net45\EntityFramework.dll</HintPath>
     </Reference>
@@ -243,6 +249,12 @@
     <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.13.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
+    <Reference Include="Oracle.ManagedDataAccess, Version=4.122.19.1, Culture=neutral, PublicKeyToken=89b483f429c47342, processorArchitecture=MSIL">
+      <HintPath>..\packages\Oracle.ManagedDataAccess.19.11.0\lib\net40\Oracle.ManagedDataAccess.dll</HintPath>
+    </Reference>
+    <Reference Include="Slapper, Version=2.0.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Slapper.AutoMapper.2.0.1\lib\net46\Slapper.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Buffers, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Buffers.4.5.1\lib\net461\System.Buffers.dll</HintPath>
@@ -251,6 +263,11 @@
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Data.Common, Version=4.1.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Data.Common.4.3.0\lib\net451\System.Data.Common.dll</HintPath>
+      <Private>True</Private>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System.Data.SQLite, Version=1.0.118.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=MSIL">
       <HintPath>..\packages\Stub.System.Data.SQLite.Core.NetFramework.1.0.118.0\lib\net46\System.Data.SQLite.dll</HintPath>
       <EmbedInteropTypes>False</EmbedInteropTypes>
@@ -380,7 +397,12 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Constants\QuarmRules.cs" />
+    <Compile Include="CustomOverlayEditWindow.xaml.cs">
+      <DependentUpon>CustomOverlayEditWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="CustomTimeSpanUpDown.cs" />
+    <Compile Include="EventArgModels\CustomOverlayEditEventArgs.cs" />
+    <Compile Include="EventArgModels\CustomOverlayEventArgs.cs" />
     <Compile Include="EventOverlay.xaml.cs">
       <DependentUpon>EventOverlay.xaml</DependentUpon>
     </Compile>
@@ -393,6 +415,7 @@
     <Compile Include="MobInfo.xaml.cs">
       <DependentUpon>MobInfo.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Models\CustomOverlay.cs" />
     <Compile Include="Models\QuarmZone.cs" />
     <Compile Include="Models\DataFileInfo.cs" />
     <Compile Include="Models\EQMapColor.cs" />
@@ -422,9 +445,11 @@
     <Compile Include="Services\AudioService.cs" />
     <Compile Include="Services\BinarySerializer.cs" />
     <Compile Include="Services\CHService.cs" />
+    <Compile Include="Services\CustomOverlayService.cs" />
     <Compile Include="Services\LoggingService.cs" />
     <Compile Include="Services\MapOpacityHelper.cs" />
     <Compile Include="Services\MapViewModelService.cs" />
+    <Compile Include="Services\Parsing\CustomOverlayParser.cs" />
     <Compile Include="Services\Parsing\RandomParser.cs" />
     <Compile Include="Services\Parsing\ResistSpellParser.cs" />
     <Compile Include="Services\Parsing\GroupInviteParser.cs" />
@@ -513,6 +538,10 @@
       <DependentUpon>SpellWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="BaseSaveStateWindow.cs" />
+    <Page Include="CustomOverlayEditWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="DPSMeter.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

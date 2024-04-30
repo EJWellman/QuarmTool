@@ -1,6 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using EQTool.Services;
+using EQToolShared.ExtendedClasses;
+using Newtonsoft.Json;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices.WindowsRuntime;
 using System.Windows;
 
 namespace EQTool.Models
@@ -242,6 +247,25 @@ namespace EQTool.Models
 		public bool BestGuessSpells { get; set; }
 		public bool YouOnlySpells { get; set; }
 		public bool ShowRandomRolls { get; set; }
+
+		private ObservableCollectionRange<CustomOverlay> _customOverlays;
+		[JsonIgnore]
+		public ObservableCollectionRange<CustomOverlay> CustomOverlays
+		{
+			get
+			{
+				if (_customOverlays == null || _customOverlays.Count == 0)
+				{
+					_customOverlays = new ObservableCollectionRange<CustomOverlay>();
+					_customOverlays.AddRange(CustomOverlayService.LoadCustomOverlayMessages());
+				}
+				return _customOverlays;
+			}
+			set
+			{
+				_customOverlays = value;
+			}
+		}
 
 		public event PropertyChangedEventHandler PropertyChanged;
 

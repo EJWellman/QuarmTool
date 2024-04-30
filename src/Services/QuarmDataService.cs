@@ -32,7 +32,7 @@ namespace EQTool.Services
 
 		public bool LoadMobDataForZone(string zoneCode)
 		{
-			_fileLocations = GetDataLocation();
+			_fileLocations = GetDataLocation("Data", "Quarmtool_Data.db");
 			if(_fileLocations == null || !_fileLocations.Found)
 			{
 				return false;

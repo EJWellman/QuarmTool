@@ -10,29 +10,31 @@ namespace EQTool.Services
         public static IContainer Init()
         {
             var builder = new ContainerBuilder();
-            _ = builder.RegisterSource(new AnyConcreteTypeNotAlreadyRegisteredSource());
-            _ = builder.RegisterType<EQToolSettingsLoad>().AsSelf().SingleInstance();
-            _ = builder.Register(a =>
+            builder.RegisterSource(new AnyConcreteTypeNotAlreadyRegisteredSource());
+            builder.RegisterType<EQToolSettingsLoad>().AsSelf().SingleInstance();
+            builder.Register(a =>
             {
                 return a.Resolve<EQToolSettingsLoad>().Load();
             }).AsSelf().SingleInstance();
-            _ = builder.RegisterType<AppDispatcher>().As<IAppDispatcher>().SingleInstance();
-            _ = builder.RegisterType<SpellIcons>().AsSelf().SingleInstance();
-            _ = builder.RegisterType<ParseSpells_spells_us>().AsSelf().SingleInstance();
-            _ = builder.RegisterType<SettingsWindowViewModel>().AsSelf().SingleInstance();
-            _ = builder.RegisterType<EQSpells>().AsSelf().SingleInstance();
-            _ = builder.RegisterType<ActivePlayer>().AsSelf().SingleInstance();
-            _ = builder.RegisterType<SpellWindowViewModel>().AsSelf().SingleInstance();
-            _ = builder.RegisterType<LogParser>().AsSelf().SingleInstance();
-            _ = builder.RegisterType<DPSWindowViewModel>().AsSelf().SingleInstance();
-            _ = builder.RegisterType<ZoneViewModel>().AsSelf().SingleInstance();
-            _ = builder.RegisterType<SessionPlayerDamage>().AsSelf().SingleInstance();
-            _ = builder.RegisterType<LoggingService>().AsSelf().SingleInstance();
-            _ = builder.RegisterType<PlayerTrackerService>().AsSelf().SingleInstance();
-            _ = builder.RegisterType<ZoneActivityTrackingService>().AsSelf().SingleInstance();
-            _ = builder.RegisterType<TimersService>().AsSelf().SingleInstance();
-            _ = builder.RegisterType<SignalrPlayerHub>().As<ISignalrPlayerHub>().SingleInstance();
-            _ = builder.RegisterType<AudioService>().AsSelf().SingleInstance();
+            builder.RegisterType<AppDispatcher>().As<IAppDispatcher>().SingleInstance();
+            builder.RegisterType<SpellIcons>().AsSelf().SingleInstance();
+            builder.RegisterType<ParseSpells_spells_us>().AsSelf().SingleInstance();
+            builder.RegisterType<SettingsWindowViewModel>().AsSelf().SingleInstance();
+            builder.RegisterType<EQSpells>().AsSelf().SingleInstance();
+            builder.RegisterType<ActivePlayer>().AsSelf().SingleInstance();
+            builder.RegisterType<SpellWindowViewModel>().AsSelf().SingleInstance();
+            builder.RegisterType<LogParser>().AsSelf().SingleInstance();
+            builder.RegisterType<DPSWindowViewModel>().AsSelf().SingleInstance();
+            builder.RegisterType<ZoneViewModel>().AsSelf().SingleInstance();
+            builder.RegisterType<SessionPlayerDamage>().AsSelf().SingleInstance();
+            builder.RegisterType<LoggingService>().AsSelf().SingleInstance();
+            builder.RegisterType<PlayerTrackerService>().AsSelf().SingleInstance();
+            builder.RegisterType<ZoneActivityTrackingService>().AsSelf().SingleInstance();
+            builder.RegisterType<TimersService>().AsSelf().SingleInstance();
+            builder.RegisterType<SignalrPlayerHub>().As<ISignalrPlayerHub>().SingleInstance();
+            builder.RegisterType<AudioService>().AsSelf().SingleInstance();
+			builder.RegisterType<QuarmDataService>().AsSelf().SingleInstance();
+			builder.RegisterType<CustomOverlayService>().AsSelf().SingleInstance();
 
             return builder.Build();
         }
