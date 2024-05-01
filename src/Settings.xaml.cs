@@ -1071,8 +1071,6 @@ namespace EQTool
 						int i = settings.CustomOverlays.IndexOf(found);
 						settings.CustomOverlays[i] = e.UpdatedOverlay;
 					}
-					//settings.CustomOverlays.Clear();
-					//settings.CustomOverlays.AddRange(CustomOverlayService.LoadCustomOverlayMessages());
 				};
 
 				editWindow.ShowDialog();

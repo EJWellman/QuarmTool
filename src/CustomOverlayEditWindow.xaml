@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:EQTool" xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         mc:Ignorable="d"
-        Title="CustomOverlayEditWindow"
+        Title="Edit Overlay"
         SizeToContent="WidthAndHeight">
     <Grid>
         <StackPanel Orientation="Vertical" Margin="5">

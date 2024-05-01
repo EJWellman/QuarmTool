@@ -217,15 +217,15 @@
             </StackPanel>
         </TabItem>
         <TabItem Header="Custom Overlays">
-            <StackPanel Orientation="Vertical" Margin="5, 5, 5, 5">
+            <StackPanel Orientation="Vertical" Margin="5, 5, 5, 5" Width="auto">
                 <ListView ItemsSource="{Binding CustomOverlays}">
                     <ListView.ItemTemplate>
                         <DataTemplate x:Name="CustomOverlaysTemplate" DataType="local:CustomOverlay">
-                            <StackPanel Orientation="Horizontal">
-                                <TextBlock Text="{Binding Name}" VerticalAlignment="Center" FontWeight="Bold"  MaxWidth="100"/>
-                                <CheckBox IsChecked="{Binding IsEnabled}" Click="Savesettings" MinWidth="20"></CheckBox>
-                                <xctk:ColorPicker SelectedColor="{Binding Color}" IsEnabled="False" Width="70"></xctk:ColorPicker>
-                                <Button Click="Open_EditExistingCustomOverlay" DataContext="{Binding ID}" Width="50" HorizontalAlignment="Left"></Button>
+                            <StackPanel Orientation="Horizontal" Width="auto">
+                                <TextBlock Text="{Binding Name}" VerticalAlignment="Center" FontWeight="Bold"  MaxWidth="125" Grid.Column="0"/>
+                                <CheckBox IsChecked="{Binding IsEnabled}" Margin="5,4,5,0" Click="Savesettings" MinWidth="20" Grid.Column="1"/>
+                                <xctk:ColorPicker SelectedColor="{Binding Color}" IsEnabled="False" Width="85" Grid.Column="2"/>
+                                <Button Click="Open_EditExistingCustomOverlay" HorizontalAlignment="Right" DataContext="{Binding ID}" Margin="10,0,0,0" Content="Edit" Width="50" Grid.Column="4"/>
                             </StackPanel>
                         </DataTemplate>
                     </ListView.ItemTemplate>
@@ -239,8 +239,8 @@
                         </TextBlock>
 
                         <Popup Name="CreateNewOverlayPopup" IsOpen="{Binding IsChecked, ElementName=ToggleCreateNewButton}">
-                            <Border BorderThickness="1">
-                                <StackPanel Background="White" Orientation="Vertical" Width="200" Margin="5, 5, 5, 5">
+                            <Border BorderThickness="0.1" Padding="0" Background="White">
+                                <StackPanel Background="White" Orientation="Vertical" Width="200" Margin="8">
                                     <StackPanel Orientation="Horizontal" Width="200">
                                         <TextBlock Text="Name" Width="65"></TextBlock>
                                         <TextBox Name="NewOverlay_Name" Width="130"></TextBox>
