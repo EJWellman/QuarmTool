@@ -6,7 +6,8 @@ Instructions:
 <li>
 <h2>Project Quarm: Download <a href="https://github.com/EJWellman/QuarmTool/releases/download/Release/QuarmTool.zip">QuarmTool.zip</a>, Unzip it and run PQTool.exe</h2>
 </li>
-<li>The program runs in the system tray. Look there to reopen spells window or settings! Program will check for updates on startup and self update if required, but if you want to check for a new Update, use the menu in the system tray!</li>
+<li>The program runs in the system tray. Look there to reopen spells window or settings!</li>
+<li><s>Program will check for updates on startup and self update if required, but if you want to check for a new Update, use the menu in the system tray!</s> This feature isn't available yet, but will be in the future!</li>
 </ul>
 Features:
 <br/>
