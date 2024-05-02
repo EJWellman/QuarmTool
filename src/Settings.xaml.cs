@@ -3,10 +3,12 @@ using EQTool.Services;
 using EQTool.Services.Spells.Log;
 using EQTool.ViewModels;
 using EQToolShared.Enums;
+using EQToolShared.ExtendedClasses;
 using EQToolShared.HubModels;
 using EQToolShared.Map;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Globalization;
@@ -18,6 +20,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
 using System.Windows.Forms;
 using System.Windows.Navigation;
 using Xceed.Wpf.Toolkit;
@@ -103,7 +106,8 @@ namespace EQTool
 
         }
 
-        private void SaveConfig()
+		#region Private Methods
+		private void SaveConfig()
         {
             toolSettingsLoad.Save(settings);
         }
@@ -1012,5 +1016,65 @@ namespace EQTool
                 }
             });
         }
-    }
+
+		private void NewOverlay_Save(object sender, RoutedEventArgs e)
+		{
+			CustomOverlay newOverlay = new CustomOverlay
+			{
+				Name = NewOverlay_Name.Text,
+				Message = NewOverlay_Message.Text,
+				Color = NewOverlay_TriggerColor.SelectedColor.Value,
+				Trigger = NewOverlay_Trigger.Text,
+				Alternate_Trigger = NewOverlay_AltTrigger.Text,
+				IsEnabled = true
+			};
+
+			if (CustomOverlayService.AddNewCustomOverlay(newOverlay))
+			{
+				settings.CustomOverlays = new ObservableCollectionRange<CustomOverlay>();
+				settings.CustomOverlays.AddRange(CustomOverlayService.LoadCustomOverlayMessages());
+			}
+
+			//unset
+			NewOverlay_Name.Text = "";
+			NewOverlay_Message.Text = "";
+			NewOverlay_Trigger.Text = "";
+			NewOverlay_AltTrigger.Text = "";
+			NewOverlay_TriggerColor.SelectedColor = System.Windows.Media.Colors.White;
+
+			//close popup
+			ToggleCreateNewButton.IsChecked = false;
+		}
+		#endregion
+
+		protected override void OnClosing(CancelEventArgs e)
+		{
+			if (settings.CustomOverlays != null)
+			{
+				settings.CustomOverlays.Clear();
+			}
+
+			base.OnClosing(e);
+		}
+
+		private void Open_EditExistingCustomOverlay(object sender, RoutedEventArgs ev)
+		{
+			var temp = (sender as System.Windows.Controls.Button).DataContext as int?;
+			if(temp != null && temp.HasValue)
+			{
+				CustomOverlayEditWindow editWindow = new CustomOverlayEditWindow(temp.Value);
+				editWindow.CustomOverlayEdited += (s, e) =>
+				{
+					if (e.Success)
+					{
+						var found = settings.CustomOverlays.FirstOrDefault(a => a.ID == e.UpdatedOverlay.ID);
+						int i = settings.CustomOverlays.IndexOf(found);
+						settings.CustomOverlays[i] = e.UpdatedOverlay;
+					}
+				};
+
+				editWindow.ShowDialog();
+			}
+		}
+	}
 }

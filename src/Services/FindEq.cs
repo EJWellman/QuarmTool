@@ -308,11 +308,11 @@ namespace EQTool.Services
 			return new FileInfo[0];
 		}
 
-		public static DataFileInfo GetDataLocation()
+		public static DataFileInfo GetDataLocation(string folderToSearch, string fileToFind)
 		{
 			DataFileInfo ret = new DataFileInfo { Found = false };
-			string dataFolder = Path.Combine(AppContext.BaseDirectory, "Data");
-			string searchPattern = "QuarmTool_Data.db";
+			string dataFolder = Path.Combine(AppContext.BaseDirectory, folderToSearch);
+			string searchPattern = fileToFind;
 
 			var foundFiles = Directory.EnumerateFiles(dataFolder, searchPattern, SearchOption.TopDirectoryOnly);
 			if (foundFiles.Any())

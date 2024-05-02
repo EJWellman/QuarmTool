@@ -50,6 +50,9 @@ namespace EQTool
                     }
 					EnsureResourcesExist();
 
+					DapperExtensions.DapperExtensions.SetMappingAssemblies(new[] { Assembly.GetExecutingAssembly() });
+					DapperExtensions.DapperExtensions.SqlDialect = new DapperExtensions.Sql.SqliteDialect();
+
 				}
 
                 App.Main();

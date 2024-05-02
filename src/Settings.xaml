@@ -117,7 +117,7 @@
                 <StackPanel Orientation="Horizontal">
                     <TextBlock Text="Enraged"  VerticalAlignment="Center" FontWeight="Bold"  MinWidth="100"/>
                     <CheckBox IsChecked="{Binding ActivePlayer.Player.EnrageOverlay}" Click="Savesettings" MinWidth="20"></CheckBox>
-                    <xctk:ColorPicker Name="EnrageOverlayColor" SelectedColor="{Binding EnrageOverlayColor}" SelectedColorChanged="OverlayColor_Selected" MinWidth="70" MaxWidth="70" Margin="0, 0, 5, 0" > </xctk:ColorPicker>
+                    <xctk:ColorPicker Name="EnrageOverlayColor" SelectedColor="{Binding EnrageOverlayColor}" SelectedColorChanged="OverlayColor_Selected" MinWidth="70" MaxWidth="70" Margin="0, 0, 5, 0" ></xctk:ColorPicker>
                     <CheckBox IsChecked="{Binding ActivePlayer.Player.EnrageAudio}" Click="Savesettings" MinWidth="30"></CheckBox>
                     <Button Content="▶" Margin="1" FontSize="7" Width="14" Height="14" Padding="0" Click="testenrage" ToolTip="Test Enrage" />
                 </StackPanel>
@@ -199,7 +199,7 @@
                 <StackPanel Orientation="Horizontal">
                     <TextBlock Text="CH Chain Tag" ToolTip="Example: GG or CA. Other tags will be ignored" VerticalAlignment="Center" FontWeight="Bold"  MinWidth="100"/>
                     <TextBox Text="{Binding Path=ActivePlayer.Player.ChChainTagOverlay, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" MinWidth="40" TextChanged="CHTextBox_TextChanged"></TextBox>
-                </StackPanel> 
+                </StackPanel>
                 <StackPanel Orientation="Horizontal">
                     <TextBlock Text="Ch Warning" ToolTip="Ch Warning" VerticalAlignment="Center" FontWeight="Bold"  MinWidth="100"/>
                     <CheckBox IsChecked="{Binding ActivePlayer.Player.ChChainWarningOverlay}" Click="Savesettings" MinWidth="75"></CheckBox>
@@ -216,6 +216,61 @@
                 </StackPanel>
             </StackPanel>
         </TabItem>
+        <TabItem Header="Custom Overlays">
+            <StackPanel Orientation="Vertical" Margin="5, 5, 5, 5" Width="auto">
+                <ListView ItemsSource="{Binding CustomOverlays}">
+                    <ListView.ItemTemplate>
+                        <DataTemplate x:Name="CustomOverlaysTemplate" DataType="local:CustomOverlay">
+                            <StackPanel Orientation="Horizontal" Width="auto">
+                                <TextBlock Text="{Binding Name}" VerticalAlignment="Center" FontWeight="Bold"  MaxWidth="125" Grid.Column="0"/>
+                                <CheckBox IsChecked="{Binding IsEnabled}" Margin="5,4,5,0" Click="Savesettings" MinWidth="20" Grid.Column="1"/>
+                                <xctk:ColorPicker SelectedColor="{Binding Color}" IsEnabled="False" Width="85" Grid.Column="2"/>
+                                <Button Click="Open_EditExistingCustomOverlay" HorizontalAlignment="Right" DataContext="{Binding ID}" Margin="10,0,0,0" Content="Edit" Width="50" Grid.Column="4"/>
+                            </StackPanel>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+
+                <Separator/>
+                <ToggleButton x:Name="ToggleCreateNewButton" IsChecked="{Binding IsChecked}" Height="30" Width="150" HorizontalAlignment="Left">
+                    <StackPanel>
+                        <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center">
+                            <Run Text="Add New" />
+                        </TextBlock>
+
+                        <Popup Name="CreateNewOverlayPopup" IsOpen="{Binding IsChecked, ElementName=ToggleCreateNewButton}">
+                            <Border BorderThickness="0.1" Padding="0" Background="White">
+                                <StackPanel Background="White" Orientation="Vertical" Width="200" Margin="8">
+                                    <StackPanel Orientation="Horizontal" Width="200">
+                                        <TextBlock Text="Name" Width="65"></TextBlock>
+                                        <TextBox Name="NewOverlay_Name" Width="130"></TextBox>
+                                    </StackPanel>
+                                    <StackPanel Orientation="Horizontal" Width="200">
+                                        <TextBlock Text="Trigger" Width="65"></TextBlock>
+                                        <TextBox Name="NewOverlay_Trigger" Width="130"></TextBox>
+                                    </StackPanel>
+                                    <StackPanel Orientation="Horizontal" Width="200">
+                                        <TextBlock Text="Alt. Trigger" Width="65"></TextBlock>
+                                        <TextBox Name="NewOverlay_AltTrigger" Width="130"></TextBox>
+                                    </StackPanel>
+                                    <StackPanel Orientation="Horizontal" Width="200">
+                                        <TextBlock Text="Message" Width="65"></TextBlock>
+                                        <TextBox Name="NewOverlay_Message" Width="130"></TextBox>
+                                    </StackPanel>
+                                    <StackPanel Orientation="Horizontal" Width="200">
+                                        <TextBlock Text="Color" Width="65"></TextBlock>
+                                        <xctk:ColorPicker Name="NewOverlay_TriggerColor" Width="130" Margin="0, 0, 5, 0" ></xctk:ColorPicker>
+                                    </StackPanel>
+                                    <Separator/>
+                                    <Button Height="20" Click="NewOverlay_Save">Save</Button>
+                                </StackPanel>
+                            </Border>
+                        </Popup>
+                    </StackPanel>
+                </ToggleButton>
+
+            </StackPanel>
+        </TabItem>
         <TabItem Header="Triggers">
             <StackPanel Orientation="Vertical" Margin="5, 5, 5, 5">
                 <StackPanel Orientation="Vertical"  Margin="0, 0, 0, 8">
@@ -230,7 +285,7 @@
                     <StackPanel Orientation="Horizontal">
                         <TextBlock Text="Random Rolls" ToolTip="Show Random rolls in Triggers window" VerticalAlignment="Center"  FontWeight="Bold"  MinWidth="100"/>
                         <CheckBox IsChecked="{Binding ShowRandomRolls}" Click="SaveAlwaysOntopCheckBoxSettings" ></CheckBox>
-                    </StackPanel> 
+                    </StackPanel>
                     <StackPanel Orientation="Horizontal">
                         <TextBlock Text="Guess Spells"  VerticalAlignment="Center"  FontWeight="Bold"  MinWidth="100"/>
                         <CheckBox x:Name="BestGuessSpells" Click="GuessSpells_Click" />

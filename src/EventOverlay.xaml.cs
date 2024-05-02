@@ -1,4 +1,5 @@
-﻿using EQTool.Models;
+﻿using EQTool.EventArgModels;
+using EQTool.Models;
 using EQTool.Services;
 using EQTool.ViewModels;
 using System;
@@ -56,6 +57,7 @@ namespace EQTool
             logParser.StartCastingEvent += LogParser_StartCastingEvent;
             logParser.SpellWornOtherOffEvent += LogParser_SpellWornOtherOffEvent;
             logParser.ResistSpellEvent += LogParser_ResistSpellEvent;
+			logParser.CustomOverlayEvent += LogParser_CustomOverlayEvent;
         }
 
         private void LogParser_ResistSpellEvent(object sender, ResistSpellParser.ResistSpellData e)
@@ -572,7 +574,32 @@ namespace EQTool
             });
         }
 
-        protected override void OnClosing(CancelEventArgs e)
+		private void LogParser_CustomOverlayEvent(object sender, CustomOverlayEventArgs e)
+		{
+			var overlay = e.CustomOverlay;
+			if (!overlay.IsEnabled)
+			{
+				return;
+			}
+			appDispatcher.DispatchUI(() =>
+			{
+				CenterText.FontSize = settings.OverlayFontSize.Value;
+				CenterText.Text = overlay.Message;
+				CenterText.Foreground = (Brush)converter.ConvertFromString(overlay.DisplayColor);
+			});
+
+			System.Threading.Tasks.Task.Factory.StartNew(() =>
+			{
+				System.Threading.Thread.Sleep(1000 * 3);
+				this.appDispatcher.DispatchUI(() =>
+				{
+					CenterText.Text = string.Empty;
+					CenterText.Foreground = Brushes.Red;
+				});
+			});
+		}
+
+		protected override void OnClosing(CancelEventArgs e)
         {
             if (logParser != null)
             {
@@ -587,6 +614,7 @@ namespace EQTool
                 logParser.StartCastingEvent -= LogParser_StartCastingEvent;
                 logParser.SpellWornOtherOffEvent -= LogParser_SpellWornOtherOffEvent;
                 logParser.ResistSpellEvent -= LogParser_ResistSpellEvent;
+				logParser.CustomOverlayEvent -= LogParser_CustomOverlayEvent;
             }
 
             base.OnClosing(e);

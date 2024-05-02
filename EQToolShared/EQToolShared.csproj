@@ -83,6 +83,7 @@
     <Compile Include="Enums\SpellTypes.cs" />
     <Compile Include="Enums\PlayerClasses.cs" />
     <Compile Include="Enums\Servers.cs" />
+    <Compile Include="ExtendedClasses\ObservableCollectionRange.cs" />
     <Compile Include="HubModels\CustomTimer.cs" />
     <Compile Include="HubModels\PlayerLocation.cs" />
     <Compile Include="Map\SignalrPlayer.cs" />
