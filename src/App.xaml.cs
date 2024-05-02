@@ -320,11 +320,11 @@ namespace EQTool
 				}
 				if (!EQToolSettings.TimerWindowState.Closed)
 				{
-					OpenSpellsWindow();
+					OpenTimersWindow();
 				}
 				if (!EQToolSettings.ComboTimerWindowState.Closed)
 				{
-					OpenSpellsWindow();
+					OpenComboTimersWindow();
 				}
 				if (!EQToolSettings.DpsWindowState.Closed)
                 {
@@ -695,11 +695,19 @@ namespace EQTool
                 else if (item is SpellWindow w3)
                 {
                     w3.Topmost = EQToolSettings.SpellWindowState.AlwaysOnTop;
-                }
-				else if (item is EventOverlay w4)
+				}
+				else if (item is ComboTimerWindow w4)
 				{
-					w4.Topmost = EQToolSettings.OverlayWindowState.AlwaysOnTop;
-					w4.Activate();
+					w4.Topmost = EQToolSettings.ComboTimerWindowState.AlwaysOnTop;
+				}
+				else if (item is TimerWindow w5)
+				{
+					w5.Topmost = EQToolSettings.TimerWindowState.AlwaysOnTop;
+				}
+				else if (item is EventOverlay w6)
+				{
+					w6.Topmost = EQToolSettings.OverlayWindowState.AlwaysOnTop;
+					w6.Activate();
 				}
             }
         }

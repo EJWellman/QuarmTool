@@ -1115,12 +1115,6 @@
     <Resource Include="Trash.png" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\EQToolShared\EQToolShared.csproj">
-      <Project>{DEBDC0EE-39F6-413D-80D7-955CA98A85CC}</Project>
-      <Name>EQToolShared</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <EmbeddedResource Include="QuarmSpells\spells01.tga" />
     <EmbeddedResource Include="QuarmSpells\spells02.tga" />
     <EmbeddedResource Include="QuarmSpells\spells03.tga" />
@@ -1162,6 +1156,12 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Embeds\System.Data.SQLite.dll" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\EQToolShared\EQToolShared.csproj">
+      <Project>{debdc0ee-39f6-413d-80d7-955ca98a85cc}</Project>
+      <Name>EQToolShared</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="AfterResolveReferences">

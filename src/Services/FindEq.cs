@@ -314,14 +314,21 @@ namespace EQTool.Services
 			string dataFolder = Path.Combine(AppContext.BaseDirectory, folderToSearch);
 			string searchPattern = fileToFind;
 
-			var foundFiles = Directory.EnumerateFiles(dataFolder, searchPattern, SearchOption.TopDirectoryOnly);
-			if (foundFiles.Any())
+			try
 			{
-				ret.Found = true;
-				ret.Location = dataFolder;
-				ret.Data_File = foundFiles.FirstOrDefault();
+				var foundFiles = Directory.EnumerateFiles(dataFolder, searchPattern, SearchOption.TopDirectoryOnly);
+				if (foundFiles.Any())
+				{
+					ret.Found = true;
+					ret.Location = dataFolder;
+					ret.Data_File = foundFiles.FirstOrDefault();
+				}
+				return ret;
 			}
-			return ret;
+			catch(DirectoryNotFoundException ex)
+			{
+				return null;
+			}
 		}
 
 		public class LogFileInfo

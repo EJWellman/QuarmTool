@@ -275,16 +275,45 @@
             <StackPanel Orientation="Vertical" Margin="5, 5, 5, 5">
                 <StackPanel Orientation="Vertical"  Margin="0, 0, 0, 8">
                     <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="Always on top" VerticalAlignment="Center"  FontWeight="Bold"  MinWidth="100"/>
+                        <TextBlock Text="Combo - Always on top" VerticalAlignment="Center"  FontWeight="Bold"  MinWidth="150"/>
+                        <CheckBox IsChecked="{Binding ComboAlwaysOnTop}" Click="SaveAlwaysOntopCheckBoxSettings" ></CheckBox>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="Spells - Always on top" VerticalAlignment="Center"  FontWeight="Bold"  MinWidth="150"/>
                         <CheckBox IsChecked="{Binding SpellAlwaysOnTop}" Click="SaveAlwaysOntopCheckBoxSettings" ></CheckBox>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="Window Opacity"  VerticalAlignment="Center"  FontWeight="Bold"  MinWidth="100"/>
-                        <Slider Value="{Binding TriggerWindowOpacity}" Minimum=".01" Maximum="1" SmallChange=".1" TickFrequency=".1" ValueChanged="SaveSettings" MinWidth="150"/>
+                        <TextBlock Text="Timers - Always on top" VerticalAlignment="Center"  FontWeight="Bold"  MinWidth="150"/>
+                        <CheckBox IsChecked="{Binding TimerAlwaysOnTop}" Click="SaveAlwaysOntopCheckBoxSettings" ></CheckBox>
+                    </StackPanel>
+                    <Separator/>
+                    <Label Height="16" HorizontalAlignment="Center" FontSize="10" FontWeight="SemiBold" Padding="0,0,0,0">Combo Settings</Label>
+                    <Separator/>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="Show /Random" VerticalAlignment="Center" FontWeight="Bold"  MinWidth="100"/>
+                        <CheckBox IsChecked="{Binding ComboShowRandomRolls}" Click="ComboShowRandom_Click" ></CheckBox>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="Show Spells" VerticalAlignment="Center"  FontWeight="Bold"  MinWidth="100"/>
+                        <CheckBox IsChecked="{Binding ComboShowSpells}" Click="ComboShowSpells_Click" ></CheckBox>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="Show Respawns" VerticalAlignment="Center"  FontWeight="Bold"  MinWidth="100"/>
+                        <CheckBox IsChecked="{Binding ComboShowTimers}" Click="ComboShowTimer_Click" ></CheckBox>
+                    </StackPanel>
+                    <Separator/>
+                    <Label Height="16" HorizontalAlignment="Center" FontSize="10" FontWeight="SemiBold" Padding="0,0,0,0">Timer Settings</Label>
+                    <Separator/>
+                    <StackPanel Orientation="Horizontal">
                         <TextBlock Text="Random Rolls" ToolTip="Show Random rolls in Triggers window" VerticalAlignment="Center"  FontWeight="Bold"  MinWidth="100"/>
-                        <CheckBox IsChecked="{Binding ShowRandomRolls}" Click="SaveAlwaysOntopCheckBoxSettings" ></CheckBox>
+                        <CheckBox IsChecked="{Binding ShowRandomRolls}" Click="SaveAlwaysOntopCheckBoxSettings"></CheckBox>
+                    </StackPanel>
+                    <Separator/>
+                    <Label Height="16" HorizontalAlignment="Center" FontSize="10" FontWeight="SemiBold" Padding="0,0,0,0">Spell Settings - Combo &amp; Spell</Label>
+                    <Separator/>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="Window Opacity"  VerticalAlignment="Center"  FontWeight="Bold"  MinWidth="100"/>
+                        <Slider Value="{Binding TriggerWindowOpacity}" Minimum=".01" Maximum="1" SmallChange=".1" TickFrequency=".1" ValueChanged="SaveSettings" MinWidth="150"/>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal">
                         <TextBlock Text="Guess Spells"  VerticalAlignment="Center"  FontWeight="Bold"  MinWidth="100"/>

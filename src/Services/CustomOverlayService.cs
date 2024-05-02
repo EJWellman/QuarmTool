@@ -90,6 +90,7 @@ namespace EQTool.Services
 
 		private static bool CreateDatabase(string fileName)
 		{
+			Directory.CreateDirectory(Path.Combine(AppContext.BaseDirectory, "Data"));
 			SQLiteConnection.CreateFile(Path.Combine(AppContext.BaseDirectory, "Data", fileName));
 			_fileLocations = GetDataLocation("Data", fileName);
 			if (_fileLocations == null || !_fileLocations.Found)

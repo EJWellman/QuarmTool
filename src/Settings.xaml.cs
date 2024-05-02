@@ -255,6 +255,27 @@ namespace EQTool
             SaveConfig();
         }
 
+		private void ComboShowRandom_Click(object sender, RoutedEventArgs e)
+		{
+			var s = sender as System.Windows.Controls.CheckBox;
+			settings.ComboShowRandomRolls = s.IsChecked ?? false;
+			SaveConfig();
+		}
+		private void ComboShowSpells_Click(object sender, RoutedEventArgs e)
+		{
+			var s = sender as System.Windows.Controls.CheckBox;
+			settings.ComboShowSpells = s.IsChecked ?? false;
+			SaveConfig();
+		}
+		private void ComboShowTimer_Click(object sender, RoutedEventArgs e)
+		{
+			var s = sender as System.Windows.Controls.CheckBox;
+			settings.ComboShowTimers = s.IsChecked ?? false;
+			SaveConfig();
+		}
+
+
+
 		private void OverlayColor_Selected(object sender, RoutedEventArgs e)
 		{
 			var s = sender as ColorPicker;

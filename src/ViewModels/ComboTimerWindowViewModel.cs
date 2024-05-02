@@ -84,28 +84,49 @@ namespace EQTool.ViewModels
             appDispatcher.DispatchUI(() =>
             {
                 var player = activePlayer.Player;
-                var itemstoremove = new List<UISpell>();
+                var itemsToRemove = new List<UISpell>();
 
                 var d = DateTime.Now;
                 foreach (var item in SpellList)
                 {
                     item.UpdateTimeLeft();
+					if((item.SpellType != SpellTypes.RandomRoll	&& item.SpellType != SpellTypes.RespawnTimer)
+						&& settings.YouOnlySpells && item.TargetName != EQSpells.SpaceYou)
+					{
+						itemsToRemove.Add(item);
+					}
 					if (item.NegativeDurationToShow.TotalSeconds <= 0 && !item.PersistentSpell)
 					{
-                        itemstoremove.Add(item);
+                        itemsToRemove.Add(item);
                     }
                     else if (item.PersistentSpell && (d - item.UpdatedDateTime).TotalMinutes > 30)
                     {
-                        itemstoremove.Add(item);
+                        itemsToRemove.Add(item);
                     }
                     item.HideGuesses = !settings.BestGuessSpells;
                     item.ShowOnlyYou = settings.YouOnlySpells;
                     item.HideClasses = player != null && SpellUIExtensions.HideSpell(player.ShowSpellsForClasses, item.Classes) && item.TargetName != EQSpells.SpaceYou;
                     if (item.SpellType == SpellTypes.RandomRoll)
                     {
-                        item.HideClasses = !this.settings.ShowRandomRolls;
-                    }
-                }
+                        item.HideClasses = !this.settings.ComboShowRandomRolls;
+					}
+					if (item.SpellType == SpellTypes.RespawnTimer
+						&& !this.settings.ComboShowTimers)
+					{
+						itemsToRemove.Add(item);
+					}
+					else if (item.SpellType == SpellTypes.RandomRoll
+					&& !this.settings.ComboShowRandomRolls)
+					{
+						itemsToRemove.Add(item);
+					}
+					else if (!this.settings.ComboShowSpells
+						&& (item.SpellType != SpellTypes.RandomRoll
+							&& item.SpellType != SpellTypes.RespawnTimer))
+					{
+						itemsToRemove.Add(item);
+					}
+				}
 
                 var groupedspells = SpellList.GroupBy(a => a.TargetName).ToList();
                 foreach (var spells in groupedspells)
@@ -135,7 +156,7 @@ namespace EQTool.ViewModels
                     }
                 }
 
-                foreach (var item in itemstoremove)
+                foreach (var item in itemsToRemove)
                 {
                     _ = SpellList.Remove(item);
                 }
@@ -352,6 +373,7 @@ namespace EQTool.ViewModels
                     Roll = match.Roll,
                     RollOrder = rollorder + 1
                 });
+				string blah = "";
             });
         }
 

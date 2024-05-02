@@ -248,6 +248,10 @@ namespace EQTool.Models
 		public bool YouOnlySpells { get; set; }
 		public bool ShowRandomRolls { get; set; }
 
+		public bool ComboShowRandomRolls { get; set; }
+		public bool ComboShowSpells { get; set; }
+		public bool ComboShowTimers { get; set; }
+
 		private ObservableCollectionRange<CustomOverlay> _customOverlays;
 		[JsonIgnore]
 		public ObservableCollectionRange<CustomOverlay> CustomOverlays
@@ -257,7 +261,11 @@ namespace EQTool.Models
 				if (_customOverlays == null || _customOverlays.Count == 0)
 				{
 					_customOverlays = new ObservableCollectionRange<CustomOverlay>();
-					_customOverlays.AddRange(CustomOverlayService.LoadCustomOverlayMessages());
+					var tmp = CustomOverlayService.LoadCustomOverlayMessages();
+					if(tmp != null)
+					{
+						_customOverlays.AddRange(tmp);
+					}
 				}
 				return _customOverlays;
 			}

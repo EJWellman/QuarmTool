@@ -272,18 +272,44 @@ namespace EQTool.ViewModels
             }
         }
 
-        public bool SpellAlwaysOnTop
+        public bool ComboAlwaysOnTop
         {
             get
             {
-                return this.toolSettings.SpellWindowState.AlwaysOnTop;
+                return this.toolSettings.ComboTimerWindowState.AlwaysOnTop;
             }
             set
             {
-                this.toolSettings.SpellWindowState.AlwaysOnTop = value;
+                this.toolSettings.ComboTimerWindowState.AlwaysOnTop = value;
                 OnPropertyChanged();
             }
-        }
+		}
+
+		public bool SpellAlwaysOnTop
+		{
+			get
+			{
+				return this.toolSettings.SpellWindowState.AlwaysOnTop;
+			}
+			set
+			{
+				this.toolSettings.SpellWindowState.AlwaysOnTop = value;
+				OnPropertyChanged();
+			}
+		}
+
+		public bool TimerAlwaysOnTop
+		{
+			get
+			{
+				return this.toolSettings.TimerWindowState.AlwaysOnTop;
+			}
+			set
+			{
+				this.toolSettings.TimerWindowState.AlwaysOnTop = value;
+				OnPropertyChanged();
+			}
+		}
 
 		public bool OverlayAlwaysOnTop
 		{

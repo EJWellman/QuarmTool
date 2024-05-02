@@ -6,11 +6,10 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SQLite;
+using System.Diagnostics;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
-using System.Security.Policy;
-using System.Windows.Documents;
 using static EQTool.Services.FindEq;
 
 namespace EQTool.Services
@@ -37,7 +36,6 @@ namespace EQTool.Services
 			{
 				return false;
 			}
-
 			string sqliteConnString = $"Data Source={_fileLocations.Data_File};";
 			using (SQLiteConnection cnn = new SQLiteConnection(sqliteConnString))
 			{
@@ -48,27 +46,23 @@ namespace EQTool.Services
 
 				var mobsTemp = cnn.Query<QuarmMonster>("SELECT * " +
 					"FROM NPC"
-					+ " WHERE Zone_Code LIKE @Zone_CodeLike1" +
+					+ " WHERE HP < 33000" +
+					"	AND (Zone_Code LIKE @Zone_CodeLike1" +
 					"	OR Zone_Code LIKE @Zone_CodeLike2" +
-					"	OR Zone_Code = @Zone_Code", new { Zone_CodeLike1 = likeZoneCode1, Zone_CodeLike2 = likeZoneCode2, Zone_Code = zoneCode });
+					"	OR Zone_Code = @Zone_Code" +
+					"	OR Zone_Code_Guess = @Zone_Code)", new { Zone_CodeLike1 = likeZoneCode1, Zone_CodeLike2 = likeZoneCode2, Zone_Code = zoneCode });
 
 				var factionsTemp = cnn.Query<QuarmMonsterFaction>("SELECT * " +
 					"FROM NPC_Factions"
-					+ " WHERE Zone_Code LIKE @Zone_CodeLike1" +
-					"	OR Zone_Code LIKE @Zone_CodeLike2" +
-					"	OR Zone_Code = @Zone_Code", new { Zone_CodeLike1 = likeZoneCode1, Zone_CodeLike2 = likeZoneCode2, Zone_Code = zoneCode });
+					+ " WHERE NPC_ID IN (" + string.Join(",", mobsTemp.Select(m => m.ID)) + ");");
 
 				var dropsTemp = cnn.Query<QuarmMonsterDrops>("SELECT * " +
 					"FROM NPC_Drops"
-					+ " WHERE Loottable_ID IN (SELECT Loottable_ID FROM NPC WHERE Zone_Code LIKE @Zone_CodeLike1" +
-					"	OR Zone_Code LIKE @Zone_CodeLike2" +
-					"	OR Zone_Code = @Zone_Code)", new { Zone_CodeLike1 = likeZoneCode1, Zone_CodeLike2 = likeZoneCode2, Zone_Code = zoneCode });
+					+ " WHERE Loottable_ID IN (" + string.Join(",", mobsTemp.Select(m => m.Loottable_ID)) + ");");
 
 				var merchantItemsTemp = cnn.Query<QuarmMerchantItems>("SELECT * " +
 					"FROM NPC_Wares"
-					+ " WHERE MerchantID IN (SELECT Merchant_ID FROM NPC WHERE Zone_Code LIKE @Zone_CodeLike1" +
-					"	OR Zone_Code LIKE @Zone_CodeLike2" +
-					"	OR Zone_Code = @Zone_Code)", new { Zone_CodeLike1 = likeZoneCode1, Zone_CodeLike2 = likeZoneCode2, Zone_Code = zoneCode });
+					+ " WHERE MerchantID IN (" + string.Join(",", mobsTemp.Select(m => m.Merchant_ID)) + ");");
 
 				var timersTemp = cnn.Query<QuarmMonsterTimer>("SELECT * " +
 					"FROM NPC_RespawnTimers"
@@ -103,8 +97,9 @@ namespace EQTool.Services
 			try
 			{
 				QuarmMonster matchedMonster = _monsters.FirstOrDefault(r =>
-					r.Name == name
-					|| r.Name == name.Replace(' ', '_')
+					r.Name == name.Trim()
+					|| r.Name == name.Trim().Replace(' ', '_')
+					|| r.Name == name.Trim().Replace('_', ' ')
 				);
 
 				if (matchedMonster != null)
@@ -135,6 +130,49 @@ namespace EQTool.Services
 					}
 
 					return match;
+				}
+
+			}
+			catch (AggregateException er)
+			{
+				if (er.InnerException != null && er.InnerException.GetType() == typeof(HttpRequestException))
+				{
+					var err = er.InnerException as HttpRequestException;
+					if (err.InnerException?.GetType() == typeof(WebException))
+					{
+						var innererr = err.InnerException as WebException;
+						throw new Exception(innererr.Message);
+					}
+					else
+					{
+						throw new Exception(err.Message);
+					}
+				}
+			}
+			catch (Exception e)
+			{
+				var msg = $"Zone: {name} ";
+				throw new Exception(msg + e.Message);
+			}
+
+			return null;
+		}
+
+		public QuarmMonster GetSlimData(string name)
+		{
+			var currentzone = _activePlayer?.Player?.Zone;
+
+			try
+			{
+				QuarmMonster matchedMonster = _monsters.FirstOrDefault(r =>
+					r.Name == name.Trim()
+					|| r.Name == name.Trim().Replace(' ', '_')
+					|| r.Name == name.Trim().Replace('_', ' ')
+				);
+
+				if (matchedMonster != null)
+				{
+					return matchedMonster;
 				}
 
 			}
@@ -197,7 +235,7 @@ namespace EQTool.Services
 				}
 				else
 				{
-					var mob = GetData(name.Replace(" ", "_"));
+					var mob = GetSlimData(name.Replace(" ", "_"));
 					if (mob.Level > 0 && mob.MaxLevel < 15)
 					{
 						if (timer.RespawnTimer >= QuarmRules.GetRespawnReductionHigherBoundMin() && timer.RespawnTimer <= QuarmRules.GetRespawnReductionHigherBoundMax())
