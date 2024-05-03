@@ -257,10 +257,6 @@ namespace EQTool.Services
                 {
                     LastYouActivity = DateTime.UtcNow;
                 }
-                if (message.StartsWith("["))
-                {
-                    return;
-                }
 
                 var timestamp = LogFileDateTimeParse.ParseDateTime(date);
                 var pos = _locationParser.Match(message);

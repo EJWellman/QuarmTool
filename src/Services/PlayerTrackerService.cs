@@ -98,10 +98,25 @@ namespace EQTool.Services
 
         private void LogParser_WhoPlayerEvent(object sender, LogParser.WhoPlayerEventArgs e)
         {
-            if (activePlayer.Player != null && e.PlayerInfo.Name == activePlayer.Player.Name && !string.IsNullOrWhiteSpace(e.PlayerInfo.GuildName))
-            {
-                activePlayer.Player.GuildName = e.PlayerInfo.GuildName;
-            }
+			if(activePlayer.Player != null)
+			{
+				if(activePlayer.Player.Name == e.PlayerInfo.Name
+					&& !string.IsNullOrWhiteSpace(e.PlayerInfo.GuildName)
+					&& activePlayer.Player.GuildName != e.PlayerInfo.GuildName)
+				{
+					activePlayer.Player.GuildName = e.PlayerInfo.GuildName;
+				}
+				if(activePlayer.Player.Name == e.PlayerInfo.Name
+					&& activePlayer.Player.PlayerClass != e.PlayerInfo.PlayerClass)
+				{
+					activePlayer.Player.PlayerClass = e.PlayerInfo.PlayerClass;
+				}
+				if(activePlayer.Player.Name == e.PlayerInfo.Name
+					&& activePlayer.Player.Level != e.PlayerInfo.Level)
+				{
+					activePlayer.Player.Level = e.PlayerInfo.Level ?? 0;
+				}
+			}
 
             lock (ContainerLock)
             {
