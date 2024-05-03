@@ -27,8 +27,9 @@ namespace EQTool
             debug = true;
 #endif
             try
-            {
-                if (!debug)
+			{
+				EnsureResourcesExist();
+				if (!debug)
                 {
                     _ = OnResolveAssembly(null, new ResolveEventArgs("System.Threading.Tasks.Extensions"));
                     AppDomain.CurrentDomain.AssemblyResolve += OnResolveAssembly;
@@ -48,18 +49,13 @@ namespace EQTool
                             return;
                         }
                     }
-					EnsureResourcesExist();
-
-					DapperExtensions.DapperExtensions.SetMappingAssemblies(new[] { Assembly.GetExecutingAssembly() });
-					DapperExtensions.DapperExtensions.SqlDialect = new DapperExtensions.Sql.SqliteDialect();
-
 				}
 
                 App.Main();
             }
             catch (Exception ex)
             {
-                File.AppendAllText("Errors.txt", ex.ToString());
+                File.AppendAllText(Path.Combine(AppContext.BaseDirectory, "Errors.txt"), ex.ToString());
                 throw;
             }
         }

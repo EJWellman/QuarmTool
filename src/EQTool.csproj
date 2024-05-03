@@ -189,9 +189,6 @@
     <Reference Include="Dapper.Contrib, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Dapper.Contrib.2.0.78\lib\net461\Dapper.Contrib.dll</HintPath>
     </Reference>
-    <Reference Include="DapperExtensions, Version=1.7.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\DapperExtensions.1.7.0\lib\net461\DapperExtensions.dll</HintPath>
-    </Reference>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.4.4\lib\net45\EntityFramework.dll</HintPath>
     </Reference>
@@ -1161,6 +1158,7 @@
     <ProjectReference Include="..\EQToolShared\EQToolShared.csproj">
       <Project>{debdc0ee-39f6-413d-80d7-955ca98a85cc}</Project>
       <Name>EQToolShared</Name>
+      <Private>True</Private>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

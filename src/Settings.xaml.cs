@@ -1052,8 +1052,18 @@ namespace EQTool
 
 			if (CustomOverlayService.AddNewCustomOverlay(newOverlay))
 			{
-				settings.CustomOverlays = new ObservableCollectionRange<CustomOverlay>();
-				settings.CustomOverlays.AddRange(CustomOverlayService.LoadCustomOverlayMessages());
+				if(settings.CustomOverlays == null)
+				{
+					settings.CustomOverlays = new ObservableCollectionRange<CustomOverlay>();
+				}
+				List<CustomOverlay> overlays = CustomOverlayService.LoadCustomOverlayMessages();
+				foreach(var overlay in overlays)
+				{
+					if(!settings.CustomOverlays.Any(co => co.ID == overlay.ID))
+					{
+						settings.CustomOverlays.Add(overlay);
+					}
+				}
 			}
 
 			//unset
