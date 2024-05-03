@@ -25,8 +25,13 @@ namespace EQTool
         private readonly QuarmDataService _quarmService;
         private readonly PigParseApi pigParseApi;
         private readonly ActivePlayer activePlayer;
-        public MobInfo(ActivePlayer activePlayer, PigParseApi pigParseApi, QuarmDataService quarmService, LogParser logParser, EQToolSettings settings, EQToolSettingsLoad toolSettingsLoad, LoggingService loggingService)
-            : base(settings.MobWindowState, toolSettingsLoad, settings)
+        public MobInfo(ActivePlayer activePlayer, 
+			PigParseApi pigParseApi, 
+			QuarmDataService quarmService, 
+			LogParser logParser, 
+			EQToolSettings settings, 
+			EQToolSettingsLoad toolSettingsLoad, 
+			LoggingService loggingService) : base(settings.MobWindowState, toolSettingsLoad, settings)
         {
             loggingService.Log(string.Empty, EventType.OpenMobInfo, activePlayer?.Player?.Server);
             this.activePlayer = activePlayer;

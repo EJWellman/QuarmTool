@@ -168,8 +168,9 @@ namespace EQTool
             if (timerWindowViewModel != null)
             {
                 timerWindowViewModel.SpellList = new System.Collections.ObjectModel.ObservableCollection<UISpell>();
-            }
-            base.OnClosing(e);
+			}
+			base.SaveState();
+			base.OnClosing(e);
         }
 
         private void PollUI(object sender, EventArgs e)

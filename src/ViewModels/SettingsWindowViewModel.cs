@@ -324,6 +324,43 @@ namespace EQTool.ViewModels
 			}
 		}
 
+		public bool ComboShowRandomRolls
+		{
+			get
+			{
+				return this.toolSettings.ComboShowRandomRolls;
+			}
+			set
+			{
+				this.toolSettings.ComboShowRandomRolls = value;
+				OnPropertyChanged();
+			}
+		}
+		public bool ComboShowSpells
+		{
+			get
+			{
+				return this.toolSettings.ComboShowSpells;
+			}
+			set
+			{
+				this.toolSettings.ComboShowSpells = value;
+				OnPropertyChanged();
+			}
+		}
+		public bool ComboShowTimers
+		{
+			get
+			{
+				return this.toolSettings.ComboShowTimers;
+			}
+			set
+			{
+				this.toolSettings.ComboShowTimers = value;
+				OnPropertyChanged();
+			}
+		}
+
 		public ObservableCollection<CustomOverlay> CustomOverlays
 		{
 			get

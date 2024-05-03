@@ -36,7 +36,7 @@ namespace EQTool
             AdjustWindow();
             timer.Tick += timer_Tick;
             SizeChanged += Window_SizeChanged;
-            StateChanged += SpellWindow_StateChanged;
+            StateChanged += Window_StateChanged;
             LocationChanged += Window_LocationChanged;
             windowState.Closed = false;
             this.SaveState();
@@ -68,7 +68,7 @@ namespace EQTool
             Close();
         }
 
-        private void SpellWindow_StateChanged(object sender, EventArgs e)
+        private void Window_StateChanged(object sender, EventArgs e)
         {
             LastWindowInteraction = DateTime.UtcNow;
             DebounceSave();
@@ -126,7 +126,7 @@ namespace EQTool
             }
             timer?.Stop();
             SizeChanged -= Window_SizeChanged;
-            StateChanged -= SpellWindow_StateChanged;
+            StateChanged -= Window_StateChanged;
             LocationChanged -= Window_LocationChanged;
             base.OnClosing(e);
         }

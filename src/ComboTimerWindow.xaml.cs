@@ -33,7 +33,7 @@ namespace EQTool
             EQToolSettingsLoad toolSettingsLoad,
             ActivePlayer activePlayer,
 			QuarmDataService quarmDataService,
-            LoggingService loggingService) : base(settings.SpellWindowState, toolSettingsLoad, settings)
+            LoggingService loggingService) : base(settings.ComboTimerWindowState, toolSettingsLoad, settings)
         {
             loggingService.Log(string.Empty, EventType.OpenMap, activePlayer?.Player?.Server);
             this.playerTrackerService = playerTrackerService;
@@ -208,6 +208,7 @@ namespace EQTool
 			{
 				comboTimerWindowViewModel.SpellList = new System.Collections.ObjectModel.ObservableCollection<UISpell>();
 			}
+			base.SaveState();
 			base.OnClosing(e);
 		}
 

@@ -127,8 +127,9 @@ namespace EQTool
             if (spellWindowViewModel != null)
             {
                 spellWindowViewModel.SpellList = new System.Collections.ObjectModel.ObservableCollection<UISpell>();
-            }
-            base.OnClosing(e);
+			}
+			base.SaveState();
+			base.OnClosing(e);
         }
 
         private void TrySaveYouSpellData()
