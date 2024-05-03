@@ -90,6 +90,21 @@ namespace EQTool.ViewModels
 
         public string MouseLocation => $"   {LastMouselocation.Y:0.##}, {LastMouselocation.X:0.##}";
 
+		private bool _ShowMouseLocation = false;
+			// => _ShowMouseLocation ? Visibility.Visible : Visibility.Hidden;
+		public Visibility ShowMouseLocation
+		{
+			get
+			{
+				return _ShowMouseLocation ? Visibility.Visible : Visibility.Hidden;
+			}
+			set
+			{
+				_ShowMouseLocation = value == Visibility.Visible;
+				OnPropertyChanged();
+			}
+		}
+
         public AABB AABB = new AABB();
 
         public MapViewModel(MapLoad mapLoad, ActivePlayer activePlayer, LoggingService loggingService, TimersService timersService)
@@ -164,7 +179,7 @@ namespace EQTool.ViewModels
         public void ToggleCenter()
         {
             this.CenterOnPlayer = !this.CenterOnPlayer;
-            CenterMapOnPlayer();
+            CenterMapOnPlayer(Lastlocation);
         }
 
         public bool LoadMap(string zone, Canvas canvas)
@@ -381,7 +396,9 @@ namespace EQTool.ViewModels
                 Transform = Transform
             });
 
-            Lastlocation = value1;
+			CenterMapOnPlayer(value1);
+
+			Lastlocation = value1;
             OnPropertyChanged(nameof(Title));
             if (!zoneinfo.ShowAllMapLevels && Canvas.Children.Count > 0)
             {
@@ -432,10 +449,18 @@ namespace EQTool.ViewModels
             //        child.RenderTransform = Transform;
             //    }
             //}
-            CenterMapOnPlayer();
+            //CenterMapOnPlayer();
         }
-
-        private void CenterMapOnPlayer()
+		private void CenterMapOnPlayer(Point3D value1)
+		{
+			if (CenterOnPlayer && CurrentScaling != 1.0f)
+			{
+				var xScale = Lastlocation.X - value1.X;
+				var yScale = Lastlocation.Y - value1.Y;
+				MoveMap(yScale * -1, xScale * -1);
+			}
+		}
+		private void CenterMapOnPlayer()
         {
             if (CenterOnPlayer)
             {
@@ -625,22 +650,94 @@ namespace EQTool.ViewModels
         {
             _mouseuppoint = mousePostion;
             _dragging = false;
-        }
+		}
 
-        public void MoveMap(int x, int y)
+		public void MoveMap(double x, double y)
+		{
+			var translate = new TranslateTransform(x, y);
+			Transform.Matrix = translate.Value * Transform.Matrix;
+			var trackingEllipses = new List<Ellipse>();
+			if (Players.Count > 0)
+			{
+				foreach (var item in Players)
+				{
+					if (item.TrackingEllipse != null)
+					{
+						trackingEllipses.Add(item.TrackingEllipse);
+					}
+				}
+			}
+			foreach (UIElement child in Canvas.Children)
+			{
+				if (child is ArrowLine c)
+				{
+					if (c != PlayerLocation.ArrowLine)
+					{
+						var transform = new MatrixTransform();
+						var translation = new TranslateTransform(Transform.Value.OffsetX, Transform.Value.OffsetY);
+						transform.Matrix = c.RotateTransform.Value * translation.Value;
+						c.RenderTransform = transform;
+					}
+				}
+				if (child is Ellipse e)
+				{
+					if (e != PlayerLocation.Ellipse
+						&& PlayerLocation.TrackingEllipse != e
+						&& (trackingEllipses.Count == 0
+							|| (trackingEllipses.Count > 0 && trackingEllipses.Any(te => te != e)))
+						&& PlayerLocation.Ellipse != e)
+					{
+						var transform = new MatrixTransform();
+						var translation = new TranslateTransform(Transform.Value.OffsetX, Transform.Value.OffsetY);
+						transform.Matrix = e.LayoutTransform.Value * translation.Value;
+						e.RenderTransform = transform;
+					}
+				}
+			}
+		}
+
+		public void MoveMap(int x, int y)
         {
             var translate = new TranslateTransform(x, y);
             Transform.Matrix = translate.Value * Transform.Matrix;
+			var trackingEllipses = new List<Ellipse>();
+			if(Players.Count > 0)
+			{
+				foreach (var item in Players)
+				{
+					if (item.TrackingEllipse != null)
+					{
+						trackingEllipses.Add(item.TrackingEllipse);
+					}
+				}
+			}
             foreach (UIElement child in Canvas.Children)
             {
                 if (child is ArrowLine c)
                 {
-                    var transform = new MatrixTransform();
-                    var translation = new TranslateTransform(Transform.Value.OffsetX, Transform.Value.OffsetY);
-                    transform.Matrix = c.RotateTransform.Value * translation.Value;
-                    c.RenderTransform = transform;
-                }
-            }
+					if(c != PlayerLocation.ArrowLine)
+					{
+						var transform = new MatrixTransform();
+						var translation = new TranslateTransform(Transform.Value.OffsetX, Transform.Value.OffsetY);
+						transform.Matrix = c.RotateTransform.Value * translation.Value;
+						c.RenderTransform = transform;
+					}
+				}
+				if (child is Ellipse e)
+				{
+					if(e != PlayerLocation.Ellipse 
+						&& PlayerLocation.TrackingEllipse != e 
+						&& (trackingEllipses.Count == 0 
+							|| ( trackingEllipses.Count > 0 && trackingEllipses.Any(te => te != e)))
+						&& PlayerLocation.Ellipse != e)
+					{
+						var transform = new MatrixTransform();
+						var translation = new TranslateTransform(Transform.Value.OffsetX, Transform.Value.OffsetY);
+						transform.Matrix = e.LayoutTransform.Value * translation.Value;
+						e.RenderTransform = transform;
+					}
+				}
+			}
         }
 
         public void PanAndZoomCanvas_MouseMove(Point mousePosition, MouseButtonState LeftButtonState)
@@ -859,5 +956,10 @@ namespace EQTool.ViewModels
                 RemoveFromCanvas(p);
             }
         }
+
+		public void ToggleMouseLocation_Show(bool entered)
+		{
+			ShowMouseLocation = entered ? Visibility.Visible : Visibility.Hidden;
+		}
     }
 }

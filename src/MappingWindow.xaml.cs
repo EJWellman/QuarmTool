@@ -63,12 +63,19 @@ namespace EQTool
             UITimer = new System.Timers.Timer(1000);
             UITimer.Elapsed += UITimer_Elapsed;
             UITimer.Enabled = true;
+			this.MouseEnter += ToggleMouseLocation_Event;
+			this.MouseLeave += ToggleMouseLocation_Event;
             //   this.SetCenerMap();
 
 			_quarmDataService = quarmDataService;
         }
 
-        private void SignalrPlayerHub_PlayerDisconnected(object sender, SignalrPlayer e)
+		private void ToggleMouseLocation_Event(object sender, MouseEventArgs e)
+		{
+			mapViewModel.ToggleMouseLocation_Show(e.RoutedEvent.Equals(Mouse.MouseEnterEvent));
+		}
+
+		private void SignalrPlayerHub_PlayerDisconnected(object sender, SignalrPlayer e)
         {
             mapViewModel.PlayerDisconnected(e);
         }
@@ -222,7 +229,10 @@ namespace EQTool
                 signalrPlayerHub.PlayerLocationEvent -= SignalrPlayerHub_PlayerLocationEvent;
                 signalrPlayerHub.PlayerDisconnected -= SignalrPlayerHub_PlayerDisconnected;
             }
-            base.OnClosing(e);
+
+			this.MouseEnter -= ToggleMouseLocation_Event;
+			this.MouseLeave -= ToggleMouseLocation_Event;
+			base.OnClosing(e);
         }
 
         private void SetCenerMap()
