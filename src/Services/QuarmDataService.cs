@@ -1,6 +1,7 @@
 ﻿using Dapper;
 using EQTool.Constants;
 using EQTool.Models;
+using EQTool.Utilities;
 using EQTool.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -10,6 +11,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Security.Policy;
 using static EQTool.Services.FindEq;
 
 namespace EQTool.Services
@@ -36,6 +38,7 @@ namespace EQTool.Services
 			{
 				return false;
 			}
+			zoneCode = ZoneSwapper.GetSwappedInstanceZoneCode(zoneCode);
 			string sqliteConnString = $"Data Source={_fileLocations.Data_File};";
 			using (SQLiteConnection cnn = new SQLiteConnection(sqliteConnString))
 			{

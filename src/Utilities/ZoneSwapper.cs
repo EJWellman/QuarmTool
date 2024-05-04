@@ -8,6 +8,34 @@ namespace EQTool.Utilities
 {
 	public static class ZoneSwapper
 	{
+		public static string GetSwappedInstanceZoneCode(string zoneCode, bool checkValue = false)
+		{
+			Dictionary<string, string> zonesToSwapForMaps = new Dictionary<string, string>()
+			{
+				{ "air_instanced", "airplane" },
+				{ "hate_instanced", "hateplane" },
+				{ "fear_instanced", "fearplane" },
+				{ "hole_instanced", "hole" },
+				{ "soldungb_tryout", "soldungb" },
+				{ "kedge_tryout", "kedge" },
+				{ "perma_tryout", "permafrost" }
+			};
+
+			if (checkValue)
+			{
+				if (zonesToSwapForMaps.ContainsValue(zoneCode))
+				{
+					return zonesToSwapForMaps.FirstOrDefault(x => x.Value == zoneCode).Key;
+				}
+			}
+
+			if (zonesToSwapForMaps.ContainsKey(zoneCode))
+			{
+				return zonesToSwapForMaps[zoneCode];
+			}
+
+			return zoneCode;
+		}
 		public static string GetSwappedZoneCode(string zoneCode, bool checkValue = false)
 		{
 			Dictionary<string, string> zonesToSwapForMaps = new Dictionary<string, string>()
