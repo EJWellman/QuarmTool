@@ -252,20 +252,26 @@ namespace EQTool.Models
             get
             {
                 var pclass = PlayerClass;
+				double rangerTrackFix = 1.945;
+				double druidTrackFix = 2.012;
+				double bardTrackFix = 2.135;
                 if (pclass.HasValue)
                 {
                     var trackskill = this.TrackingSkill ?? 10;
-                    if (pclass == EQToolShared.Enums.PlayerClasses.Ranger)
+                    if (pclass == PlayerClasses.Ranger)
                     {
-                        return (trackskill * 12) * 2;
+						var trackDist = (trackskill * 9) < 300 ? 300 : (trackskill * 9);
+						return (trackDist * 2 /*diameter*/) * rangerTrackFix;
                     }
-                    else if (pclass == EQToolShared.Enums.PlayerClasses.Druid)
+                    else if (pclass == PlayerClasses.Druid)
                     {
-                        return (trackskill * 10) * 2;
+						var trackDist = (trackskill * 8) < 300 ? 300 : (trackskill * 8);
+						return (trackDist * 2/*diameter*/) * druidTrackFix;
                     }
-                    else if (pclass == EQToolShared.Enums.PlayerClasses.Bard)
+                    else if (pclass == PlayerClasses.Bard)
                     {
-                        return (trackskill * 7) * 2;
+						var trackDist = (trackskill * 7) < 300 ? 300 : (trackskill * 7);
+						return (trackDist * 2/*diameter*/) * bardTrackFix;
                     }
                 }
                 return null;
