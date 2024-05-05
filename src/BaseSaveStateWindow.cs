@@ -76,21 +76,21 @@ namespace EQTool
 
         private void Window_LocationChanged(object sender, EventArgs e)
         {
-			if(((Window)sender).Top < SystemParameters.VirtualScreenTop)
+			if(((Window)sender).Top <= SystemParameters.VirtualScreenTop)
 			{
-				((Window)sender).Top = SystemParameters.VirtualScreenTop;
+				((Window)sender).Top = SystemParameters.VirtualScreenTop + 1;
 			}
 			if(((Window)sender).Left < SystemParameters.VirtualScreenLeft)
 			{
-				((Window)sender).Left = SystemParameters.VirtualScreenLeft;
+				((Window)sender).Left = SystemParameters.VirtualScreenLeft + 1;
 			}
 			if(((Window)sender).Top + ((Window)sender).Height > SystemParameters.VirtualScreenHeight)
 			{
-				((Window)sender).Top = SystemParameters.VirtualScreenHeight - ((Window)sender).Height;
+				((Window)sender).Top = SystemParameters.VirtualScreenHeight - ((Window)sender).Height - 1;
 			}
 			if(((Window)sender).Left + ((Window)sender).Width > SystemParameters.VirtualScreenLeft + SystemParameters.VirtualScreenWidth)
 			{
-				((Window)sender).Left = SystemParameters.VirtualScreenWidth + SystemParameters.VirtualScreenLeft - ((Window)sender).Width;
+				((Window)sender).Left = SystemParameters.VirtualScreenWidth + SystemParameters.VirtualScreenLeft - ((Window)sender).Width - 1;
 			}
 
 

@@ -37,8 +37,13 @@ namespace EQTool.Services.Parsing
 			{
 				foreach(var overlay in _settings.CustomOverlays)
 				{
-					if(Regex.Matches(message, overlay.Trigger, RegexOptions.IgnoreCase).Count>0
-						|| Regex.Matches(message, overlay.Alternate_Trigger, RegexOptions.IgnoreCase).Count > 0)
+					if(overlay.IsEnabled && !string.IsNullOrWhiteSpace(overlay.Trigger) 
+						&& !string.IsNullOrWhiteSpace(overlay.Message) && Regex.Matches(message, overlay.Trigger, RegexOptions.IgnoreCase).Count > 0)
+					{
+						return overlay;
+					}
+					if (overlay.IsEnabled && !string.IsNullOrWhiteSpace(overlay.Alternate_Trigger)
+						&& !string.IsNullOrWhiteSpace(overlay.Message) && Regex.Matches(message, overlay.Alternate_Trigger, RegexOptions.IgnoreCase).Count > 0)
 					{
 						return overlay;
 					}
