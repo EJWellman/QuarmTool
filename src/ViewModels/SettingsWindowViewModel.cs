@@ -360,6 +360,18 @@ namespace EQTool.ViewModels
 				OnPropertyChanged();
 			}
 		}
+		public bool ComboShowModRodTimers
+		{
+			get
+			{
+				return this.toolSettings.ComboShowModRodTimers;
+			}
+			set
+			{
+				this.toolSettings.ComboShowModRodTimers = value;
+				OnPropertyChanged();
+			}
+		}
 
 		public ObservableCollection<CustomOverlay> CustomOverlays
 		{

@@ -399,6 +399,7 @@
     </Compile>
     <Compile Include="CustomTimeSpanUpDown.cs" />
     <Compile Include="EventArgModels\CustomOverlayEditEventArgs.cs" />
+    <Compile Include="EventArgModels\ModRodUsageArgs.cs" />
     <Compile Include="EventArgModels\CustomOverlayEventArgs.cs" />
     <Compile Include="EventOverlay.xaml.cs">
       <DependentUpon>EventOverlay.xaml</DependentUpon>
@@ -447,6 +448,7 @@
     <Compile Include="Services\MapOpacityHelper.cs" />
     <Compile Include="Services\MapViewModelService.cs" />
     <Compile Include="Services\Parsing\CustomOverlayParser.cs" />
+    <Compile Include="Services\Parsing\ModRodParser.cs" />
     <Compile Include="Services\Parsing\RandomParser.cs" />
     <Compile Include="Services\Parsing\ResistSpellParser.cs" />
     <Compile Include="Services\Parsing\GroupInviteParser.cs" />

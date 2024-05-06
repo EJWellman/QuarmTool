@@ -273,6 +273,24 @@ namespace EQTool
 			settings.ComboShowTimers = s.IsChecked ?? false;
 			SaveConfig();
 		}
+		private void ComboShowModRodTimers_Click(object sender, RoutedEventArgs e)
+		{
+			var s = sender as System.Windows.Controls.CheckBox;
+			settings.ComboShowModRodTimers = s.IsChecked ?? false;
+			SaveConfig();
+		}
+		private void TimerShowRandom_Click(object sender, RoutedEventArgs e)
+		{
+			var s = sender as System.Windows.Controls.CheckBox;
+			settings.ShowRandomRolls = s.IsChecked ?? false;
+			SaveConfig();
+		}
+		private void TimerShowModRodTimers_Click(object sender, RoutedEventArgs e)
+		{
+			var s = sender as System.Windows.Controls.CheckBox;
+			settings.ShowModRodTimers = s.IsChecked ?? false;
+			SaveConfig();
+		}
 
 
 

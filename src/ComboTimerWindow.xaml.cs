@@ -1,4 +1,5 @@
-﻿using EQTool.Models;
+﻿using EQTool.EventArgModels;
+using EQTool.Models;
 using EQTool.Services;
 using EQTool.ViewModels;
 using EQToolShared;
@@ -61,6 +62,7 @@ namespace EQTool
 			this.logParser.POFDTEvent += LogParser_POFDTEvent;
 			this.logParser.ResistSpellEvent += LogParser_ResistSpellEvent;
 			this.logParser.RandomRollEvent += LogParser_RandomRollEvent;
+			this.logParser.ModRodUsedEvent += LogParser_ModRodUsedEvent;
 			UITimer = new System.Timers.Timer(1000);
 			UITimer.Elapsed += PollUI;
 			UITimer.Enabled = true;
@@ -176,6 +178,18 @@ namespace EQTool
 			}
 		}
 
+		private void LogParser_ModRodUsedEvent(object sender, ModRodUsageArgs e)
+		{
+			this.comboTimerWindowViewModel.TryAddCustom(new CustomTimer
+			{
+				DurationInSeconds = 300,
+				Name = $"{e.Name}",
+				SpellNameIcon = "Modulation",
+				SpellType = SpellTypes.HarvestCooldown,
+				TargetName = "Mod Rod Consumed"
+			});
+		}
+
 		private void LogParser_CancelTimerEvent(object sender, LogParser.CancelTimerEventArgs e)
 		{
 			comboTimerWindowViewModel.TryRemoveCustom(e.Name);
@@ -203,6 +217,7 @@ namespace EQTool
 				logParser.POFDTEvent -= LogParser_POFDTEvent;
 				logParser.ResistSpellEvent -= LogParser_ResistSpellEvent;
 				logParser.RandomRollEvent -= LogParser_RandomRollEvent;
+				logParser.ModRodUsedEvent -= LogParser_ModRodUsedEvent;
 			}
 			if (comboTimerWindowViewModel != null)
 			{

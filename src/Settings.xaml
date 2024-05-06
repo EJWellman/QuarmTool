@@ -301,12 +301,20 @@
                         <TextBlock Text="Show Respawns" VerticalAlignment="Center"  FontWeight="Bold"  MinWidth="100"/>
                         <CheckBox IsChecked="{Binding ComboShowTimers}" Click="ComboShowTimer_Click" ></CheckBox>
                     </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="Show Mod Rods" VerticalAlignment="Center"  FontWeight="Bold"  MinWidth="100"/>
+                        <CheckBox IsChecked="{Binding ComboShowModRodTimers}" Click="ComboShowModRodTimers_Click" ></CheckBox>
+                    </StackPanel>
                     <Separator/>
                     <Label Height="16" HorizontalAlignment="Center" FontSize="10" FontWeight="SemiBold" Padding="0,0,0,0">Timer Settings</Label>
                     <Separator/>
                     <StackPanel Orientation="Horizontal">
                         <TextBlock Text="Random Rolls" ToolTip="Show Random rolls in Triggers window" VerticalAlignment="Center"  FontWeight="Bold"  MinWidth="100"/>
-                        <CheckBox IsChecked="{Binding ShowRandomRolls}" Click="SaveAlwaysOntopCheckBoxSettings"></CheckBox>
+                        <CheckBox IsChecked="{Binding ShowRandomRolls}" Click="TimerShowRandom_Click"></CheckBox>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="Show Mod Rods" VerticalAlignment="Center"  FontWeight="Bold"  MinWidth="100"/>
+                        <CheckBox IsChecked="{Binding ShowModRodTimers}" Click="TimerShowModRodTimers_Click" ></CheckBox>
                     </StackPanel>
                     <Separator/>
                     <Label Height="16" HorizontalAlignment="Center" FontSize="10" FontWeight="SemiBold" Padding="0,0,0,0">Spell Settings - Combo &amp; Spell</Label>

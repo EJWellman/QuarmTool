@@ -84,7 +84,7 @@ namespace EQTool.ViewModels
             appDispatcher.DispatchUI(() =>
             {
                 var player = activePlayer.Player;
-                var itemstoremove = new List<UISpell>();
+                var itemsToRemove = new List<UISpell>();
 
                 var d = DateTime.Now;
                 foreach (var item in SpellList)
@@ -92,11 +92,11 @@ namespace EQTool.ViewModels
                     item.UpdateTimeLeft();
                     if (item.NegativeDurationToShow.TotalSeconds <= 0 && !item.PersistentSpell)
                     {
-                        itemstoremove.Add(item);
+                        itemsToRemove.Add(item);
                     }
                     else if (item.PersistentSpell && (d - item.UpdatedDateTime).TotalMinutes > 30)
                     {
-                        itemstoremove.Add(item);
+                        itemsToRemove.Add(item);
                     }
                     item.HideGuesses = !settings.BestGuessSpells;
                     item.ShowOnlyYou = settings.YouOnlySpells;
@@ -104,8 +104,14 @@ namespace EQTool.ViewModels
                     if (item.SpellType == SpellTypes.RandomRoll)
                     {
                         item.HideClasses = !this.settings.ShowRandomRolls;
-                    }
-                }
+					}
+
+					if (!this.settings.ShowModRodTimers
+						&& item.SpellType == SpellTypes.ModRod)
+					{
+						itemsToRemove.Add(item);
+					}
+				}
 
                 var groupedspells = SpellList.GroupBy(a => a.TargetName).ToList();
                 foreach (var spells in groupedspells)
@@ -135,7 +141,7 @@ namespace EQTool.ViewModels
                     }
                 }
 
-                foreach (var item in itemstoremove)
+                foreach (var item in itemsToRemove)
                 {
                     _ = SpellList.Remove(item);
                 }

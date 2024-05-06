@@ -9,7 +9,8 @@
         BadGuyCoolDown = -2,
         Beneficial = -1,
         Detrimental = 0,
-        Other = 1
+        Other = 1,
+		ModRod = 2
 
     }
 }

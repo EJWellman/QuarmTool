@@ -251,6 +251,8 @@ namespace EQTool.Models
 		public bool ComboShowRandomRolls { get; set; }
 		public bool ComboShowSpells { get; set; }
 		public bool ComboShowTimers { get; set; }
+		public bool ComboShowModRodTimers { get; set; }
+		public bool ShowModRodTimers { get; set; }
 
 		private ObservableCollectionRange<CustomOverlay> _customOverlays;
 		[JsonIgnore]

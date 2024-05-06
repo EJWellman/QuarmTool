@@ -49,6 +49,7 @@ namespace EQTool.Services
         private readonly ChParser _chParser;
         private readonly InvisParser _invisParser;
         private readonly LevParser _levParser;
+		private readonly ModRodParser _modRodParser;
         private readonly FTEParser _fTEParser;
         private readonly CharmBreakParser _charmBreakParser;
         private readonly FailedFeignParser _failedFeignParser;
@@ -88,6 +89,7 @@ namespace EQTool.Services
             PlayerWhoLogParse playerWhoLogParse,
             InvisParser invisParser,
             LevParser levParser,
+			ModRodParser modRodParser,
             FailedFeignParser failedFeignParser,
 			CustomOverlayParser customOverlayParser
             )
@@ -116,6 +118,7 @@ namespace EQTool.Services
             this._activePlayer = activePlayer;
             this._appDispatcher = appDispatcher;
             this._levelLogParse = levelLogParse;
+			this._modRodParser = modRodParser;
             this._settings = settings;
             this._playerWhoLogParse = playerWhoLogParse;
 			this._customOverlayParser = customOverlayParser;
@@ -209,25 +212,16 @@ namespace EQTool.Services
         public event EventHandler<SpellWornOffOtherEventArgs> SpellWornOtherOffEvent;
         public event EventHandler<ResistSpellData> ResistSpellEvent;
         public event EventHandler<SpellEventArgs> StartCastingEvent;
-
         public event EventHandler<CancelTimerEventArgs> CancelTimerEvent;
-
         public event EventHandler<StartTimerEventArgs> StartTimerEvent;
-
         public event EventHandler<ConEventArgs> ConEvent;
-
         public event EventHandler<DeadEventArgs> DeadEvent;
-
         public event EventHandler<FightHitEventArgs> FightHitEvent;
-
         public event EventHandler<PlayerZonedEventArgs> PlayerZonedEvent;
-
         public event EventHandler<PlayerLocationEventArgs> PlayerLocationEvent;
-
         public event EventHandler<CampEventArgs> CampEvent;
-
         public event EventHandler<EnteredWorldArgs> EnteredWorldEvent;
-
+		public event EventHandler<ModRodUsageArgs> ModRodUsedEvent;
 		public event EventHandler<CustomOverlayEventArgs> CustomOverlayEvent;
 
         public void Push(string log)
@@ -363,7 +357,7 @@ namespace EQTool.Services
                 }
 
                 var matchedspell = _spellLogParse.MatchSpell(message);
-                if (matchedspell != null)
+                if (matchedspell != null && matchedspell.Spell.name != "Modulation")
                 {
                     StartCastingEvent?.Invoke(this, new SpellEventArgs { Spell = matchedspell });
                     return;
@@ -446,7 +440,14 @@ namespace EQTool.Services
                     return;
                 }
 
-                var stringmsg = this._failedFeignParser.FailedFaignCheck(message);
+				var modRod = _modRodParser.Parse(message);
+				if (modRod != null)
+				{
+					ModRodUsedEvent?.Invoke(this, modRod);
+					return;
+				}
+
+				var stringmsg = this._failedFeignParser.FailedFaignCheck(message);
                 if (!string.IsNullOrWhiteSpace(stringmsg))
                 {
                     FailedFeignEvent?.Invoke(this, stringmsg);

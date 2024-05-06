@@ -120,9 +120,14 @@ namespace EQTool.ViewModels
 					{
 						itemsToRemove.Add(item);
 					}
+					else if (!this.settings.ComboShowModRodTimers
+						&& item.SpellType == SpellTypes.ModRod)
+					{
+						itemsToRemove.Add(item);
+					}
 					else if (!this.settings.ComboShowSpells
-						&& (item.SpellType != SpellTypes.RandomRoll
-							&& item.SpellType != SpellTypes.RespawnTimer))
+						&& item.SpellType != SpellTypes.RandomRoll
+						&& item.SpellType != SpellTypes.RespawnTimer)
 					{
 						itemsToRemove.Add(item);
 					}
@@ -373,7 +378,6 @@ namespace EQTool.ViewModels
                     Roll = match.Roll,
                     RollOrder = rollorder + 1
                 });
-				string blah = "";
             });
         }
 
