@@ -23,11 +23,11 @@ namespace EQTool
         private readonly LogParser logParser;
         private ViewModels.MobInfoViewModel mobInfoViewModel;
         private readonly QuarmDataService _quarmService;
-        private readonly PigParseApi pigParseApi;
+		private readonly PlayerTrackerService playerTrackerService;
         private readonly ActivePlayer activePlayer;
         public MobInfo(ActivePlayer activePlayer, 
-			PigParseApi pigParseApi, 
 			QuarmDataService quarmService, 
+			PlayerTrackerService playerTrackerService,
 			LogParser logParser, 
 			EQToolSettings settings, 
 			EQToolSettingsLoad toolSettingsLoad, 
@@ -35,7 +35,7 @@ namespace EQTool
         {
             loggingService.Log(string.Empty, EventType.OpenMobInfo, activePlayer?.Player?.Server);
             this.activePlayer = activePlayer;
-            this.pigParseApi = pigParseApi;
+			this.playerTrackerService = playerTrackerService;
             this._quarmService = quarmService;
             this.logParser = logParser;
             DataContext = mobInfoViewModel = new ViewModels.MobInfoViewModel();
