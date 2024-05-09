@@ -131,7 +131,7 @@ namespace EQTool
 					TargetName = "Death Timers"
 				};
 
-				var exisitngdeathentry = timerWindowViewModel.SpellList.FirstOrDefault(a => a.SpellName == add.Name && CustomTimer.CustomerTime == a.TargetName);
+				var exisitngdeathentry = timerWindowViewModel.SpellList.FirstOrDefault(a => a.SpellName == add.Name && a.TargetName == "Death Timers");
 				if (exisitngdeathentry != null)
 				{
 					deathcounter = ++deathcounter > 999 ? 1 : deathcounter;
