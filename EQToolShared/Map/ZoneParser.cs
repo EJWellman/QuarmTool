@@ -2099,7 +2099,7 @@ namespace EQToolShared.Map
             ZoneNameMapper.Add("halas", "halas");
 			ZoneNameMapper.Add("domain of frost", "myriah");
 			ZoneNameMapper.Add("solusek's eye", "soldunga");
-            ZoneNameMapper.Add("estate of unrest", "unrest");
+            ZoneNameMapper.Add("the estate of unrest", "unrest");
             ZoneNameMapper.Add("blackburrow", "blackburrow");
             ZoneNameMapper.Add("gorge of king xorbb", "beholder");
             ZoneNameMapper.Add("plane of hate", "hateplane");
@@ -2124,7 +2124,7 @@ namespace EQToolShared.Map
             ZoneNameMapper.Add("the hole", "hole");
 			ZoneNameMapper.Add("the hole (instanced)", "hole_instanced");
 			ZoneNameMapper.Add("qeynos hills", "qeytoqrg");
-            ZoneNameMapper.Add("arena", "arena");
+            ZoneNameMapper.Add("the arena", "arena");
             ZoneNameMapper.Add("lavastorm mountains", "lavastorm");
             ZoneNameMapper.Add("plane of growth", "growthplane");
             ZoneNameMapper.Add("misty thicket", "misty");

@@ -56,6 +56,12 @@ namespace EQTool.Services.Spells.Log
             {
                 return null;
             }
+			//Handles /anon & /role players
+			var anonIndex = message.IndexOf("[ANONYMOUS]");
+			if (anonIndex != -1)
+			{
+				return null;
+			}
 
 
             var guess = new EQToolShared.APIModels.PlayerControllerModels.Player();
