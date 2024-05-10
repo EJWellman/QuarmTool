@@ -349,17 +349,17 @@ namespace EQTool.Models
             }
             else
             {
-                foreach (var item in ZoneParser.ZoneNameMapper)
-                {
-                    if (string.Equals(item.Value, zoneName, StringComparison.OrdinalIgnoreCase))
-                    {
-                        if (item.Value.Contains("("))
-                        {
-                            continue;
-                        }
-                        return item.Key;
-                    }
-                }
+				foreach(var item in ZoneParser.ZoneNames)
+				{
+					if (string.Equals(item.MapName, zoneName, StringComparison.OrdinalIgnoreCase))
+					{
+						if(item.MapName.Contains("("))
+						{
+							continue;
+						}
+						return item.LongName;
+					}
+				}
             }
             return zoneName;
         }

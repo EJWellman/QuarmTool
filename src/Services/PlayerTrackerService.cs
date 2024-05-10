@@ -81,8 +81,9 @@ namespace EQTool.Services
         {
             lock (ContainerLock)
             {
-                if (CurrentZone != activePlayer.Player?.Zone
-					&& CurrentZone != ZoneParser.ZoneNameMapper[activePlayer.Player?.LastZoneEntered])
+                if (CurrentZone != activePlayer.Player?.Zone)
+					//TODO: Fix this to use the new ZoneNameInfo class
+					//&& CurrentZone != ZoneParser.ZoneNameMapper[activePlayer.Player?.LastZoneEntered])
                 {
                     CurrentZone = activePlayer.Player?.Zone;
 					_quarmDataService.LoadMobDataForZone(CurrentZone);

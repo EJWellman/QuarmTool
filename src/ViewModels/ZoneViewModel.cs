@@ -7,13 +7,6 @@ namespace EQTool.ViewModels
 {
     public class ZoneViewModel : INotifyPropertyChanged
     {
-        private readonly WikiApi wikiApi;
-
-        public ZoneViewModel(WikiApi wikiApi)
-        {
-            this.wikiApi = wikiApi;
-        }
-
         private string _Name = string.Empty;
 
         public string Name

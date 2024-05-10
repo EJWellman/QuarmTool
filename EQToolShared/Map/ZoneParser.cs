@@ -1,4 +1,5 @@
-﻿using System;
+﻿using EQToolShared.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -25,8 +26,8 @@ namespace EQToolShared.Map
     {
         private const string Youhaveentered = "You have entered ";
         private const string Therearenoplayers = "There are no players ";
-        private const string Thereare = "There are ";
-        private const string Thereis = "There is ";
+        private const string ThereAre = "There are ";
+        private const string ThereIs = "There is ";
         private const string Youhaveenteredareapvp = "You have entered an Arena (PvP) area.";
         private const string spaceinspace = "in ";
         public static readonly List<string> KaelFactionMobs = new List<string>() {
@@ -44,8 +45,8 @@ namespace EQToolShared.Map
             "Jaglorm Ygorr",
             "Yeeldan Spiritcaller"
         };
-        public static readonly Dictionary<string, string> ZoneNameMapper = new Dictionary<string, string>();
-        public static readonly Dictionary<string, string> ZoneWhoMapper = new Dictionary<string, string>();
+
+		public static readonly List<ZoneNameInfo> ZoneNames = new List<ZoneNameInfo>();
         public static readonly Dictionary<string, ZoneInfo> ZoneInfoMap = new Dictionary<string, ZoneInfo>();
 #if QUARM
         private static bool isProjectQ = true;
@@ -56,7 +57,8 @@ namespace EQToolShared.Map
 
         static ZoneParser()
         {
-            ZoneInfoMap.Add("airplane", new ZoneInfo
+			#region build ZoneInfoMap
+			ZoneInfoMap.Add("airplane", new ZoneInfo
             {
                 Name = "airplane",
                 ShowAllMapLevels = true,
@@ -2029,187 +2031,216 @@ namespace EQToolShared.Map
                 ZoneInfoMap["runnyeye"].RespawnTime = new TimeSpan(0, 8, 0);
                 ZoneInfoMap["cazicthule"].RespawnTime = new TimeSpan(0, 8, 0);
             }
+			#endregion
 
-            ZoneWhoMapper.Add("kael drakkal", "kael drakkel");
-            ZoneWhoMapper.Add("eastern wastes", "eastern wastelands");
-            ZoneWhoMapper.Add("the wakening land", "the wakening lands");
-            ZoneWhoMapper.Add("siren's grotto", "sirens grotto");
-            ZoneWhoMapper.Add("the plane of hate", "plane of hate");
-			ZoneWhoMapper.Add("plane of hate (instanced)", "plane of hate (instanced)");
-			ZoneWhoMapper.Add("burning woods", "the burning wood");
-            ZoneWhoMapper.Add("south ro", "southern desert of ro");
-            ZoneWhoMapper.Add("plane of sky", "plane of sky");
-			ZoneWhoMapper.Add("plane of sky (instanced)", "plane of sky (instanced)");
-			ZoneWhoMapper.Add("south karana", "southern plains of karana");
-            ZoneWhoMapper.Add("sleeper's tomb", "sleepers tomb");
-            ZoneWhoMapper.Add("mountains of rathe", "rathe mountains");
-            ZoneWhoMapper.Add("nektulos forest", "the nektulos forest");
-            ZoneWhoMapper.Add("city of mist", "the city of mist");
-            ZoneWhoMapper.Add("west cabilis", "cabilis west");
-            ZoneWhoMapper.Add("east cabilis", "cabilis east");
-            ZoneWhoMapper.Add("cazic-thule", "lost temple of cazic-thule");
-            ZoneWhoMapper.Add("everfrost peaks", "everfrost");
-            ZoneWhoMapper.Add("highkeep", "high keep");
-            ZoneWhoMapper.Add("kithicor forest", "kithicor woods");
-            ZoneWhoMapper.Add("lower guk", "ruins of old guk");
-            ZoneWhoMapper.Add("north ro", "northern desert of ro");
-            ZoneWhoMapper.Add("north karana", "northern plains of karana");
-            ZoneWhoMapper.Add("permafrost keep", "permafrost caverns");
-            ZoneWhoMapper.Add("clan runnyeye", "runnyeye citadel");
-            ZoneWhoMapper.Add("the ruins of old paineel", "the hole");
-			ZoneWhoMapper.Add("the warrens", "warrens");
-            ZoneWhoMapper.Add("thurgadin", "city of thurgadin");
-            ZoneWhoMapper.Add("upper guk", "guk");
-            ZoneWhoMapper.Add("warsliks wood", "warsliks woods");
-            ZoneWhoMapper.Add("west karana", "western plains of karana");
-            ZoneWhoMapper.Add("clan crushbone", "crushbone");
-            ZoneWhoMapper.Add("east karana", "eastern plains of karana");
-            ZoneWhoMapper.Add("the field of bone", "field of bone");
-            ZoneWhoMapper.Add("qeynos catacombs", "qeynos aqueduct system");
-            ZoneWhoMapper.Add("felwithe", "northern felwithe");
-            ZoneWhoMapper.Add("kaladim", "south kaladim");
+			#region ZoneNames
+			ZoneNames.Add(new ZoneNameInfo("acrylia caverns", "acrylia"));
+			ZoneNames.Add(new ZoneNameInfo("plane of sky", "airplane"));
+			ZoneNames.Add(new ZoneNameInfo("ak'anon", "akanon"));
+			ZoneNames.Add(new ZoneNameInfo("akheva ruins", "akheva"));
+			ZoneNames.Add(new ZoneNameInfo("the arena", "arena"));
+			ZoneNames.Add(new ZoneNameInfo("the arena two", "arena2"));
+			ZoneNames.Add(new ZoneNameInfo("aviak village", "aviak"));
+			ZoneNames.Add(new ZoneNameInfo("befallen", "befallen"));
+			ZoneNames.Add(new ZoneNameInfo("gorge of king xorbb", "beholder"));
+			ZoneNames.Add(new ZoneNameInfo("blackburrow", "blackburrow"));
+			ZoneNames.Add(new ZoneNameInfo("bastion of thunder", "bothunder"));
+			ZoneNames.Add(new ZoneNameInfo("the burning wood", "burningwood", "burning woods"));
+			ZoneNames.Add(new ZoneNameInfo("butcherblock mountains", "butcher"));
+			ZoneNames.Add(new ZoneNameInfo("cabilis east", "cabeast", "east cabilis"));
+			ZoneNames.Add(new ZoneNameInfo("cabilis west", "cabwest", "west cabilis"));
+			ZoneNames.Add(new ZoneNameInfo("dagnor's cauldron", "cauldron"));
+			ZoneNames.Add(new ZoneNameInfo("lost temple of cazicthule", "cazicthule", "cazic-thule"));
+			ZoneNames.Add(new ZoneNameInfo("the howling stones", "charasis", "howling stones"));
+			ZoneNames.Add(new ZoneNameInfo("chardok", "chardok"));
+			ZoneNames.Add(new ZoneNameInfo("the city of mist", "citymist", "city of mist"));
+			ZoneNames.Add(new ZoneNameInfo("loading", "clz"));
+			ZoneNames.Add(new ZoneNameInfo("cobaltscar", "cobaltscar"));
+			ZoneNames.Add(new ZoneNameInfo("the crypt of decay", "codecay"));
+			ZoneNames.Add(new ZoneNameInfo("tower of bone (gm)", "towerbone", "fieldofbone"));
+			ZoneNames.Add(new ZoneNameInfo("west commonlands", "commons"));
+			ZoneNames.Add(new ZoneNameInfo("crushbone", "crushbone", "clan crushbone"));
+			ZoneNames.Add(new ZoneNameInfo("crystal caverns", "crystal"));
+			ZoneNames.Add(new ZoneNameInfo("sunset home", "cshome"));
+			ZoneNames.Add(new ZoneNameInfo("the crypt of dalnir", "dalnir"));
+			ZoneNames.Add(new ZoneNameInfo("the dawnshroud peaks", "dawnshroud"));
+			ZoneNames.Add(new ZoneNameInfo("the dreadlands", "dreadlands"));
+			ZoneNames.Add(new ZoneNameInfo("mines of droga", "droga", "temple of droga"));
+			ZoneNames.Add(new ZoneNameInfo("eastern plains of karana", "eastkarana", "east karana"));
+			ZoneNames.Add(new ZoneNameInfo("eastern wastes", "eastwastes"));
+			ZoneNames.Add(new ZoneNameInfo("echo caverns", "echo"));
+			ZoneNames.Add(new ZoneNameInfo("east commonlands", "ecommons"));
+			ZoneNames.Add(new ZoneNameInfo("the emerald jungle", "emeraldjungle"));
+			ZoneNames.Add(new ZoneNameInfo("erudin", "erudnext"));
+			ZoneNames.Add(new ZoneNameInfo("erudin palace", "erudnint"));
+			ZoneNames.Add(new ZoneNameInfo("erud's crossing", "erudsxing"));
+			ZoneNames.Add(new ZoneNameInfo("marauders mire", "erudsxing2"));
+			ZoneNames.Add(new ZoneNameInfo("everfrost peaks", "everfrost"));
+			ZoneNames.Add(new ZoneNameInfo("plane of fear", "fearplane"));
+			ZoneNames.Add(new ZoneNameInfo("the feerrott", "feerrott"));
+			ZoneNames.Add(new ZoneNameInfo("northern felwithe", "felwithea", "felwithe"));
+			ZoneNames.Add(new ZoneNameInfo("southern felwithe", "felwitheb", "felwithe"));
+			ZoneNames.Add(new ZoneNameInfo("field of bone", "fieldofbone"));
+			ZoneNames.Add(new ZoneNameInfo("firiona vie", "firiona"));
+			ZoneNames.Add(new ZoneNameInfo("east freeport", "freporte"));
+			ZoneNames.Add(new ZoneNameInfo("north freeport", "freportn"));
+			ZoneNames.Add(new ZoneNameInfo("west freeport", "freportw"));
+			ZoneNames.Add(new ZoneNameInfo("frontier mountains", "frontiermtns"));
+			ZoneNames.Add(new ZoneNameInfo("tower of frozen shadow", "frozenshadow"));
+			ZoneNames.Add(new ZoneNameInfo("the fungus grove", "fungusgrove"));
+			ZoneNames.Add(new ZoneNameInfo("greater faydark", "gfaydark"));
+			ZoneNames.Add(new ZoneNameInfo("the great divide", "greatdivide"));
+			ZoneNames.Add(new ZoneNameInfo("grieg's end", "griegsend"));
+			ZoneNames.Add(new ZoneNameInfo("grimling forest", "grimling"));
+			ZoneNames.Add(new ZoneNameInfo("grobb", "grobb"));
+			ZoneNames.Add(new ZoneNameInfo("plane of growth", "growthplane"));
+			ZoneNames.Add(new ZoneNameInfo("ruins of old guk", "gukbottom", "lower guk"));
+			ZoneNames.Add(new ZoneNameInfo("guk", "guktop", "upper guk"));
+			ZoneNames.Add(new ZoneNameInfo("halas", "halas"));
+			ZoneNames.Add(new ZoneNameInfo("plane of hate", "hateplane", "the plane of hate"));
+			ZoneNames.Add(new ZoneNameInfo("high keep", "highkeep"));
+			ZoneNames.Add(new ZoneNameInfo("highpass hold", "highpass"));
+			ZoneNames.Add(new ZoneNameInfo("halls of honor", "hohonora"));
+			ZoneNames.Add(new ZoneNameInfo("temple of marr", "hohonorb"));
+			ZoneNames.Add(new ZoneNameInfo("the hole", "hole"));
+			ZoneNames.Add(new ZoneNameInfo("hollowshade moor", "hollowshade"));
+			ZoneNames.Add(new ZoneNameInfo("iceclad ocean", "iceclad"));
+			ZoneNames.Add(new ZoneNameInfo("innothule swamp", "innothule"));
+			ZoneNames.Add(new ZoneNameInfo("jaggedpine forest", "jaggedpine"));
+			ZoneNames.Add(new ZoneNameInfo("kael drakkel", "kael"));
+			ZoneNames.Add(new ZoneNameInfo("kaesora", "kaesora"));
+			ZoneNames.Add(new ZoneNameInfo("south kaladim", "kaladima", "kaladim"));
+			ZoneNames.Add(new ZoneNameInfo("north kaladim", "kaladimb", "kaladim"));
+			ZoneNames.Add(new ZoneNameInfo("karnor's castle", "karnor"));
+			ZoneNames.Add(new ZoneNameInfo("katta castellum", "katta"));
+			ZoneNames.Add(new ZoneNameInfo("kedge keep", "kedge"));
+			ZoneNames.Add(new ZoneNameInfo("kerra isle", "kerraridge"));
+			ZoneNames.Add(new ZoneNameInfo("kithicor forest", "kithicor"));
+			ZoneNames.Add(new ZoneNameInfo("kurn's tower", "kurn"));
+			ZoneNames.Add(new ZoneNameInfo("lake of ill omen", "lakeofillomen"));
+			ZoneNames.Add(new ZoneNameInfo("lake rathetear", "lakerathe"));
+			ZoneNames.Add(new ZoneNameInfo("lavastorm mountains", "lavastorm"));
+			ZoneNames.Add(new ZoneNameInfo("mons letalis", "letalis"));
+			ZoneNames.Add(new ZoneNameInfo("lesser faydark", "lfaydark"));
+			ZoneNames.Add(new ZoneNameInfo("loading zone", "load"));
+			ZoneNames.Add(new ZoneNameInfo("new loading zone", "load2"));
+			ZoneNames.Add(new ZoneNameInfo("the maiden's eye", "maiden"));
+			ZoneNames.Add(new ZoneNameInfo("plane of mischief", "mischiefplane"));
+			ZoneNames.Add(new ZoneNameInfo("castle of mistmoore", "mistmoore", "castle mistmoore"));
+			ZoneNames.Add(new ZoneNameInfo("misty thicket", "misty"));
+			ZoneNames.Add(new ZoneNameInfo("marus seru", "mseru"));
+			ZoneNames.Add(new ZoneNameInfo("najena", "najena"));
+			ZoneNames.Add(new ZoneNameInfo("dragon necropolis", "necropolis"));
+			ZoneNames.Add(new ZoneNameInfo("nektropos", "nektropos"));
+			ZoneNames.Add(new ZoneNameInfo("neriak - foreign quarter", "neriaka", "neriak foreign quarter"));
+			ZoneNames.Add(new ZoneNameInfo("neriak - commons", "neriakb", "neriak commons"));
+			ZoneNames.Add(new ZoneNameInfo("neriak - 3rd gate", "neriakc", "neriak third gate"));
+			ZoneNames.Add(new ZoneNameInfo("neriak palace", "neriakd"));
+			ZoneNames.Add(new ZoneNameInfo("netherbian lair", "netherbian"));
+			ZoneNames.Add(new ZoneNameInfo("nexus", "nexus"));
+			ZoneNames.Add(new ZoneNameInfo("the lair of terris thule", "nightmareb"));
+			ZoneNames.Add(new ZoneNameInfo("northern plains of karana", "northkarana", "north karana"));
+			ZoneNames.Add(new ZoneNameInfo("northern desert of ro", "nro", "north ro"));
+			ZoneNames.Add(new ZoneNameInfo("mines of nurga", "nurga"));
+			ZoneNames.Add(new ZoneNameInfo("oasis of marr", "oasis"));
+			ZoneNames.Add(new ZoneNameInfo("oggok", "oggok"));
+			ZoneNames.Add(new ZoneNameInfo("ocean of tears", "oot"));
+			ZoneNames.Add(new ZoneNameInfo("the overthere", "overthere"));
+			ZoneNames.Add(new ZoneNameInfo("paineel", "paineel"));
+			ZoneNames.Add(new ZoneNameInfo("the paludal caverns", "paludal"));
+			ZoneNames.Add(new ZoneNameInfo("lair of the splitpaw", "paw", "infected paw"));
+			ZoneNames.Add(new ZoneNameInfo("permafrost caverns", "permafrost", "permafrost keep"));
+			ZoneNames.Add(new ZoneNameInfo("plane of air", "poair"));
+			ZoneNames.Add(new ZoneNameInfo("plane of disease", "podisease"));
+			ZoneNames.Add(new ZoneNameInfo("plane of earth", "poeartha"));
+			ZoneNames.Add(new ZoneNameInfo("plane of earth", "poearthb"));
+			ZoneNames.Add(new ZoneNameInfo("plane of fire", "pofire"));
+			ZoneNames.Add(new ZoneNameInfo("plane of innovation", "poinnovation"));
+			ZoneNames.Add(new ZoneNameInfo("plane of justice", "pojustice"));
+			ZoneNames.Add(new ZoneNameInfo("plane of knowledge", "poknowledge"));
+			ZoneNames.Add(new ZoneNameInfo("plane of nightmares", "ponightmare"));
+			ZoneNames.Add(new ZoneNameInfo("plane of storms", "postorms"));
+			ZoneNames.Add(new ZoneNameInfo("drunder, the fortress of zek", "potactics"));
+			ZoneNames.Add(new ZoneNameInfo("plane of time", "potimea"));
+			ZoneNames.Add(new ZoneNameInfo("plane of time", "potimeb"));
+			ZoneNames.Add(new ZoneNameInfo("torment, the plane of pain", "potorment"));
+			ZoneNames.Add(new ZoneNameInfo("plane of tranquility", "potranquility"));
+			ZoneNames.Add(new ZoneNameInfo("plane of valor", "povalor"));
+			ZoneNames.Add(new ZoneNameInfo("plane of war", "powar"));
+			ZoneNames.Add(new ZoneNameInfo("plane of water", "powater"));
+			ZoneNames.Add(new ZoneNameInfo("qeynos aqueduct system", "qcat", "qeynos catacombs"));
+			ZoneNames.Add(new ZoneNameInfo("western plains of karana", "qey2hh1", "west karana"));
+			ZoneNames.Add(new ZoneNameInfo("south qeynos", "qeynos"));
+			ZoneNames.Add(new ZoneNameInfo("north qeynos", "qeynos2"));
+			ZoneNames.Add(new ZoneNameInfo("qeynos hills", "qeytoqrg"));
+			ZoneNames.Add(new ZoneNameInfo("surefall glade", "qrg"));
+			ZoneNames.Add(new ZoneNameInfo("rathe mountains", "rathemtn", "moutains of rathe"));
+			ZoneNames.Add(new ZoneNameInfo("rivervale", "rivervale"));
+			ZoneNames.Add(new ZoneNameInfo("runnyeye", "runnyeye", "clan runnyeye"));
+			ZoneNames.Add(new ZoneNameInfo("scarlet desert", "scarlet"));
+			ZoneNames.Add(new ZoneNameInfo("ruins of sebilis", "sebilis", "old sebilis"));
+			ZoneNames.Add(new ZoneNameInfo("shadeweaver's thicket", "shadeweaver"));
+			ZoneNames.Add(new ZoneNameInfo("shadow haven", "shadowhaven"));
+			ZoneNames.Add(new ZoneNameInfo("the city of shar vahl", "sharvahl"));
+			ZoneNames.Add(new ZoneNameInfo("siren's grotto", "sirens"));
+			ZoneNames.Add(new ZoneNameInfo("skyfire mountains", "skyfire"));
+			ZoneNames.Add(new ZoneNameInfo("skyshrine", "skyshrine"));
+			ZoneNames.Add(new ZoneNameInfo("sleeper's tomb", "sleeper"));
+			ZoneNames.Add(new ZoneNameInfo("solusek's eye", "soldunga"));
+			ZoneNames.Add(new ZoneNameInfo("nagafen's lair", "soldungb"));
+			ZoneNames.Add(new ZoneNameInfo("tower of solusek ro", "solrotower"));
+			ZoneNames.Add(new ZoneNameInfo("temple of solusek ro", "soltemple"));
+			ZoneNames.Add(new ZoneNameInfo("southern plains of karana", "southkarana", "south karana"));
+			ZoneNames.Add(new ZoneNameInfo("southern desert of ro", "sro", "south ro"));
+			ZoneNames.Add(new ZoneNameInfo("sanctus seru", "sseru"));
+			ZoneNames.Add(new ZoneNameInfo("ssraeshza temple", "ssratemple"));
+			ZoneNames.Add(new ZoneNameInfo("steamfont mountains", "steamfont"));
+			ZoneNames.Add(new ZoneNameInfo("stonebrunt mountains", "stonebrunt"));
+			ZoneNames.Add(new ZoneNameInfo("swamp of no hope", "swampofnohope"));
+			ZoneNames.Add(new ZoneNameInfo("temple of veeshan", "templeveeshan"));
+			ZoneNames.Add(new ZoneNameInfo("the tenebrous mountains", "tenebrous"));
+			ZoneNames.Add(new ZoneNameInfo("the deep", "thedeep"));
+			ZoneNames.Add(new ZoneNameInfo("the grey", "thegrey"));
+			ZoneNames.Add(new ZoneNameInfo("the city of thurgadin", "thurgadina"));
+			ZoneNames.Add(new ZoneNameInfo("icewell keep", "thurgadinb"));
+			ZoneNames.Add(new ZoneNameInfo("timorous deep", "timorous"));
+			ZoneNames.Add(new ZoneNameInfo("toxxulia forest", "tox"));
+			ZoneNames.Add(new ZoneNameInfo("trakanon's teeth", "trakanon"));
+			ZoneNames.Add(new ZoneNameInfo("everquest tutorial", "tutorial"));
+			ZoneNames.Add(new ZoneNameInfo("twilight", "twilight"));
+			ZoneNames.Add(new ZoneNameInfo("the umbral plains", "umbral"));
+			ZoneNames.Add(new ZoneNameInfo("the estate of unrest", "unrest", "estate of unrest"));
+			ZoneNames.Add(new ZoneNameInfo("veeshan's peak", "veeshan"));
+			ZoneNames.Add(new ZoneNameInfo("veksar", "veksar"));
+			ZoneNames.Add(new ZoneNameInfo("velketor's labyrinth", "velketor"));
+			ZoneNames.Add(new ZoneNameInfo("vex thal", "vexthal"));
+			ZoneNames.Add(new ZoneNameInfo("the wakening land", "wakening"));
+			ZoneNames.Add(new ZoneNameInfo("the warrens", "warrens"));
+			ZoneNames.Add(new ZoneNameInfo("warsliks woods", "warslikswood", "warsliks wood"));
+			ZoneNames.Add(new ZoneNameInfo("western wastes", "westwastes"));
+			ZoneNames.Add(new ZoneNameInfo("nektulos forest", "nektulos"));
+			ZoneNames.Add(new ZoneNameInfo("the bazaar", "bazaar"));
+			ZoneNames.Add(new ZoneNameInfo("shard of decay", "sodecay", null, null, "codecay"));
+			ZoneNames.Add(new ZoneNameInfo("nagafen's lair (instanced)", "soldungb_tryout", null, null, "soldungb"));
+			ZoneNames.Add(new ZoneNameInfo("permafrost caverns (instanced)", "perma_tryout", null, null, "permafrost"));
+			ZoneNames.Add(new ZoneNameInfo("kedge keep (instanced)", "kedge_tryout", null, null, "kedge"));
+			ZoneNames.Add(new ZoneNameInfo("domain of frost", "myriah", null, null, "halas"));
+			ZoneNames.Add(new ZoneNameInfo("trial of fire and ice (instanced)", "fireice", null, null, "arena"));
+			ZoneNames.Add(new ZoneNameInfo("plane of hate (instanced)", "hate_instanced", null, null, "hateplane"));
+			ZoneNames.Add(new ZoneNameInfo("plane of fear (instanced)", "fear_instanced", null, null, "fearplane"));
+			ZoneNames.Add(new ZoneNameInfo("plane of sky (instanced)", "air_instanced", null, null, "airplane"));
+			ZoneNames.Add(new ZoneNameInfo("oops, all icebones!", "towerfrost", null, null, "kurn"));
+			ZoneNames.Add(new ZoneNameInfo("the hole (instanced)", "hole_instanced", null, null, "hole"));
+			ZoneNames.Add(new ZoneNameInfo("sunset home", "cshome2", null, null, "cshome"));
+			ZoneNames.Add(new ZoneNameInfo("house of mischief", "mischiefhouse", null, null, "mischiefplane"));
+			ZoneNames.Add(new ZoneNameInfo("bloodied kithicor", "kithicor_alt", null, null, "kithicor"));
+			ZoneNames.Add(new ZoneNameInfo("bloodied rivervale (instanced)", "rivervale_alt", null, null, "rivervale"));
+			#endregion
 
-            ZoneNameMapper.Add("ocean of tears", "oot");
-            ZoneNameMapper.Add("northern plains of karana", "northkarana");
-            ZoneNameMapper.Add("skyshrine", "skyshrine");
-            ZoneNameMapper.Add("the nektulos forest", "nektulos");
-            ZoneNameMapper.Add("sleepers tomb", "sleeper");
-            ZoneNameMapper.Add("erudin", "erudnext");
-            ZoneNameMapper.Add("kedge keep", "kedge");
-            ZoneNameMapper.Add("kedge keep (instanced)", "kedge_tryout");
-            ZoneNameMapper.Add("ak'anon", "akanon");
-            ZoneNameMapper.Add("warsliks woods", "warslikswood");
-            ZoneNameMapper.Add("castle mistmoore", "mistmoore");
-            ZoneNameMapper.Add("castle of mistmoore", "mistmoore");
-            ZoneNameMapper.Add("high keep", "highkeep");
-            ZoneNameMapper.Add("highpass hold", "highpass");
-            ZoneNameMapper.Add("qeynos aqueduct system", "qcat");
-            ZoneNameMapper.Add("lake of ill omen", "lakeofillomen");
-            ZoneNameMapper.Add("kael drakkel", "kael");
-            ZoneNameMapper.Add("tower of frozen shadow", "frozenshadow");
-            ZoneNameMapper.Add("icewell keep", "thurgadinb");
-            ZoneNameMapper.Add("the feerrott", "feerrott");
-            ZoneNameMapper.Add("ruins of sebilis", "sebilis");
-            ZoneNameMapper.Add("old sebilis", "sebilis");
-            ZoneNameMapper.Add("east commonlands", "ecommons");
-            ZoneNameMapper.Add("cabilis east", "cabeast");
-            ZoneNameMapper.Add("veeshan's peak", "veeshan");
-            ZoneNameMapper.Add("surefall glade", "qrg");
-            ZoneNameMapper.Add("innothule swamp", "innothule");
-            ZoneNameMapper.Add("halas", "halas");
-			ZoneNameMapper.Add("domain of frost", "myriah");
-			ZoneNameMapper.Add("solusek's eye", "soldunga");
-            ZoneNameMapper.Add("the estate of unrest", "unrest");
-            ZoneNameMapper.Add("blackburrow", "blackburrow");
-            ZoneNameMapper.Add("gorge of king xorbb", "beholder");
-            ZoneNameMapper.Add("plane of hate", "hateplane");
-            ZoneNameMapper.Add("plane of hate (instanced)", "hate_instanced");
-			ZoneNameMapper.Add("plane of sky", "airplane");
-			ZoneNameMapper.Add("plane of sky (instanced)", "air_instanced");
-			ZoneNameMapper.Add("west commonlands", "commons");
-            ZoneNameMapper.Add("north qeynos", "qeynos2");
-            ZoneNameMapper.Add("cobalt scar", "cobaltscar");
-            ZoneNameMapper.Add("befallen", "befallen");
-            ZoneNameMapper.Add("paineel", "paineel");
-            ZoneNameMapper.Add("north freeport", "freportn");
-            ZoneNameMapper.Add("nagafen's lair", "soldungb");
-            ZoneNameMapper.Add("nagafen's lair (instanced)", "soldungb_tryout");
-            ZoneNameMapper.Add("runnyeye citadel", "runnyeye");
-            ZoneNameMapper.Add("frontier mountains", "frontiermtns");
-            ZoneNameMapper.Add("the city of mist", "citymist");
-            ZoneNameMapper.Add("west freeport", "freportw");
-            ZoneNameMapper.Add("butcherblock mountains", "butcher");
-            ZoneNameMapper.Add("permafrost caverns", "permafrost");
-            ZoneNameMapper.Add("permafrost caverns (instanced)", "perma_tryout");
-            ZoneNameMapper.Add("the hole", "hole");
-			ZoneNameMapper.Add("the hole (instanced)", "hole_instanced");
-			ZoneNameMapper.Add("qeynos hills", "qeytoqrg");
-            ZoneNameMapper.Add("the arena", "arena");
-            ZoneNameMapper.Add("lavastorm mountains", "lavastorm");
-            ZoneNameMapper.Add("plane of growth", "growthplane");
-            ZoneNameMapper.Add("misty thicket", "misty");
-            ZoneNameMapper.Add("city of thurgadin", "thurgadina");
-            ZoneNameMapper.Add("northern desert of ro", "nro");
-            ZoneNameMapper.Add("neriak foreign quarter", "neriaka");
-            ZoneNameMapper.Add("neriak - foreign quarter", "neriaka");
-            ZoneNameMapper.Add("infected paw", "paw");
-            ZoneNameMapper.Add("lair of the splitpaw", "paw");
-            ZoneNameMapper.Add("southern felwithe", "felwitheb");
-            ZoneNameMapper.Add("velketor's labyrinth", "velketor");
-            ZoneNameMapper.Add("cabilis west", "cabwest");
-            ZoneNameMapper.Add("lake rathetear", "lakerathe");
-            ZoneNameMapper.Add("kurn's tower", "kurn");
-			ZoneNameMapper.Add("oops, all icebones!", "towerfrost");
-			ZoneNameMapper.Add("dagnor's cauldron", "cauldron");
-            ZoneNameMapper.Add("western wastes", "westwastes");
-            ZoneNameMapper.Add("temple of veeshan", "templeveeshan");
-            ZoneNameMapper.Add("lesser faydark", "lfaydark");
-            ZoneNameMapper.Add("everfrost", "everfrost");
-            ZoneNameMapper.Add("trakanon's teeth", "trakanon");
-            ZoneNameMapper.Add("eastern plains of karana", "eastkarana");
-            ZoneNameMapper.Add("north kaladim", "kaladimb");
-            ZoneNameMapper.Add("dreadlands", "dreadlands");
-            ZoneNameMapper.Add("south qeynos", "qeynos");
-            ZoneNameMapper.Add("plane of fear", "fearplane");
-            ZoneNameMapper.Add("plane of fear (instanced)", "fear_instanced");
-            ZoneNameMapper.Add("rathe mountains", "rathemtn");
-            ZoneNameMapper.Add("the wakening lands", "wakening");
-            ZoneNameMapper.Add("southern desert of ro", "sro");
-            ZoneNameMapper.Add("the burning wood", "burningwood");
-            ZoneNameMapper.Add("greater faydark", "gfaydark");
-            ZoneNameMapper.Add("dragon necropolis", "necropolis");
-            ZoneNameMapper.Add("guk", "guktop");
-            ZoneNameMapper.Add("the overthere", "overthere");
-            ZoneNameMapper.Add("eastern wastelands", "eastwastes");
-            ZoneNameMapper.Add("field of bone", "fieldofbone");
-            ZoneNameMapper.Add("neriak third gate", "neriakc");
-            ZoneNameMapper.Add("neriak - 3rd gate", "neriakc");
-            ZoneNameMapper.Add("erud's crossing", "erudsxing");
-            ZoneNameMapper.Add("northern felwithe", "felwithea");
-            ZoneNameMapper.Add("firiona vie", "firiona");
-            ZoneNameMapper.Add("east freeport", "freporte");
-            ZoneNameMapper.Add("swamp of no hope", "swampofnohope");
-            ZoneNameMapper.Add("timorous deep", "timorous");
-            ZoneNameMapper.Add("dalnir", "dalnir");
-            ZoneNameMapper.Add("southern plains of karana", "southkarana");
-            ZoneNameMapper.Add("western plains of karana", "qey2hh1");
-            ZoneNameMapper.Add("skyfire mountains", "skyfire");
-            ZoneNameMapper.Add("mines of nurga", "nurga");
-            ZoneNameMapper.Add("oasis of marr", "oasis");
-            ZoneNameMapper.Add("the emerald jungle", "emeraldjungle");
-            ZoneNameMapper.Add("great divide", "greatdivide");
-            ZoneNameMapper.Add("sirens grotto", "sirens");
-            ZoneNameMapper.Add("erudin palace", "erudnint");
-            ZoneNameMapper.Add("toxxulia forest", "tox");
-            ZoneNameMapper.Add("ruins of old guk", "gukbottom");
-            ZoneNameMapper.Add("steamfont mountains", "steamfont");
-            ZoneNameMapper.Add("south kaladim", "kaladima");
-            ZoneNameMapper.Add("najena", "najena");
-            ZoneNameMapper.Add("stonebrunt mountains", "stonebrunt");
-            ZoneNameMapper.Add("howling stones", "charasis");
-            ZoneNameMapper.Add("kerra isle", "kerraridge");
-            ZoneNameMapper.Add("lost temple of cazic-thule", "cazicthule");
-            ZoneNameMapper.Add("lost temple of cazicthule", "cazicthule");
-            ZoneNameMapper.Add("neriak - commons", "neriakb");
-            ZoneNameMapper.Add("neriak commons", "neriakb");
-            ZoneNameMapper.Add("karnor's castle", "karnor");
-            ZoneNameMapper.Add("crystal caverns", "crystal");
-            ZoneNameMapper.Add("iceclad ocean", "iceclad");
-            ZoneNameMapper.Add("warrens", "warrens");
-            ZoneNameMapper.Add("oggok", "oggok");
-            ZoneNameMapper.Add("grobb", "grobb");
-            ZoneNameMapper.Add("rivervale", "rivervale");
-            ZoneNameMapper.Add("plane of mischief", "mischiefplane");
-            ZoneNameMapper.Add("kaesora", "kaesora");
-            ZoneNameMapper.Add("temple of droga", "droga");
-            ZoneNameMapper.Add("crushbone", "crushbone");
-            ZoneNameMapper.Add("chardok", "chardok");
-            ZoneNameMapper.Add("kithicor woods", "kithicor");
-            ZoneNameMapper.Add("temple of solusek ro", "soltemple");
-            Zones = ZoneInfoMap.Keys.ToList();
-        }
+			Zones = ZoneNames.Select(a => a.MapName.ToLower()).ToList();
+		}
 
-        public static readonly List<string> Zones;
+		public static readonly List<string> Zones;
         public static string TranslateToMapName(string name)
         {
             name = name?.ToLower()?.Trim();
@@ -2218,18 +2249,60 @@ namespace EQToolShared.Map
                 return string.Empty;
             }
 
-            if (ZoneWhoMapper.TryGetValue(name, out var n))
-            {
-                name = n;
-            }
+			if(ZoneNames.Select(a => a.MapName).Contains(name))
+			{
+				return name;
+			}
 
-            if (ZoneNameMapper.TryGetValue(name, out n))
-            {
-                name = n;
-            }
+			if(ZoneNames.Select(a => a.WhoName).Contains(name))
+			{
+				//if(ZoneNames.Where(a => a.WhoName == name).Count() > 1)
+				//{
+					
+				//}
+				name = ZoneNames.First(a => a.WhoName == name).MapName;
+			}
+			else if (ZoneNames.Select(a => a.EnterName).Contains(name))
+			{
+				name = ZoneNames.First(a => a.EnterName == name).MapName;
+			}
 
             return Zones.Any(a => a == name) ? name : string.Empty;
         }
+	public static bool CheckWhoAgainstPreviousZone(string message, string name, string lastZone)
+	{
+		string messageZone = string.Empty;
+		if (message.StartsWith(Therearenoplayers) || message.StartsWith(Youhaveenteredareapvp) || message.StartsWith(Youhaveentered))
+		{
+			return false;
+		}
+		else if (message.StartsWith(ThereAre) || message.StartsWith(ThereIs))
+		{
+			message = message.Replace(ThereAre, string.Empty).Replace(ThereIs, string.Empty).Trim();
+			var inindex = message.IndexOf(spaceinspace);
+			if (inindex != -1)
+			{
+				message = message.Substring(inindex + spaceinspace.Length).Trim().TrimEnd('.').ToLower();
+				if (message != "everquest")
+				{
+					messageZone = message;
+				}
+			}
+		}
+		if(string.IsNullOrWhiteSpace(messageZone))
+		{
+			return false;
+		}
+		else
+		{
+			if(ZoneNames.Select(a => a.WhoName).Count() > 1)
+			{
+				messageZone = ZoneNames.First(a => a.WhoName == messageZone && (a.MapName == lastZone || a.EnterName == lastZone)).MapName;
+			}
+		}
+
+		return !string.IsNullOrWhiteSpace(messageZone);
+	}
 
         public static string Match(string message)
         {
@@ -2243,9 +2316,9 @@ namespace EQToolShared.Map
                 message = message.Replace(Youhaveentered, string.Empty).Trim().TrimEnd('.').ToLower();
                 return message;
             }
-            else if (message.StartsWith(Thereare))
+            else if (message.StartsWith(ThereAre))
             {
-                message = message.Replace(Thereare, string.Empty).Trim();
+                message = message.Replace(ThereAre, string.Empty).Trim();
                 var inindex = message.IndexOf(spaceinspace);
                 if (inindex != -1)
                 {
@@ -2256,9 +2329,9 @@ namespace EQToolShared.Map
                     }
                 }
             }
-            else if (message.StartsWith(Thereis))
+            else if (message.StartsWith(ThereIs))
             {
-                message = message.Replace(Thereis, string.Empty).Trim();
+                message = message.Replace(ThereIs, string.Empty).Trim();
                 var inindex = message.IndexOf(spaceinspace);
                 if (inindex != -1)
                 {

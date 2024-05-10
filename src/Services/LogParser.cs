@@ -468,7 +468,7 @@ namespace EQTool.Services
                     var b4matchedzone = matchedzone;
 
 					if (!string.IsNullOrWhiteSpace(_activePlayer.Player?.LastZoneEntered) 
-						&& ZoneSwapper.GetSwappedZoneName(_activePlayer.Player?.LastZoneEntered) == b4matchedzone)
+						&& ZoneParser.CheckWhoAgainstPreviousZone(message, matchedzone, _activePlayer.Player?.LastZoneEntered))
 					{
 						matchedzone = _activePlayer.Player?.LastZoneEntered;
 					}

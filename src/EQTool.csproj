@@ -480,7 +480,6 @@
     <Compile Include="Services\Spells\Log\SpellWornOffLogParse.cs" />
     <Compile Include="Services\Spells\SpellUIExtentions.cs" />
     <Compile Include="Services\PigParseApi.cs" />
-    <Compile Include="Services\WikiApi.cs" />
     <Compile Include="Services\WindowBounds.cs" />
     <Compile Include="Services\LogParser.cs" />
     <Compile Include="Services\Spells\Log\LogCustomTimer.cs" />
