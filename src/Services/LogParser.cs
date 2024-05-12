@@ -148,6 +148,7 @@ namespace EQTool.Services
         public class DeadEventArgs : EventArgs
         {
             public string Name { get; set; }
+			public DateTime ExecutionTime { get; set; }
         }
 
         public class ConEventArgs : EventArgs
@@ -318,7 +319,7 @@ namespace EQTool.Services
                 var name = _logDeathParse.GetDeadTarget(message);
                 if (!string.IsNullOrWhiteSpace(name))
                 {
-                    DeadEvent?.Invoke(this, new DeadEventArgs { Name = name });
+                    DeadEvent?.Invoke(this, new DeadEventArgs { Name = name, ExecutionTime = timestamp });
                     return;
                 }
 

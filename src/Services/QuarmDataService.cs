@@ -233,10 +233,14 @@ namespace EQTool.Services
 					if (timer.RespawnTimer >= QuarmRules.GetRespawnReductionDungeonHigherBoundMin() && timer.RespawnTimer <= QuarmRules.GetRespawnReductionDungeonHigherBoundMax())
 					{
 						timer.RespawnTimer = QuarmRules.GetRespawnReductionDungeonHigherBound();
+						timer.Min_RespawnTimer = QuarmRules.GetRespawnReductionDungeonHigherBound();
+						timer.Max_RespawnTimer = QuarmRules.GetRespawnReductionDungeonHigherBound();
 					}
 					else if (timer.RespawnTimer >= QuarmRules.GetRespawnReductionDungeonLowerBoundMin() && timer.RespawnTimer <= QuarmRules.GetRespawnReductionDungeonLowerBoundMax())
 					{
 						timer.RespawnTimer = QuarmRules.GetRespawnReductionDungeonLowerBound();
+						timer.Min_RespawnTimer = QuarmRules.GetRespawnReductionDungeonLowerBound();
+						timer.Max_RespawnTimer = QuarmRules.GetRespawnReductionDungeonLowerBound();
 					}
 				}
 				else
@@ -247,10 +251,14 @@ namespace EQTool.Services
 						if (timer.RespawnTimer >= QuarmRules.GetRespawnReductionHigherBoundMin() && timer.RespawnTimer <= QuarmRules.GetRespawnReductionHigherBoundMax())
 						{
 							timer.RespawnTimer = QuarmRules.GetRespawnReductionHigherBound();
+							timer.Min_RespawnTimer = QuarmRules.GetRespawnReductionHigherBound();
+							timer.Max_RespawnTimer = QuarmRules.GetRespawnReductionHigherBound();
 						}
 						else if (timer.RespawnTimer >= QuarmRules.GetRespawnReductionLowerBoundMin() && timer.RespawnTimer <= QuarmRules.GetRespawnReductionLowerBoundMax())
 						{
 							timer.RespawnTimer = QuarmRules.GetRespawnReductionLowerBound();
+							timer.Min_RespawnTimer = QuarmRules.GetRespawnReductionLowerBound();
+							timer.Max_RespawnTimer = QuarmRules.GetRespawnReductionLowerBound();
 						}
 					}
 				}

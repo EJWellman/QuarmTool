@@ -33,6 +33,7 @@ namespace EQTool.ViewModels
 		public SpellIcon SpellIcon { get; set; }
 
         public DateTime UpdatedDateTime { get; set; }
+		public DateTime ExecutionTime { get; set; }
 
 		private TimeSpan _NegativeDurationToShow;
 
@@ -51,7 +52,14 @@ namespace EQTool.ViewModels
 			set
 			{
 				_MaxTimerEndDateTime = value;
-				NegativeSecondsOnSpell = (int)(_MaxTimerEndDateTime - DateTime.Now).TotalSeconds;
+				if(ExecutionTime == null)
+				{
+					NegativeSecondsOnSpell = (int)(_MaxTimerEndDateTime - DateTime.Now).TotalSeconds;
+				}
+				else
+				{
+					NegativeSecondsOnSpell = (int)(_MaxTimerEndDateTime - ExecutionTime).TotalSeconds;
+				}
 				UpdateTimeLeft();
 			}
 		}
@@ -63,19 +71,30 @@ namespace EQTool.ViewModels
             set
             {
                 _TimerEndDateTime = value;
-                TotalSecondsOnSpell = (int)(_TimerEndDateTime - DateTime.Now).TotalSeconds;
-                UpdateTimeLeft();
+				if (ExecutionTime == null)
+				{
+					TotalSecondsOnSpell = (int)(_TimerEndDateTime - DateTime.Now).TotalSeconds;
+				}
+				else
+				{
+					TotalSecondsOnSpell = (int)(_TimerEndDateTime - ExecutionTime).TotalSeconds;
+				}
+				UpdateTimeLeft();
             }
         }
 
         public void UpdateTimeLeft()
-        {
-            _SecondsLeftOnSpell = TimerEndDateTime - DateTime.Now;
+		{
+			_SecondsLeftOnSpell = TimerEndDateTime - DateTime.Now;
 			_NegativeDurationToShow = MaxTimerEndDateTime - DateTime.Now;
             if (TotalSecondsOnSpell > 0)
             {
                 PercentLeftOnSpell = (int)(_SecondsLeftOnSpell.TotalSeconds / TotalSecondsOnSpell * 100);
             }
+			if(_SecondsLeftOnSpell.TotalSeconds < 0)
+			{
+				PercentLeftOnSpell = (int)(_NegativeDurationToShow.TotalSeconds / NegativeSecondsOnSpell * 100);
+			}
 			OnPropertyChanged(nameof(NegativeSecondsOnSpell));
             OnPropertyChanged(nameof(SecondsLeftOnSpell));
             OnPropertyChanged(nameof(SecondsLeftOnSpellPretty));
@@ -251,7 +270,7 @@ namespace EQTool.ViewModels
                 {
                     st += _SecondsLeftOnSpell.Hours + "h ";
                 }
-				else if (_SecondsLeftOnSpell.Hours < 0)
+				else if (_SecondsLeftOnSpell.Hours <= 0 && _SecondsLeftOnSpell.Seconds <= 0 && _NegativeDurationToShow.Hours > 0)
 				{
 					st += "-" + _NegativeDurationToShow.Hours + "h ";
 				}
@@ -259,7 +278,7 @@ namespace EQTool.ViewModels
                 {
                     st += _SecondsLeftOnSpell.Minutes + "m ";
                 }
-				else if (_SecondsLeftOnSpell.Minutes < 0)
+				else if (_SecondsLeftOnSpell.Minutes <= 0 && _SecondsLeftOnSpell.Seconds <= 0 && _NegativeDurationToShow.Minutes > 0)
 				{
 					st += "-" + _NegativeDurationToShow.Minutes + "m ";
 				}
@@ -267,7 +286,7 @@ namespace EQTool.ViewModels
                 {
                     st += _SecondsLeftOnSpell.Seconds + "s";
                 }
-				else if (_SecondsLeftOnSpell.Seconds < 0)
+				else if (_SecondsLeftOnSpell.Seconds <= 0 && _SecondsLeftOnSpell.Seconds <= 0 && _NegativeDurationToShow.Seconds > 0)
 				{
 					st += "-" + _NegativeDurationToShow.Seconds + "s";
 				}

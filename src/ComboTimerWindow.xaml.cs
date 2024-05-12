@@ -164,7 +164,8 @@ namespace EQTool
 					NegativeDurationToShow = (int)(deathTimer.Max_RespawnTimer),
 					SpellNameIcon = "Disease Cloud",
 					SpellType = SpellTypes.RespawnTimer,
-					TargetName = "Death Timers"
+					TargetName = "Death Timers",
+					ExecutionTime = e.ExecutionTime
 			};
 
 				var exisitngdeathentry = comboTimerWindowViewModel.SpellList.FirstOrDefault(a => a.SpellName == add.Name && a.TargetName == "Death Timers");

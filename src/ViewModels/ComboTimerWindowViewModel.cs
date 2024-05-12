@@ -95,7 +95,11 @@ namespace EQTool.ViewModels
 					{
 						itemsToRemove.Add(item);
 					}
-					if (item.NegativeDurationToShow.TotalSeconds <= 0 && !item.PersistentSpell)
+					else if(item.MaxTimerEndDateTime != null && item.MaxTimerEndDateTime < DateTime.Now)
+					{
+						itemsToRemove.Add(item);
+					}
+					else if (item.NegativeDurationToShow.TotalSeconds <= 0 && !item.PersistentSpell)
 					{
                         itemsToRemove.Add(item);
                     }
@@ -362,10 +366,22 @@ namespace EQTool.ViewModels
                         item.TimerEndDateTime = DateTime.Now.AddSeconds(spellduration);
                     }
                 }
-
-				SpellList.Add(new UISpell(DateTime.Now.AddSeconds(spellduration), DateTime.Now.AddSeconds(negativeDuration > spellduration ? negativeDuration : spellduration), false)
+				DateTime endTime;
+				DateTime negativeEndTime;
+				if(match.ExecutionTime != null)
 				{
-					UpdatedDateTime = DateTime.Now,
+					endTime = match.ExecutionTime.AddSeconds(spellduration);
+					negativeEndTime = match.ExecutionTime.AddSeconds(negativeDuration > spellduration ? negativeDuration : spellduration);
+				}
+				else
+				{
+					endTime = DateTime.Now.AddSeconds(spellduration);
+					negativeEndTime = DateTime.Now.AddSeconds(negativeDuration > spellduration ? negativeDuration : spellduration);
+				}
+
+				SpellList.Add(new UISpell(endTime, negativeEndTime, false)
+				{
+					UpdatedDateTime = match.ExecutionTime,
                     PercentLeftOnSpell = 100,
                     SpellType = match.SpellType,
                     TargetName = match.TargetName,
@@ -376,7 +392,8 @@ namespace EQTool.ViewModels
                     GuessedSpell = false,
                     PersistentSpell = false,
                     Roll = match.Roll,
-                    RollOrder = rollorder + 1
+                    RollOrder = rollorder + 1,
+					ExecutionTime = match.ExecutionTime
                 });
             });
         }
