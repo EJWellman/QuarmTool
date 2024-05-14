@@ -25,5 +25,10 @@ namespace EQTool.Models
 			}
 		}
 		public bool IsEnabled { get; set; }
+
+		public CustomOverlay ShallowClone()
+		{
+			return (CustomOverlay)this.MemberwiseClone();
+		}
 	}
 }

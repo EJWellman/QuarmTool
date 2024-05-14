@@ -10,7 +10,7 @@ namespace EQTool.Services.Fight
 
         }
 
-        public void Log(List<EntittyDPS> entities)
+        public void Log(List<EntityDPS> entities)
         {
 
             //if (!entities.Any())

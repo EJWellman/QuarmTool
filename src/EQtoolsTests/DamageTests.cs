@@ -99,41 +99,41 @@ namespace EQToolTests
         [TestMethod]
         public void TestDPS()
         {
-            var entity = new EntittyDPS()
+            var entity = new EntityDPS()
             {
                 StartTime = DateTime.Now.AddSeconds(-20)
             };
-            entity.AddDamage(new EntittyDPS.DamagePerTime
+            entity.AddDamage(new EntityDPS.DamagePerTime
             {
                 Damage = 1,
                 TimeStamp = DateTime.Now.AddSeconds(-20)
             });
-            entity.AddDamage(new EntittyDPS.DamagePerTime
+            entity.AddDamage(new EntityDPS.DamagePerTime
             {
                 Damage = 1,
                 TimeStamp = DateTime.Now.AddSeconds(-5)
             });
-            entity.AddDamage(new EntittyDPS.DamagePerTime
+            entity.AddDamage(new EntityDPS.DamagePerTime
             {
                 Damage = 1,
                 TimeStamp = DateTime.Now.AddSeconds(-4)
             });
-            entity.AddDamage(new EntittyDPS.DamagePerTime
+            entity.AddDamage(new EntityDPS.DamagePerTime
             {
                 Damage = 1,
                 TimeStamp = DateTime.Now.AddSeconds(-3)
             });
-            entity.AddDamage(new EntittyDPS.DamagePerTime
+            entity.AddDamage(new EntityDPS.DamagePerTime
             {
                 Damage = 1,
                 TimeStamp = DateTime.Now.AddSeconds(-2)
             });
-            entity.AddDamage(new EntittyDPS.DamagePerTime
+            entity.AddDamage(new EntityDPS.DamagePerTime
             {
                 Damage = 1,
                 TimeStamp = DateTime.Now.AddSeconds(-1)
             });
-            entity.AddDamage(new EntittyDPS.DamagePerTime
+            entity.AddDamage(new EntityDPS.DamagePerTime
             {
                 Damage = 1,
                 TimeStamp = DateTime.Now.AddSeconds(10)
@@ -147,11 +147,11 @@ namespace EQToolTests
         [TestMethod]
         public void TestDPS2()
         {
-            var entity = new EntittyDPS()
+            var entity = new EntityDPS()
             {
                 StartTime = DateTime.Now.AddSeconds(-20)
             };
-            entity.AddDamage(new EntittyDPS.DamagePerTime
+            entity.AddDamage(new EntityDPS.DamagePerTime
             {
                 Damage = 44,
                 TimeStamp = DateTime.Now.AddSeconds(-1)
@@ -186,7 +186,7 @@ namespace EQToolTests
         [TestMethod]
         public void TestDPSColors()
         {
-            var r = new EntittyDPS
+            var r = new EntityDPS
             {
                 TotalDamage = 100,
                 TargetTotalDamage = 1000

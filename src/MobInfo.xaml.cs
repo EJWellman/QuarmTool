@@ -51,21 +51,6 @@ namespace EQTool
                 if (e.Name != mobInfoViewModel.Name)
                 {
 					mobInfoViewModel.NewResults = _quarmService.GetData(e.Name);
-					//mobInfoViewModel.Results = _jsonService.GetData(e.Name);
-					//var items = mobInfoViewModel.KnownLoot.Where(a => a.HaseUrl == Visibility.Visible).Select(a => a.Name?.Trim()).Where(a => !string.IsNullOrWhiteSpace(a)).ToList();
-					//if (activePlayer?.Player?.Server != null && items.Any())
-					//{
-					//    var itemprices = pigParseApi.GetData(items, activePlayer.Player.Server.Value);
-					//    foreach (var item in itemprices)
-					//    {
-					//        var loot = mobInfoViewModel.KnownLoot.FirstOrDefault(a => a.Name.Equals(item.ItemName, StringComparison.OrdinalIgnoreCase));
-					//        if (loot != null)
-					//        {
-					//            loot.Price = item.TotalWTSLast6MonthsAverage.ToString();
-					//            loot.PriceUrl = $"https://pigparse.azurewebsites.net/ItemDetails/{item.EQitemId}";
-					//        }
-					//    }
-					//}
 					FactionHitsStack.Visibility = mobInfoViewModel.HasFactionHits;
 					QuestsStack.Visibility = mobInfoViewModel.HasQuests;
 					KnownLootStack.Visibility = mobInfoViewModel.HasKnownLoot;

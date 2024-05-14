@@ -8,7 +8,7 @@ using System.Windows.Media;
 
 namespace EQTool.ViewModels
 {
-    public class EntittyDPS : INotifyPropertyChanged
+    public class EntityDPS : INotifyPropertyChanged
     {
         private string _SourceName = string.Empty;
 

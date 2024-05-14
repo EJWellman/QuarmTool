@@ -24,8 +24,8 @@ namespace EQTool.ViewModels
             this.SessionPlayerDamage = sessionPlayerDamage;
         }
 
-        public ObservableCollection<EntittyDPS> _EntityList = new ObservableCollection<EntittyDPS>();
-        public ObservableCollection<EntittyDPS> EntityList
+        public ObservableCollection<EntityDPS> _EntityList = new ObservableCollection<EntityDPS>();
+        public ObservableCollection<EntityDPS> EntityList
         {
             get => _EntityList;
             set
@@ -98,7 +98,7 @@ namespace EQTool.ViewModels
         {
             appDispatcher.DispatchUI(() =>
             {
-                var itemstormove = new List<EntittyDPS>();
+                var itemstormove = new List<EntityDPS>();
                 var now = DateTime.Now;
                 var groups = _EntityList.GroupBy(a => a.TargetName).ToList();
                 foreach (var item in _EntityList)
@@ -173,10 +173,12 @@ namespace EQTool.ViewModels
 
             appDispatcher.DispatchUI(() =>
             {
-                var item = EntityList.FirstOrDefault(a => a.SourceName == entity.SourceName && a.TargetName == entity.TargetName && !a.DeathTime.HasValue);
+                var item = EntityList.FirstOrDefault(a => a.SourceName == entity.SourceName 
+					&& a.TargetName == entity.TargetName 
+					&& !a.DeathTime.HasValue);
                 if (item == null)
                 {
-                    item = new EntittyDPS
+                    item = new EntityDPS
                     {
                         SourceName = entity.SourceName,
                         TargetName = entity.TargetName,
@@ -187,16 +189,49 @@ namespace EQTool.ViewModels
                         HighestHit = entity.DamageDone
                     };
                     EntityList.Add(item);
-                }
-                else
-                {
-                    //Debug.WriteLine($"{entity.TargetName} {entity.DamageDone}");
-                    item.AddDamage(new EntittyDPS.DamagePerTime
-                    {
-                        TimeStamp = entity.TimeStamp,
-                        Damage = entity.DamageDone
-                    });
-                }
+				}
+				else
+				{
+					//Debug.WriteLine($"{entity.TargetName} {entity.DamageDone}");
+					item.AddDamage(new EntityDPS.DamagePerTime
+					{
+						TimeStamp = entity.TimeStamp,
+						Damage = entity.DamageDone
+					});
+				}
+
+				var ownedItem = EntityList.FirstOrDefault(a => a.SourceName == entity.SourceName 
+					&& entity.SourceName == ActivePlayer.Player?.PetName 
+					&& a.TargetName == entity.TargetName 
+					&& !a.DeathTime.HasValue);
+				if (ownedItem != null)
+				{
+					var playerItem = EntityList.FirstOrDefault(a => a.SourceName == "You" 
+						&& a.TargetName == entity.TargetName 
+						&& !a.DeathTime.HasValue);
+					if (playerItem == null)
+					{
+						EntityList.Add(new EntityDPS
+						{
+							SourceName = "You",
+							TargetName = entity.TargetName,
+							StartTime = entity.TimeStamp,
+							TotalDamage = entity.DamageDone,
+							TotalTwelveSecondDamage = entity.DamageDone,
+							TrailingDamage = entity.DamageDone,
+							HighestHit = entity.DamageDone
+						});
+					}
+					else if (playerItem != null)
+					{
+						playerItem.AddDamage(new EntityDPS.DamagePerTime
+						{
+							TimeStamp = entity.TimeStamp,
+							Damage = entity.DamageDone
+						});
+					}
+					
+				}
             });
         }
 

@@ -288,6 +288,7 @@ namespace EQTool.Services
                     HasUsedStartupEnterWorld = true;
                     Debug.WriteLine("EnteredWorldEvent In Game");
                     EnteredWorldEvent?.Invoke(this, new EnteredWorldArgs());
+					//Add log lock
                     return;
                 }
 
@@ -308,6 +309,13 @@ namespace EQTool.Services
                 {
                     StartingWhoOfZone = message == "---------------------------" && StartingWhoOfZone;
                 }
+
+				var petOwner = _playerWhoLogParse.ParsePetOwner(message, _activePlayer.Player);
+				if(!string.IsNullOrWhiteSpace(petOwner) && _activePlayer.Player != null)
+				{
+					_activePlayer.Player.PetName = petOwner;
+					return;
+				}
 
                 var matched = _dpsLogParse.Match(message, timestamp);
                 if (matched != null)

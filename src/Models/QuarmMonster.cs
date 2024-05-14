@@ -22,6 +22,20 @@ namespace EQTool.Models
 		public int Level { get; set; }
 		public int MaxDmg { get; set; }
 		public int MinDmg { get; set; }
+		public int DmgBonus
+		{
+			get
+			{
+				if (MinDmg > MaxDmg)
+					return MinDmg;
+
+				int di1k = ((MaxDmg - MinDmg) * 1000) / 19;       // multiply damage interval by 1000 to avoid using floats
+				di1k = (di1k + 50) / 100 * 100;                   // round DI to nearest tenth of a point
+				int db = MaxDmg * 1000 - di1k * 20;
+
+				return db / 1000;
+			}
+		}
 		public int IsQuestNPC { get; set; }
 		public int MaxLevel { get; set; }
 		public float RunSpeed { get; set; }

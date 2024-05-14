@@ -231,6 +231,17 @@ namespace EQTool.Models
             }
         }
 
+		private string _petName;
+		public string PetName
+		{
+			get => _petName;
+			set
+			{
+				_petName = value;
+				OnPropertyChanged();
+			}
+		}
+
         private PlayerClasses? _PlayerClass;
         public PlayerClasses? PlayerClass
         {

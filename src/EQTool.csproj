@@ -508,7 +508,7 @@
     <Compile Include="ViewModels\MapViewModel.cs" />
     <Compile Include="ViewModels\DPSWindowViewModel.cs" />
     <Compile Include="ViewModels\SpellWindowViewModel.cs" />
-    <Compile Include="ViewModels\EntittyDPS.cs" />
+    <Compile Include="ViewModels\EntityDPS.cs" />
     <Compile Include="ViewModels\SettingsWindowViewModel.cs" />
     <Compile Include="Models\PlayerInfo.cs" />
     <Compile Include="Models\Polygon.cs" />

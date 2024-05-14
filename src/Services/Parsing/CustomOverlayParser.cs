@@ -37,15 +37,36 @@ namespace EQTool.Services.Parsing
 			{
 				foreach(var overlay in _settings.CustomOverlays)
 				{
-					if(overlay.IsEnabled && !string.IsNullOrWhiteSpace(overlay.Trigger) 
-						&& !string.IsNullOrWhiteSpace(overlay.Message) && Regex.Matches(message, overlay.Trigger, RegexOptions.IgnoreCase).Count > 0)
+					var triggerMatches = Regex.Matches(message, overlay.Trigger, RegexOptions.IgnoreCase);
+					var altTriggerMatches = Regex.Matches(message, overlay.Alternate_Trigger, RegexOptions.IgnoreCase);
+
+					if (overlay.IsEnabled && !string.IsNullOrWhiteSpace(overlay.Trigger) 
+						&& !string.IsNullOrWhiteSpace(overlay.Message) && triggerMatches.Count > 0)
 					{
-						return overlay;
+						var retOverlay = overlay.ShallowClone();
+						if (triggerMatches[0].Groups.Count >= 1)
+						{
+							retOverlay.Message = retOverlay.Message.Replace("{0}", triggerMatches[0].Groups[1].Value);
+						}
+						if (triggerMatches[0].Groups.Count >= 2)
+						{
+							retOverlay.Message = retOverlay.Message.Replace("{1}", triggerMatches[0].Groups[2].Value);
+						}
+						return retOverlay;
 					}
 					if (overlay.IsEnabled && !string.IsNullOrWhiteSpace(overlay.Alternate_Trigger)
-						&& !string.IsNullOrWhiteSpace(overlay.Message) && Regex.Matches(message, overlay.Alternate_Trigger, RegexOptions.IgnoreCase).Count > 0)
+						&& !string.IsNullOrWhiteSpace(overlay.Message) && altTriggerMatches.Count > 0)
 					{
-						return overlay;
+						var retOverlay = overlay.ShallowClone();
+						if (altTriggerMatches[0].Groups.Count >= 1)
+						{
+							retOverlay.Message = retOverlay.Message.Replace("{0}", altTriggerMatches[0].Groups[1].Value);
+						}
+						if (altTriggerMatches[0].Groups.Count >= 2)
+						{
+							retOverlay.Message = retOverlay.Message.Replace("{1}", altTriggerMatches[0].Groups[2].Value);
+						}
+						return retOverlay;
 					}
 				}
 			}

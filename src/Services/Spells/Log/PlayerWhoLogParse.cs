@@ -1,4 +1,6 @@
-﻿using EQToolShared.Enums;
+﻿using EQTool.Models;
+using EQToolShared.Enums;
+using System;
 using System.Collections.Generic;
 
 namespace EQTool.Services.Spells.Log
@@ -97,5 +99,19 @@ namespace EQTool.Services.Spells.Log
 
             return guess;
         }
-    }
+
+		internal string ParsePetOwner(string message, PlayerInfo player)
+		{
+			string myLeaderIsPattern = " says 'My leader is ";
+			var index = message.IndexOf(myLeaderIsPattern);
+			var playerIndex = message.IndexOf(player.Name);
+			if (index == -1 || playerIndex == -1)
+			{
+				return null;
+			}
+			string petName = message.Substring(0, index);
+
+			return petName;
+		}
+	}
 }

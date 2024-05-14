@@ -28,7 +28,7 @@ namespace EQTool
             loggingService.Log(string.Empty, EventType.OpenDPS, activePlayer?.Player?.Server);
             this.logParser = logParser;
             this.dPSWindowViewModel = dPSWindowViewModel;
-            this.dPSWindowViewModel.EntityList = new System.Collections.ObjectModel.ObservableCollection<EntittyDPS>();
+            this.dPSWindowViewModel.EntityList = new System.Collections.ObjectModel.ObservableCollection<EntityDPS>();
             DataContext = dPSWindowViewModel;
             InitializeComponent();
             base.Init();
@@ -39,13 +39,13 @@ namespace EQTool
             UITimer.Enabled = true;
             DpsList.ItemsSource = dPSWindowViewModel.EntityList;
             var view = (ListCollectionView)CollectionViewSource.GetDefaultView(dPSWindowViewModel.EntityList);
-            view.GroupDescriptions.Add(new PropertyGroupDescription(nameof(EntittyDPS.TargetName)));
-            view.LiveGroupingProperties.Add(nameof(EntittyDPS.TargetName));
+            view.GroupDescriptions.Add(new PropertyGroupDescription(nameof(EntityDPS.TargetName)));
+            view.LiveGroupingProperties.Add(nameof(EntityDPS.TargetName));
             view.IsLiveGrouping = true;
-            view.SortDescriptions.Add(new SortDescription(nameof(EntittyDPS.TargetName), ListSortDirection.Ascending));
-            view.SortDescriptions.Add(new SortDescription(nameof(EntittyDPS.TotalDamage), ListSortDirection.Descending));
+            view.SortDescriptions.Add(new SortDescription(nameof(EntityDPS.TargetName), ListSortDirection.Ascending));
+            view.SortDescriptions.Add(new SortDescription(nameof(EntityDPS.TotalDamage), ListSortDirection.Descending));
             view.IsLiveSorting = true;
-            view.LiveSortingProperties.Add(nameof(EntittyDPS.TotalDamage));
+            view.LiveSortingProperties.Add(nameof(EntityDPS.TotalDamage));
         }
 
         private void LogParser_FightHitEvent(object sender, LogParser.FightHitEventArgs e)

@@ -650,128 +650,6 @@ namespace EQTool.ViewModels
 			return Regex.Replace(input, "<.*?>", string.Empty);
 		}
 
-		/*
-        private void Parse()
-        {
-            if (string.IsNullOrWhiteSpace(Results))
-            {
-                return;
-            }
-            var spec = Specials.ToList();
-            foreach (var item in spec)
-            {
-                _ = Specials.Remove(item);
-            }
-            var knownLoot = KnownLoot.ToList();
-            foreach (var item in knownLoot)
-            {
-                _ = KnownLoot.Remove(item);
-            }
-            spec = Factions.ToList();
-            foreach (var item in spec)
-            {
-                _ = Factions.Remove(item);
-            }
-            spec = OpposingFactions.ToList();
-            foreach (var item in spec)
-            {
-                _ = OpposingFactions.Remove(item);
-            }
-            spec = _RelatedQuests.ToList();
-            foreach (var item in spec)
-            {
-                _ = _RelatedQuests.Remove(item);
-            }
-            var cleanresults = Results;
-            var lastindexof = cleanresults.LastIndexOf("}}");
-            if (lastindexof == -1)
-            {
-                return;
-            }
-
-            cleanresults = cleanresults.Substring(0, lastindexof);
-            cleanresults = cleanresults.Replace("\r\n", "\n").Replace("|imagefilename", "^imagefilename").Replace("| ", "^");
-            var splits = cleanresults.Split('^').Where(a => !string.IsNullOrWhiteSpace(a)).Select(a => a.Trim().TrimStart('\n')).ToList();
-            Name = GetValue("name", splits);
-            Race = GetValue("race", splits);
-            Class = GetValue("class", splits)?.Replace("[[", string.Empty).Replace("]]", string.Empty);
-            var lvl = GetValue("level", splits)?.Where(a => char.IsDigit(a) || a == ' ' || a == '-')?.ToArray();
-            if (lvl != null)
-            {
-                Level = new string(lvl);
-            }
-
-            AggroRadius = GetValue("agro_radius", splits);
-            RunSpeed = GetValue("run_speed", splits);
-            AC = GetValue("AC", splits);
-            HP = GetValue("HP", splits);
-            HPRegen = GetValue("HP_regen", splits);
-            ManaRegen = GetValue("mana_regen", splits);
-            AttacksPerRound = GetValue("attacks_per_round", splits);
-            AttackSpeed = GetValue("attack_speed", splits);
-            DamagePerHit = GetValue("damage_per_hit", splits);
-            if (DamagePerHit?.Contains('\n') == true)
-            {
-                DamagePerHit = DamagePerHit.Split('\n')[0];
-            }
-
-            var infos = MobInfoParsing.ParseSpecials(splits);
-            foreach (var item in infos)
-            {
-                Specials.Add(item);
-            }
-
-            var knownloot = MobInfoParsing.ParseKnownLoot(splits);
-            foreach (var item in knownLoot)
-            {
-                KnownLoot.Add(item);
-            }
-
-            infos = MobInfoParsing.ParseFactions(splits);
-            foreach (var item in infos)
-            {
-                Factions.Add(item);
-            }
-
-            infos = MobInfoParsing.ParseOpposingFactions(splits);
-            foreach (var item in infos)
-            {
-                OpposingFactions.Add(item);
-            }
-
-            infos = MobInfoParsing.ParseRelatedQuests(splits);
-            foreach (var item in infos)
-            {
-                RelatedQuests.Add(item);
-            }
-
-            if (!string.IsNullOrWhiteSpace(Name))
-            {
-                var name = HttpUtility.UrlEncode(Name.Replace(' ', '_'));
-                Url = $"https://wiki.project1999.com/{name}";
-            }
-
-            var imageurl = GetValue("imagefilename", splits);
-            if (!string.IsNullOrWhiteSpace(imageurl) && imageurl.Length > 2)
-            {
-                var indexof = imageurl.IndexOf(".png");
-                if (indexof != -1)
-                {
-                    imageurl = imageurl.Substring(0, indexof + 4);
-                }
-
-                indexof = imageurl.IndexOf(".jpg");
-                if (indexof != -1)
-                {
-                    imageurl = imageurl.Substring(0, indexof + 4);
-                }
-
-                imageurl = char.ToUpper(imageurl[0]) + imageurl.Substring(1, imageurl.Length - 1);
-                ImageUrl = $"https://wiki.project1999.com/images/{imageurl}";
-            }
-        }
-		*/
-
 		public void ConvertToViewModel(QuarmMonster monster)
 		{
 			if (monster != null)
@@ -789,7 +667,7 @@ namespace EQTool.ViewModels
 				ManaRegen = monster.Combat_Mana_Regen.ToString();
 				AttacksPerRound = monster.Attack_Count.ToString();
 				AttackSpeed = monster.Attack_Delay.ToString();
-				DamagePerHit = $"{monster.MinDmg}-{monster.MaxDmg}";
+				DamagePerHit = $"{monster.MinDmg}-{monster.MaxDmg + monster.DmgBonus}";
 				PrimaryFaction = monster.Primary_Faction;
 				Resist_Cold = monster.CR.ToString();
 				Resist_Fire = monster.FR.ToString();

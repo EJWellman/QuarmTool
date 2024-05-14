@@ -2098,7 +2098,7 @@ namespace EQToolShared.Map
 			ZoneNames.Add(new ZoneNameInfo("guk", "guktop", "upper guk"));
 			ZoneNames.Add(new ZoneNameInfo("halas", "halas"));
 			ZoneNames.Add(new ZoneNameInfo("plane of hate", "hateplane", "the plane of hate"));
-			ZoneNames.Add(new ZoneNameInfo("high keep", "highkeep"));
+			ZoneNames.Add(new ZoneNameInfo("high keep", "highkeep", "highkeep"));
 			ZoneNames.Add(new ZoneNameInfo("highpass hold", "highpass"));
 			ZoneNames.Add(new ZoneNameInfo("halls of honor", "hohonora"));
 			ZoneNames.Add(new ZoneNameInfo("temple of marr", "hohonorb"));
