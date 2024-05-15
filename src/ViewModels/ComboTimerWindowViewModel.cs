@@ -131,7 +131,8 @@ namespace EQTool.ViewModels
 					}
 					else if (!this.settings.ComboShowSpells
 						&& item.SpellType != SpellTypes.RandomRoll
-						&& item.SpellType != SpellTypes.RespawnTimer)
+						&& item.SpellType != SpellTypes.RespawnTimer
+						&& item.SpellType != SpellTypes.ModRod)
 					{
 						itemsToRemove.Add(item);
 					}

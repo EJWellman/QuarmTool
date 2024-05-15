@@ -8,5 +8,6 @@ namespace EQTool.EventArgModels
 	{
 		public string Name { get; set; }
 		public string Action { get; set; }
+		public DateTime ExecutionTime { get; set; }
 	}
 }

@@ -1098,11 +1098,6 @@ namespace EQTool
 
 		protected override void OnClosing(CancelEventArgs e)
 		{
-			if (settings.CustomOverlays != null)
-			{
-				settings.CustomOverlays.Clear();
-			}
-
 			base.OnClosing(e);
 		}
 

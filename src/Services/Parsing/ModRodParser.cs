@@ -11,7 +11,7 @@ namespace EQTool.Services.Parsing
 	public class ModRodParser
 	{
 
-		public ModRodUsageArgs Parse(string line)
+		public ModRodUsageArgs Parse(string line, DateTime timestamp)
 		{
 			var modulates = " modulates.";
 			var youModulate = "You modulate.";
@@ -25,7 +25,8 @@ namespace EQTool.Services.Parsing
 			return new ModRodUsageArgs
 			{
 				Name = modRodParts[0],
-				Action = modRodParts[1]
+				Action = modRodParts[1],
+				ExecutionTime = timestamp
 			};
 		}
 	}

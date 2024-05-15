@@ -449,7 +449,7 @@ namespace EQTool.Services
                     return;
                 }
 
-				var modRod = _modRodParser.Parse(message);
+				var modRod = _modRodParser.Parse(message, timestamp);
 				if (modRod != null)
 				{
 					ModRodUsedEvent?.Invoke(this, modRod);

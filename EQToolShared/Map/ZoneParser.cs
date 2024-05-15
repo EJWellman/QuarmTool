@@ -2295,9 +2295,13 @@ namespace EQToolShared.Map
 		}
 		else
 		{
-			if(ZoneNames.Select(a => a.WhoName).Count() > 1)
+			if(ZoneNames.Where(a => a.WhoName == messageZone && (a.MapName == lastZone || a.EnterName == lastZone)).Count() > 1)
 			{
 				messageZone = ZoneNames.First(a => a.WhoName == messageZone && (a.MapName == lastZone || a.EnterName == lastZone)).MapName;
+			}
+			else 
+			{ 
+				return false; 
 			}
 		}
 

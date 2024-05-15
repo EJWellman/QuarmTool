@@ -150,8 +150,9 @@ namespace EQTool
 				DurationInSeconds = 300,
 				Name = $"{e.Name}",
 				SpellNameIcon = "Modulation",
-				SpellType = SpellTypes.HarvestCooldown,
-				TargetName = "Mod Rod Consumed"
+				SpellType = SpellTypes.ModRod,
+				TargetName = "Mod Rod Consumed",
+				ExecutionTime = e.ExecutionTime
 			});
 		}
 
