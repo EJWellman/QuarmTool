@@ -9,25 +9,29 @@
         SizeToContent="WidthAndHeight">
     <Grid>
         <StackPanel Orientation="Vertical" Margin="5">
-            <StackPanel Orientation="Horizontal" Width="200">
-                <TextBlock Text="Name" Width="65"></TextBlock>
-                <TextBox Name="Edit_Name" Text="{Binding Name}" Width="130"></TextBox>
+            <StackPanel Orientation="Horizontal" Width="250">
+                <TextBlock Text="Name" Width="85"></TextBlock>
+                <TextBox Name="Edit_Name" Text="{Binding Name}" Width="165"></TextBox>
             </StackPanel>
-            <StackPanel Orientation="Horizontal" Width="200">
-                <TextBlock Text="Trigger" Width="65"></TextBlock>
-                <TextBox Name="Edit_Trigger" Text="{Binding Trigger}" Width="130"></TextBox>
+            <StackPanel Orientation="Horizontal" Width="250">
+                <TextBlock Text="Trigger" Width="85"></TextBlock>
+                <TextBox Name="Edit_Trigger" Text="{Binding Trigger}" Width="165"></TextBox>
             </StackPanel>
-            <StackPanel Orientation="Horizontal" Width="200">
-                <TextBlock Text="Alt. Trigger" Width="65"></TextBlock>
-                <TextBox Name="Edit_AltTrigger" Text="{Binding Alternate_Trigger}" Width="130"></TextBox>
+            <StackPanel Orientation="Horizontal" Width="250">
+                <TextBlock Text="Alt. Trigger" Width="85"></TextBlock>
+                <TextBox Name="Edit_AltTrigger" Text="{Binding Alternate_Trigger}" Width="165"></TextBox>
             </StackPanel>
-            <StackPanel Orientation="Horizontal" Width="200">
-                <TextBlock Text="Message" Width="65"></TextBlock>
-                <TextBox Name="Edit_Message" Width="130" Text="{Binding Message}"></TextBox>
+            <StackPanel Orientation="Horizontal" Width="250">
+                <TextBlock Text="Message" Width="85"></TextBlock>
+                <TextBox Name="Edit_Message" Width="165" Text="{Binding Message}"></TextBox>
             </StackPanel>
-            <StackPanel Orientation="Horizontal" Width="200">
-                <TextBlock Text="Color" Width="65"></TextBlock>
-                <xctk:ColorPicker Name="Edit_TriggerColor" SelectedColor="{Binding Color}" Width="130" Margin="0, 0, 5, 0" ></xctk:ColorPicker>
+            <StackPanel Orientation="Horizontal" Width="250">
+                <TextBlock Text="Audio Message" Width="85"></TextBlock>
+                <TextBox Name="Edit_AudioMessage" Width="165" Text="{Binding AudioMessage}"></TextBox>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" Width="250">
+                <TextBlock Text="Color" Width="85"></TextBlock>
+                <xctk:ColorPicker Name="Edit_TriggerColor" SelectedColor="{Binding Color}" Width="165" Margin="0, 0, 5, 0" ></xctk:ColorPicker>
             </StackPanel>
 
             <Button Click="SaveExistingCustomOverlay" Margin="75,10,0,0" Width="50" HorizontalAlignment="Left">Save</Button>

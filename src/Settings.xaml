@@ -218,15 +218,37 @@
         </TabItem>
         <TabItem Header="Custom Overlays">
             <StackPanel Orientation="Vertical" Margin="5, 5, 5, 5" Width="auto">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="85"/>
+                        <ColumnDefinition Width="35"/>
+                        <ColumnDefinition Width="90"/>
+                        <ColumnDefinition Width="45"/>
+                        <ColumnDefinition Width="55"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Grid.Column="1">Visual</TextBlock>
+                    <TextBlock Grid.Column="3" Margin="10,0,0,0">Audio</TextBlock>
+                </Grid>
                 <ListView ItemsSource="{Binding CustomOverlays}">
                     <ListView.ItemTemplate>
                         <DataTemplate x:Name="CustomOverlaysTemplate" DataType="local:CustomOverlay">
-                            <StackPanel Orientation="Horizontal" Width="auto">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="85"/>
+                                    <ColumnDefinition Width="35"/>
+                                    <ColumnDefinition Width="90"/>
+                                    <ColumnDefinition Width="30"/>
+                                    <ColumnDefinition Width="60"/>
+                                </Grid.ColumnDefinitions>
                                 <TextBlock Text="{Binding Name}" VerticalAlignment="Center" FontWeight="Bold"  MaxWidth="125" Grid.Column="0"/>
                                 <CheckBox IsChecked="{Binding IsEnabled}" Margin="5,4,5,0" Click="Savesettings" MinWidth="20" Grid.Column="1"/>
                                 <xctk:ColorPicker SelectedColor="{Binding Color}" IsEnabled="False" Width="85" Grid.Column="2"/>
+                                <CheckBox IsChecked="{Binding IsAudioEnabled}" Margin="10,4,5,0" Click="Savesettings" MinWidth="20" Grid.Column="3"/>
                                 <Button Click="Open_EditExistingCustomOverlay" HorizontalAlignment="Right" DataContext="{Binding ID}" Margin="10,0,0,0" Content="Edit" Width="50" Grid.Column="4"/>
-                            </StackPanel>
+                            </Grid>
+                            
+                            <!--<StackPanel Orientation="Horizontal" Width="auto">-->
+                            <!--</StackPanel>-->
                         </DataTemplate>
                     </ListView.ItemTemplate>
                 </ListView>
@@ -241,25 +263,29 @@
                         <Popup Name="CreateNewOverlayPopup" IsOpen="{Binding IsChecked, ElementName=ToggleCreateNewButton}">
                             <Border BorderThickness="0.1" Padding="0" Background="White">
                                 <StackPanel Background="White" Orientation="Vertical" Width="200" Margin="8">
-                                    <StackPanel Orientation="Horizontal" Width="200">
-                                        <TextBlock Text="Name" Width="65"></TextBlock>
-                                        <TextBox Name="NewOverlay_Name" Width="130"></TextBox>
+                                    <StackPanel Orientation="Horizontal" Width="250">
+                                        <TextBlock Text="Name" Width="85"></TextBlock>
+                                        <TextBox Name="NewOverlay_Name" Width="165"></TextBox>
                                     </StackPanel>
-                                    <StackPanel Orientation="Horizontal" Width="200">
-                                        <TextBlock Text="Trigger" Width="65"></TextBlock>
-                                        <TextBox Name="NewOverlay_Trigger" Width="130"></TextBox>
+                                    <StackPanel Orientation="Horizontal" Width="250">
+                                        <TextBlock Text="Trigger" Width="85"></TextBlock>
+                                        <TextBox Name="NewOverlay_Trigger" Width="165"></TextBox>
                                     </StackPanel>
-                                    <StackPanel Orientation="Horizontal" Width="200">
-                                        <TextBlock Text="Alt. Trigger" Width="65"></TextBlock>
-                                        <TextBox Name="NewOverlay_AltTrigger" Width="130"></TextBox>
+                                    <StackPanel Orientation="Horizontal" Width="250">
+                                        <TextBlock Text="Alt. Trigger" Width="85"></TextBlock>
+                                        <TextBox Name="NewOverlay_AltTrigger" Width="165"></TextBox>
                                     </StackPanel>
-                                    <StackPanel Orientation="Horizontal" Width="200">
-                                        <TextBlock Text="Message" Width="65"></TextBlock>
-                                        <TextBox Name="NewOverlay_Message" Width="130"></TextBox>
+                                    <StackPanel Orientation="Horizontal" Width="250">
+                                        <TextBlock Text="Message" Width="85"></TextBlock>
+                                        <TextBox Name="NewOverlay_Message" Width="165"></TextBox>
                                     </StackPanel>
-                                    <StackPanel Orientation="Horizontal" Width="200">
-                                        <TextBlock Text="Color" Width="65"></TextBlock>
-                                        <xctk:ColorPicker Name="NewOverlay_TriggerColor" Width="130" Margin="0, 0, 5, 0" ></xctk:ColorPicker>
+                                    <StackPanel Orientation="Horizontal" Width="250">
+                                        <TextBlock Text="Audio Message" Width="85"></TextBlock>
+                                        <TextBox Name="NewOverlay_AudioMessage" Width="165"></TextBox>
+                                    </StackPanel>
+                                    <StackPanel Orientation="Horizontal" Width="250">
+                                        <TextBlock Text="Color" Width="85"></TextBlock>
+                                        <xctk:ColorPicker Name="NewOverlay_TriggerColor" Width="165" Margin="0, 0, 5, 0" ></xctk:ColorPicker>
                                     </StackPanel>
                                     <Separator/>
                                     <Button Height="20" Click="NewOverlay_Save">Save</Button>

@@ -86,7 +86,8 @@ namespace EQTool
 				SpellNameIcon = "Invisibility",
 				SpellType = EQToolShared.Enums.SpellTypes.RandomRoll,
 				Roll = e.RandomRollData.Roll,
-				DurationInSeconds = 60 * 3
+				DurationInSeconds = 60 * 3,
+				ExecutionTime = e.ExecutionTime
 			});
 		}
 
@@ -99,7 +100,7 @@ namespace EQTool
 					IsYou = e.isYou,
 					Spell = e.Spell,
 					MultipleMatchesFound = false,
-					TargetName = EQSpells.SpaceYou,
+					TargetName = EQSpells.SpaceYou
 				}, true);
 			}
 		}
@@ -111,7 +112,8 @@ namespace EQTool
 				DurationInSeconds = 45,
 				Name = $"--DT-- '{e.DTReceiver}'",
 				SpellNameIcon = "Disease Cloud",
-				SpellType = EQToolShared.Enums.SpellTypes.BadGuyCoolDown
+				SpellType = EQToolShared.Enums.SpellTypes.BadGuyCoolDown,
+				ExecutionTime = e.ExecutionTime
 			});
 		}
 

@@ -79,8 +79,9 @@ namespace EQTool
                 SpellNameIcon = "Invisibility",
                 SpellType = SpellTypes.RandomRoll,
                 Roll = e.RandomRollData.Roll,
-                DurationInSeconds = 60 * 3
-            });
+                DurationInSeconds = 60 * 3,
+				ExecutionTime = e.ExecutionTime
+			});
         }
 
         private void LogParser_POFDTEvent(object sender, POFDTParser.POF_DT_Event e)
@@ -90,7 +91,8 @@ namespace EQTool
                 DurationInSeconds = 45,
                 Name = $"--DT-- '{e.DTReceiver}'",
                 SpellNameIcon = "Disease Cloud",
-                SpellType = SpellTypes.BadGuyCoolDown
+                SpellType = SpellTypes.BadGuyCoolDown,
+				ExecutionTime = e.ExecutionTime
             });
         }
 

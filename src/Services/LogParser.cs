@@ -188,6 +188,7 @@ namespace EQTool.Services
         public class RandomRollEventArgs : EventArgs
         {
             public RandomRollData RandomRollData { get; set; }
+			public DateTime ExecutionTime { get; set; }
 		}
 
 		public class WhoEventArgs : EventArgs { }
@@ -341,6 +342,7 @@ namespace EQTool.Services
                 var customtimer = _logCustomTimer.GetStartTimer(message);
                 if (customtimer != null)
                 {
+					customtimer.ExecutionTime = timestamp;
                     StartTimerEvent?.Invoke(this, new StartTimerEventArgs { CustomTimer = customtimer });
                     return;
                 }
@@ -403,13 +405,14 @@ namespace EQTool.Services
                 var randomdata = _randomParser.Parse1(message);
                 if (randomdata != null)
                 {
-                    RandomRollEvent?.Invoke(this, new RandomRollEventArgs { RandomRollData = randomdata });
+                    RandomRollEvent?.Invoke(this, new RandomRollEventArgs { RandomRollData = randomdata, ExecutionTime = timestamp });
                     return;
                 }
 
                 var dt = this._pOFDTParser.DtCheck(message);
                 if (dt != null)
                 {
+					dt.ExecutionTime = timestamp;
                     POFDTEvent?.Invoke(this, dt);
                     return;
                 }

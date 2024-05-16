@@ -308,20 +308,26 @@ namespace EQTool.Services
 			return new FileInfo[0];
 		}
 
-		public static DataFileInfo GetDataLocation(string folderToSearch, string fileToFind)
+		public static DataFileInfo GetDataLocation(string folderToSearch, string dataFileName, string userFileName)
 		{
 			DataFileInfo ret = new DataFileInfo { Found = false };
 			string dataFolder = Path.Combine(AppContext.BaseDirectory, folderToSearch);
-			string searchPattern = fileToFind;
+			string dataSearchPattern = dataFileName;
+			string userSearchPattern = userFileName;
 
 			try
 			{
-				var foundFiles = Directory.EnumerateFiles(dataFolder, searchPattern, SearchOption.TopDirectoryOnly);
+				var foundFiles = Directory.EnumerateFiles(dataFolder, dataSearchPattern, SearchOption.TopDirectoryOnly);
 				if (foundFiles.Any())
 				{
 					ret.Found = true;
 					ret.Location = dataFolder;
 					ret.Data_File = foundFiles.FirstOrDefault();
+				}
+				foundFiles = Directory.EnumerateFiles(dataFolder, userSearchPattern, SearchOption.TopDirectoryOnly);
+				if (foundFiles.Any())
+				{
+					ret.User_File = foundFiles.FirstOrDefault();
 				}
 				return ret;
 			}

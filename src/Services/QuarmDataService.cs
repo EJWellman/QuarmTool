@@ -26,71 +26,61 @@ namespace EQTool.Services
 		private static List<QuarmMonsterTimer> _monsterTimers;
 		private static QuarmZone _currentZone;
 		private static DataFileInfo _fileLocations;
-		public QuarmDataService(ActivePlayer activePlayer)
+		private static DataService _dataService;
+		public QuarmDataService(ActivePlayer activePlayer, DataService dataService)
 		{
-			this._activePlayer = activePlayer;
+			_activePlayer = activePlayer;
+			_dataService = dataService;
 		}
 
 		public bool LoadMobDataForZone(string zoneCode)
 		{
-			_fileLocations = GetDataLocation("Data", "Quarmtool_Data.db");
-			if(_fileLocations == null || !_fileLocations.Found)
+			string likeZoneCode1 = "%" + zoneCode + "^%";
+			string likeZoneCode2 = "%^" + zoneCode + "%";
+
+			var mobsTemp = _dataService.GetData<QuarmMonster>("SELECT * " +
+				"FROM NPC " +
+				"WHERE (HP < 33000" +
+				"	OR NPC_Class_ID IN(" +
+				"		20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34" +
+				"	)" +
+				")	AND (Zone_Code LIKE @Zone_CodeLike1" +
+				"	OR Zone_Code LIKE @Zone_CodeLike2" +
+				"	OR Zone_Code = @Zone_Code" +
+				"	OR Zone_Code_Guess = @Zone_Code)", new { Zone_CodeLike1 = likeZoneCode1, Zone_CodeLike2 = likeZoneCode2, Zone_Code = zoneCode });
+
+			var factionsTemp = _dataService.GetData<QuarmMonsterFaction>("SELECT * " +
+				"FROM NPC_Factions"
+				+ " WHERE NPC_ID IN (" + string.Join(",", mobsTemp.Select(m => m.ID)) + ");");
+
+			var dropsTemp = _dataService.GetData<QuarmMonsterDrops>("SELECT * " +
+				"FROM NPC_Drops"
+				+ " WHERE Loottable_ID IN (" + string.Join(",", mobsTemp.Select(m => m.Loottable_ID)) + ");");
+
+			var merchantItemsTemp = _dataService.GetData<QuarmMerchantItems>("SELECT * " +
+				"FROM NPC_Wares"
+				+ " WHERE MerchantID IN (" + string.Join(",", mobsTemp.Select(m => m.Merchant_ID)) + ");");
+
+			var timersTemp = _dataService.GetData<QuarmMonsterTimer>("SELECT * " +
+				"FROM NPC_RespawnTimers"
+				+ " WHERE Zone_Code LIKE @Zone_CodeLike1" +
+				"	OR Zone_Code LIKE @Zone_CodeLike2" +
+				"	OR Zone_Code = @Zone_Code", new { Zone_CodeLike1 = likeZoneCode1, Zone_CodeLike2 = likeZoneCode2, Zone_Code = zoneCode });
+
+			var tempZone = _dataService.GetData<QuarmZone>("SELECT * " +
+				"FROM Zones"
+				+ " WHERE Code = @Zone_Code", new { Zone_Code = zoneCode }).FirstOrDefault();
+
+			_monsters = mobsTemp.ToList();
+			_factions = factionsTemp.ToList();
+			_drops = dropsTemp.ToList();
+			_merchantWares = merchantItemsTemp.ToList();
+			_monsterTimers = timersTemp.ToList();
+			_currentZone = tempZone;
+
+			if(_monsters.Count > 0)
 			{
-				return false;
-			}
-			zoneCode = ZoneSwapper.GetSwappedInstanceZoneCode(zoneCode);
-			string sqliteConnString = $"Data Source={_fileLocations.Data_File};";
-			using (SQLiteConnection cnn = new SQLiteConnection(sqliteConnString))
-			{
-				cnn.Open();
-
-				string likeZoneCode1 = "%" + zoneCode + "^%";
-				string likeZoneCode2 = "%^" + zoneCode + "%";
-
-				var mobsTemp = cnn.Query<QuarmMonster>("SELECT * " +
-					"FROM NPC " +
-					"WHERE (HP < 33000" +
-					"	OR NPC_Class_ID IN(" +
-					"		20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34" +
-					"	)" +
-					")	AND (Zone_Code LIKE @Zone_CodeLike1" +
-					"	OR Zone_Code LIKE @Zone_CodeLike2" +
-					"	OR Zone_Code = @Zone_Code" +
-					"	OR Zone_Code_Guess = @Zone_Code)", new { Zone_CodeLike1 = likeZoneCode1, Zone_CodeLike2 = likeZoneCode2, Zone_Code = zoneCode });
-
-				var factionsTemp = cnn.Query<QuarmMonsterFaction>("SELECT * " +
-					"FROM NPC_Factions"
-					+ " WHERE NPC_ID IN (" + string.Join(",", mobsTemp.Select(m => m.ID)) + ");");
-
-				var dropsTemp = cnn.Query<QuarmMonsterDrops>("SELECT * " +
-					"FROM NPC_Drops"
-					+ " WHERE Loottable_ID IN (" + string.Join(",", mobsTemp.Select(m => m.Loottable_ID)) + ");");
-
-				var merchantItemsTemp = cnn.Query<QuarmMerchantItems>("SELECT * " +
-					"FROM NPC_Wares"
-					+ " WHERE MerchantID IN (" + string.Join(",", mobsTemp.Select(m => m.Merchant_ID)) + ");");
-
-				var timersTemp = cnn.Query<QuarmMonsterTimer>("SELECT * " +
-					"FROM NPC_RespawnTimers"
-					+ " WHERE Zone_Code LIKE @Zone_CodeLike1" +
-					"	OR Zone_Code LIKE @Zone_CodeLike2" +
-					"	OR Zone_Code = @Zone_Code", new { Zone_CodeLike1 = likeZoneCode1, Zone_CodeLike2 = likeZoneCode2, Zone_Code = zoneCode });
-
-				var tempZone = cnn.Query<QuarmZone>("SELECT * " +
-					"FROM Zones"
-					+ " WHERE Code = @Zone_Code", new { Zone_Code = zoneCode }).FirstOrDefault();
-
-				_monsters = mobsTemp.ToList();
-				_factions = factionsTemp.ToList();
-				_drops = dropsTemp.ToList();
-				_merchantWares = merchantItemsTemp.ToList();
-				_monsterTimers = timersTemp.ToList();
-				_currentZone = tempZone;
-
-				if(_monsters.Count > 0)
-				{
-					return true;
-				}
+				return true;
 			}
 
 			return false;

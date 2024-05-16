@@ -25,6 +25,8 @@ namespace EQTool.Models
 			}
 		}
 		public bool IsEnabled { get; set; }
+		public bool IsAudioEnabled { get; set; }
+		public string AudioMessage { get; set; }
 
 		public CustomOverlay ShallowClone()
 		{

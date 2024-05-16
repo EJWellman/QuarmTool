@@ -47,10 +47,12 @@ namespace EQTool.Services.Parsing
 						if (triggerMatches[0].Groups.Count >= 1)
 						{
 							retOverlay.Message = retOverlay.Message.Replace("{0}", triggerMatches[0].Groups[1].Value);
+							retOverlay.AudioMessage = retOverlay.AudioMessage.Replace("{0}", triggerMatches[0].Groups[1].Value);
 						}
 						if (triggerMatches[0].Groups.Count >= 2)
 						{
 							retOverlay.Message = retOverlay.Message.Replace("{1}", triggerMatches[0].Groups[2].Value);
+							retOverlay.AudioMessage = retOverlay.AudioMessage.Replace("{1}", triggerMatches[0].Groups[2].Value);
 						}
 						return retOverlay;
 					}
@@ -61,10 +63,12 @@ namespace EQTool.Services.Parsing
 						if (altTriggerMatches[0].Groups.Count >= 1)
 						{
 							retOverlay.Message = retOverlay.Message.Replace("{0}", altTriggerMatches[0].Groups[1].Value);
+							retOverlay.AudioMessage = retOverlay.AudioMessage.Replace("{0}", altTriggerMatches[0].Groups[1].Value);
 						}
 						if (altTriggerMatches[0].Groups.Count >= 2)
 						{
 							retOverlay.Message = retOverlay.Message.Replace("{1}", altTriggerMatches[0].Groups[2].Value);
+							retOverlay.AudioMessage = retOverlay.AudioMessage.Replace("{1}", altTriggerMatches[0].Groups[2].Value);
 						}
 						return retOverlay;
 					}

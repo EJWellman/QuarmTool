@@ -16,7 +16,7 @@ namespace EQToolShared.HubModels
         public SpellTypes SpellType { get; set; } = SpellTypes.Beneficial;
         public string TargetName { get; set; } = CustomerTime;
         public Dictionary<PlayerClasses, int> Classes { get; set; } = Enum.GetValues(typeof(PlayerClasses)).Cast<PlayerClasses>().Select(a => new { key = a, level = 1 }).ToDictionary(a => a.key, a => a.level);
-		public DateTime ExecutionTime { get; set; }
+		public DateTime ExecutionTime { get; set; } = DateTime.Now;
     }
     public class SignalrCustomTimer : CustomTimer
     {

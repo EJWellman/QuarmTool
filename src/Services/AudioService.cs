@@ -1,4 +1,5 @@
-﻿using EQTool.Models;
+﻿using EQTool.EventArgModels;
+using EQTool.Models;
 using EQTool.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -36,7 +37,8 @@ namespace EQTool.Services
             this.logParser.CHEvent += LogParser_CHEvent;
             this.logParser.SpellWornOtherOffEvent += LogParser_SpellWornOtherOffEvent1;
             this.logParser.ResistSpellEvent += LogParser_ResistSpellEvent;
-        }
+			this.logParser.CustomOverlayEvent += LogParser_CustomOverlayEvent;
+		}
 
         private void LogParser_ResistSpellEvent(object sender, ResistSpellParser.ResistSpellData e)
         {
@@ -214,5 +216,13 @@ namespace EQTool.Services
                 this.PlayResource($"Invisability Fading.");
             }
         }
-    }
+
+		private void LogParser_CustomOverlayEvent(object sender, CustomOverlayEventArgs e)
+		{
+			if (e.CustomOverlay.IsAudioEnabled)
+			{
+				this.PlayResource(e.CustomOverlay.AudioMessage);
+			}
+		}
+	}
 }

@@ -4,7 +4,7 @@
 	{
 		public bool Found { get; set; }
 		public string Location { get; set; }
-
 		public string Data_File { get; set; }
+		public string User_File { get; set; }
 	}
 }

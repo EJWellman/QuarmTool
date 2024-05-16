@@ -1,4 +1,6 @@
-﻿namespace EQTool.Services
+﻿using System;
+
+namespace EQTool.Services
 {
     public class POFDTParser
     {
@@ -6,6 +8,7 @@
         {
             public string NpcName { get; set; }
             public string DTReceiver { get; set; }
+			public DateTime ExecutionTime { get; set; }
         }
 
         public POF_DT_Event DtCheck(string line)
