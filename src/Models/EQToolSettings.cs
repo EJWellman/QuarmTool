@@ -242,6 +242,44 @@ namespace EQTool.Models
 			set => _SettingsWindowState = value ?? new WindowState();
 		}
 
+		private WindowState _webViewWindowState;
+		public WindowState WebViewWindowState
+		{
+			get
+			{
+				if (_webViewWindowState == null)
+				{
+					_webViewWindowState = new WindowState();
+				}
+				return _webViewWindowState;
+			}
+			set => _webViewWindowState = value ?? new WindowState();
+		}
+
+		private WindowState _webView2WindowState;
+		public WindowState WebView2WindowState
+		{
+			get
+			{
+				if (_webView2WindowState == null)
+				{
+					_webView2WindowState = new WindowState();
+				}
+				return _webView2WindowState;
+			}
+			set => _webView2WindowState = value ?? new WindowState();
+		}
+
+		private string _discordUrl { get; set; }
+		public string DiscordUrl
+		{
+			get
+			{
+				return _discordUrl;
+			}
+			set => _discordUrl = value;
+		}
+
 		public List<PlayerInfo> Players { get; set; } = new List<PlayerInfo>();
 
 		public bool BestGuessSpells { get; set; }

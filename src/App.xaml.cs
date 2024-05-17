@@ -36,7 +36,9 @@ namespace EQTool
         private System.Windows.Forms.MenuItem SettingsMenuItem;
         private System.Windows.Forms.MenuItem GroupSuggestionsMenuItem;
         private System.Windows.Forms.MenuItem MobInfoMenuItem;
-        private LogParser logParser => container.Resolve<LogParser>();
+		private System.Windows.Forms.MenuItem WebViewMenuItem;
+		private System.Windows.Forms.MenuItem WebView2MenuItem;
+		private LogParser logParser => container.Resolve<LogParser>();
         private System.Timers.Timer UITimer;
         private PlayerTrackerService PlayerTrackerService;
         private ZoneActivityTrackingService ZoneActivityTrackingService;
@@ -255,7 +257,9 @@ namespace EQTool
             DpsMeterMenuItem = new System.Windows.Forms.MenuItem("Dps", ToggleDPSWindow);
             OverlayMenuItem = new System.Windows.Forms.MenuItem("Overlay", ToggleOverlayWindow);
             MobInfoMenuItem = new System.Windows.Forms.MenuItem("Mob Info", ToggleMobInfoWindow);
-            var gitHubMenuItem = new System.Windows.Forms.MenuItem("Suggestions", Suggestions);
+			WebViewMenuItem = new System.Windows.Forms.MenuItem("Web View", ToggleWebViewWindow);
+			WebView2MenuItem = new System.Windows.Forms.MenuItem("Web View 2", ToggleWebView2Window);
+			var gitHubMenuItem = new System.Windows.Forms.MenuItem("Suggestions", Suggestions);
             //var whythepig = new System.Windows.Forms.MenuItem("Pigparse Discord", Discord);
             //var updates = new System.Windows.Forms.MenuItem("Check for Update", CheckForUpdates);
             var versionstring = Assembly.GetExecutingAssembly().GetName().Version.ToString();
@@ -295,7 +299,9 @@ namespace EQTool
 					TimerMenuItem,
 					ComboTimerMenuItem,
                     MobInfoMenuItem,
-                    SettingsMenuItem,
+					WebViewMenuItem,
+					WebView2MenuItem,
+					SettingsMenuItem,
                     gitHubMenuItem,
                     //updates,
                     version,
@@ -601,7 +607,18 @@ namespace EQTool
             ToggleWindow<MobInfo>(s);
         }
 
-        public void ToggleSettingsWindow(object sender, EventArgs e)
+		public void ToggleWebViewWindow(object sender, EventArgs e)
+		{
+			var s = (System.Windows.Forms.MenuItem)sender;
+			ToggleWindow<WebTest>(s);
+		}
+		public void ToggleWebView2Window(object sender, EventArgs e)
+		{
+			var s = (System.Windows.Forms.MenuItem)sender;
+			ToggleWindow<WebTest2>(s);
+		}
+
+		public void ToggleSettingsWindow(object sender, EventArgs e)
         {
             var s = (System.Windows.Forms.MenuItem)sender;
             ToggleWindow<Settings>(s);
