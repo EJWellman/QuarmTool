@@ -322,12 +322,12 @@ namespace EQTool.Services
 				{
 					ret.Found = true;
 					ret.Location = dataFolder;
-					ret.Data_File = foundFiles.FirstOrDefault();
+					ret.Data_File = Path.Combine(dataFolder, foundFiles.FirstOrDefault());
 				}
 				foundFiles = Directory.EnumerateFiles(dataFolder, userSearchPattern, SearchOption.TopDirectoryOnly);
 				if (foundFiles.Any())
 				{
-					ret.User_File = foundFiles.FirstOrDefault();
+					ret.User_File = Path.Combine(dataFolder, foundFiles.FirstOrDefault());
 				}
 				return ret;
 			}

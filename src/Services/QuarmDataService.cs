@@ -199,7 +199,7 @@ namespace EQTool.Services
 
 		public QuarmMonsterTimer GetMonsterTimer(string name)
 		{
-			QuarmMonsterTimer timer = _monsterTimers.FirstOrDefault(t => t.Mob_Name == name || t.Mob_Name == name.Replace(" ", "_"));
+			QuarmMonsterTimer timer = _monsterTimers.FirstOrDefault(t => t.Mob_Name == name || t.Mob_Name == name.Replace(" ", "_"))?.ShallowClone();
 			if (timer == null)
 			{
 				timer = new QuarmMonsterTimer()
@@ -215,8 +215,10 @@ namespace EQTool.Services
 				timer.RespawnTimer = timer.Min_RespawnTimer; 
 			}
 
-			if (_currentZone.HasReducedSpawnTimers && timer.Min_RespawnTimer == timer.Max_RespawnTimer)
+			if (_currentZone.HasReducedSpawnTimers)
 			{
+				timer.RespawnTimer = timer.Min_RespawnTimer;
+
 				var spawnTimer = timer.Min_RespawnTimer;
 				if (_currentZone.IsDungeon)
 				{

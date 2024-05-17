@@ -254,15 +254,14 @@ namespace EQTool.Models
 		public bool ComboShowModRodTimers { get; set; }
 		public bool ShowModRodTimers { get; set; }
 
-		private ObservableCollectionRange<CustomOverlay> _customOverlays;
+		private ObservableCollectionRange<CustomOverlay> _customOverlays = new ObservableCollectionRange<CustomOverlay>();
 		[JsonIgnore]
 		public ObservableCollectionRange<CustomOverlay> CustomOverlays
 		{
 			get
 			{
-				if (_customOverlays == null || _customOverlays.Count == 0)
+				if (_customOverlays.Count == 0)
 				{
-					_customOverlays = new ObservableCollectionRange<CustomOverlay>();
 					var tmp = CustomOverlayService.LoadCustomOverlayMessages();
 					if(tmp != null)
 					{

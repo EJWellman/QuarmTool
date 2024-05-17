@@ -1065,7 +1065,9 @@ namespace EQTool
 				Color = NewOverlay_TriggerColor.SelectedColor.Value,
 				Trigger = NewOverlay_Trigger.Text,
 				Alternate_Trigger = NewOverlay_AltTrigger.Text,
-				IsEnabled = true
+				AudioMessage = NewOverlay_AudioMessage.Text,
+				IsEnabled = true,
+				IsAudioEnabled = true
 			};
 
 			if (CustomOverlayService.AddNewCustomOverlay(newOverlay))

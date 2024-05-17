@@ -1,6 +1,7 @@
 ﻿using Dapper;
 using Dapper.Contrib.Extensions;
 using EQTool.Models;
+using EQToolShared.Enums;
 using System;
 using System.Collections.Generic;
 using System.Data.SQLite;
@@ -19,6 +20,8 @@ namespace EQTool.Services
 		private static bool versionChecked = false;
 		private DataFileInfo _fileLocations;
 
+		private QueryType _queryType;
+
 		public IEnumerable<T> GetData<T>(string query, object parameters = null)
 		{
 			StringBuilder fileToUse = new StringBuilder();
@@ -29,11 +32,11 @@ namespace EQTool.Services
 				|| typeof(T) == typeof(QuarmMonsterTimer)
 				|| typeof(T) == typeof(QuarmZone))
 			{
-				fileToUse.Append(_gameDataFileName);
+				_queryType = QueryType.Data;
 			}
 			else if(typeof(T) == typeof(CustomOverlay))
 			{
-				fileToUse.Append(_userDataFileName);
+				_queryType = QueryType.User;
 			}
 
 			if (_fileLocations == null && !DatabaseExists())
@@ -43,13 +46,14 @@ namespace EQTool.Services
 					CreateDatabase(_userDataFileName);
 				}
 			}
-			else if(!versionChecked)
+			else if(!versionChecked && _queryType == QueryType.User)
 			{
 				CheckDatabaseVersion();
 			}
+
 			if (_fileLocations != null)
 			{
-				string sqliteConnString = $"Data Source={Path.Combine(_fileLocations.Location, fileToUse.ToString())};";
+				string sqliteConnString = GetConnectionString(_queryType);
 				using (SQLiteConnection cnn = new SQLiteConnection(sqliteConnString))
 				{
 					cnn.Open();
@@ -80,11 +84,11 @@ namespace EQTool.Services
 				|| typeof(T) == typeof(QuarmMonsterTimer)
 				|| typeof(T) == typeof(QuarmZone))
 			{
-				fileToUse.Append(_gameDataFileName);
+				_queryType = QueryType.Data;
 			}
 			else if (typeof(T) == typeof(CustomOverlay))
 			{
-				fileToUse.Append(_userDataFileName);
+				_queryType = QueryType.User;
 			}
 
 			if (_fileLocations == null && !DatabaseExists())
@@ -96,7 +100,7 @@ namespace EQTool.Services
 			}
 			if (_fileLocations != null)
 			{
-				string sqliteConnString = $"Data Source={fileToUse};";
+				string sqliteConnString = GetConnectionString(_queryType);
 				using (SQLiteConnection cnn = new SQLiteConnection(sqliteConnString))
 				{
 					cnn.Open();
@@ -112,12 +116,11 @@ namespace EQTool.Services
 
 		private void CheckDatabaseVersion()
 		{
-			string sqliteConnString = $"Data Source={Path.Combine(_fileLocations.Location, _userDataFileName)};";
+			string sqliteConnString = GetConnectionString(_queryType);
 			using (SQLiteConnection cnn = new SQLiteConnection(sqliteConnString))
 			{
 				cnn.Open();
 				long version = cnn.QuerySingle<long>("PRAGMA user_version");
-				string blah = "";
 
 				if (version < 1)
 				{
@@ -133,7 +136,7 @@ namespace EQTool.Services
 			versionChecked = true;
 		}
 
-		public bool Update(CustomOverlay obj)
+		public bool UpdateCustomOverlay(CustomOverlay obj)
 		{
 			if (_fileLocations == null && !DatabaseExists())
 			{
@@ -144,7 +147,7 @@ namespace EQTool.Services
 			}
 			if (_fileLocations != null)
 			{
-				string sqliteConnString = $"Data Source={Path.Combine(_fileLocations.Location, _userDataFileName)};";
+				string sqliteConnString = GetConnectionString(QueryType.User);
 				using (SQLiteConnection cnn = new SQLiteConnection(sqliteConnString))
 				{
 					cnn.Open();
@@ -176,7 +179,7 @@ namespace EQTool.Services
 				return false;
 			}
 
-			string sqliteConnString = $"Data Source={_fileLocations.User_File};";
+			string sqliteConnString = GetConnectionString(QueryType.User);
 			using (SQLiteConnection cnn = new SQLiteConnection(sqliteConnString))
 			{
 				cnn.Open();
@@ -190,7 +193,24 @@ namespace EQTool.Services
 			}
 
 			_fileLocations.User_File = Path.Combine(AppContext.BaseDirectory, "Data", fileName);
+			versionChecked = true;
 			return true;
+		}
+
+		private string GetConnectionString(QueryType type)
+		{
+			if(type == QueryType.Data)
+			{
+				return $"Data Source={_fileLocations.Data_File};";
+			}
+			else if(type == QueryType.User)
+			{
+				return $"Data Source={_fileLocations.User_File};";
+			}
+			else
+			{
+				return string.Empty;
+			}
 		}
 	}
 }

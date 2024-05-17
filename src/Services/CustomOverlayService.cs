@@ -30,7 +30,7 @@ namespace EQTool.Services
 
 		public static bool UpdateCustomOverlay(CustomOverlay overlay)
 		{
-			return _dataService.Update(overlay);
+			return _dataService.UpdateCustomOverlay(overlay);
 		}
 
 		public static List<CustomOverlay> LoadCustomOverlayMessages()
