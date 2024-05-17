@@ -548,7 +548,7 @@
     <Compile Include="WebTest.cs">
       <DependentUpon>webTest.xaml</DependentUpon>
     </Compile>
-    <Compile Include="webTest2.cs" />
+    <Compile Include="webTest2.xaml.cs" />
     <Page Include="CustomOverlayEditWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

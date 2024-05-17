@@ -6,10 +6,10 @@
         xmlns:local="clr-namespace:EQTool"
         mc:Ignorable="d" 
         Style="{DynamicResource MyEventWindowStyle}"
-      Height="450" 
-    Width="640"  
-    WindowStyle="None"  
-    AllowsTransparency="True">
+        Height="450" 
+        Width="640"  
+        WindowStyle="None"  
+        AllowsTransparency="True">
     <WindowChrome.WindowChrome>
         <WindowChrome CaptionHeight="0" ResizeBorderThickness="0" x:Name="WindowResizeChrome" />
     </WindowChrome.WindowChrome>

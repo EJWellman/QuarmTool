@@ -6,9 +6,25 @@
         xmlns:wv2="clr-namespace:Microsoft.Web.WebView2.Wpf;assembly=Microsoft.Web.WebView2.Wpf"
         xmlns:local="clr-namespace:EQTool"
         mc:Ignorable="d"
-        Title="WebTest" Height="450" Width="800">
-    <DockPanel>
-        <wv2:WebView2 Name="webViewer" DockPanel.Dock="Top" Source="https://streamkit.discord.com/overlay" />
-
-    </DockPanel>
+        Title="WebTest" Height="450" Width="800"
+        Background="Transparent"
+        BorderBrush="Transparent"
+        Style="{DynamicResource MyEventWindowStyle}"
+        WindowStyle="None"  
+        AllowsTransparency="True">
+    <WindowChrome.WindowChrome>
+        <WindowChrome CaptionHeight="0" ResizeBorderThickness="0" x:Name="WindowResizeChrome" />
+    </WindowChrome.WindowChrome>
+    <Border CornerRadius="5" BorderBrush="White" Name="webViewerBorder">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="16"></RowDefinition>
+                <RowDefinition></RowDefinition>
+            </Grid.RowDefinitions>
+            <Grid Grid.Row="0" HorizontalAlignment="Left" MouseLeftButtonDown="DragWindow" Width="16" Height="16">
+                <StackPanel Background="Red" Margin="4, 4, 4, 4" MouseEnter="Grid_MouseEnter" MouseLeave="Grid_MouseLeave"></StackPanel>
+            </Grid>
+            <wv2:WebView2 Name="webViewer" Grid.Row="1" DockPanel.Dock="Top" Source="https://streamkit.discord.com/overlay" />
+        </Grid>
+    </Border>
 </local:BaseSaveStateWindow>
