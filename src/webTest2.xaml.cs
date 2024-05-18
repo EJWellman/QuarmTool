@@ -29,8 +29,8 @@ namespace EQTool
 			webViewerBorder.Background = new SolidColorBrush() { Color = Colors.White,  Opacity = 0 };
 			webViewer.DefaultBackgroundColor = System.Drawing.Color.FromArgb(0, 0, 0, 0);
 
-			_settings.DiscordSettings.DiscordServer = "247541665852686336";
-			_settings.DiscordSettings.DiscordChannel = "247541665852686337";
+			_settings.DiscordSettings.DiscordServer = "0";
+			_settings.DiscordSettings.DiscordChannel = "1";
 
 			Uri uri = new UriBuilder(_settings.DiscordSettings.DiscordUrl).Uri;
 			webViewer.Source = uri;
