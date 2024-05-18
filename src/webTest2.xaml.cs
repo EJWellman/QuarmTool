@@ -26,16 +26,13 @@ namespace EQTool
 			InitializeComponent();
 
 			this.Topmost = true;
+			webViewerBorder.Background = new SolidColorBrush() { Color = Colors.White,  Opacity = 0 };
+			webViewer.DefaultBackgroundColor = System.Drawing.Color.FromArgb(0, 0, 0, 0);
 
-			// Set the window background to transparent
-			//webViewer.CreationProperties = null;
-			//this.webViewer.DefaultBackgroundColor = System.Drawing.Color.Transparent;
-			webViewerBorder.Background = new SolidColorBrush() { Color = Colors.White,  Opacity = 0 };// System.Windows.Media.Brushes.Transparent;
-			webViewer.DefaultBackgroundColor = System.Drawing.Color.FromArgb(0, 0, 0, 0);//.Transparent;
+			_settings.DiscordSettings.DiscordServer = "247541665852686336";
+			_settings.DiscordSettings.DiscordChannel = "247541665852686337";
 
-			_settings.DiscordUrl = _settings.DiscordUrl.Substring(1, _settings.DiscordUrl.Length - 2);
-
-			Uri uri = new UriBuilder(_settings.DiscordUrl).Uri;
+			Uri uri = new UriBuilder(_settings.DiscordSettings.DiscordUrl).Uri;
 			webViewer.Source = uri;
 		}
 

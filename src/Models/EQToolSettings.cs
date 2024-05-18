@@ -270,14 +270,18 @@ namespace EQTool.Models
 			set => _webView2WindowState = value ?? new WindowState();
 		}
 
-		private string _discordUrl { get; set; }
-		public string DiscordUrl
+		private DiscordSettings _discordSettings;
+		public DiscordSettings DiscordSettings
 		{
 			get
 			{
-				return _discordUrl;
+				if (_discordSettings == null)
+				{
+					_discordSettings = new DiscordSettings();
+				}
+				return _discordSettings;
 			}
-			set => _discordUrl = value;
+			set => _discordSettings = value ?? new DiscordSettings();
 		}
 
 		public List<PlayerInfo> Players { get; set; } = new List<PlayerInfo>();
