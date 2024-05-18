@@ -7,6 +7,7 @@ using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices.WindowsRuntime;
 using System.Windows;
+using ZealPipes.Services;
 
 namespace EQTool.Models
 {
@@ -275,6 +276,8 @@ namespace EQTool.Models
 				_customOverlays = value;
 			}
 		}
+		[JsonIgnore]
+		public ZealMessageService ZealMessageService { get; set; }
 
 		public event PropertyChangedEventHandler PropertyChanged;
 

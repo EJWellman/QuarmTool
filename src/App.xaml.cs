@@ -17,6 +17,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media;
+using ZealPipes.Services;
 
 namespace EQTool
 {
@@ -37,6 +38,7 @@ namespace EQTool
         private System.Windows.Forms.MenuItem GroupSuggestionsMenuItem;
         private System.Windows.Forms.MenuItem MobInfoMenuItem;
         private LogParser logParser => container.Resolve<LogParser>();
+		private ZealMessageService _zealMessageService => container.Resolve<ZealMessageService>();
         private System.Timers.Timer UITimer;
         private PlayerTrackerService PlayerTrackerService;
         private ZoneActivityTrackingService ZoneActivityTrackingService;
@@ -121,16 +123,16 @@ namespace EQTool
                     Server = server
                 };
                 if (msg.Message.Contains("Server timeout (30000.00ms) elapsed without receiving a message from the server.") ||
-                    msg.Message.Contains("The 'InvokeCoreAsync' method cannot be called") ||
-                     msg.Message.Contains("The remote party closed the WebSocket connection") ||
-                     msg.Message.Contains("An internal WebSocket error occurred.")
+						msg.Message.Contains("The 'InvokeCoreAsync' method cannot be called") ||
+						msg.Message.Contains("The remote party closed the WebSocket connection") ||
+						msg.Message.Contains("An internal WebSocket error occurred.")
                     )
                 {
                     return;
                 }
-                var msagasjson = Newtonsoft.Json.JsonConvert.SerializeObject(msg);
-                var content = new StringContent(msagasjson, Encoding.UTF8, "application/json");
-                var result = httpclient.PostAsync("https://pigparse.azurewebsites.net/api/eqtool/exception", content).Result;
+                //var msagasjson = Newtonsoft.Json.JsonConvert.SerializeObject(msg);
+                //var content = new StringContent(msagasjson, Encoding.UTF8, "application/json");
+                //var result = httpclient.PostAsync("https://pigparse.azurewebsites.net/api/eqtool/exception", content).Result;
             }
             catch { }
         }
@@ -193,7 +195,7 @@ namespace EQTool
             SetupExceptionHandling();
             if (!WaitForEQToolToStop())
             {
-                MessageBox.Show("Another EQTool is currently running. You must shut that one down first!", "Multiple EQTools running!", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show("Another QuarmTool is currently running. You must shut that one down first!", "Multiple QuarmTools running!", MessageBoxButton.OK, MessageBoxImage.Error);
                 App.Current.Shutdown();
                 return;
             }
@@ -203,7 +205,7 @@ namespace EQTool
                 var path = Path.Combine(curr, "eqgame.exe");
                 if (File.Exists(path))
                 {
-                    MessageBox.Show("Pigparse does not support running from in the EQ directory. Please move the pigparse and try again", "Pigparse Invalid Folder!", MessageBoxButton.OK, MessageBoxImage.Error);
+                    MessageBox.Show("QuarmTool does not support running from in the EQ directory. Please move QuarmTool and try again", "QuarmTool Invalid Folder!", MessageBoxButton.OK, MessageBoxImage.Error);
                     App.Current.Shutdown();
                     return;
                 }
@@ -237,6 +239,7 @@ namespace EQTool
         private void InitStuff()
         {
             container = DI.Init();
+
             UITimer = new System.Timers.Timer(1000 * 60);
 #if !DEBUG
             UITimer.Elapsed += UITimer_Elapsed;
@@ -353,6 +356,8 @@ namespace EQTool
             ((App)System.Windows.Application.Current).UpdateBackgroundOpacity("MyWindowStyleDPS", this.EQToolSettings.DpsWindowState.Opacity.Value);
             ((App)System.Windows.Application.Current).UpdateBackgroundOpacity("MyWindowStyleMap", this.EQToolSettings.MapWindowState.Opacity.Value);
             ((App)System.Windows.Application.Current).UpdateBackgroundOpacity("MyWindowStyleTrigger", this.EQToolSettings.SpellWindowState.Opacity.Value);
+
+			_zealMessageService.StartProcessing();
         }
         public void UpdateBackgroundOpacity(string name, double opacity)
         {
@@ -673,7 +678,8 @@ namespace EQTool
 
 		private void OnExit(object sender, EventArgs e)
         {
-            System.Windows.Application.Current.Shutdown();
+			_zealMessageService.StopProcessing();
+            Current.Shutdown();
         }
 
         public void ApplyAlwaysOnTop()

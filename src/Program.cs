@@ -1,4 +1,5 @@
 ﻿using EQTool.Properties;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -7,6 +8,8 @@ using System.Linq;
 using System.Reflection;
 using System.Threading;
 using System.Windows.Documents;
+using ZealPipes.Services;
+using ZealPipes.Services.Helpers;
 
 namespace EQTool
 {
@@ -51,7 +54,20 @@ namespace EQTool
                     }
 				}
 
+				//IServiceCollection services = new ServiceCollection();
+				//services.AddSingleton<ProcessMonitor>();
+				//services.AddSingleton<ZealPipeReader>();
+				//services.AddSingleton<ZealMessageService>();
+				//IServiceProvider serviceProvider = services.BuildServiceProvider();
+
+
+				//var zealMessageService = serviceProvider.GetService<ZealMessageService>();
+
+				//zealMessageService.StartProcessing();
+
                 App.Main();
+
+				//zealMessageService.StopProcessing();
             }
             catch (Exception ex)
             {

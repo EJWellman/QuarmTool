@@ -41,7 +41,7 @@ namespace EQTool.Services
 
 			if (_fileLocations == null && !DatabaseExists())
 			{
-				if(_fileLocations != null && string.IsNullOrWhiteSpace(_fileLocations.User_File))
+				if(_fileLocations == null || string.IsNullOrWhiteSpace(_fileLocations?.User_File))
 				{
 					CreateDatabase(_userDataFileName);
 				}

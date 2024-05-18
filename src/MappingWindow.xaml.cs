@@ -8,6 +8,9 @@ using System;
 using System.ComponentModel;
 using System.Windows;
 using System.Windows.Input;
+using System.Windows.Media.Media3D;
+using ZealPipes.Common.Models;
+using ZealPipes.Services;
 
 namespace EQTool
 {
@@ -21,6 +24,7 @@ namespace EQTool
         private readonly ISignalrPlayerHub signalrPlayerHub;
         private readonly System.Timers.Timer UITimer;
 		private QuarmDataService _quarmDataService;
+		private ZealMessageService _zealMessageService;
 
 		public MappingWindow(
             ISignalrPlayerHub signalrPlayerHub,
@@ -32,7 +36,8 @@ namespace EQTool
             EQToolSettingsLoad toolSettingsLoad,
             IAppDispatcher appDispatcher,
             LoggingService loggingService,
-			QuarmDataService quarmDataService) : base(settings.MapWindowState, toolSettingsLoad, settings)
+			QuarmDataService quarmDataService,
+			ZealMessageService zealMessageService) : base(settings.MapWindowState, toolSettingsLoad, settings)
         {
             loggingService.Log(string.Empty, EventType.OpenMap, activePlayer?.Player?.Server);
             this.activePlayer = activePlayer;
@@ -40,6 +45,7 @@ namespace EQTool
             this.playerTrackerService = playerTrackerService;
             this.appDispatcher = appDispatcher;
             this.logParser = logParser;
+			_zealMessageService = zealMessageService;
             DataContext = this.mapViewModel = mapViewModel;
             InitializeComponent();
             base.Init();
@@ -58,6 +64,7 @@ namespace EQTool
             Map.CancelTimerEvent += Map_CancelTimerEvent;
             Map.TimerMenu_ClosedEvent += Map_TimerMenu_ClosedEvent;
             Map.TimerMenu_OpenedEvent += Map_TimerMenu_OpenedEvent;
+			_zealMessageService.OnPlayerMessageReceived += _zealMessageService_OnPlayerMessageReceived;
             this.signalrPlayerHub.PlayerLocationEvent += SignalrPlayerHub_PlayerLocationEvent;
             this.signalrPlayerHub.PlayerDisconnected += SignalrPlayerHub_PlayerDisconnected;
             UITimer = new System.Timers.Timer(1000);
@@ -69,6 +76,11 @@ namespace EQTool
 
 			_quarmDataService = quarmDataService;
         }
+
+		private void _zealMessageService_OnPlayerMessageReceived(object sender, ZealMessageService.PlayerMessageReceivedEventArgs e)
+		{
+			appDispatcher.DispatchUI(() => mapViewModel.UpdateLocation(new Point3D(e.Message.Data.Position.X, e.Message.Data.Position.Y, e.Message.Data.Position.Z)));
+		}
 
 		private void ToggleMouseLocation_Event(object sender, MouseEventArgs e)
 		{

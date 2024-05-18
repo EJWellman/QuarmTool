@@ -2,6 +2,9 @@
 using Autofac.Features.ResolveAnything;
 using EQTool.Models;
 using EQTool.ViewModels;
+using ZealPipes.Common;
+using ZealPipes.Services;
+using ZealPipes.Services.Helpers;
 
 namespace EQTool.Services
 {
@@ -35,6 +38,20 @@ namespace EQTool.Services
             builder.RegisterType<AudioService>().AsSelf().SingleInstance();
 			builder.RegisterType<QuarmDataService>().AsSelf().SingleInstance();
 			builder.RegisterType<CustomOverlayService>().AsSelf().SingleInstance();
+			//Zeal Pipes
+			builder.RegisterType<ProcessMonitor>().AsSelf().SingleInstance();
+			builder.RegisterType<ZealPipeReader>().AsSelf().SingleInstance();
+			builder.RegisterType<ZealPipeSettings>().AsSelf().SingleInstance();
+			builder.RegisterType<ZealSettings>().AsSelf().SingleInstance();
+			builder.Register(ctx =>
+			{
+				var settings = ctx.Resolve<ZealSettings>();
+				var processMonitor = ctx.Resolve<ProcessMonitor>();
+				ZealPipeReader pipeReader = ctx.Resolve<ZealPipeReader>();
+				return new ZealMessageService(processMonitor, settings, pipeReader);
+			}).As<ZealMessageService>().SingleInstance();
+			builder.RegisterType<ZealMessageService>().AsSelf().SingleInstance();
+
 
             return builder.Build();
         }
