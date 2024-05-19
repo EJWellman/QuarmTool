@@ -11,6 +11,8 @@ using System.Reflection.Emit;
 using System.Windows;
 using System.Windows.Documents;
 using System.Windows.Navigation;
+using ZealPipes.Common.Models;
+using ZealPipes.Services;
 using static System.Net.Mime.MediaTypeNames;
 
 namespace EQTool
@@ -19,32 +21,65 @@ namespace EQTool
     /// Interaction logic for MobInfo.xaml
     /// </summary>
     public partial class MobInfo : BaseSaveStateWindow
-    {
-        private readonly LogParser logParser;
+	{
+		private readonly IAppDispatcher appDispatcher;
+		private readonly LogParser logParser;
         private ViewModels.MobInfoViewModel mobInfoViewModel;
         private readonly QuarmDataService _quarmService;
 		private readonly PlayerTrackerService playerTrackerService;
         private readonly ActivePlayer activePlayer;
-        public MobInfo(ActivePlayer activePlayer, 
+		private ZealMessageService _zealMessageService;
+		public MobInfo(ActivePlayer activePlayer, 
 			QuarmDataService quarmService, 
 			PlayerTrackerService playerTrackerService,
 			LogParser logParser, 
 			EQToolSettings settings, 
-			EQToolSettingsLoad toolSettingsLoad, 
+			EQToolSettingsLoad toolSettingsLoad,
+			IAppDispatcher appDispatcher,
+			ZealMessageService zealMessageService, 
 			LoggingService loggingService) : base(settings.MobWindowState, toolSettingsLoad, settings)
         {
+			this.appDispatcher = appDispatcher;
             loggingService.Log(string.Empty, EventType.OpenMobInfo, activePlayer?.Player?.Server);
             this.activePlayer = activePlayer;
 			this.playerTrackerService = playerTrackerService;
-            this._quarmService = quarmService;
+            _quarmService = quarmService;
+			_zealMessageService = zealMessageService;
             this.logParser = logParser;
             DataContext = mobInfoViewModel = new ViewModels.MobInfoViewModel();
             InitializeComponent();
             base.Init();
+			_zealMessageService.OnCharacterUpdated += ZealMessageService_OnCharacterUpdated;
             this.logParser.ConEvent += LogParser_ConEvent;
         }
 
-        private void LogParser_ConEvent(object sender, LogParser.ConEventArgs e)
+		private void ZealMessageService_OnCharacterUpdated(object sender, ZealCharacter.ZealCharacterUpdatedEventArgs e)
+		{
+			string mobName = e.Character.Detail.LabelData[(int)ZealPipes.Common.LabelType.TargetName - 1].Value;
+			if (!string.IsNullOrWhiteSpace(mobName) && mobName != mobInfoViewModel.Name)
+			{
+
+				appDispatcher.DispatchUI(() =>
+				{
+					mobInfoViewModel.NewResults = _quarmService.GetData(mobName);
+					FactionHitsStack.Visibility = mobInfoViewModel.HasFactionHits;
+					QuestsStack.Visibility = mobInfoViewModel.HasQuests;
+					KnownLootStack.Visibility = mobInfoViewModel.HasKnownLoot;
+					MerchandiseStack.Visibility = mobInfoViewModel.HasMerchandise;
+					SpecialAbilitiesStack.Visibility = mobInfoViewModel.HasSpecials;
+
+					invis_rad.IsChecked = mobInfoViewModel.See_Invis;
+					ivu_rad.IsChecked = mobInfoViewModel.See_Invis_Undead;
+					sneak_rad.IsChecked = mobInfoViewModel.See_Sneak;
+					ihide_rad.IsChecked = mobInfoViewModel.See_Imp_Hide;
+				});
+
+			}
+
+			string blah = "";
+		}
+
+		private void LogParser_ConEvent(object sender, LogParser.ConEventArgs e)
         {
             try
             {
