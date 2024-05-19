@@ -41,7 +41,6 @@ namespace EQTool.Services
 			//Zeal Pipes
 			builder.RegisterType<ProcessMonitor>().AsSelf().SingleInstance();
 			builder.RegisterType<ZealPipeReader>().AsSelf().SingleInstance();
-			builder.RegisterType<ZealPipeSettings>().AsSelf().SingleInstance();
 			builder.RegisterType<ZealSettings>().AsSelf().SingleInstance();
 			builder.Register(ctx =>
 			{

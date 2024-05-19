@@ -367,7 +367,7 @@ namespace EQTool.ViewModels
 
         private int failedzonelogcounter = 0;
 
-        public void UpdateLocation(Point3D value1)
+        public void UpdateLocation(Point3D value1, float? heading = null)
         {
             if (MapLoading || PlayerLocation?.ArrowLine == null || Canvas == null || string.IsNullOrWhiteSpace(ZoneName))
             {
@@ -393,7 +393,8 @@ namespace EQTool.ViewModels
                 Oldlocation = Lastlocation,
                 Newlocation = value1,
                 PlayerLocationCircle = PlayerLocation,
-                Transform = Transform
+                Transform = Transform,
+				Heading = heading != null ? (heading / -512) * 360 + 180 : null
             });
 
 			CenterMapOnPlayer(value1);

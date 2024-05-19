@@ -79,7 +79,7 @@ namespace EQTool
 
 		private void _zealMessageService_OnPlayerMessageReceived(object sender, ZealMessageService.PlayerMessageReceivedEventArgs e)
 		{
-			appDispatcher.DispatchUI(() => mapViewModel.UpdateLocation(new Point3D(e.Message.Data.Position.X, e.Message.Data.Position.Y, e.Message.Data.Position.Z)));
+			appDispatcher.DispatchUI(() => mapViewModel.UpdateLocation(new Point3D(e.Message.Data.Position.X, e.Message.Data.Position.Y, e.Message.Data.Position.Z), e.Message.Data.heading));
 		}
 
 		private void ToggleMouseLocation_Event(object sender, MouseEventArgs e)

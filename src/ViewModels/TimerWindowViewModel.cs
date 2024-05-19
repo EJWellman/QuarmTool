@@ -11,6 +11,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Windows.Media;
 
 namespace EQTool.ViewModels
 {
@@ -18,17 +19,19 @@ namespace EQTool.ViewModels
     {
         private readonly ActivePlayer activePlayer;
         private readonly IAppDispatcher appDispatcher;
-        private readonly EQToolSettings settings;
+        private readonly EQToolSettings _settings;
         private readonly EQSpells spells;
+		private ColorService _colorService;
 
-        public TimerWindowViewModel(ActivePlayer activePlayer, IAppDispatcher appDispatcher, EQToolSettings settings, EQSpells spells)
+        public TimerWindowViewModel(ActivePlayer activePlayer, IAppDispatcher appDispatcher, EQToolSettings settings, EQSpells spells, ColorService colorService)
         {
 
             this.activePlayer = activePlayer;
             this.appDispatcher = appDispatcher;
-            this.settings = settings;
+            this._settings = settings;
             Title = "Timers v" + App.Version;
-            this.spells = spells;
+			this.spells = spells;
+			_colorService = colorService;
         }
 
 
@@ -102,15 +105,15 @@ namespace EQTool.ViewModels
                     {
                         itemsToRemove.Add(item);
                     }
-                    item.HideGuesses = !settings.BestGuessSpells;
-                    item.ShowOnlyYou = settings.YouOnlySpells;
+                    item.HideGuesses = !_settings.BestGuessSpells;
+                    item.ShowOnlyYou = _settings.YouOnlySpells;
                     item.HideClasses = player != null && SpellUIExtensions.HideSpell(player.ShowSpellsForClasses, item.Classes) && item.TargetName != EQSpells.SpaceYou;
                     if (item.SpellType == SpellTypes.RandomRoll)
                     {
-                        item.HideClasses = !this.settings.ShowRandomRolls;
+                        item.HideClasses = !this._settings.ShowRandomRolls;
 					}
 
-					if (!this.settings.ShowModRodTimers
+					if (!this._settings.ShowModRodTimers
 						&& item.SpellType == SpellTypes.ModRod)
 					{
 						itemsToRemove.Add(item);
@@ -227,7 +230,9 @@ namespace EQTool.ViewModels
                     PersistentSpell = false,
                     Roll = match.Roll,
                     RollOrder = rollorder + 1,
-					ExecutionTime = match.ExecutionTime
+					ExecutionTime = match.ExecutionTime,
+					SpellNameColor = new SolidColorBrush(_settings.SpellTimerNameColor),
+					ProgressBarColor = _colorService.GetColorFromSpellType(match.SpellType)
                 });
             });
         }

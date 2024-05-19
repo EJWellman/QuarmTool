@@ -255,7 +255,13 @@ namespace EQTool.Services
                 }
 
                 var timestamp = LogFileDateTimeParse.ParseDateTime(date);
-                var pos = _locationParser.Match(message);
+
+				var customOverlay = CustomOverlayParser.Parse(message);
+				if (customOverlay != null)
+				{
+					CustomOverlayEvent?.Invoke(this, new CustomOverlayEventArgs { CustomOverlay = customOverlay });
+				}
+				var pos = _locationParser.Match(message);
                 if (pos.HasValue)
                 {
                     PlayerLocationEvent?.Invoke(this, new PlayerLocationEventArgs { Location = pos.Value, PlayerInfo = _activePlayer.Player });
@@ -503,13 +509,6 @@ namespace EQTool.Services
                     PlayerZonedEvent?.Invoke(this, new PlayerZonedEventArgs { Zone = matchedzone });
                     return;
                 }
-
-				var customOverlay = CustomOverlayParser.Parse(message);
-				if(customOverlay != null)
-				{
-					CustomOverlayEvent?.Invoke(this, new CustomOverlayEventArgs { CustomOverlay = customOverlay });
-					return;
-				}
             }
             catch (Exception e)
             {

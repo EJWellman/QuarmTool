@@ -10,6 +10,7 @@ using System.Runtime.CompilerServices;
 using System.Speech.Synthesis;
 using System.Windows;
 using System.Windows.Data;
+using System.Windows.Media;
 
 namespace EQTool.ViewModels
 {
@@ -97,7 +98,7 @@ namespace EQTool.ViewModels
 			}
 		}
 
-		public System.Windows.Media.Color EnrageOverlayColor 
+		public Color EnrageOverlayColor 
 		{
 			get
 			{
@@ -109,7 +110,7 @@ namespace EQTool.ViewModels
 				OnPropertyChanged();
 			}
 		}
-		public System.Windows.Media.Color LevFadingOverlayColor 
+		public Color LevFadingOverlayColor 
 		{
 			get
 			{
@@ -121,7 +122,7 @@ namespace EQTool.ViewModels
 				OnPropertyChanged();
 			}
 		}
-		public System.Windows.Media.Color InvisFadingOverlayColor 
+		public Color InvisFadingOverlayColor 
 		{ 
 			get
 			{
@@ -133,7 +134,7 @@ namespace EQTool.ViewModels
 				OnPropertyChanged();
 			}
 		}
-		public System.Windows.Media.Color FTEOverlayColor 
+		public Color FTEOverlayColor 
 		{ 
 			get 
 			{ 
@@ -145,7 +146,7 @@ namespace EQTool.ViewModels
 				OnPropertyChanged();
 			}
 		}
-		public System.Windows.Media.Color CharmBreakOverlayColor 
+		public Color CharmBreakOverlayColor 
 		{ 
 			get 
 			{ 
@@ -157,7 +158,7 @@ namespace EQTool.ViewModels
 				OnPropertyChanged();
 			}
 		}
-		public System.Windows.Media.Color FailedFeignOverlayColor 
+		public Color FailedFeignOverlayColor 
 		{ 
 			get 
 			{
@@ -169,7 +170,7 @@ namespace EQTool.ViewModels
 				OnPropertyChanged();
 			}
 		}
-		public System.Windows.Media.Color GroupInviteOverlayColor 
+		public Color GroupInviteOverlayColor 
 		{ 
 			get 
 			{
@@ -181,7 +182,7 @@ namespace EQTool.ViewModels
 				OnPropertyChanged();
 			}
 		}
-		public System.Windows.Media.Color DragonRoarOverlayColor 
+		public Color DragonRoarOverlayColor 
 		{ 
 			get 
 			{
@@ -193,7 +194,7 @@ namespace EQTool.ViewModels
 				OnPropertyChanged();
 			}
 		}
-		public System.Windows.Media.Color RootWarningOverlayColor 
+		public Color RootWarningOverlayColor 
 		{ 
 			get 
 			{
@@ -205,7 +206,7 @@ namespace EQTool.ViewModels
 				OnPropertyChanged();
 			}
 		}
-		public System.Windows.Media.Color ResistWarningOverlayColor 
+		public Color ResistWarningOverlayColor 
 		{ 
 			get 
 			{
@@ -521,7 +522,94 @@ namespace EQTool.ViewModels
         public ObservableCollection<int> Levels { get; set; } = new ObservableCollection<int>();
         public ObservableCollection<int?> TrackSkills { get; set; } = new ObservableCollection<int?>();
 
-        public void Update()
+		#region Timer Colors
+		public Color SpellTimerNameColor
+		{
+			get
+			{
+				return this.toolSettings.SpellTimerNameColor;
+			}
+			set
+			{
+				this.toolSettings.SpellTimerNameColor = value;
+				OnPropertyChanged();
+			}
+		}
+		public Color BeneficialSpellTimerColor
+		{ 
+			get 
+			{
+				return this.toolSettings.BeneficialSpellTimerColor;
+			}
+			set
+			{
+				this.toolSettings.BeneficialSpellTimerColor = value;
+				OnPropertyChanged();
+			}
+		}
+		public Color DetrimentalSpellTimerColor
+		{ 
+			get 
+			{
+				return this.toolSettings.DetrimentalSpellTimerColor;
+			}
+			set
+			{
+				this.toolSettings.DetrimentalSpellTimerColor = value;
+				OnPropertyChanged();
+			}
+		}
+		public Color RespawnTimerColor
+		{ 
+			get 
+			{
+				return this.toolSettings.RespawnTimerColor;
+			}
+			set
+			{
+				this.toolSettings.RespawnTimerColor = value;
+				OnPropertyChanged();
+			}
+		}
+		public Color DisciplineTimerColor
+		{ 
+			get 
+			{
+				return this.toolSettings.DisciplineTimerColor;
+			}
+			set
+			{
+				this.toolSettings.DisciplineTimerColor = value;
+				OnPropertyChanged();
+			}
+		}
+		public Color ModRodTimerColor
+		{ 
+			get 
+			{
+				return this.toolSettings.ModRodTimerColor;
+			}
+			set
+			{
+				this.toolSettings.ModRodTimerColor = value;
+				OnPropertyChanged();
+			}
+		}
+		public Color OtherTimerColor
+		{ 
+			get 
+			{
+				return this.toolSettings.OtherTimerColor;
+			}
+			set
+			{
+				this.toolSettings.OtherTimerColor = value;
+				OnPropertyChanged();
+			}
+		}
+		#endregion
+
+		public void Update()
         {
             _ = ActivePlayer.Update();
             OnPropertyChanged(nameof(ActivePlayer));

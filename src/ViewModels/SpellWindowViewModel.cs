@@ -11,24 +11,27 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Windows.Media;
 
 namespace EQTool.ViewModels
 {
     public class SpellWindowViewModel : INotifyPropertyChanged
     {
-        private readonly ActivePlayer activePlayer;
-        private readonly IAppDispatcher appDispatcher;
-        private readonly EQToolSettings settings;
-        private readonly EQSpells spells;
+        private readonly ActivePlayer _activePlayer;
+        private readonly IAppDispatcher _appDispatcher;
+        private readonly EQToolSettings _settings;
+		private ColorService _colorService;
+		private readonly EQSpells _spells;
 
-        public SpellWindowViewModel(ActivePlayer activePlayer, IAppDispatcher appDispatcher, EQToolSettings settings, EQSpells spells)
+        public SpellWindowViewModel(ActivePlayer activePlayer, IAppDispatcher appDispatcher, EQToolSettings settings, ColorService colorService, EQSpells spells)
         {
 
-            this.activePlayer = activePlayer;
-            this.appDispatcher = appDispatcher;
-            this.settings = settings;
+            _activePlayer = activePlayer;
+            _appDispatcher = appDispatcher;
+            _settings = settings;
+			_colorService = colorService;
             Title = "Spell Timers v" + App.Version;
-            this.spells = spells;
+            _spells = spells;
         }
 
 
@@ -81,9 +84,9 @@ namespace EQTool.ViewModels
 
         public void UpdateSpells()
         {
-            appDispatcher.DispatchUI(() =>
+            _appDispatcher.DispatchUI(() =>
             {
-                var player = activePlayer.Player;
+                var player = _activePlayer.Player;
                 var itemstoremove = new List<UISpell>();
 
                 var d = DateTime.Now;
@@ -98,12 +101,12 @@ namespace EQTool.ViewModels
                     {
                         itemstoremove.Add(item);
                     }
-                    item.HideGuesses = !settings.BestGuessSpells;
-                    item.ShowOnlyYou = settings.YouOnlySpells;
+                    item.HideGuesses = !_settings.BestGuessSpells;
+                    item.ShowOnlyYou = _settings.YouOnlySpells;
                     item.HideClasses = player != null && SpellUIExtensions.HideSpell(player.ShowSpellsForClasses, item.Classes) && item.TargetName != EQSpells.SpaceYou;
                     if (item.SpellType == SpellTypes.RandomRoll)
                     {
-                        item.HideClasses = !this.settings.ShowRandomRolls;
+                        item.HideClasses = !this._settings.ShowRandomRolls;
                     }
                 }
 
@@ -144,7 +147,7 @@ namespace EQTool.ViewModels
 
         public void ClearAllSpells()
         {
-            appDispatcher.DispatchUI(() =>
+            _appDispatcher.DispatchUI(() =>
             {
                 while (SpellList.Count > 0)
                 {
@@ -189,7 +192,7 @@ namespace EQTool.ViewModels
                 return;
             }
 
-            appDispatcher.DispatchUI(() =>
+            _appDispatcher.DispatchUI(() =>
             {
                 var spellname = match.Spell.name;
                 if (string.Equals(match.Spell.name, "Harvest", StringComparison.OrdinalIgnoreCase) && match.TargetName == EQSpells.SpaceYou)
@@ -218,7 +221,7 @@ namespace EQTool.ViewModels
                 if (match.Spell.name.EndsWith("Discipline"))
                 {
                     var basetime = (int)(match.Spell.recastTime / 1000.0);
-                    var playerlevel = this.activePlayer.Player.Level;
+                    var playerlevel = this._activePlayer.Player.Level;
                     if (match.Spell.name == "Evasive Discipline")
                     {
                         float baseseconds = 15 * 60;
@@ -261,7 +264,7 @@ namespace EQTool.ViewModels
                     return;
                 }
                 var needscount = SpellsThatNeedCounts.Contains(spellname);
-                var spellduration = TimeSpan.FromSeconds(SpellDurations.GetDuration_inSeconds(match.Spell, activePlayer.Player));
+                var spellduration = TimeSpan.FromSeconds(SpellDurations.GetDuration_inSeconds(match.Spell, _activePlayer.Player));
                 var duration = needscount ? 0 : match.TotalSecondsOverride ?? spellduration.TotalSeconds;
                 var isnpc = MasterNPCList.NPCs.Contains(match.TargetName);
                 var uispell = new UISpell(DateTime.Now.AddSeconds((int)duration), isnpc)
@@ -276,8 +279,10 @@ namespace EQTool.ViewModels
                     Counter = needscount ? 1 : (int?)null,
                     SpellIcon = match.Spell.SpellIcon,
                     Classes = match.Spell.Classes,
-                    GuessedSpell = match.MultipleMatchesFound
-                };
+                    GuessedSpell = match.MultipleMatchesFound,
+					SpellNameColor = new SolidColorBrush(_settings.SpellTimerNameColor),
+					ProgressBarColor = _colorService.GetColorFromSpellType(match.Spell.type)
+				};
                 var s = SpellList.FirstOrDefault(a => a.SpellName == spellname && match.TargetName == a.TargetName);
                 if (s != null)
                 {
@@ -306,7 +311,7 @@ namespace EQTool.ViewModels
                 return;
             }
 
-            appDispatcher.DispatchUI(() =>
+            _appDispatcher.DispatchUI(() =>
             {
                 var s = SpellList.FirstOrDefault(a => a.SpellName == match.Name && match.TargetName == a.TargetName);
                 if (s != null)
@@ -318,7 +323,7 @@ namespace EQTool.ViewModels
                 }
 
                 var spellduration = match.DurationInSeconds;
-                var spellicon = spells.AllSpells.FirstOrDefault(a => a.name == match.SpellNameIcon);
+                var spellicon = _spells.AllSpells.FirstOrDefault(a => a.name == match.SpellNameIcon);
                 var rollorder = 0;
                 if (match.SpellType == SpellTypes.RandomRoll)
                 {
@@ -349,8 +354,10 @@ namespace EQTool.ViewModels
                     GuessedSpell = false,
                     PersistentSpell = false,
                     Roll = match.Roll,
-                    RollOrder = rollorder + 1
-                });
+                    RollOrder = rollorder + 1,
+					SpellNameColor = new SolidColorBrush(_settings.SpellTimerNameColor),
+					ProgressBarColor = _colorService.GetColorFromSpellType(match.SpellType)
+				});
             });
         }
 
@@ -361,14 +368,14 @@ namespace EQTool.ViewModels
                 return;
             }
 
-            appDispatcher.DispatchUI(() =>
+            _appDispatcher.DispatchUI(() =>
             {
                 foreach (var item in youspells)
                 {
-                    var match = spells.AllSpells.FirstOrDefault(a => a.name == item.Name);
+                    var match = _spells.AllSpells.FirstOrDefault(a => a.name == item.Name);
                     if (match != null)
                     {
-                        var spellduration = TimeSpan.FromSeconds(SpellDurations.GetDuration_inSeconds(match, activePlayer.Player));
+                        var spellduration = TimeSpan.FromSeconds(SpellDurations.GetDuration_inSeconds(match, _activePlayer.Player));
                         var savedspellduration = item.TotalSecondsLeft;
                         var uispell = new UISpell(DateTime.Now.AddSeconds(savedspellduration), false)
                         {
@@ -382,8 +389,10 @@ namespace EQTool.ViewModels
                             Counter = null,
                             SpellIcon = match.SpellIcon,
                             Classes = match.Classes,
-                            GuessedSpell = false
-                        };
+                            GuessedSpell = false,
+							SpellNameColor = new SolidColorBrush(_settings.SpellTimerNameColor),
+							ProgressBarColor = _colorService.GetColorFromSpellType(match.type)
+						};
                         SpellList.Add(uispell);
                     }
                 }
@@ -397,7 +406,7 @@ namespace EQTool.ViewModels
                 return;
             }
 
-            appDispatcher.DispatchUI(() =>
+            _appDispatcher.DispatchUI(() =>
             {
                 var s = SpellList.Where(a => a.SpellName == possiblespell && a.TargetName != EQSpells.SpaceYou).ToList();
                 if (s.Count() == 1)
@@ -414,7 +423,7 @@ namespace EQTool.ViewModels
                 return;
             }
 
-            appDispatcher.DispatchUI(() =>
+            _appDispatcher.DispatchUI(() =>
             {
                 var spells = SpellList.Where(a => possiblespellnames.Contains(a.SpellName) && a.TargetName == EQSpells.SpaceYou).ToList();
                 if (spells.Count() == 1)
@@ -431,7 +440,7 @@ namespace EQTool.ViewModels
                 return;
             }
 
-            appDispatcher.DispatchUI(() =>
+            _appDispatcher.DispatchUI(() =>
             {
                 var s = SpellList.FirstOrDefault(a => a.SpellName == name && CustomTimer.CustomerTime == a.TargetName);
                 if (s != null)
@@ -448,7 +457,7 @@ namespace EQTool.ViewModels
                 return;
             }
 
-            appDispatcher.DispatchUI(() =>
+            _appDispatcher.DispatchUI(() =>
             {
                 var spellstormove = SpellList.Where(a => a.TargetName.ToLower() == target.ToLower()).ToList();
                 foreach (var item in spellstormove)

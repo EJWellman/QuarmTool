@@ -1,4 +1,5 @@
 ﻿using EQTool.Models;
+using EQTool.Services;
 using EQToolShared.Enums;
 using EQToolShared.HubModels;
 using System;
@@ -10,7 +11,6 @@ using System.Windows.Media;
 
 namespace EQTool.ViewModels
 {
-
     public class UISpell : INotifyPropertyChanged
     {
         public UISpell(DateTime endtime, bool isNPC)
@@ -332,21 +332,10 @@ namespace EQTool.ViewModels
                 {
                     ProgressBarColor = Brushes.MediumAquamarine;
                 }
-                else if (_SpellType == SpellTypes.Detrimental)
+                else if (_SpellType == SpellTypes.Detrimental
+					|| _SpellType == SpellTypes.BadGuyCoolDown)
                 {
                     ProgressBarColor = Brushes.OrangeRed;
-                }
-                else if (_SpellType == SpellTypes.BadGuyCoolDown)
-                {
-                    ProgressBarColor = Brushes.DarkOrange;
-                }
-                else if (_SpellType == SpellTypes.HarvestCooldown)
-                {
-                    ProgressBarColor = Brushes.SkyBlue;
-                }
-                else if (_SpellType >= SpellTypes.Other)
-                {
-                    ProgressBarColor = Brushes.DarkSeaGreen;
                 }
                 else if (_SpellType >= SpellTypes.RespawnTimer)
                 {
@@ -364,8 +353,16 @@ namespace EQTool.ViewModels
         }
 
         public SolidColorBrush ProgressBarColor { get; set; }
+		public SolidColorBrush SpellNameColor { get; set; }
+		public SolidColorBrush SpellNameInverseColor 
+		{ 
+			get
+			{
+				return SpellNameColor.InvertColor();
+			}
+		}
 
-        public int PercentLeftOnSpell { get; set; }
+		public int PercentLeftOnSpell { get; set; }
 
         public event PropertyChangedEventHandler PropertyChanged;
 

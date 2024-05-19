@@ -22,6 +22,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Forms;
+using System.Windows.Media;
 using System.Windows.Navigation;
 using Xceed.Wpf.Toolkit;
 
@@ -55,7 +56,7 @@ namespace EQTool
     public partial class Settings : BaseSaveStateWindow
     {
         private readonly SettingsWindowViewModel SettingsWindowData;
-        private readonly EQToolSettings settings;
+        private readonly EQToolSettings _settings;
         private readonly EQToolSettingsLoad toolSettingsLoad;
         private readonly SpellWindowViewModel spellWindowViewModel;
         private readonly EQSpells spells;
@@ -83,11 +84,11 @@ namespace EQTool
             this.appDispatcher = appDispatcher;
             this.dPSLogParse = dPSLogParse;
             this.spells = spells;
-            this.settings = settings;
+            this._settings = settings;
             this.spellWindowViewModel = spellWindowViewModel;
             this.toolSettingsLoad = toolSettingsLoad;
             DataContext = SettingsWindowData = settingsWindowData;
-            SettingsWindowData.EqPath = this.settings.DefaultEqDirectory;
+            SettingsWindowData.EqPath = this._settings.DefaultEqDirectory;
             InitializeComponent();
             base.Init();
             TryCheckLoggingEnabled();
@@ -109,20 +110,20 @@ namespace EQTool
 		#region Private Methods
 		private void SaveConfig()
         {
-            toolSettingsLoad.Save(settings);
+            toolSettingsLoad.Save(_settings);
         }
 
         private void TryUpdateSettings()
         {
-            var logfounddata = FindEq.GetLogFileLocation(new FindEq.FindEQData { EqBaseLocation = settings.DefaultEqDirectory, EQlogLocation = string.Empty });
+            var logfounddata = FindEq.GetLogFileLocation(new FindEq.FindEQData { EqBaseLocation = _settings.DefaultEqDirectory, EQlogLocation = string.Empty });
             if (logfounddata?.Found == true)
             {
-                settings.EqLogDirectory = logfounddata.Location;
+                _settings.EqLogDirectory = logfounddata.Location;
                 SettingsWindowData.EqLogPath = logfounddata.Location;
             }
             SettingsWindowData.Update();
-            BestGuessSpells.IsChecked = settings.BestGuessSpells;
-            YouSpellsOnly.IsChecked = settings.YouOnlySpells;
+            BestGuessSpells.IsChecked = _settings.BestGuessSpells;
+            YouSpellsOnly.IsChecked = _settings.YouOnlySpells;
             var player = SettingsWindowData.ActivePlayer.Player;
 
             if (player?.ShowSpellsForClasses != null)
@@ -139,8 +140,8 @@ namespace EQTool
                     item.IsChecked = false;
                 }
             }
-            var hasvalideqdir = FindEq.IsValidEqFolder(settings.DefaultEqDirectory);
-            if (hasvalideqdir && FindEq.TryCheckLoggingEnabled(settings.DefaultEqDirectory) == true)
+            var hasvalideqdir = FindEq.IsValidEqFolder(_settings.DefaultEqDirectory);
+            if (hasvalideqdir && FindEq.TryCheckLoggingEnabled(_settings.DefaultEqDirectory) == true)
             {
                 ((App)System.Windows.Application.Current).ToggleMenuButtons(true);
             }
@@ -157,7 +158,7 @@ namespace EQTool
 
         private void TryCheckLoggingEnabled()
         {
-            SettingsWindowData.IsLoggingEnabled = FindEq.TryCheckLoggingEnabled(settings.DefaultEqDirectory) ?? false;
+            SettingsWindowData.IsLoggingEnabled = FindEq.TryCheckLoggingEnabled(_settings.DefaultEqDirectory) ?? false;
         }
 
         private void fontsizescombobox_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
@@ -179,7 +180,7 @@ namespace EQTool
                 {
                     if (FindEq.IsValidEqFolder(fbd.SelectedPath))
                     {
-                        SettingsWindowData.EqPath = settings.DefaultEqDirectory = fbd.SelectedPath;
+                        SettingsWindowData.EqPath = _settings.DefaultEqDirectory = fbd.SelectedPath;
                         this.appDispatcher.DispatchUI(() =>
                         {
                             TryUpdateSettings();
@@ -203,13 +204,13 @@ namespace EQTool
             }
             try
             {
-                if (settings.DefaultEqDirectory.ToLower().Contains("program files"))
+                if (_settings.DefaultEqDirectory.ToLower().Contains("program files"))
                 {
                     _ = System.Windows.MessageBox.Show("Everquest is installed in program files. YOU MUST ADD LOG=TRUE to the eqclient.ini yourself.", "Configuration", MessageBoxButton.OK, MessageBoxImage.Warning);
                 }
                 else
                 {
-                    var data = File.ReadAllLines(settings.DefaultEqDirectory + "/eqclient.ini");
+                    var data = File.ReadAllLines(_settings.DefaultEqDirectory + "/eqclient.ini");
                     var newlist = new List<string>();
                     foreach (var item in data)
                     {
@@ -223,7 +224,7 @@ namespace EQTool
                             newlist.Add(item);
                         }
                     }
-                    File.WriteAllLines(settings.DefaultEqDirectory + "/eqclient.ini", newlist);
+                    File.WriteAllLines(_settings.DefaultEqDirectory + "/eqclient.ini", newlist);
                 }
             }
             catch { }
@@ -244,51 +245,51 @@ namespace EQTool
         private void YouSpells_Click(object sender, RoutedEventArgs e)
         {
             var s = sender as System.Windows.Controls.CheckBox;
-            settings.YouOnlySpells = s.IsChecked ?? false;
+            _settings.YouOnlySpells = s.IsChecked ?? false;
             SaveConfig();
         }
 
         private void GuessSpells_Click(object sender, RoutedEventArgs e)
         {
             var s = sender as System.Windows.Controls.CheckBox;
-            settings.BestGuessSpells = s.IsChecked ?? false;
+            _settings.BestGuessSpells = s.IsChecked ?? false;
             SaveConfig();
         }
 
 		private void ComboShowRandom_Click(object sender, RoutedEventArgs e)
 		{
 			var s = sender as System.Windows.Controls.CheckBox;
-			settings.ComboShowRandomRolls = s.IsChecked ?? false;
+			_settings.ComboShowRandomRolls = s.IsChecked ?? false;
 			SaveConfig();
 		}
 		private void ComboShowSpells_Click(object sender, RoutedEventArgs e)
 		{
 			var s = sender as System.Windows.Controls.CheckBox;
-			settings.ComboShowSpells = s.IsChecked ?? false;
+			_settings.ComboShowSpells = s.IsChecked ?? false;
 			SaveConfig();
 		}
 		private void ComboShowTimer_Click(object sender, RoutedEventArgs e)
 		{
 			var s = sender as System.Windows.Controls.CheckBox;
-			settings.ComboShowTimers = s.IsChecked ?? false;
+			_settings.ComboShowTimers = s.IsChecked ?? false;
 			SaveConfig();
 		}
 		private void ComboShowModRodTimers_Click(object sender, RoutedEventArgs e)
 		{
 			var s = sender as System.Windows.Controls.CheckBox;
-			settings.ComboShowModRodTimers = s.IsChecked ?? false;
+			_settings.ComboShowModRodTimers = s.IsChecked ?? false;
 			SaveConfig();
 		}
 		private void TimerShowRandom_Click(object sender, RoutedEventArgs e)
 		{
 			var s = sender as System.Windows.Controls.CheckBox;
-			settings.ShowRandomRolls = s.IsChecked ?? false;
+			_settings.ShowRandomRolls = s.IsChecked ?? false;
 			SaveConfig();
 		}
 		private void TimerShowModRodTimers_Click(object sender, RoutedEventArgs e)
 		{
 			var s = sender as System.Windows.Controls.CheckBox;
-			settings.ShowModRodTimers = s.IsChecked ?? false;
+			_settings.ShowModRodTimers = s.IsChecked ?? false;
 			SaveConfig();
 		}
 
@@ -297,45 +298,66 @@ namespace EQTool
 		private void OverlayColor_Selected(object sender, RoutedEventArgs e)
 		{
 			var s = sender as ColorPicker;
-			if(s.Name == "LevFadingOverlayColor")
+			if (s.Name == "LevFadingOverlayColor")
 			{
-				settings.LevFadingOverlayColor = s.SelectedColor.Value;
+				_settings.LevFadingOverlayColor = s.SelectedColor.Value;
 			}
-			else if(s.Name == "InvisFadingOverlayColor")
+			else if (s.Name == "InvisFadingOverlayColor")
 			{
-				settings.InvisFadingOverlayColor = s.SelectedColor.Value;
+				_settings.InvisFadingOverlayColor = s.SelectedColor.Value;
 			}
-			else if(s.Name == "EnrageOverlayColor")
+			else if (s.Name == "EnrageOverlayColor")
 			{
-				settings.EnrageOverlayColor = s.SelectedColor.Value;
+				_settings.EnrageOverlayColor = s.SelectedColor.Value;
 			}
-			else if(s.Name == "FTEOverlayColor")
+			else if (s.Name == "FTEOverlayColor")
 			{
-				settings.FTEOverlayColor = s.SelectedColor.Value;
+				_settings.FTEOverlayColor = s.SelectedColor.Value;
 			}
-			else if(s.Name == "CharmBreakOverlayColor")
+			else if (s.Name == "CharmBreakOverlayColor")
 			{
-				settings.CharmBreakOverlayColor = s.SelectedColor.Value;
+				_settings.CharmBreakOverlayColor = s.SelectedColor.Value;
 			}
-			else if(s.Name == "FailedFeignOverlayColor")
+			else if (s.Name == "FailedFeignOverlayColor")
 			{
-				settings.FailedFeignOverlayColor = s.SelectedColor.Value;
+				_settings.FailedFeignOverlayColor = s.SelectedColor.Value;
 			}
-			else if(s.Name == "GroupInviteOverlayColor")
+			else if (s.Name == "GroupInviteOverlayColor")
 			{
-				settings.GroupInviteOverlayColor = s.SelectedColor.Value;
+				_settings.GroupInviteOverlayColor = s.SelectedColor.Value;
 			}
-			else if(s.Name == "DragonRoarOverlayColor")
+			else if (s.Name == "DragonRoarOverlayColor")
 			{
-				settings.DragonRoarOverlayColor = s.SelectedColor.Value;
+				_settings.DragonRoarOverlayColor = s.SelectedColor.Value;
 			}
-			else if(s.Name == "RootWarningOverlayColor")
+			else if (s.Name == "RootWarningOverlayColor")
 			{
-				settings.RootWarningOverlayColor = s.SelectedColor.Value;
+				_settings.RootWarningOverlayColor = s.SelectedColor.Value;
 			}
-			else if(s.Name == "ResistWarningOverlayColor")
+			else if (s.Name == "ResistWarningOverlayColor")
 			{
-				settings.ResistWarningOverlayColor = s.SelectedColor.Value;
+				_settings.ResistWarningOverlayColor = s.SelectedColor.Value;
+			}
+			else if (s.Name == "SpellTimerNameColor") {
+				_settings.SpellTimerNameColor = s.SelectedColor.Value;
+			}
+			else if (s.Name == "BeneficialSpellTimerColor") {
+				_settings.BeneficialSpellTimerColor = s.SelectedColor.Value;
+			}
+			else if (s.Name == "DetrimentalSpellTimerColor") {
+				_settings.DetrimentalSpellTimerColor = s.SelectedColor.Value;
+			}
+			else if (s.Name == "RespawnTimerColor") {
+				_settings.RespawnTimerColor = s.SelectedColor.Value;
+			}
+			else if (s.Name == "ModRodTimerColor") {
+				_settings.ModRodTimerColor = s.SelectedColor.Value;
+			}
+			else if (s.Name == "DisciplineTimerColor") {
+				_settings.DisciplineTimerColor = s.SelectedColor.Value;
+			}
+			else if (s.Name == "OtherTimerColor") {
+				_settings.OtherTimerColor = s.SelectedColor.Value;
 			}
 			SaveConfig();
 		}
@@ -1072,16 +1094,16 @@ namespace EQTool
 
 			if (CustomOverlayService.AddNewCustomOverlay(newOverlay))
 			{
-				if(settings.CustomOverlays == null)
+				if(_settings.CustomOverlays == null)
 				{
-					settings.CustomOverlays = new ObservableCollectionRange<CustomOverlay>();
+					_settings.CustomOverlays = new ObservableCollectionRange<CustomOverlay>();
 				}
 				List<CustomOverlay> overlays = CustomOverlayService.LoadCustomOverlayMessages();
 				foreach(var overlay in overlays)
 				{
-					if(!settings.CustomOverlays.Any(co => co.ID == overlay.ID))
+					if(!_settings.CustomOverlays.Any(co => co.ID == overlay.ID))
 					{
-						settings.CustomOverlays.Add(overlay);
+						_settings.CustomOverlays.Add(overlay);
 					}
 				}
 			}
@@ -1091,7 +1113,7 @@ namespace EQTool
 			NewOverlay_Message.Text = "";
 			NewOverlay_Trigger.Text = "";
 			NewOverlay_AltTrigger.Text = "";
-			NewOverlay_TriggerColor.SelectedColor = System.Windows.Media.Colors.White;
+			NewOverlay_TriggerColor.SelectedColor = Colors.White;
 
 			//close popup
 			ToggleCreateNewButton.IsChecked = false;
@@ -1113,9 +1135,9 @@ namespace EQTool
 				{
 					if (e.Success)
 					{
-						var found = settings.CustomOverlays.FirstOrDefault(a => a.ID == e.UpdatedOverlay.ID);
-						int i = settings.CustomOverlays.IndexOf(found);
-						settings.CustomOverlays[i] = e.UpdatedOverlay;
+						var found = _settings.CustomOverlays.FirstOrDefault(a => a.ID == e.UpdatedOverlay.ID);
+						int i = _settings.CustomOverlays.IndexOf(found);
+						_settings.CustomOverlays[i] = e.UpdatedOverlay;
 					}
 				};
 

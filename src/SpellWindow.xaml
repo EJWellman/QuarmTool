@@ -66,20 +66,55 @@
                             </Grid.ColumnDefinitions>
                             <ProgressBar Grid.Column="0" Grid.ColumnSpan="3" Value="{Binding PercentLeftOnSpell}"  Maximum="100"  Foreground="{Binding ProgressBarColor}"  />
                             <StackPanel Orientation="Horizontal" Grid.Column="0" >
-                                <Image Height="{DynamicResource GlobalFontSize}" Width="{DynamicResource GlobalFontSize}" IsEnabled="{Binding HasSpellIcon}">
-                                    <Image.Source>
-                                        <CroppedBitmap Source="{Binding SpellIcon.Icon}" SourceRect="{Binding Rect}" />
-                                    </Image.Source>
-                                </Image>
-                                <TextBlock HorizontalAlignment="Left" FontWeight="Bold" Text="{Binding SpellName}"/>
-                                <TextBlock HorizontalAlignment="Left" FontWeight="Bold" Text="{Binding SpellExtraData}"/>
-                                <TextBlock HorizontalAlignment="Left" FontWeight="Bold" Text="{Binding SpellExtraData2}"/>
+                                <Grid Grid.Column="0">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition/>
+                                    </Grid.ColumnDefinitions>
+                                    <Image Height="{DynamicResource GlobalFontSize}" Width="{DynamicResource GlobalFontSize}" IsEnabled="{Binding HasSpellIcon}" Grid.Column="0">
+                                        <Image.Source>
+                                            <CroppedBitmap Source="{Binding SpellIcon.Icon}" SourceRect="{Binding Rect}" />
+                                        </Image.Source>
+                                    </Image>
+                                    <TextBlock HorizontalAlignment="Left" FontWeight="Bold" Text="{Binding SpellName}" Foreground="{Binding SpellNameInverseColor}" Grid.Column="1">
+                                        <TextBlock.Effect>
+                                            <BlurEffect Radius="2.0" KernelType="Box"/>
+                                        </TextBlock.Effect>
+                                    </TextBlock>
+                                    <TextBlock HorizontalAlignment="Left" FontWeight="Bold" Text="{Binding SpellName}" Foreground="{Binding SpellNameColor}" Grid.Column="1"/>
+                                    <TextBlock HorizontalAlignment="Left" FontWeight="Bold" Text="{Binding SpellExtraData}" Foreground="{Binding SpellNameInverseColor}" Grid.Column="2">
+                                        <TextBlock.Effect>
+                                            <BlurEffect Radius="2.0" KernelType="Box"/>
+                                        </TextBlock.Effect>
+                                    </TextBlock>
+                                    <TextBlock HorizontalAlignment="Left" FontWeight="Bold" Text="{Binding SpellExtraData}" Foreground="{Binding SpellNameColor}" Grid.Column="2"/>
+                                    <TextBlock HorizontalAlignment="Left" FontWeight="Bold" Text="{Binding SpellExtraData2}" Foreground="{Binding SpellNameInverseColor}" Grid.Column="3">
+                                        <TextBlock.Effect>
+                                            <BlurEffect Radius="2.0" KernelType="Box"/>
+                                        </TextBlock.Effect>
+                                    </TextBlock>
+                                    <TextBlock HorizontalAlignment="Left" FontWeight="Bold" Text="{Binding SpellExtraData2}" Foreground="{Binding SpellNameColor}" Grid.Column="3"/>
+                                </Grid>
                             </StackPanel>
                             <StackPanel Orientation="Horizontal" Grid.Column="2" HorizontalAlignment="Right">
-                                <Button Margin="5, 0, 0, 0" Width="14" Height="14" Click="RemoveSingleItem" ToolTip="Remove from list">
-                                    <Image Source="pack://application:,,,/Trash.png"/>
-                                </Button>
-                                <TextBlock MinWidth="70" TextAlignment="Right" FontWeight="Bold" Text="{Binding SecondsLeftOnSpellPretty}"/>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition/>
+                                    </Grid.ColumnDefinitions>
+                                    <Button Margin="5, 0, 0, 0" Width="14" Height="14" Click="RemoveSingleItem" ToolTip="Remove from list" Grid.Column="0">
+                                        <Image Source="pack://application:,,,/Trash.png"/>
+                                    </Button>
+
+                                    <TextBlock MinWidth="70" TextAlignment="Right" FontWeight="Bold" Text="{Binding SecondsLeftOnSpellPretty}" Foreground="{Binding SpellNameInverseColor}" Grid.Column="1">
+                                        <TextBlock.Effect>
+                                            <BlurEffect Radius="2.0" KernelType="Box"/>
+                                        </TextBlock.Effect>
+                                    </TextBlock>
+                                    <TextBlock MinWidth="70" TextAlignment="Right" FontWeight="Bold" Text="{Binding SecondsLeftOnSpellPretty}" Foreground="{Binding SpellNameColor}" Grid.Column="1"/>
+                                </Grid>
                             </StackPanel>
                         </Grid>
                     </DataTemplate>

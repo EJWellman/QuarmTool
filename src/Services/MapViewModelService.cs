@@ -27,6 +27,7 @@ namespace EQTool.Services
         public double? Trackingdistance { get; set; }
         public float CurrentScaling { get; set; }
         public Transform Transform { get; set; }
+		public float? Heading { get; set; }
     }
     public static class MapViewModelService
     {
@@ -84,7 +85,15 @@ namespace EQTool.Services
 
             var transform = new MatrixTransform();
             var translation = new TranslateTransform(locationData.Transform.Value.OffsetX, locationData.Transform.Value.OffsetY);
-            transform.Matrix = locationData.PlayerLocationCircle.ArrowLine.RotateTransform.Value * translation.Value;
+			if(locationData.Heading != null)
+			{
+				locationData.PlayerLocationCircle.ArrowLine.RenderTransform = new RotateTransform((float)locationData.Heading);
+				transform.Matrix = locationData.PlayerLocationCircle.ArrowLine.RenderTransform.Value * translation.Value;
+			}
+			else
+			{
+				transform.Matrix = locationData.PlayerLocationCircle.ArrowLine.RotateTransform.Value * translation.Value;
+			}
             locationData.PlayerLocationCircle.ArrowLine.RenderTransform = transform;
 
             var transform2 = new MatrixTransform();
