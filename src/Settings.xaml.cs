@@ -831,13 +831,7 @@ namespace EQTool
             SettingsWindowData.ActivePlayer.Player.EnrageAudio = true;
             SettingsWindowData.ActivePlayer.Player.EnrageOverlay = true;
             ((App)System.Windows.Application.Current).OpenOverLayWindow();
-            if (ZoneParser.ZoneInfoMap.TryGetValue(z, out var zone))
-            {
-                if (zone.NotableNPCs.Any())
-                {
-                    this.PushLog(zone.NotableNPCs.FirstOrDefault() + " has become ENRAGED.");
-                }
-            }
+            this.PushLog("Lord Nagafen has become ENRAGED.");
         }
 
         private void testlevfading(object sender, RoutedEventArgs e)

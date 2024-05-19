@@ -74,7 +74,8 @@ namespace EQTool
         private void TimerMenu_Opened(object sender, RoutedEventArgs e)
         {
             TimerMenu_OpenedEvent?.Invoke(this, e);
-            TimeSpanControl.Value = ZoneSpawnTimes.GetSpawnTime(string.Empty, ZoneName);
+			TimeSpanControl.Value = new TimeSpan(0, 8, 0);
+			//TimeSpanControl.Value = ZoneSpawnTimes.GetSpawnTime(string.Empty, ZoneName);
         }
     }
 }
