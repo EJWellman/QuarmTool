@@ -297,7 +297,7 @@
 
             </StackPanel>
         </TabItem>
-        <TabItem Header="Triggers">
+        <TabItem Header="Timers">
             <StackPanel Orientation="Vertical" Margin="5, 5, 5, 5">
                 <StackPanel Orientation="Vertical"  Margin="0, 0, 0, 8">
                     <StackPanel Orientation="Horizontal">
@@ -358,18 +358,61 @@
                         <CheckBox x:Name="YouSpellsOnly" Click="YouSpells_Click" />
                     </StackPanel>
                 </StackPanel>
-                <StackPanel Orientation="Horizontal">
-                    <TextBlock Text="Spell Filters"  FontWeight="Bold" MinWidth="100" ToolTip="This will filter what shows up on other players."/>
+                <Separator></Separator>
+                <Expander ExpandDirection="Down" IsExpanded="False" Header="Timer Colors" FontWeight="Bold">
                     <StackPanel Orientation="Vertical">
-                        <ListBox IsEnabled="{Binding HasCharName}" ItemsSource="{Binding SelectedPlayerClasses}" MinWidth="150">
-                            <ListBox.ItemTemplate>
-                                <DataTemplate>
-                                    <CheckBox Content="{Binding TheText}" Tag="{Binding TheValue}" Unchecked="CheckBoxZone_Checked" Checked="CheckBoxZone_Checked" IsChecked="{Binding IsChecked}" Margin="0,5,0,0"/>
-                                </DataTemplate>
-                            </ListBox.ItemTemplate>
-                        </ListBox>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="125"/>
+                                <ColumnDefinition Width="100"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="0*"/>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                            </Grid.RowDefinitions>
+                            <TextBlock Grid.Row="0" Grid.Column="0" Text="Text" FontWeight="Bold" VerticalAlignment="Center"  MinWidth="100" ToolTip="Has a very slight dropshadow of the opposite color."/>
+                            <xctk:ColorPicker Name="SpellTimerNameColor"  Grid.Row="0" Grid.Column="1" SelectedColor="{Binding SpellTimerNameColor}" MinWidth="100" Margin="5,0,-93,0"/>
+
+                            <TextBlock Grid.Row="1" Grid.Column="0" Text="Beneficial" FontWeight="Bold" VerticalAlignment="Center"  MinWidth="100"/>
+                            <xctk:ColorPicker Name="BeneficialSpellTimerColor" Grid.Row="1" Grid.Column="1" SelectedColor="{Binding BeneficialSpellTimerColor}" FontWeight="Bold" MinWidth="100" Margin="5,5,-93,0"/>
+
+                            <TextBlock Grid.Row="2" Grid.Column="0" Text="Detrimental" FontWeight="Bold" VerticalAlignment="Center"  MinWidth="100"/>
+                            <xctk:ColorPicker Name="DetrimentalSpellTimerColor" Grid.Row="2" Grid.Column="1" SelectedColor="{Binding DetrimentalSpellTimerColor}" FontWeight="Bold" MinWidth="100" Margin="5,5,-93,0"/>
+
+                            <TextBlock Grid.Row="3" Grid.Column="0" Text="Respawn" FontWeight="Bold" VerticalAlignment="Center"  MinWidth="100"/>
+                            <xctk:ColorPicker Name="RespawnTimerColor" Grid.Row="3" Grid.Column="1" SelectedColor="{Binding RespawnTimerColor}" FontWeight="Bold" MinWidth="100" Margin="5,5,-93,0"/>
+
+                            <TextBlock Grid.Row="4" Grid.Column="0" Text="Mod Rod" FontWeight="Bold" VerticalAlignment="Center"  MinWidth="100"/>
+                            <xctk:ColorPicker Name="ModRodTimerColor" Grid.Row="4" Grid.Column="1" SelectedColor="{Binding ModRodTimerColor}" FontWeight="Bold" MinWidth="100" Margin="5,5,-93,0"/>
+
+                            <TextBlock Grid.Row="5" Grid.Column="0" Text="Discipline" FontWeight="Bold" VerticalAlignment="Center"  MinWidth="100"/>
+                            <xctk:ColorPicker Name="DisciplineTimerColor" Grid.Row="5" Grid.Column="1" SelectedColor="{Binding DisciplineTimerColor}" FontWeight="Bold" MinWidth="100" Margin="5,5,-93,0"/>
+                            
+                            <TextBlock Grid.Row="6" Grid.Column="0" Text="Other" FontWeight="Bold" VerticalAlignment="Center"  MinWidth="100"/>
+                            <xctk:ColorPicker Name="OtherTimerColor" Grid.Row="6" Grid.Column="1" SelectedColor="{Binding OtherTimerColor}" FontWeight="Bold" MinWidth="100" Margin="5,5,-93,0"/>
+                        </Grid>
                     </StackPanel>
-                </StackPanel>
+                </Expander>
+                <Separator></Separator>
+                <Expander ExpandDirection="Down" IsExpanded="False" Header="Spell Filters" FontWeight="Bold" ToolTip="This will filter what shows up on other players.">
+                    <StackPanel Orientation="Horizontal">
+                        <!--<TextBlock Text="Spell Filters"  FontWeight="Bold" MinWidth="100" />-->
+                        <StackPanel Orientation="Vertical">
+                            <ListBox IsEnabled="{Binding HasCharName}" ItemsSource="{Binding SelectedPlayerClasses}" MinWidth="150">
+                                <ListBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <CheckBox Content="{Binding TheText}" Tag="{Binding TheValue}" Unchecked="CheckBoxZone_Checked" Checked="CheckBoxZone_Checked" IsChecked="{Binding IsChecked}" Margin="0,5,0,0"/>
+                                    </DataTemplate>
+                                </ListBox.ItemTemplate>
+                            </ListBox>
+                        </StackPanel>
+                    </StackPanel>
+                </Expander>
             </StackPanel>
         </TabItem>
         <TabItem Header="Map">

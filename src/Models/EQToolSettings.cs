@@ -2,10 +2,9 @@
 using EQToolShared.ExtendedClasses;
 using Newtonsoft.Json;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices.WindowsRuntime;
+using System.Windows.Media;
 using System.Windows;
 
 namespace EQTool.Models
@@ -64,16 +63,16 @@ namespace EQTool.Models
 			}
 		}
 
-		private System.Windows.Media.Color _EnrageOverlayColor = System.Windows.Media.Color.FromRgb(255, 255, 0); //Red
-		private System.Windows.Media.Color _LevFadingOverlayColor = System.Windows.Media.Color.FromRgb(255, 255, 0); //Red
-		private System.Windows.Media.Color _InvisFadingOverlayColor = System.Windows.Media.Color.FromRgb(255, 255, 0); //Red
-		private System.Windows.Media.Color _FTEOverlayColor = System.Windows.Media.Color.FromRgb(255, 255, 0); //Red
-		private System.Windows.Media.Color _CharmBreakOverlayColor = System.Windows.Media.Color.FromRgb(255, 255, 0); //Red
-		private System.Windows.Media.Color _FailedFeignOverlayColor = System.Windows.Media.Color.FromRgb(255, 255, 0); //Red
-		private System.Windows.Media.Color _GroupInviteOverlayColor = System.Windows.Media.Color.FromRgb(255, 255, 0); //Red
-		private System.Windows.Media.Color _DragonRoarOverlayColor = System.Windows.Media.Color.FromRgb(255, 255, 0); //Red
-		private System.Windows.Media.Color _RootWarningOverlayColor = System.Windows.Media.Color.FromRgb(255, 255, 0); //Red
-		private System.Windows.Media.Color _ResistWarningOverlayColor = System.Windows.Media.Color.FromRgb(255, 255, 0); //Red
+		private Color _EnrageOverlayColor = Color.FromRgb(255, 255, 0); //Red
+		private Color _LevFadingOverlayColor = Color.FromRgb(255, 255, 0); //Red
+		private Color _InvisFadingOverlayColor = Color.FromRgb(255, 255, 0); //Red
+		private Color _FTEOverlayColor = Color.FromRgb(255, 255, 0); //Red
+		private Color _CharmBreakOverlayColor = Color.FromRgb(255, 255, 0); //Red
+		private Color _FailedFeignOverlayColor = Color.FromRgb(255, 255, 0); //Red
+		private Color _GroupInviteOverlayColor = Color.FromRgb(255, 255, 0); //Red
+		private Color _DragonRoarOverlayColor = Color.FromRgb(255, 255, 0); //Red
+		private Color _RootWarningOverlayColor = Color.FromRgb(255, 255, 0); //Red
+		private Color _ResistWarningOverlayColor = Color.FromRgb(255, 255, 0); //Red
 
 
 		public System.Windows.Media.Color ResistWarningOverlayColor
@@ -253,6 +252,14 @@ namespace EQTool.Models
 		public bool ComboShowTimers { get; set; }
 		public bool ComboShowModRodTimers { get; set; }
 		public bool ShowModRodTimers { get; set; }
+
+		public Color SpellTimerNameColor { get; set; } = Color.FromRgb(255, 255, 255);
+		public Color BeneficialSpellTimerColor { get; set; } = Color.FromRgb(102, 205, 170);
+		public Color DetrimentalSpellTimerColor { get; set; } = Color.FromRgb(255, 69, 0);
+		public Color RespawnTimerColor { get; set; } = Color.FromRgb(255, 160, 122);
+		public Color DisciplineTimerColor { get; set; } = Color.FromRgb(255, 215, 0);
+		public Color ModRodTimerColor { get; set; } = Color.FromRgb(255, 215, 0);
+		public Color OtherTimerColor { get; set; } = Color.FromRgb(143, 188, 143);
 
 		private ObservableCollectionRange<CustomOverlay> _customOverlays = new ObservableCollectionRange<CustomOverlay>();
 		[JsonIgnore]
