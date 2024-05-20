@@ -56,13 +56,14 @@ namespace EQTool
         private void LogParser_DeadEvent(object sender, LogParser.DeadEventArgs e)
         {
             var zone = this.activePlayer?.Player?.Zone;
-            if (!string.IsNullOrWhiteSpace(zone) && ZoneParser.ZoneInfoMap.TryGetValue(zone, out var fzone))
-            {
-                if (fzone.NotableNPCs.Any(a => a == e.Name))
-                {
-                    this.copytoclipboard(e.Name);
-                }
-            }
+			//TODO: Revisit this later
+            //if (!string.IsNullOrWhiteSpace(zone) && ZoneParser.ZoneInfoMap.TryGetValue(zone, out var fzone))
+            //{
+            //    if (fzone.NotableNPCs.Any(a => a == e.Name))
+            //    {
+            //        this.copytoclipboard(e.Name);
+            //    }
+            //}
 
             dPSWindowViewModel.TargetDied(e.Name);
         }

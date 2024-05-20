@@ -54,16 +54,16 @@ namespace EQToolApis.Services
                     }
 
                     var npcdata = new List<NoteableNPC>();
-                    foreach (var npc in zone.Value.NotableNPCs.Where(a => !string.IsNullOrWhiteSpace(a)))
-                    {
-                        npcdata.Add(new NoteableNPC
-                        {
-                            LastDeath = deathnpcs.FirstOrDefault(a => a.Name == npc)?.LastDeath,
-                            LastSeen = lastseennpcs.FirstOrDefault(a => a.Name == npc)?.LastSeen,
-                            Name = npc,
-                            EQNotableNPCId = notablenpcs.FirstOrDefault(a => a.Name == npc).EQNotableNPCId
-                        });
-                    }
+                    //foreach (var npc in zone.Value.NotableNPCs.Where(a => !string.IsNullOrWhiteSpace(a)))
+                    //{
+                    //    npcdata.Add(new NoteableNPC
+                    //    {
+                    //        LastDeath = deathnpcs.FirstOrDefault(a => a.Name == npc)?.LastDeath,
+                    //        LastSeen = lastseennpcs.FirstOrDefault(a => a.Name == npc)?.LastSeen,
+                    //        Name = npc,
+                    //        EQNotableNPCId = notablenpcs.FirstOrDefault(a => a.Name == npc).EQNotableNPCId
+                    //    });
+                    //}
                     newnoteableNPCCache.ServerData[(int)server].Zones.Add(zone.Key, npcdata);
                 }
             }

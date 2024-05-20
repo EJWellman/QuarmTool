@@ -8,20 +8,23 @@ using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Security.Policy;
 using System.Threading;
 using System.Windows.Media.Media3D;
+using static EQTool.Services.LogParser;
 
 namespace EQTool.Services
 {
     public class MapLoad
     {
-        private readonly LoggingService loggingService;
-        private readonly ActivePlayer activePlayer;
+        private readonly LoggingService _loggingService;
+        private readonly ActivePlayer _activePlayer;
+		private string _cachedMapsFolder = "cachedmaps_2";
 
         public MapLoad(LoggingService loggingService, ActivePlayer activePlayer)
         {
-            this.loggingService = loggingService;
-            this.activePlayer = activePlayer;
+            _loggingService = loggingService;
+            _activePlayer = activePlayer;
         }
         public ParsedData Load(string zone, string lastZone = "")
         {
@@ -34,62 +37,48 @@ namespace EQTool.Services
                 zone = "freportw";
             }
             var lines = new List<string>();
-            var checkformanualmaps = System.IO.Directory.GetCurrentDirectory() + "/maps";
-            var isdebug = false;
-#if DEBUG
-            //isdebug = true;
-#endif
-            if (isdebug && System.IO.Directory.Exists(checkformanualmaps))
+            var checkformanualmaps = Path.Combine(Directory.GetCurrentDirectory(), "maps");
+
+			string cachedMapsFullFolderPath = Directory.GetCurrentDirectory() + $"/{_cachedMapsFolder}";
+			Directory.CreateDirectory(cachedMapsFullFolderPath);
+			if (File.Exists(cachedMapsFullFolderPath + "/" + zone + ".bin"))
+			{
+				try
+				{
+					var data = BinarySerializer.ReadFromBinaryFile<ParsedData>(cachedMapsFullFolderPath + "/" + zone + ".bin");
+					stop.Stop();
+					Debug.WriteLine($"Time to load map from Cache {zone} {stop.ElapsedMilliseconds}");
+					return data;
+				}
+				catch (Exception ex)
+				{
+					_loggingService.Log(ex.ToString(), EventType.Error, _activePlayer?.Player?.Server);
+				}
+			}
+
+			if (Directory.Exists(checkformanualmaps))
             {
-                var resourcenames = Directory.GetFiles(checkformanualmaps, zone + "*.txt").ToList();
-                foreach (var item in resourcenames)
-                {
-                    using (var stream = new FileStream(item, FileMode.Open, FileAccess.Read))
-                    using (var reader = new StreamReader(stream))
-                    {
-                        var l = reader.ReadToEnd();
-                        var splits = l.Split(new string[] { "\r\n", "\r", "\n" }, StringSplitOptions.None);
-                        lines.AddRange(splits);
-                    }
-                }
-            }
-            var oldcachedmaps = Directory.GetDirectories(System.IO.Directory.GetCurrentDirectory(), "cachedmaps*");
-            var version = "cachedmaps_2";
-            foreach (var item in oldcachedmaps)
-            {
-                if (!item.Contains(version))
-                {
-                    try
-                    {
-                        Directory.Delete(item, true);
-                    }
-                    catch
-                    {
-                        Thread.Sleep(2000);
-                        Directory.Delete(item, true);
-                    }
-                }
-            }
-            checkformanualmaps = System.IO.Directory.GetCurrentDirectory() + $"/{version}";
-            if (System.IO.File.Exists(checkformanualmaps + "/" + zone + ".bin"))
-            {
-                try
-                {
-                    var data = BinarySerializer.ReadFromBinaryFile<ParsedData>(checkformanualmaps + "/" + zone + ".bin");
-                    stop.Stop();
-                    Debug.WriteLine($"Time to load map from Cache {zone} {stop.ElapsedMilliseconds}");
-                    return data;
-                }
-                catch (Exception ex)
-                {
-                    loggingService.Log(ex.ToString(), EventType.Error, activePlayer?.Player?.Server);
-                }
-            }
-            try
-            {
-                _ = Directory.CreateDirectory(checkformanualmaps);
-            }
-            catch { }
+				List<string> namesToLookFor = new List<string>()
+				{
+					$"{zone}.txt",
+					$"{zone}_1.txt",
+					$"{zone}_2.txt",
+					$"{zone}_3.txt"
+				};
+
+				List<string> list = Directory.GetFiles(checkformanualmaps, zone + "*.txt").ToList();
+				var resourcenames = list.Where(a => namesToLookFor.Contains(Path.GetFileName(a).ToLower())).ToList();
+				foreach (var item in resourcenames)
+				{
+					using (var stream = new FileStream(item, FileMode.Open, FileAccess.Read))
+					using (var reader = new StreamReader(stream))
+					{
+						var l = reader.ReadToEnd();
+						var splits = l.Split(new string[] { "\r\n", "\r", "\n" }, StringSplitOptions.None);
+						lines.AddRange(splits);
+					}
+				}
+			}
 
             if (!lines.Any())
             {
@@ -121,14 +110,26 @@ namespace EQTool.Services
             try
             {
 
-                BinarySerializer.WriteToBinaryFile(checkformanualmaps + "/" + zone + ".bin", d);
+                BinarySerializer.WriteToBinaryFile(cachedMapsFullFolderPath + "/" + zone + ".bin", d);
             }
             catch (Exception ex)
             {
-                loggingService.Log(ex.ToString(), EventType.Error, activePlayer?.Player?.Server);
+                _loggingService.Log(ex.ToString(), EventType.Error, _activePlayer?.Player?.Server);
             }
             return d;
         }
+
+		public void ClearCachedMaps()
+		{
+			string cachedMapsFullFolderPath = Directory.GetCurrentDirectory() + $"/{_cachedMapsFolder}";
+			if (Directory.Exists(cachedMapsFullFolderPath))
+			{
+				Directory.GetFiles(cachedMapsFullFolderPath).ToList().ForEach(File.Delete);
+
+				Load(_activePlayer.Player.LastZoneEntered);
+			}
+
+		}
 
         [Serializable]
         public class MapLine
