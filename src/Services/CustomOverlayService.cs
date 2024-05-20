@@ -33,6 +33,11 @@ namespace EQTool.Services
 			return _dataService.UpdateCustomOverlay(overlay);
 		}
 
+		public static bool DeleteCustomOverlay(CustomOverlay overlay)
+		{
+			return _dataService.Delete(overlay);
+		}
+
 		public static List<CustomOverlay> LoadCustomOverlayMessages()
 		{
 			return _dataService.GetData<CustomOverlay>("SELECT * FROM CustomOverlays").ToList();

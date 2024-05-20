@@ -114,6 +114,47 @@ namespace EQTool.Services
 			return 0;
 		}
 
+		public bool Delete<T>(T obj)
+			where T : class
+		{
+			StringBuilder fileToUse = new StringBuilder();
+			if (typeof(T) == typeof(QuarmMonster)
+				|| typeof(T) == typeof(QuarmMonsterFaction)
+				|| typeof(T) == typeof(QuarmMonsterDrops)
+				|| typeof(T) == typeof(QuarmMerchantItems)
+				|| typeof(T) == typeof(QuarmMonsterTimer)
+				|| typeof(T) == typeof(QuarmZone))
+			{
+				_queryType = QueryType.Data;
+			}
+			else if (typeof(T) == typeof(CustomOverlay))
+			{
+				_queryType = QueryType.User;
+			}
+
+			if (_fileLocations == null && !DatabaseExists())
+			{
+				if (_fileLocations != null && string.IsNullOrWhiteSpace(_fileLocations.User_File))
+				{
+					CreateDatabase(_userDataFileName);
+				}
+			}
+			if (_fileLocations != null)
+			{
+				string sqliteConnString = GetConnectionString(_queryType);
+				using (SQLiteConnection cnn = new SQLiteConnection(sqliteConnString))
+				{
+					cnn.Open();
+					if (typeof(T) == typeof(CustomOverlay))
+					{
+						return cnn.Delete(obj);
+					}
+				}
+			}
+
+			return false;
+		}
+
 		private void CheckDatabaseVersion()
 		{
 			string sqliteConnString = GetConnectionString(_queryType);

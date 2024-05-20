@@ -1,11 +1,11 @@
 ﻿<local:BaseSaveStateWindow  xmlns:local="clr-namespace:EQTool" 
-                            x:Class="EQTool.Settings"
+        x:Class="EQTool.Settings"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:properties="clr-namespace:EQTool.Properties" xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
-                            Style="{StaticResource MySettingsWindowSyle}"
+        Style="{StaticResource MySettingsWindowSyle}"
         mc:Ignorable="d"
         SizeToContent="WidthAndHeight"
         Title="Settings">
@@ -239,12 +239,16 @@
                                     <ColumnDefinition Width="90"/>
                                     <ColumnDefinition Width="30"/>
                                     <ColumnDefinition Width="60"/>
+                                    <ColumnDefinition/>
                                 </Grid.ColumnDefinitions>
                                 <TextBlock Text="{Binding Name}" VerticalAlignment="Center" FontWeight="Bold"  MaxWidth="125" Grid.Column="0"/>
                                 <CheckBox IsChecked="{Binding IsEnabled}" Margin="5,4,5,0" Click="Savesettings" MinWidth="20" Grid.Column="1"/>
                                 <xctk:ColorPicker SelectedColor="{Binding Color}" IsEnabled="False" Width="85" Grid.Column="2"/>
                                 <CheckBox IsChecked="{Binding IsAudioEnabled}" Margin="10,4,5,0" Click="Savesettings" MinWidth="20" Grid.Column="3"/>
                                 <Button Click="Open_EditExistingCustomOverlay" HorizontalAlignment="Right" DataContext="{Binding ID}" Margin="10,0,0,0" Content="Edit" Width="50" Grid.Column="4"/>
+                                <Button Click="Delete_ExistingCustomOverlay" DataContext="{Binding ID}" Margin="10,0,0,0" Grid.Column="5">
+                                    <TextBlock Foreground="Red">X</TextBlock>
+                                </Button>
                             </Grid>
                             
                             <!--<StackPanel Orientation="Horizontal" Width="auto">-->
