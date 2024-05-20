@@ -36,8 +36,6 @@ namespace EQTool
 			webViewer.Source = uri;
 		}
 
-
-
 		private void Grid_MouseEnter(object sender, MouseEventArgs e)
 		{
 			WindowResizeChrome.ResizeBorderThickness = new Thickness(8);

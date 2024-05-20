@@ -32,11 +32,10 @@ namespace EQTool
 			InitializeComponent();
 		}
 
-
 		private void Button_Click(object sender, RoutedEventArgs e)
 		{
 			string url = webViewer.ExecuteScriptAsync("document.querySelector(\"input[type='text'][readonly]\").value").Result;
-			_settings.DiscordSettings.DiscordUrl = url.Substring(1, _settings.DiscordSettings.DiscordUrl.Length - 2);
+			_settings.DiscordSettings.DiscordUrl = url.Substring(1, url.Length - 2);
 		}
 	}
 }
