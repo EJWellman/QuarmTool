@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Drawing;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -22,7 +23,9 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Forms;
+using System.Windows.Interop;
 using System.Windows.Media;
+using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using Xceed.Wpf.Toolkit;
 
@@ -105,7 +108,8 @@ namespace EQTool
             this.DebugTab.Visibility = Visibility.Visible;
 #endif
 
-        }
+			MapInfoIcon.Source = Imaging.CreateBitmapSourceFromHIcon(SystemIcons.Information.Handle, Int32Rect.Empty, BitmapSizeOptions.FromEmptyOptions());
+		}
 
 		#region Private Methods
 		private void SaveConfig()
@@ -1138,5 +1142,10 @@ namespace EQTool
 				editWindow.ShowDialog();
 			}
 		}
-	}
+
+		private void ClearCachedMapsClicked(object sender, RoutedEventArgs e)
+		{
+
+        }
+    }
 }

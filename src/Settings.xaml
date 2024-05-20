@@ -433,6 +433,11 @@
                     <TextBlock Text="Location Share" VerticalAlignment="Center"  FontWeight="Bold" MinWidth="100"/>
                     <ComboBox SelectedItem="{Binding ActivePlayer.Player.MapLocationSharing}" ItemsSource="{Binding LocationShareOptions}" MinWidth="150"></ComboBox>
                 </StackPanel>
+                <Separator/>
+                <StackPanel Orientation="Horizontal">
+                    <Button Click="ClearCachedMapsClicked" Content="Clear Cached Maps" MaxWidth="120" HorizontalAlignment="Left"/>
+                    <Image Name="MapInfoIcon" Height="16" Width="16" HorizontalAlignment="Right" ToolTip="Clears the cached maps folder, and allows for loading new maps."></Image>
+                </StackPanel>
             </StackPanel>
         </TabItem>
         <TabItem Header="Debug" Name="DebugTab">
