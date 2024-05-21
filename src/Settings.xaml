@@ -392,6 +392,90 @@
                 </StackPanel>
             </StackPanel>
         </TabItem>
+        <TabItem Header="Discord">
+            <StackPanel Orientation="Vertical" Margin="5, 5, 5, 5">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition Width="auto"/>
+                </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                    </Grid.RowDefinitions>
+                
+                <StackPanel Orientation="Horizontal" Grid.Row="0">
+                    <TextBlock Grid.Column="0" Text="Discord Server" VerticalAlignment="Center" FontWeight="Bold" MinWidth="100"/>
+                    <TextBox Grid.Column="1" Text="{Binding DiscordServer}" MinWidth="150"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" Grid.Row="1">
+                    <TextBlock Grid.Column="0" Text="Discord Channel" VerticalAlignment="Center" FontWeight="Bold" MinWidth="100"/>
+                    <TextBox Grid.Column="1" Text="{Binding DiscordChannel}" MinWidth="150"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Grid.Column="0" Text="Text Color" VerticalAlignment="Center" FontWeight="Bold" MinWidth="100"/>
+                    <TextBox Grid.Column="1" Text="{Binding TextColorHex}" MinWidth="150"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Grid.Column="0" Text="Text Size" VerticalAlignment="Center" FontWeight="Bold" MinWidth="100"/>
+                    <TextBox Grid.Column="1" Text="{Binding TextSize}" MinWidth="150"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Grid.Column="0" Text="Text Outline Color" VerticalAlignment="Center" FontWeight="Bold" MinWidth="100"/>
+                    <TextBox Grid.Column="1" Text="{Binding TextOutlineColorHex}" MinWidth="150"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Grid.Column="0" Text="Text Outline Size" VerticalAlignment="Center" FontWeight="Bold" MinWidth="100"/>
+                    <TextBox Grid.Column="1" Text="{Binding TextOutlineSize}" MinWidth="150"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Grid.Column="0" Text="Text Shadow Color" VerticalAlignment="Center" FontWeight="Bold" MinWidth="100"/>
+                    <TextBox Grid.Column="1" Text="{Binding TextShadowColorHex}" MinWidth="150"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Grid.Column="0" Text="Text Shadow Size" VerticalAlignment="Center" FontWeight="Bold" MinWidth="100"/>
+                    <TextBox Grid.Column="1" Text="{Binding TextShadowSize}" MinWidth="150"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Grid.Column="0" Text="BG Color" VerticalAlignment="Center" FontWeight="Bold" MinWidth="100"/>
+                    <TextBox Grid.Column="1" Text="{Binding BgColorHex}" MinWidth="150"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Grid.Column="0" Text="BG Opacity" VerticalAlignment="Center" FontWeight="Bold" MinWidth="100"/>
+                    <TextBox Grid.Column="1" Text="{Binding BgOpacity}" MinWidth="150"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Grid.Column="0" Text="BG Shadow Color" VerticalAlignment="Center" FontWeight="Bold" MinWidth="100"/>
+                    <TextBox Grid.Column="1" Text="{Binding BgShadowColorHex}" MinWidth="150"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Grid.Column="0" Text="BG Shadow Size" VerticalAlignment="Center" FontWeight="Bold" MinWidth="100"/>
+                    <TextBox Grid.Column="1" Text="{Binding BgShadowSize}" MinWidth="150"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Grid.Column="0" Text="Limit Speaking" VerticalAlignment="Center" FontWeight="Bold" MinWidth="100"/>
+                    <CheckBox IsChecked="{Binding LimitSpeaking}"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Grid.Column="0" Text="Small Avatars" VerticalAlignment="Center" FontWeight="Bold" MinWidth="100"/>
+                    <CheckBox IsChecked="{Binding SmallAvatars}"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Grid.Column="0" Text="Hide Names" VerticalAlignment="Center" FontWeight="Bold" MinWidth="100"/>
+                    <CheckBox IsChecked="{Binding HideNames}"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Grid.Column="0" Text="Fade Chat" VerticalAlignment="Center" FontWeight="Bold" MinWidth="100"/>
+                    <CheckBox IsChecked="{Binding FadeChat}"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Grid.Column="0" Text="Streamer Avatar First" VerticalAlignment="Center" FontWeight="Bold" MinWidth="100"/>
+                    <CheckBox IsChecked="{Binding StreamerAvatarFirst}"/>
+                </StackPanel>
+            </Grid>
+            </StackPanel>
+        </TabItem>
         <TabItem Header="Debug" Name="DebugTab">
             <StackPanel Orientation="Vertical" Margin="5, 5, 5, 5">
                 <StackPanel Orientation="Horizontal">
