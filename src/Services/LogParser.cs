@@ -256,11 +256,22 @@ namespace EQTool.Services
 
                 var timestamp = LogFileDateTimeParse.ParseDateTime(date);
 
-				var customOverlay = CustomOverlayParser.Parse(message);
-				if (customOverlay != null)
+				try
 				{
-					CustomOverlayEvent?.Invoke(this, new CustomOverlayEventArgs { CustomOverlay = customOverlay });
+					var customOverlay = CustomOverlayParser.Parse(message);
+					if (customOverlay != null)
+					{
+						_appDispatcher.DispatchUI(() =>
+						{
+							CustomOverlayEvent?.Invoke(this, new CustomOverlayEventArgs { CustomOverlay = customOverlay });
+						});
+					}
 				}
+				catch (Exception e)
+				{
+					Debug.WriteLine($"LogParser CustomOverlayEvent {message}", this._activePlayer?.Player?.Server);
+				}
+
 				var pos = _locationParser.Match(message);
                 if (pos.HasValue)
                 {

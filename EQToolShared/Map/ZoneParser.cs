@@ -1017,7 +1017,7 @@ namespace EQToolShared.Map
 			ZoneNames.Add(new ZoneNameInfo("north qeynos", "qeynos2"));
 			ZoneNames.Add(new ZoneNameInfo("qeynos hills", "qeytoqrg"));
 			ZoneNames.Add(new ZoneNameInfo("surefall glade", "qrg"));
-			ZoneNames.Add(new ZoneNameInfo("rathe mountains", "rathemtn", "moutains of rathe"));
+			ZoneNames.Add(new ZoneNameInfo("rathe mountains", "rathemtn", "mountains of rathe"));
 			ZoneNames.Add(new ZoneNameInfo("rivervale", "rivervale"));
 			ZoneNames.Add(new ZoneNameInfo("runnyeye", "runnyeye", "clan runnyeye"));
 			ZoneNames.Add(new ZoneNameInfo("scarlet desert", "scarlet"));
