@@ -253,6 +253,7 @@ namespace EQTool.Models
 		public bool ComboShowModRodTimers { get; set; }
 		public bool ShowModRodTimers { get; set; }
 
+		public bool ShowTimerDropShadows { get; set; } = false;
 		public Color SpellTimerNameColor { get; set; } = Color.FromRgb(255, 255, 255);
 		public Color BeneficialSpellTimerColor { get; set; } = Color.FromRgb(102, 205, 170);
 		public Color DetrimentalSpellTimerColor { get; set; } = Color.FromRgb(255, 69, 0);

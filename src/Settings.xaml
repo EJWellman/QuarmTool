@@ -242,9 +242,9 @@
                                     <ColumnDefinition/>
                                 </Grid.ColumnDefinitions>
                                 <TextBlock Text="{Binding Name}" VerticalAlignment="Center" FontWeight="Bold"  MaxWidth="125" Grid.Column="0"/>
-                                <CheckBox IsChecked="{Binding IsEnabled}" Margin="5,4,5,0" Click="Savesettings" MinWidth="20" Grid.Column="1"/>
+                                <CheckBox IsChecked="{Binding IsEnabled}" Margin="5,4,5,0" Click="CustomOverlayVisual_Click" MinWidth="20" Grid.Column="1"/>
                                 <xctk:ColorPicker SelectedColor="{Binding Color}" IsEnabled="False" Width="85" Grid.Column="2"/>
-                                <CheckBox IsChecked="{Binding IsAudioEnabled}" Margin="10,4,5,0" Click="Savesettings" MinWidth="20" Grid.Column="3"/>
+                                <CheckBox IsChecked="{Binding IsAudioEnabled}" Margin="10,4,5,0" Click="CustomOverlayAudio_Click" MinWidth="20" Grid.Column="3"/>
                                 <Button Click="Open_EditExistingCustomOverlay" HorizontalAlignment="Right" DataContext="{Binding ID}" Margin="10,0,0,0" Content="Edit" Width="50" Grid.Column="4"/>
                                 <Button Click="Delete_ExistingCustomOverlay" DataContext="{Binding ID}" Margin="10,0,0,0" Grid.Column="5">
                                     <TextBlock Foreground="Red">X</TextBlock>
@@ -371,7 +371,8 @@
                                 <ColumnDefinition Width="100"/>
                             </Grid.ColumnDefinitions>
                             <Grid.RowDefinitions>
-                                <RowDefinition Height="0*"/>
+                                <RowDefinition/>
+                                <RowDefinition/>
                                 <RowDefinition/>
                                 <RowDefinition/>
                                 <RowDefinition/>
@@ -379,26 +380,29 @@
                                 <RowDefinition/>
                                 <RowDefinition/>
                             </Grid.RowDefinitions>
-                            <TextBlock Grid.Row="0" Grid.Column="0" Text="Text" FontWeight="Bold" VerticalAlignment="Center"  MinWidth="100" ToolTip="Has a very slight dropshadow of the opposite color."/>
-                            <xctk:ColorPicker Name="SpellTimerNameColor"  Grid.Row="0" Grid.Column="1" SelectedColor="{Binding SpellTimerNameColor}" MinWidth="100" Margin="5,0,-93,0"/>
+                            <TextBlock Grid.Row="0" Grid.Column="0" Text="Text Shadow" FontWeight="Bold" VerticalAlignment="Center"  MinWidth="100" ToolTip="Applies a very slight dropshadow of the opposite color."/>
+                            <CheckBox x:Name="ShowTimerShadow" Click="TextShadow_Click" Grid.Row="0" Grid.Column="1" Margin="5"/>
 
-                            <TextBlock Grid.Row="1" Grid.Column="0" Text="Beneficial" FontWeight="Bold" VerticalAlignment="Center"  MinWidth="100"/>
-                            <xctk:ColorPicker Name="BeneficialSpellTimerColor" Grid.Row="1" Grid.Column="1" SelectedColor="{Binding BeneficialSpellTimerColor}" FontWeight="Bold" MinWidth="100" Margin="5,5,-93,0"/>
+                            <TextBlock Grid.Row="1" Grid.Column="0" Text="Text" FontWeight="Bold" VerticalAlignment="Center"  MinWidth="100"/>
+                            <xctk:ColorPicker Name="SpellTimerNameColor"  Grid.Row="1" Grid.Column="1" SelectedColor="{Binding SpellTimerNameColor}" MinWidth="100" Margin="5,0,-93,0"/>
 
-                            <TextBlock Grid.Row="2" Grid.Column="0" Text="Detrimental" FontWeight="Bold" VerticalAlignment="Center"  MinWidth="100"/>
-                            <xctk:ColorPicker Name="DetrimentalSpellTimerColor" Grid.Row="2" Grid.Column="1" SelectedColor="{Binding DetrimentalSpellTimerColor}" FontWeight="Bold" MinWidth="100" Margin="5,5,-93,0"/>
+                            <TextBlock Grid.Row="2" Grid.Column="0" Text="Beneficial" FontWeight="Bold" VerticalAlignment="Center"  MinWidth="100"/>
+                            <xctk:ColorPicker Name="BeneficialSpellTimerColor" Grid.Row="2" Grid.Column="1" SelectedColor="{Binding BeneficialSpellTimerColor}" FontWeight="Bold" MinWidth="100" Margin="5,5,-93,0"/>
 
-                            <TextBlock Grid.Row="3" Grid.Column="0" Text="Respawn" FontWeight="Bold" VerticalAlignment="Center"  MinWidth="100"/>
-                            <xctk:ColorPicker Name="RespawnTimerColor" Grid.Row="3" Grid.Column="1" SelectedColor="{Binding RespawnTimerColor}" FontWeight="Bold" MinWidth="100" Margin="5,5,-93,0"/>
+                            <TextBlock Grid.Row="3" Grid.Column="0" Text="Detrimental" FontWeight="Bold" VerticalAlignment="Center"  MinWidth="100"/>
+                            <xctk:ColorPicker Name="DetrimentalSpellTimerColor" Grid.Row="3" Grid.Column="1" SelectedColor="{Binding DetrimentalSpellTimerColor}" FontWeight="Bold" MinWidth="100" Margin="5,5,-93,0"/>
 
-                            <TextBlock Grid.Row="4" Grid.Column="0" Text="Mod Rod" FontWeight="Bold" VerticalAlignment="Center"  MinWidth="100"/>
-                            <xctk:ColorPicker Name="ModRodTimerColor" Grid.Row="4" Grid.Column="1" SelectedColor="{Binding ModRodTimerColor}" FontWeight="Bold" MinWidth="100" Margin="5,5,-93,0"/>
+                            <TextBlock Grid.Row="4" Grid.Column="0" Text="Respawn" FontWeight="Bold" VerticalAlignment="Center"  MinWidth="100"/>
+                            <xctk:ColorPicker Name="RespawnTimerColor" Grid.Row="4" Grid.Column="1" SelectedColor="{Binding RespawnTimerColor}" FontWeight="Bold" MinWidth="100" Margin="5,5,-93,0"/>
 
-                            <TextBlock Grid.Row="5" Grid.Column="0" Text="Discipline" FontWeight="Bold" VerticalAlignment="Center"  MinWidth="100"/>
-                            <xctk:ColorPicker Name="DisciplineTimerColor" Grid.Row="5" Grid.Column="1" SelectedColor="{Binding DisciplineTimerColor}" FontWeight="Bold" MinWidth="100" Margin="5,5,-93,0"/>
+                            <TextBlock Grid.Row="5" Grid.Column="0" Text="Mod Rod" FontWeight="Bold" VerticalAlignment="Center"  MinWidth="100"/>
+                            <xctk:ColorPicker Name="ModRodTimerColor" Grid.Row="5" Grid.Column="1" SelectedColor="{Binding ModRodTimerColor}" FontWeight="Bold" MinWidth="100" Margin="5,5,-93,0"/>
+
+                            <TextBlock Grid.Row="6" Grid.Column="0" Text="Discipline" FontWeight="Bold" VerticalAlignment="Center"  MinWidth="100"/>
+                            <xctk:ColorPicker Name="DisciplineTimerColor" Grid.Row="6" Grid.Column="1" SelectedColor="{Binding DisciplineTimerColor}" FontWeight="Bold" MinWidth="100" Margin="5,5,-93,0"/>
                             
-                            <TextBlock Grid.Row="6" Grid.Column="0" Text="Other" FontWeight="Bold" VerticalAlignment="Center"  MinWidth="100"/>
-                            <xctk:ColorPicker Name="OtherTimerColor" Grid.Row="6" Grid.Column="1" SelectedColor="{Binding OtherTimerColor}" FontWeight="Bold" MinWidth="100" Margin="5,5,-93,0"/>
+                            <TextBlock Grid.Row="7" Grid.Column="0" Text="Other" FontWeight="Bold" VerticalAlignment="Center"  MinWidth="100"/>
+                            <xctk:ColorPicker Name="OtherTimerColor" Grid.Row="7" Grid.Column="1" SelectedColor="{Binding OtherTimerColor}" FontWeight="Bold" MinWidth="100" Margin="5,5,-93,0"/>
                         </Grid>
                     </StackPanel>
                 </Expander>

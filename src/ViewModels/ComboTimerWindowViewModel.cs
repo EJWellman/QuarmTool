@@ -11,6 +11,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Windows;
 
 namespace EQTool.ViewModels
 {
@@ -70,9 +71,9 @@ namespace EQTool.ViewModels
                 _LastReadOffset = value;
                 OnPropertyChanged();
             }
-        }
+		}
 
-        public void ClearYouSpells()
+		public void ClearYouSpells()
         {
             var itemstoremove = SpellList.Where(a => a.TargetName == EQSpells.SpaceYou).ToList();
             foreach (var item in itemstoremove)
@@ -311,7 +312,8 @@ namespace EQTool.ViewModels
                     Classes = match.Spell.Classes,
                     GuessedSpell = match.MultipleMatchesFound,
 					SpellNameColor = new System.Windows.Media.SolidColorBrush(_settings.SpellTimerNameColor),
-					ProgressBarColor = _colorService.GetColorFromSpellType(match.Spell.type)
+					ProgressBarColor = _colorService.GetColorFromSpellType(match.Spell.type),
+					DropShadowVisibility = _settings.ShowTimerDropShadows ? Visibility.Visible : Visibility.Collapsed
 				};
                 var s = SpellList.FirstOrDefault(a => a.SpellName == spellname && match.TargetName == a.TargetName);
                 if (s != null)
@@ -400,7 +402,8 @@ namespace EQTool.ViewModels
                     RollOrder = rollorder + 1,
 					ExecutionTime = match.ExecutionTime,
 					SpellNameColor = new System.Windows.Media.SolidColorBrush(_settings.SpellTimerNameColor),
-					ProgressBarColor = _colorService.GetColorFromSpellType(match.SpellType)
+					ProgressBarColor = _colorService.GetColorFromSpellType(match.SpellType),
+					DropShadowVisibility = _settings.ShowTimerDropShadows ? Visibility.Visible : Visibility.Collapsed
 				});
             });
         }
@@ -435,7 +438,8 @@ namespace EQTool.ViewModels
                             Classes = match.Classes,
                             GuessedSpell = false,
 							SpellNameColor = new System.Windows.Media.SolidColorBrush(_settings.SpellTimerNameColor),
-							ProgressBarColor = _colorService.GetColorFromSpellType(match.type)
+							ProgressBarColor = _colorService.GetColorFromSpellType(match.type),
+							DropShadowVisibility = _settings.ShowTimerDropShadows ? Visibility.Visible : Visibility.Collapsed
 						};
                         SpellList.Add(uispell);
                     }

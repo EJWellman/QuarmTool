@@ -247,7 +247,14 @@ namespace EQTool
             SaveConfig();
         }
 
-        private void YouSpells_Click(object sender, RoutedEventArgs e)
+		private void TextShadow_Click(object sender, RoutedEventArgs e)
+		{
+			var s = sender as System.Windows.Controls.CheckBox;
+			_settings.ShowTimerDropShadows = s.IsChecked ?? false;
+			SaveConfig();
+		}
+
+		private void YouSpells_Click(object sender, RoutedEventArgs e)
         {
             var s = sender as System.Windows.Controls.CheckBox;
             _settings.YouOnlySpells = s.IsChecked ?? false;
@@ -1114,6 +1121,20 @@ namespace EQTool
 
 			//close popup
 			ToggleCreateNewButton.IsChecked = false;
+		}
+
+		private void CustomOverlayVisual_Click(object sender, RoutedEventArgs e)
+		{
+			var s = sender as System.Windows.Controls.CheckBox;
+			CustomOverlayService.UpdateCustomOverlay((CustomOverlay)s.DataContext);
+			SaveConfig();
+		}
+
+		private void CustomOverlayAudio_Click(object sender, RoutedEventArgs e)
+		{
+			var s = sender as System.Windows.Controls.CheckBox;
+			CustomOverlayService.UpdateCustomOverlay((CustomOverlay)s.DataContext);
+			SaveConfig();
 		}
 		#endregion
 
