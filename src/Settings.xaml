@@ -105,10 +105,15 @@
                     <ComboBox SelectedItem="{Binding SelectedVoice}" ItemsSource="{Binding InstalledVoices}" MinWidth="105"></ComboBox>
                     <Button Content="▶" Margin="1" FontSize="7" Width="14" Height="14" Padding="0" Click="textvoice" ToolTip="Test Voice" />
                 </StackPanel>
-                <StackPanel Orientation="Horizontal">
+                <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
                     <TextBlock Text="Overlay Font Size" ToolTip="Example: GG or CA. Other tags will be ignored" VerticalAlignment="Center" FontWeight="Bold"  MinWidth="100"/>
                     <ComboBox SelectedItem="{Binding OverlayFontSize}" ItemsSource="{Binding FontSizes}" MinWidth="105"></ComboBox>
                 </StackPanel>
+                <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
+                    <TextBlock Text="Audio Volume"  VerticalAlignment="Center"  FontWeight="Bold"  MinWidth="100"/>
+                    <Slider Value="{Binding AudioTriggerVolume}" ToolTip="{Binding AudioTriggerVolume}" Minimum="0" Maximum="100" SmallChange="1" TickFrequency="1" ValueChanged="SaveSettings" MinWidth="150"/>
+                </StackPanel>
+                <Separator/>
                 <StackPanel Orientation="Horizontal">
                     <TextBlock VerticalAlignment="Center" FontWeight="Bold"  MinWidth="90"/>
                     <TextBlock Text="Visual" FontWeight="Bold"  MinWidth="95" Width="34"/>

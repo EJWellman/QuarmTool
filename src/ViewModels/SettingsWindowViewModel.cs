@@ -98,6 +98,19 @@ namespace EQTool.ViewModels
 			}
 		}
 
+		public int AudioTriggerVolume
+		{
+			get
+			{
+				return this.toolSettings.AudioTriggerVolume;
+			}
+			set
+			{
+				this.toolSettings.AudioTriggerVolume = value;
+				OnPropertyChanged();
+			}
+		}
+
 		public Color EnrageOverlayColor 
 		{
 			get
