@@ -1,4 +1,5 @@
-﻿using EQTool.Models;
+﻿using EQTool.Factories;
+using EQTool.Models;
 using EQTool.Services;
 using EQTool.Utilities;
 using EQTool.ViewModels;
@@ -6,6 +7,7 @@ using EQToolShared.Enums;
 using EQToolShared.Map;
 using System;
 using System.ComponentModel;
+using System.Linq;
 using System.Windows;
 using System.Windows.Input;
 
@@ -21,6 +23,8 @@ namespace EQTool
         private readonly ISignalrPlayerHub signalrPlayerHub;
         private readonly System.Timers.Timer UITimer;
 		private QuarmDataService _quarmDataService;
+		private TimerWindowFactory _timerWindowFactory;
+		private DataService _dataService;
 
 		public MappingWindow(
             ISignalrPlayerHub signalrPlayerHub,
@@ -32,7 +36,9 @@ namespace EQTool
             EQToolSettingsLoad toolSettingsLoad,
             IAppDispatcher appDispatcher,
             LoggingService loggingService,
-			QuarmDataService quarmDataService) : base(settings.MapWindowState, toolSettingsLoad, settings)
+			QuarmDataService quarmDataService,
+			TimerWindowFactory timerWindowFactory,
+			DataService dataService) : base(settings.MapWindowState, toolSettingsLoad, settings)
         {
             loggingService.Log(string.Empty, EventType.OpenMap, activePlayer?.Player?.Server);
             this.activePlayer = activePlayer;
@@ -40,7 +46,10 @@ namespace EQTool
             this.playerTrackerService = playerTrackerService;
             this.appDispatcher = appDispatcher;
             this.logParser = logParser;
-            DataContext = this.mapViewModel = mapViewModel;
+			_quarmDataService = quarmDataService;
+			_timerWindowFactory = timerWindowFactory;
+			_dataService = dataService;
+			DataContext = this.mapViewModel = mapViewModel;
             InitializeComponent();
             base.Init();
             _ = mapViewModel.LoadDefaultMap(Map);
@@ -65,10 +74,8 @@ namespace EQTool
             UITimer.Enabled = true;
 			this.MouseEnter += ToggleMouseLocation_Event;
 			this.MouseLeave += ToggleMouseLocation_Event;
-            //   this.SetCenerMap();
-
-			_quarmDataService = quarmDataService;
-        }
+			mapViewModel.TimerWindows = settings.TimerWindows;
+		}
 
 		private void ToggleMouseLocation_Event(object sender, MouseEventArgs e)
 		{
@@ -266,5 +273,15 @@ namespace EQTool
         {
             this.mapViewModel.ToggleCenter();
         }
-    }
+
+		protected void OpenTimerWindow(object sender, RoutedEventArgs e)
+		{
+			var contextID = (sender as System.Windows.Controls.MenuItem).DataContext as int?;
+			if (contextID != null)
+			{
+				var w = _timerWindowFactory.CreateTimerWindow((int)contextID);
+				(App.Current as App).OpenSpawnableWindow<BaseTimerWindow>(w);
+			}
+		}
+	}
 }

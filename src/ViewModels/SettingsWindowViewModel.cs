@@ -395,6 +395,14 @@ namespace EQTool.ViewModels
 			}
 		}
 
+		public ObservableCollection<TimerWindowOptions> TimerWindows
+		{
+			get
+			{
+				return this.toolSettings.TimerWindows;
+			}
+		}
+
 		public bool ShowRandomRolls
         {
             get

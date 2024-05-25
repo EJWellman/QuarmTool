@@ -1,0 +1,51 @@
+﻿<Window x:Class="EQTool.EditTimerWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:EQTool" 
+        xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+        mc:Ignorable="d"
+        SizeToContent="WidthAndHeight">
+    <Grid>
+
+        <!--
+        BestGuessSpells
+		YouOnlySpells
+		ShowRandomRolls
+		ShowTimers
+		ShowModRodTimers
+		ShowSpells
+        -->
+
+        <StackPanel Orientation="Vertical" Margin="5">
+            <StackPanel Orientation="Horizontal" Width="250">
+                <TextBlock Text="Window Title" Width="85"></TextBlock>
+                <TextBox Name="WindowTitle" Width="165"></TextBox>
+            </StackPanel>
+            <Separator/>
+            <StackPanel Orientation="Horizontal" Width="250">
+                <TextBlock Text="Spells" Width="85"></TextBlock>
+                <CheckBox Name="ShowSpells" Width="40"/>
+                <TextBlock Text="Rolls" Width="85"></TextBlock>
+                <CheckBox Name="ShowRolls" Width="40"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" Width="250">
+                <TextBlock Text="Mod Rods" Width="85"></TextBlock>
+                <CheckBox Name="ShowModRods" Width="40"/>
+                <TextBlock Text="Death Timers" Width="85"></TextBlock>
+                <CheckBox Name="ShowDeaths" Width="40"/>
+            </StackPanel>
+            <Separator/>
+            <StackPanel Orientation="Horizontal" Width="250">
+                <TextBlock Text="Guess Spells" Width="85" ToolTip="Will use player level to guess the closest spell based on message."/>
+                <CheckBox Name="ShowBestGuess" Width="40" ToolTip="Will use player level to guess the closest spell based on message."/>
+                <TextBlock Text="You Only" Width="85"></TextBlock>
+                <CheckBox Name="ShowYouOnly" Width="40"/>
+            </StackPanel>
+
+            <Button Click="NewOverlay_Save" Margin="0,10,0,0" Width="50" HorizontalAlignment="Center">Save</Button>
+        </StackPanel>
+        
+    </Grid>
+</Window>

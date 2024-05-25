@@ -1,5 +1,6 @@
 ﻿using Autofac;
 using Autofac.Features.ResolveAnything;
+using EQTool.Factories;
 using EQTool.Models;
 using EQTool.ViewModels;
 
@@ -35,6 +36,9 @@ namespace EQTool.Services
             builder.RegisterType<AudioService>().AsSelf().SingleInstance();
 			builder.RegisterType<QuarmDataService>().AsSelf().SingleInstance();
 			builder.RegisterType<CustomOverlayService>().AsSelf().SingleInstance();
+			builder.RegisterType<TimerWindowService>().AsSelf().SingleInstance();
+			builder.RegisterType<DataService>().AsSelf().SingleInstance();
+			builder.RegisterType<TimerWindowFactory>().AsSelf().SingleInstance();
 
             return builder.Build();
         }

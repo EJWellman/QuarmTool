@@ -1,14 +1,6 @@
-﻿using Dapper;
-using Dapper.Contrib.Extensions;
-using EQTool.Models;
-using EQTool.ViewModels;
-using Microsoft.Extensions.Logging;
-using System;
+﻿using EQTool.Models;
 using System.Collections.Generic;
-using System.Data.SQLite;
-using System.IO;
 using System.Linq;
-using static EQTool.Services.FindEq;
 
 namespace EQTool.Services
 {

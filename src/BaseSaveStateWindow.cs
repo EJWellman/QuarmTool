@@ -1,4 +1,5 @@
-﻿using EQTool.Models;
+﻿using EQTool.Factories;
+using EQTool.Models;
 using EQTool.Services;
 using System;
 using System.ComponentModel;

@@ -1,4 +1,5 @@
 ﻿using Autofac;
+using EQTool.Factories;
 using EQTool.Models;
 using EQTool.Services;
 using EQTool.ViewModels;
@@ -24,7 +25,7 @@ namespace EQTool
     {
         public static HttpClient httpclient = new HttpClient();
 
-        private Autofac.IContainer container;
+        public static IContainer Container;
         private System.Windows.Forms.NotifyIcon SystemTrayIcon;
 
         private System.Windows.Forms.MenuItem MapMenuItem;
@@ -36,12 +37,14 @@ namespace EQTool
         private System.Windows.Forms.MenuItem SettingsMenuItem;
         private System.Windows.Forms.MenuItem GroupSuggestionsMenuItem;
         private System.Windows.Forms.MenuItem MobInfoMenuItem;
-        private LogParser logParser => container.Resolve<LogParser>();
+        private LogParser logParser => Container.Resolve<LogParser>();
         private System.Timers.Timer UITimer;
         private PlayerTrackerService PlayerTrackerService;
         private ZoneActivityTrackingService ZoneActivityTrackingService;
         private ISignalrPlayerHub signalrPlayerHub;
         private AudioService audioService;
+
+		private TimerWindowFactory _timerWindowFactory;
 
         private EQToolSettings _EQToolSettings;
 
@@ -51,7 +54,7 @@ namespace EQTool
             {
                 if (_EQToolSettings == null)
                 {
-                    _EQToolSettings = container.Resolve<EQToolSettings>();
+                    _EQToolSettings = Container.Resolve<EQToolSettings>();
                 }
                 return _EQToolSettings;
             }
@@ -140,19 +143,19 @@ namespace EQTool
 
             AppDomain.CurrentDomain.UnhandledException += (s, e) =>
             {
-                var server = this.container?.Resolve<ActivePlayer>()?.Player?.Server;
+				var server = Container?.Resolve<ActivePlayer>()?.Player?.Server;
                 LogUnhandledException((Exception)e.ExceptionObject, "AppDomain.CurrentDomain.UnhandledException", server);
             };
 
             DispatcherUnhandledException += (s, e) =>
             {
-                var server = this.container?.Resolve<ActivePlayer>()?.Player?.Server;
+                var server = Container?.Resolve<ActivePlayer>()?.Player?.Server;
                 LogUnhandledException(e.Exception, "Application.Current.DispatcherUnhandledException", server);
             };
 
             TaskScheduler.UnobservedTaskException += (s, e) =>
             {
-                var server = this.container?.Resolve<ActivePlayer>()?.Player?.Server;
+                var server = Container?.Resolve<ActivePlayer>()?.Player?.Server;
                 LogUnhandledException(e.Exception, "TaskScheduler.UnobservedTaskException", server);
             };
         }
@@ -236,13 +239,13 @@ namespace EQTool
 
         private void InitStuff()
         {
-            container = DI.Init();
+            Container = DI.Init();
             UITimer = new System.Timers.Timer(1000 * 60);
 #if !DEBUG
             UITimer.Elapsed += UITimer_Elapsed;
             UITimer.Enabled = true;
 #endif
-            container.Resolve<LoggingService>().Log(string.Empty, EventType.StartUp, null);
+            Container.Resolve<LoggingService>().Log(string.Empty, EventType.StartUp, null);
             SettingsMenuItem = new System.Windows.Forms.MenuItem("Settings", ToggleSettingsWindow);
             var standardgroup = new System.Windows.Forms.MenuItem("Standard Groups", CreateStandardGroup);
             var hotclericsamegroup = new System.Windows.Forms.MenuItem("HOT Clerics Same Group", CreateHOTClericsSameGroup);
@@ -343,11 +346,11 @@ namespace EQTool
                     OpenOverLayWindow();
                 }
             }
-            signalrPlayerHub = container.Resolve<ISignalrPlayerHub>();
+            signalrPlayerHub = Container.Resolve<ISignalrPlayerHub>();
 
-            PlayerTrackerService = container.Resolve<PlayerTrackerService>();
-            ZoneActivityTrackingService = container.Resolve<ZoneActivityTrackingService>();
-            audioService = container.Resolve<AudioService>();
+            PlayerTrackerService = Container.Resolve<PlayerTrackerService>();
+            ZoneActivityTrackingService = Container.Resolve<ZoneActivityTrackingService>();
+            audioService = Container.Resolve<AudioService>();
             logParser.QuakeEvent += LogParser_QuakeEvent;
             App.Current.Resources["GlobalFontSize"] = (double)(this.EQToolSettings?.FontSize ?? 12);
             ((App)System.Windows.Application.Current).UpdateBackgroundOpacity("MyWindowStyleDPS", this.EQToolSettings.DpsWindowState.Opacity.Value);
@@ -366,7 +369,7 @@ namespace EQTool
 
         private void LogParser_QuakeEvent(object sender, LogParser.QuakeArgs e)
         {
-            container.Resolve<PigParseApi>().SendQuake();
+            Container.Resolve<PigParseApi>().SendQuake();
         }
 
         [DllImport("user32.dll")]
@@ -392,7 +395,7 @@ namespace EQTool
         private bool updatecalled = false;
         private void UITimer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
         {
-            var dispatcher = container.Resolve<IAppDispatcher>();
+            var dispatcher = Container.Resolve<IAppDispatcher>();
             dispatcher.DispatchUI(() =>
             {
                 if (updatecalled)
@@ -403,8 +406,8 @@ namespace EQTool
                 try
                 {
                     var idletime = GetIdleTime();
-                    var spellstuff = container.Resolve<SpellWindowViewModel>();
-                    var logParser = container.Resolve<LogParser>();
+                    var spellstuff = Container.Resolve<SpellWindowViewModel>();
+                    var logParser = Container.Resolve<LogParser>();
                     //if (spellstuff != null)
                     //{
                     //    if (spellstuff.SpellList.Count() < 2 && (DateTime.UtcNow - logParser.LastYouActivity).TotalMinutes > 10 && idletime.TotalMinutes > 10)
@@ -538,7 +541,7 @@ namespace EQTool
                 else
                 {
                     w?.Close();
-                    w = container.Resolve<T>();
+                    w = Container.Resolve<T>();
                     WindowList.Add(w);
                     w.Closed += (se, ee) =>
                     {
@@ -566,7 +569,7 @@ namespace EQTool
             {
                 m.Checked = true;
                 w?.Close();
-                w = container.Resolve<T>();
+                w = Container.Resolve<T>();
                 WindowList.Add(w);
                 w.Closed += (se, ee) =>
                 {
@@ -575,9 +578,24 @@ namespace EQTool
                 };
                 w.Show();
             }
-        }
+		}
 
-        public void ToggleMapWindow(object sender, EventArgs e)
+		public void OpenSpawnableWindow<T>(T w) where T : BaseSaveStateWindow
+		{
+			if(typeof(T) == typeof(BaseTimerWindow))
+			{
+				//w?.Close();
+				WindowList.Add(w);
+				w.Closed += (se, ee) =>
+				{
+					_ = WindowList.Remove(w);
+				};
+				w.Show();
+			}
+
+		}
+
+		public void ToggleMapWindow(object sender, EventArgs e)
         {
             var s = (System.Windows.Forms.MenuItem)sender;
             ToggleWindow<MappingWindow>(s);

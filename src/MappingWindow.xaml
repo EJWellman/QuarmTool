@@ -76,8 +76,19 @@
                             <Button Margin="1" FontSize="7" Width="14" Height="14" Padding="0" Click="OpenTimers" ToolTip="Open Timer Window">
                                 <Image Source="pack://application:,,,/clock.png"/>
                             </Button>
-                            <Button Margin="1" FontSize="7" Width="14" Height="14" Padding="0" Click="OpenComboTimers" ToolTip="Open Combo Timer Window">
+                            <Button Margin="1" FontSize="7" Width="14" Height="14" Padding="0" ToolTip="Open Combo Timer Window">
                                 <Image Source="pack://application:,,,/combo.png"/>
+                                <Button.ContextMenu>
+                                    <ContextMenu StaysOpen="True">
+                                        <MenuItem Header="Timers" ItemsSource="{Binding Path=TimerWindows}">
+                                            <MenuItem.ItemTemplate>
+                                                <DataTemplate>
+                                                    <MenuItem Header="{Binding Title}" DataContext="{Binding ID}" Click="OpenTimerWindow"/>
+                                                </DataTemplate>
+                                            </MenuItem.ItemTemplate>
+                                        </MenuItem>
+                                    </ContextMenu>
+                                </Button.ContextMenu>
                             </Button>
                             <Button Margin="1" FontSize="7" Width="14" Height="14" Padding="0" Click="opendps" ToolTip="Open DPS Window">
                                 <Image Source="pack://application:,,,/dps.png"/>

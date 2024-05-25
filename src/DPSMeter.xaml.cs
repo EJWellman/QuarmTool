@@ -21,7 +21,12 @@ namespace EQTool
         private readonly DPSWindowViewModel dPSWindowViewModel;
         private readonly ActivePlayer activePlayer;
 
-        public DPSMeter(LogParser logParser, DPSWindowViewModel dPSWindowViewModel, EQToolSettings settings, EQToolSettingsLoad toolSettingsLoad, LoggingService loggingService, ActivePlayer activePlayer)
+        public DPSMeter(LogParser logParser, 
+			DPSWindowViewModel dPSWindowViewModel, 
+			EQToolSettings settings, 
+			EQToolSettingsLoad toolSettingsLoad, 
+			LoggingService loggingService, 
+			ActivePlayer activePlayer)
              : base(settings.DpsWindowState, toolSettingsLoad, settings)
         {
             this.activePlayer = activePlayer;

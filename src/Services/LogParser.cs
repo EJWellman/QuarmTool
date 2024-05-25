@@ -56,7 +56,6 @@ namespace EQTool.Services
         private readonly GroupInviteParser _groupInviteParser;
         private readonly ResistSpellParser _resistSpellParser;
         private readonly RandomParser _randomParser;
-		private readonly CustomOverlayParser _customOverlayParser;
 
         private bool StartingWhoOfZone = false;
         private bool Processing = false;
@@ -64,64 +63,43 @@ namespace EQTool.Services
         private bool HasUsedStartupEnterWorld = false;
 
         public LogParser(
-            RandomParser randomParser,
-            ResistSpellParser resistSpellParser,
-            GroupInviteParser groupInviteParser,
-            CharmBreakParser charmBreakParser,
-            FTEParser fTEParser,
-            ChParser chParser,
-            QuakeParser quakeParser,
-            EnterWorldParser enterWorldParser,
-            SpellWornOffLogParse spellWornOffLogParse,
-            SpellLogParse spellLogParse,
+			ResistSpellParser resistSpellParser,
             LogCustomTimer logCustomTimer,
-            ConLogParse conLogParse,
-            LogDeathParse logDeathParse,
-            DPSLogParse dPSLogParse,
-            LocationParser locationParser,
+			SpellWornOffLogParse spellWornOffLogParser,
+			SpellLogParse spellLogParser,
             EQToolSettingsLoad toolSettingsLoad,
             ActivePlayer activePlayer,
             IAppDispatcher appDispatcher,
-            EQToolSettings settings,
-            POFDTParser pOFDTParser,
-            EnrageParser enrageParser,
-            LevelLogParse levelLogParse,
-            PlayerWhoLogParse playerWhoLogParse,
-            InvisParser invisParser,
-            LevParser levParser,
-			ModRodParser modRodParser,
-            FailedFeignParser failedFeignParser,
-			CustomOverlayParser customOverlayParser
+            EQToolSettings settings
             )
         {
-            this._randomParser = randomParser;
-            this._resistSpellParser = resistSpellParser;
-            this._groupInviteParser = groupInviteParser;
-            this._failedFeignParser = failedFeignParser;
-            this._charmBreakParser = charmBreakParser;
-            this._fTEParser = fTEParser;
-            this._invisParser = invisParser;
-            this._levParser = levParser;
-            this._chParser = chParser;
-            this._enrageParser = enrageParser;
-            this._pOFDTParser = pOFDTParser;
-            this._quakeParser = quakeParser;
-            this._enterWorldParser = enterWorldParser;
-            this._spellWornOffLogParse = spellWornOffLogParse;
-            this._spellLogParse = spellLogParse;
-            this._logCustomTimer = logCustomTimer;
-            this._conLogParse = conLogParse;
-            this._logDeathParse = logDeathParse;
-            this._dpsLogParse = dPSLogParse;
-            this._locationParser = locationParser;
-            this._toolSettingsLoad = toolSettingsLoad;
-            this._activePlayer = activePlayer;
-            this._appDispatcher = appDispatcher;
-            this._levelLogParse = levelLogParse;
-			this._modRodParser = modRodParser;
-            this._settings = settings;
-            this._playerWhoLogParse = playerWhoLogParse;
-			this._customOverlayParser = customOverlayParser;
+            _randomParser = new RandomParser();
+            _resistSpellParser = resistSpellParser;
+            _groupInviteParser = new GroupInviteParser();
+            _failedFeignParser = new FailedFeignParser(activePlayer);
+            _charmBreakParser = new CharmBreakParser();
+            _fTEParser = new FTEParser();
+            _invisParser = new InvisParser();
+            _levParser = new LevParser();
+            _chParser = new ChParser(activePlayer);
+            _enrageParser = new EnrageParser(activePlayer);
+            _pOFDTParser = new POFDTParser();
+            _quakeParser = new QuakeParser();
+            _enterWorldParser = new EnterWorldParser();
+            _spellWornOffLogParse = spellWornOffLogParser;
+            _spellLogParse = spellLogParser;
+            _logCustomTimer = logCustomTimer;
+            _conLogParse = new ConLogParse();
+            _logDeathParse = new LogDeathParse();
+            _dpsLogParse = new DPSLogParse(activePlayer);
+            _locationParser = new LocationParser();
+            _toolSettingsLoad = toolSettingsLoad;
+            _activePlayer = activePlayer;
+            _appDispatcher = appDispatcher;
+            _levelLogParse = new LevelLogParse(activePlayer);
+			_modRodParser = new ModRodParser();
+            _settings = settings;
+            _playerWhoLogParse = new PlayerWhoLogParse();
             _uiTimer = new System.Timers.Timer(100);
             _uiTimer.Elapsed += Poll;
             _uiTimer.Enabled = true;

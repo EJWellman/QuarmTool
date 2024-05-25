@@ -87,6 +87,7 @@ namespace EQTool.ViewModels
         private readonly TimersService timersService;
         private bool CenterOnPlayer = false;
         public Point CenterRelativeToCanvas = new Point(0, 0);
+		public ObservableCollection<TimerWindowOptions> TimerWindows { get; set; }
 
         public string MouseLocation => $"   {LastMouselocation.Y:0.##}, {LastMouselocation.X:0.##}";
 

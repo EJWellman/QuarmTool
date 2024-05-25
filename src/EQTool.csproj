@@ -393,17 +393,25 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="BaseTimerWindow.xaml.cs">
+      <DependentUpon>BaseTimerWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Constants\QuarmRules.cs" />
+    <Compile Include="EditTimerWindow.xaml.cs">
+      <DependentUpon>EditTimerWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="CustomOverlayEditWindow.xaml.cs">
       <DependentUpon>CustomOverlayEditWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="CustomTimeSpanUpDown.cs" />
+    <Compile Include="EventArgModels\TimerWindowEditEventArgs.cs" />
     <Compile Include="EventArgModels\CustomOverlayEditEventArgs.cs" />
     <Compile Include="EventArgModels\ModRodUsageArgs.cs" />
     <Compile Include="EventArgModels\CustomOverlayEventArgs.cs" />
     <Compile Include="EventOverlay.xaml.cs">
       <DependentUpon>EventOverlay.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Factories\TimerWindowFactory.cs" />
     <Compile Include="MappingWindow.xaml.cs">
       <DependentUpon>MappingWindow.xaml</DependentUpon>
     </Compile>
@@ -423,6 +431,7 @@
     <Compile Include="Models\QuarmMonsterFaction.cs" />
     <Compile Include="Models\QuarmMonsterDrops.cs" />
     <Compile Include="Models\PlayerRequest.cs" />
+    <Compile Include="Models\TimerWindowOptions.cs" />
     <Compile Include="PanAndZoomCanvas.xaml.cs">
       <DependentUpon>PanAndZoomCanvas.xaml</DependentUpon>
     </Compile>
@@ -444,6 +453,7 @@
     <Compile Include="Services\BinarySerializer.cs" />
     <Compile Include="Services\CHService.cs" />
     <Compile Include="Services\ColorService.cs" />
+    <Compile Include="Services\TimerWindowService.cs" />
     <Compile Include="Services\CustomOverlayService.cs" />
     <Compile Include="Services\DataService.cs" />
     <Compile Include="Services\LoggingService.cs" />
@@ -503,6 +513,7 @@
     <Compile Include="Utilities\ZoneSwapper.cs" />
     <Compile Include="ViewModels\ActivePlayerInfo.cs" />
     <Compile Include="Services\TimersService.cs" />
+    <Compile Include="ViewModels\BaseTimerWindowViewModel.cs" />
     <Compile Include="ViewModels\ComboTimerWindowViewModel.cs" />
     <Compile Include="ViewModels\TimerWindowViewModel.cs" />
     <Compile Include="ViewModels\ZoneViewModel.cs" />
@@ -537,6 +548,14 @@
       <DependentUpon>SpellWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="BaseSaveStateWindow.cs" />
+    <Page Include="BaseTimerWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="EditTimerWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="CustomOverlayEditWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

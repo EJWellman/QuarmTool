@@ -1,4 +1,4 @@
-﻿using Autofac.Features.OwnedInstances;
+﻿using EQTool.Factories;
 using EQTool.Models;
 using EQTool.Services;
 using EQTool.Services.Spells.Log;
@@ -6,10 +6,8 @@ using EQTool.ViewModels;
 using EQToolShared.Enums;
 using EQToolShared.ExtendedClasses;
 using EQToolShared.HubModels;
-using EQToolShared.Map;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
@@ -22,7 +20,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
 using System.Windows.Forms;
 using System.Windows.Interop;
 using System.Windows.Media;
@@ -65,7 +62,9 @@ namespace EQTool
         private readonly SpellWindowViewModel _spellWindowViewModel;
         private readonly EQSpells _spells;
         private readonly DPSLogParse _dPSLogParse;
-        private readonly IAppDispatcher _appDispatcher;
+		private readonly TimerWindowFactory _timerWindowFactory;
+		private readonly TimerWindowService _timerWindowService;
+		private readonly IAppDispatcher _appDispatcher;
         private readonly ISignalrPlayerHub _signalrPlayerHub;
         private readonly LogParser _logParser;
         private readonly MapLoad _mapLoad;
@@ -80,17 +79,21 @@ namespace EQTool
             EQToolSettings settings,
             EQToolSettingsLoad toolSettingsLoad,
             SettingsWindowViewModel settingsWindowData,
-            SpellWindowViewModel spellWindowViewModel) : base(settings.SettingsWindowState, toolSettingsLoad, settings)
+            SpellWindowViewModel spellWindowViewModel,
+			TimerWindowFactory timerFactory,
+			TimerWindowService timerWindowService) : base(settings.SettingsWindowState, toolSettingsLoad, settings)
         {
-            this._signalrPlayerHub = signalrPlayerHub;
-            this._logParser = logParser;
-            this._mapLoad = mapLoad;
-            this._appDispatcher = appDispatcher;
-            this._dPSLogParse = dPSLogParse;
-            this._spells = spells;
-            this._settings = settings;
-            this._spellWindowViewModel = spellWindowViewModel;
-            this._toolSettingsLoad = toolSettingsLoad;
+            _signalrPlayerHub = signalrPlayerHub;
+            _logParser = logParser;
+            _mapLoad = mapLoad;
+            _appDispatcher = appDispatcher;
+            _dPSLogParse = dPSLogParse;
+            _spells = spells;
+            _settings = settings;
+            _spellWindowViewModel = spellWindowViewModel;
+            _toolSettingsLoad = toolSettingsLoad;
+			_timerWindowFactory = timerFactory;
+			_timerWindowService = timerWindowService;
             DataContext = _SettingsWindowData = settingsWindowData;
             _SettingsWindowData.EqPath = this._settings.DefaultEqDirectory;
             InitializeComponent();
@@ -1196,5 +1199,25 @@ namespace EQTool
 		{
 			_mapLoad.ClearCachedMaps();
         }
+
+		private void CreateTimerWindow_Click(object sender, RoutedEventArgs e)
+		{
+			var temp = (sender as System.Windows.Controls.Button).DataContext as int?;
+			var window = new EditTimerWindow(_settings, _timerWindowFactory, temp);
+
+
+			window.TimerWindowEdited += (s, ev) =>
+			{
+				if (ev.Success)
+				{
+					var found = _settings.TimerWindows.FirstOrDefault(a => a.ID == ev.UpdatedWindow.ID);
+					int i = _settings.TimerWindows.IndexOf(found);
+					_settings.TimerWindows[i] = ev.UpdatedWindow;
+				}
+			};
+
+
+			window.Show();
+		}
 	}
 }

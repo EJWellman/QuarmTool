@@ -309,6 +309,35 @@
         <TabItem Header="Timers">
             <StackPanel Orientation="Vertical" Margin="5, 5, 5, 5">
                 <StackPanel Orientation="Vertical"  Margin="0, 0, 0, 8">
+                    <Button Content="Create Timer Window" Click="CreateTimerWindow_Click"></Button>
+                    <Separator/>
+                        <ListView ItemsSource="{Binding TimerWindows}">
+                            <ListView.ItemTemplate>
+                                <DataTemplate x:Name="TimerWindowsTemplate" DataType="local:TimerWindowOptions">
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="85"/>
+                                            <ColumnDefinition Width="35"/>
+                                            <ColumnDefinition Width="90"/>
+                                            <ColumnDefinition Width="30"/>
+                                            <ColumnDefinition Width="60"/>
+                                            <ColumnDefinition/>
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock Text="{Binding Title}" VerticalAlignment="Center" FontWeight="Bold"  MaxWidth="125" Grid.Column="0"/>
+                                        <CheckBox IsChecked="{Binding Closed}" Margin="5,4,5,0" Click="CustomOverlayVisual_Click" MinWidth="20" Grid.Column="1"/>
+                                        <CheckBox IsChecked="{Binding AlwaysOnTop}" Margin="10,4,5,0" Click="CustomOverlayAudio_Click" MinWidth="20" Grid.Column="3"/>
+                                        <Button Click="CreateTimerWindow_Click" HorizontalAlignment="Right" DataContext="{Binding ID}" Margin="10,0,0,0" Content="Edit" Width="50" Grid.Column="4"/>
+                                        <!--<Button Click="Delete_ExistingCustomOverlay" DataContext="{Binding ID}" Margin="10,0,0,0" Grid.Column="5">
+                                            <TextBlock Foreground="Red">X</TextBlock>
+                                        </Button>-->
+                                    </Grid>
+
+                                    <!--<StackPanel Orientation="Horizontal" Width="auto">-->
+                                    <!--</StackPanel>-->
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                        </ListView>
+                    <Separator/>
                     <StackPanel Orientation="Horizontal">
                         <TextBlock Text="Combo - Always on top" VerticalAlignment="Center"  FontWeight="Bold"  MinWidth="150"/>
                         <CheckBox IsChecked="{Binding ComboAlwaysOnTop}" Click="SaveAlwaysOntopCheckBoxSettings" ></CheckBox>
