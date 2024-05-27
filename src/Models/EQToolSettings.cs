@@ -63,6 +63,19 @@ namespace EQTool.Models
 			}
 		}
 
+		private int _audioTriggerVolume = 100;
+		public int AudioTriggerVolume
+		{
+			get
+			{
+				return _audioTriggerVolume;
+			}
+			set
+			{
+				_audioTriggerVolume = value;
+			}
+		}
+
 		private Color _EnrageOverlayColor = Color.FromRgb(255, 255, 0); //Red
 		private Color _LevFadingOverlayColor = Color.FromRgb(255, 255, 0); //Red
 		private Color _InvisFadingOverlayColor = Color.FromRgb(255, 255, 0); //Red
