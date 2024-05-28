@@ -13,17 +13,17 @@ using static EQTool.Services.FindEq;
 
 namespace EQTool.Services
 {
-	public class DataService
+	public static class DataService
 	{
 		private const string _gameDataFileName = "Quarmtool_Data.db";
 		private const string _userDataFileName = "Quarmtool_User.db";
 		private static bool versionChecked = false;
-		private DataFileInfo _fileLocations;
+		private static DataFileInfo _fileLocations;
 
-		private QueryType _queryType;
 
-		public IEnumerable<T> GetData<T>(string query, object parameters = null)
+		public static IEnumerable<T> GetData<T>(string query, object parameters = null)
 		{
+			QueryType _queryType;
 			StringBuilder fileToUse = new StringBuilder();
 			if(typeof(T) == typeof(QuarmMonster) 
 				|| typeof(T) == typeof(QuarmMonsterFaction)
@@ -34,8 +34,7 @@ namespace EQTool.Services
 			{
 				_queryType = QueryType.Data;
 			}
-			else if (typeof(T) == typeof(CustomOverlay)
-				|| typeof(T) == typeof(Models.TimerWindowOptions))
+			else
 			{
 				_queryType = QueryType.User;
 			}
@@ -49,7 +48,7 @@ namespace EQTool.Services
 			}
 			else if(!versionChecked && _queryType == QueryType.User)
 			{
-				CheckDatabaseVersion();
+				CheckDatabaseVersion(_queryType);
 			}
 
 			if (_fileLocations != null)
@@ -74,9 +73,10 @@ namespace EQTool.Services
 			}			
 		}
 
-		public long Insert<T>(T obj)
+		public static long Insert<T>(T obj)
 			where T : class
 		{
+			QueryType _queryType;
 			StringBuilder fileToUse = new StringBuilder();
 			if (typeof(T) == typeof(QuarmMonster)
 				|| typeof(T) == typeof(QuarmMonsterFaction)
@@ -87,8 +87,7 @@ namespace EQTool.Services
 			{
 				_queryType = QueryType.Data;
 			}
-			else if (typeof(T) == typeof(CustomOverlay)
-				|| typeof(T) == typeof(Models.TimerWindowOptions))
+			else
 			{
 				_queryType = QueryType.User;
 			}
@@ -117,9 +116,10 @@ namespace EQTool.Services
 			return 0;
 		}
 
-		public bool Delete<T>(T obj)
+		public static bool Delete<T>(T obj)
 			where T : class
 		{
+			QueryType _queryType;
 			StringBuilder fileToUse = new StringBuilder();
 			if (typeof(T) == typeof(QuarmMonster)
 				|| typeof(T) == typeof(QuarmMonsterFaction)
@@ -130,8 +130,7 @@ namespace EQTool.Services
 			{
 				_queryType = QueryType.Data;
 			}
-			else if (typeof(T) == typeof(CustomOverlay)
-				|| typeof(T) == typeof(TimerWindowOptions))
+			else
 			{
 				_queryType = QueryType.User;
 			}
@@ -159,9 +158,9 @@ namespace EQTool.Services
 			return false;
 		}
 
-		private void CheckDatabaseVersion()
+		private static void CheckDatabaseVersion(QueryType queryType)
 		{
-			string sqliteConnString = GetConnectionString(_queryType);
+			string sqliteConnString = GetConnectionString(queryType);
 			using (SQLiteConnection cnn = new SQLiteConnection(sqliteConnString))
 			{
 				cnn.Open();
@@ -193,7 +192,7 @@ namespace EQTool.Services
 			versionChecked = true;
 		}
 
-		public bool UpdateCustomOverlay(CustomOverlay obj)
+		public static bool UpdateCustomOverlay(CustomOverlay obj)
 		{
 			if (_fileLocations == null && !DatabaseExists())
 			{
@@ -215,7 +214,7 @@ namespace EQTool.Services
 			return false;
 		}
 
-		public bool UpdateTimerWindow(TimerWindowOptions obj)
+		public static bool UpdateTimerWindow(TimerWindowOptions obj)
 		{
 			if (_fileLocations == null && !DatabaseExists())
 			{
@@ -237,7 +236,7 @@ namespace EQTool.Services
 			return false;
 		}
 
-		private bool DatabaseExists()
+		private static bool DatabaseExists()
 		{
 			_fileLocations = GetDataLocation("Data", _gameDataFileName, _userDataFileName);
 			if (_fileLocations == null || !_fileLocations.Found || string.IsNullOrWhiteSpace(_fileLocations.User_File))
@@ -247,7 +246,7 @@ namespace EQTool.Services
 			return true;
 		}
 
-		private bool CreateDatabase(string fileName)
+		private static bool CreateDatabase(string fileName)
 		{
 			Directory.CreateDirectory(Path.Combine(AppContext.BaseDirectory, "Data"));
 			SQLiteConnection.CreateFile(Path.Combine(AppContext.BaseDirectory, "Data", fileName));
@@ -279,7 +278,7 @@ namespace EQTool.Services
 			return true;
 		}
 
-		private string GetConnectionString(QueryType type)
+		private static string GetConnectionString(QueryType type)
 		{
 			if(type == QueryType.Data)
 			{

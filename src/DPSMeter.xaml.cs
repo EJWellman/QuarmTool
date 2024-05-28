@@ -51,7 +51,19 @@ namespace EQTool
             view.SortDescriptions.Add(new SortDescription(nameof(EntityDPS.TotalDamage), ListSortDirection.Descending));
             view.IsLiveSorting = true;
             view.LiveSortingProperties.Add(nameof(EntityDPS.TotalDamage));
-        }
+
+			foreach (var timer in settings.TimerWindows)
+			{
+				var item = new System.Windows.Controls.MenuItem()
+				{
+					Header = timer.Title,
+					DataContext = timer.ID,
+				};
+				item.Click += (App.Current as App).OpenTimerWindow;
+
+				TimerWindowsMenu.Items.Add(item);
+			}
+		}
 
         private void LogParser_FightHitEvent(object sender, LogParser.FightHitEventArgs e)
         {
@@ -123,7 +135,19 @@ namespace EQTool
             }
         }
 
-        private void MoveCurrentToLastSession(object sender, RoutedEventArgs e)
+		private void Map_TimerMenu_Open(object sender, EventArgs e)
+		{
+			var cm = ContextMenuService.GetContextMenu(sender as DependencyObject);
+			if (cm == null)
+			{
+				return;
+			}
+			cm.Placement = System.Windows.Controls.Primitives.PlacementMode.MousePoint;
+			cm.PlacementTarget = sender as UIElement;
+			cm.IsOpen = true;
+		}
+
+		private void MoveCurrentToLastSession(object sender, RoutedEventArgs e)
         {
             dPSWindowViewModel.SessionPlayerDamage.LastSessionPlayerDamage = dPSWindowViewModel.SessionPlayerDamage.CurrentSessionPlayerDamage;
             dPSWindowViewModel.SessionPlayerDamage.CurrentSessionPlayerDamage = new PlayerDamage();

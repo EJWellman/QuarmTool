@@ -22,21 +22,114 @@ namespace EQTool.ViewModels
         private readonly EQToolSettings _settings;
         private readonly EQSpells _spells;
 		private ColorService _colorService;
+		public TimerWindowOptions _windowOptions;
 
-		public BaseTimerWindowViewModel(ActivePlayer activePlayer, IAppDispatcher appDispatcher, EQToolSettings settings, EQSpells spells, ColorService colorService)
+		public BaseTimerWindowViewModel(ActivePlayer activePlayer, IAppDispatcher appDispatcher, EQToolSettings settings, EQSpells spells, ColorService colorService, TimerWindowOptions windowOptions)
         {
 			_activePlayer = activePlayer;
 			_appDispatcher = appDispatcher;
             _settings = settings;
             _spells = spells;
 			_colorService = colorService;
-        }
-		public bool BestGuessSpells { get; set; }
-		public bool YouOnlySpells { get; set; }
-		public bool ShowRandomRolls { get; set; }
-		public bool ShowTimers { get; set; }
-		public bool ShowModRodTimers { get; set; }
-		public bool ShowSpells { get; set; }
+			_windowOptions = windowOptions;
+
+		}
+		public int ID
+		{
+			get
+			{
+				return _windowOptions.ID;
+			}
+			set
+			{
+				_windowOptions.ID = value;
+				OnPropertyChanged();
+			}
+		}
+		public bool BestGuessSpells
+		{
+			get
+			{
+				return _windowOptions.BestGuessSpells;
+			}
+			set
+			{
+				_windowOptions.BestGuessSpells = value;
+				OnPropertyChanged();
+			}
+		}
+		public bool YouOnlySpells
+		{
+			get
+			{
+				return _windowOptions.YouOnlySpells;
+			}
+			set
+			{
+				_windowOptions.YouOnlySpells = value;
+				OnPropertyChanged();
+			}
+		}
+		public bool ShowRandomRolls
+		{
+			get
+			{
+				return _windowOptions.ShowRandomRolls;
+			}
+			set
+			{
+				_windowOptions.ShowRandomRolls = value;
+				OnPropertyChanged();
+			}
+		}
+		public bool ShowTimers
+		{
+			get
+			{
+				return _windowOptions.ShowTimers;
+			}
+			set
+			{
+				_windowOptions.ShowTimers = value;
+				OnPropertyChanged();
+			}
+		}
+		public bool ShowModRodTimers
+		{
+			get
+			{
+				return _windowOptions.ShowModRodTimers;
+			}
+			set
+			{
+				_windowOptions.ShowModRodTimers = value;
+				OnPropertyChanged();
+			}
+		}
+		public bool ShowSpells
+		{
+			get
+			{
+				return _windowOptions.ShowSpells;
+			}
+			set
+			{
+				_windowOptions.ShowSpells = value;
+				OnPropertyChanged();
+			}
+		}
+		public string WindowTitle
+		{
+			get
+			{
+				return _windowOptions.Title;
+			}
+			set
+			{
+				_windowOptions.Title = value;
+				OnPropertyChanged();
+			}
+		}
 		public Models.WindowState WindowState { get; set; } = new Models.WindowState();
 
 		public ObservableCollection<UISpell> _SpellList = new ObservableCollection<UISpell>();
@@ -46,17 +139,6 @@ namespace EQTool.ViewModels
 			set
 			{
 				_SpellList = value;
-				OnPropertyChanged();
-			}
-		}
-
-		private string _Title = null;
-		public string Title
-		{
-			get => _Title;
-			set
-			{
-				_Title = value;
 				OnPropertyChanged();
 			}
 		}

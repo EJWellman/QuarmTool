@@ -9,6 +9,7 @@ using System;
 using System.ComponentModel;
 using System.Linq;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
 
 namespace EQTool
@@ -24,7 +25,6 @@ namespace EQTool
         private readonly System.Timers.Timer UITimer;
 		private QuarmDataService _quarmDataService;
 		private TimerWindowFactory _timerWindowFactory;
-		private DataService _dataService;
 
 		public MappingWindow(
             ISignalrPlayerHub signalrPlayerHub,
@@ -37,8 +37,7 @@ namespace EQTool
             IAppDispatcher appDispatcher,
             LoggingService loggingService,
 			QuarmDataService quarmDataService,
-			TimerWindowFactory timerWindowFactory,
-			DataService dataService) : base(settings.MapWindowState, toolSettingsLoad, settings)
+			TimerWindowFactory timerWindowFactory) : base(settings.MapWindowState, toolSettingsLoad, settings)
         {
             loggingService.Log(string.Empty, EventType.OpenMap, activePlayer?.Player?.Server);
             this.activePlayer = activePlayer;
@@ -48,7 +47,6 @@ namespace EQTool
             this.logParser = logParser;
 			_quarmDataService = quarmDataService;
 			_timerWindowFactory = timerWindowFactory;
-			_dataService = dataService;
 			DataContext = this.mapViewModel = mapViewModel;
             InitializeComponent();
             base.Init();
@@ -74,7 +72,17 @@ namespace EQTool
             UITimer.Enabled = true;
 			this.MouseEnter += ToggleMouseLocation_Event;
 			this.MouseLeave += ToggleMouseLocation_Event;
-			mapViewModel.TimerWindows = settings.TimerWindows;
+			foreach(var timer in settings.TimerWindows)
+			{
+				var item = new System.Windows.Controls.MenuItem()
+				{
+					Header = timer.Title,
+					DataContext = timer.ID,	
+				};
+				item.Click += (App.Current as App).OpenTimerWindow;
+
+				TimerWindowsMenu.Items.Add(item);
+			}
 		}
 
 		private void ToggleMouseLocation_Event(object sender, MouseEventArgs e)
@@ -130,7 +138,19 @@ namespace EQTool
             mapViewModel.DeleteSelectedTimer();
         }
 
-        private void LogParser_DeadEvent(object sender, LogParser.DeadEventArgs e)
+		private void Map_TimerMenu_Open(object sender, EventArgs e)
+		{
+			var cm = ContextMenuService.GetContextMenu(sender as DependencyObject);
+			if(cm == null)
+			{
+				return;
+			}
+			cm.Placement = System.Windows.Controls.Primitives.PlacementMode.MousePoint;
+			cm.PlacementTarget = sender as UIElement;
+			cm.IsOpen = true;
+		}
+
+		private void LogParser_DeadEvent(object sender, LogParser.DeadEventArgs e)
         {
             if (playerTrackerService.IsPlayer(e.Name))
             {
@@ -273,15 +293,5 @@ namespace EQTool
         {
             this.mapViewModel.ToggleCenter();
         }
-
-		protected void OpenTimerWindow(object sender, RoutedEventArgs e)
-		{
-			var contextID = (sender as System.Windows.Controls.MenuItem).DataContext as int?;
-			if (contextID != null)
-			{
-				var w = _timerWindowFactory.CreateTimerWindow((int)contextID);
-				(App.Current as App).OpenSpawnableWindow<BaseTimerWindow>(w);
-			}
-		}
 	}
 }

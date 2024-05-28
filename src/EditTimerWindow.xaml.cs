@@ -117,10 +117,18 @@ namespace EQTool
 
 		private void UpdateTimerWindow(TimerWindowOptions timer)
 		{
+			var w = (Application.Current as App).GetSpawnableTimerWindowBase(timer);
+			if(w != null)
+			{
+				timer.WindowRect = w.Top + "," + w.Left + "," + w.Width + "," + w.Height;
+			}
+			
+
 			if (TimerWindowService.UpdateTimerWindow(timer))
 			{
 				this.TimerWindowEdited(this, new TimerWindowEditEventArgs { Success = true, UpdatedWindow = timer });
 				Close();
+				(Application.Current as App).UpdateSpawnableTimerWindowContext(timer);
 			}
 			this.TimerWindowEdited(this, new TimerWindowEditEventArgs { Success = false });
         }

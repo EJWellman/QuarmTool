@@ -28,6 +28,11 @@ namespace EQTool.Services.Parsing
 
 		public static CustomOverlay Parse(string message)
 		{
+			if(_settings == null)
+			{
+				_settings = new EQToolSettings();
+			}
+
 			if(_settings.CustomOverlays == null)
 			{
 				_settings.CustomOverlays = new EQToolShared.ExtendedClasses.ObservableCollectionRange<CustomOverlay>();

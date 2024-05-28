@@ -324,12 +324,11 @@
                                             <ColumnDefinition/>
                                         </Grid.ColumnDefinitions>
                                         <TextBlock Text="{Binding Title}" VerticalAlignment="Center" FontWeight="Bold"  MaxWidth="125" Grid.Column="0"/>
-                                        <CheckBox IsChecked="{Binding Closed}" Margin="5,4,5,0" Click="CustomOverlayVisual_Click" MinWidth="20" Grid.Column="1"/>
-                                        <CheckBox IsChecked="{Binding AlwaysOnTop}" Margin="10,4,5,0" Click="CustomOverlayAudio_Click" MinWidth="20" Grid.Column="3"/>
+                                        <CheckBox IsChecked="{Binding AlwaysOnTop}" Margin="10,4,5,0" Click="TimerWindowAlwaysOnTop_Click" MinWidth="20" Grid.Column="3"/>
                                         <Button Click="CreateTimerWindow_Click" HorizontalAlignment="Right" DataContext="{Binding ID}" Margin="10,0,0,0" Content="Edit" Width="50" Grid.Column="4"/>
-                                        <!--<Button Click="Delete_ExistingCustomOverlay" DataContext="{Binding ID}" Margin="10,0,0,0" Grid.Column="5">
+                                        <Button Click="DeleteTimerWindow_Click" DataContext="{Binding ID}" Margin="10,0,0,0" Grid.Column="5">
                                             <TextBlock Foreground="Red">X</TextBlock>
-                                        </Button>-->
+                                        </Button>
                                     </Grid>
 
                                     <!--<StackPanel Orientation="Horizontal" Width="auto">-->

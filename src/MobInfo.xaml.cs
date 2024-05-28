@@ -9,6 +9,7 @@ using System.Drawing;
 using System.Linq;
 using System.Reflection.Emit;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Navigation;
 using static System.Net.Mime.MediaTypeNames;
@@ -42,7 +43,19 @@ namespace EQTool
             InitializeComponent();
             base.Init();
             this.logParser.ConEvent += LogParser_ConEvent;
-        }
+
+			foreach (var timer in settings.TimerWindows)
+			{
+				var item = new System.Windows.Controls.MenuItem()
+				{
+					Header = timer.Title,
+					DataContext = timer.ID,
+				};
+				item.Click += (App.Current as App).OpenTimerWindow;
+
+				TimerWindowsMenu.Items.Add(item);
+			}
+		}
 
         private void LogParser_ConEvent(object sender, LogParser.ConEventArgs e)
         {
@@ -93,6 +106,18 @@ namespace EQTool
         private void Hyperlink_RequestNavigatebutton(object sender, RoutedEventArgs args)
         {
             _ = Process.Start(new ProcessStartInfo(mobInfoViewModel.Url));
-        }
-    }
+		}
+
+		private void Map_TimerMenu_Open(object sender, EventArgs e)
+		{
+			var cm = ContextMenuService.GetContextMenu(sender as DependencyObject);
+			if (cm == null)
+			{
+				return;
+			}
+			cm.Placement = System.Windows.Controls.Primitives.PlacementMode.MousePoint;
+			cm.PlacementTarget = sender as UIElement;
+			cm.IsOpen = true;
+		}
+	}
 }

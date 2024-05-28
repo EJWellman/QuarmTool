@@ -94,7 +94,6 @@ namespace EQTool
 				((Window)sender).Left = SystemParameters.VirtualScreenWidth + SystemParameters.VirtualScreenLeft - ((Window)sender).Width - 1;
 			}
 
-
             LastWindowInteraction = DateTime.UtcNow;
             DebounceSave();
         }

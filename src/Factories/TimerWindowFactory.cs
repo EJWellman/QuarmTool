@@ -35,7 +35,7 @@ namespace EQTool.Factories
 
 		public BaseTimerWindow CreateTimerWindow(TimerWindowOptions timerWindow)
 		{
-			var newTimerWindowViewModel = new BaseTimerWindowViewModel(_activePlayer, _appDispatcher, _settings, _spells, _colorService);
+			var newTimerWindowViewModel = new BaseTimerWindowViewModel(_activePlayer, _appDispatcher, _settings, _spells, _colorService, timerWindow);
 
 			var logParser = App.Container.Resolve<LogParser>();
 			var playerTrackerService = App.Container.Resolve<PlayerTrackerService>();
@@ -46,17 +46,12 @@ namespace EQTool.Factories
 			{
 				Title = timerWindow.Title
 			};
-		//var newTimerWindow = new BaseTimerWindow(_playerTrackerService, _settings, newTimerWindowViewModel, _logParser, _toolSettingsLoad,
-		//	_activePlayer, new QuarmDataService(_activePlayer, new DataService()), _logging)
-		//{
-		//	Title = timerWindow.Title
-		//};
 
-		string[] rectParts = timerWindow.WindowRect?.Split(',');
+			string[] rectParts = timerWindow.WindowRect?.Split(',');
 			Rect rect = new Rect();
 			if(rectParts != null)
 			{
-				var windowPoint = new Point(int.Parse(rectParts[0]), int.Parse(rectParts[1]));
+				var windowPoint = new Point(int.Parse(rectParts[1]), int.Parse(rectParts[0]));
 				var windowSize = new Size(int.Parse(rectParts[2]), int.Parse(rectParts[3]));
 				rect = new Rect(windowPoint, windowSize);
 			}
@@ -67,16 +62,22 @@ namespace EQTool.Factories
 			newTimerWindowViewModel.ShowTimers = timerWindow.ShowTimers;
 			newTimerWindowViewModel.ShowRandomRolls = timerWindow.ShowRandomRolls;
 			newTimerWindowViewModel.YouOnlySpells = timerWindow.YouOnlySpells;
+			newTimerWindowViewModel.ID = timerWindow.ID;
 			newTimerWindowViewModel.WindowState = new Models.WindowState()
 			{
 				State = (System.Windows.WindowState)timerWindow.State,
 				Closed = timerWindow.Closed,
 				AlwaysOnTop = timerWindow.AlwaysOnTop,
 				Opacity = timerWindow.Opacity,
-				WindowRect = rect
+				WindowRect = rect,
 			};
 
 			newTimerWindow.DataContext = newTimerWindowViewModel;
+			newTimerWindow.Top = rect.Top;
+			newTimerWindow.Left = rect.Left;
+			newTimerWindow.Width = rect.Width;
+			newTimerWindow.Height = rect.Height;
+			newTimerWindow.Topmost = timerWindow.AlwaysOnTop;
 			return newTimerWindow;
 		}
 		public BaseTimerWindow CreateTimerWindow(int windowId)

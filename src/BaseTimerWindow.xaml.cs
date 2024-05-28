@@ -23,92 +23,48 @@ namespace EQTool
         private readonly ActivePlayer _activePlayer;
         private readonly PlayerTrackerService _playerTrackerService;
 		private readonly QuarmDataService _quarmDataService;
-
-		public BaseTimerWindow(BaseTimerWindowViewModel viewModel,
-			EQToolSettingsLoad toolSettingsLoad,
-			EQToolSettings settings) : base(viewModel.WindowState, toolSettingsLoad, settings)
-		{
-			DataContext = _baseTimerWindowViewModel = viewModel;
-			_uiTimer = new System.Timers.Timer(1000);
-			_uiTimer.Elapsed += PollUI;
-			_uiTimer.Enabled = true;
-		}
-
-		public void Setup()
-		{
-
-			InitializeComponent();
-			//this._playerTrackerService = playerTrackerService;
-			//this._logParser = logParser;
-			//this._activePlayer = activePlayer;
-			//_quarmDataService = quarmDataService;
-			_baseTimerWindowViewModel.SpellList = new System.Collections.ObjectModel.ObservableCollection<UISpell>();
-			if (this._activePlayer.Player != null)
-			{
-				_baseTimerWindowViewModel.AddSavedYouSpells(this._activePlayer.Player.YouSpells);
-			}
-
-			InitializeComponent();
-			base.Init();
-			this._logParser.SpellWornOtherOffEvent += LogParser_SpellWornOtherOffEvent;
-			this._logParser.CampEvent += LogParser_CampEvent;
-			this._logParser.EnteredWorldEvent += LogParser_EnteredWorldEvent;
-			this._logParser.SpellWornOffSelfEvent += LogParser_SpellWornOffSelfEvent;
-			this._logParser.StartCastingEvent += LogParser_StartCastingEvent;
-			this._logParser.DeadEvent += LogParser_DeadEvent;
-			this._logParser.StartTimerEvent += LogParser_StartTimerEvent;
-			this._logParser.CancelTimerEvent += LogParser_CancelTimerEvent;
-			this._logParser.POFDTEvent += LogParser_POFDTEvent;
-			this._logParser.ResistSpellEvent += LogParser_ResistSpellEvent;
-			this._logParser.RandomRollEvent += LogParser_RandomRollEvent;
-			this._logParser.ModRodUsedEvent += LogParser_ModRodUsedEvent;
-			var view = (ListCollectionView)CollectionViewSource.GetDefaultView(spelllistview.ItemsSource);
-			view.GroupDescriptions.Add(new PropertyGroupDescription(nameof(UISpell.TargetName)));
-			view.LiveGroupingProperties.Add(nameof(UISpell.TargetName));
-			view.IsLiveGrouping = true;
-			view.SortDescriptions.Add(new SortDescription(nameof(UISpell.Sorting), ListSortDirection.Ascending));
-			view.SortDescriptions.Add(new SortDescription(nameof(UISpell.Roll), ListSortDirection.Descending));
-			view.SortDescriptions.Add(new SortDescription(nameof(UISpell.SecondsLeftOnSpell), ListSortDirection.Ascending));
-			view.IsLiveSorting = true;
-			view.LiveSortingProperties.Add(nameof(UISpell.SecondsLeftOnSpell));
-		}
+		private readonly EQToolSettings _settings;
 
         public BaseTimerWindow(
             PlayerTrackerService playerTrackerService,
             EQToolSettings settings,
-            BaseTimerWindowViewModel BaseTimerWindowViewModel,
+            BaseTimerWindowViewModel baseTimerWindowViewModel,
             LogParser logParser,
             EQToolSettingsLoad toolSettingsLoad,
             ActivePlayer activePlayer,
 			QuarmDataService quarmDataService,
-            LoggingService loggingService) : base(BaseTimerWindowViewModel.WindowState, toolSettingsLoad, settings)
+            LoggingService loggingService) : base(baseTimerWindowViewModel.WindowState, toolSettingsLoad, settings)
         {
             loggingService.Log(string.Empty, EventType.OpenMap, activePlayer?.Player?.Server);
-            this._playerTrackerService = playerTrackerService;
-            this._logParser = logParser;
-            this._activePlayer = activePlayer;
+            _playerTrackerService = playerTrackerService;
+            _logParser = logParser;
+            _activePlayer = activePlayer;
 			_quarmDataService = quarmDataService;
-            BaseTimerWindowViewModel.SpellList = new System.Collections.ObjectModel.ObservableCollection<UISpell>();
-            DataContext = this._baseTimerWindowViewModel = BaseTimerWindowViewModel;
-            if (this._activePlayer.Player != null)
+			_settings = settings;
+            baseTimerWindowViewModel.SpellList = new System.Collections.ObjectModel.ObservableCollection<UISpell>();
+            DataContext = _baseTimerWindowViewModel = baseTimerWindowViewModel;
+            if (_activePlayer.Player != null)
             {
-                BaseTimerWindowViewModel.AddSavedYouSpells(this._activePlayer.Player.YouSpells);
+                baseTimerWindowViewModel.AddSavedYouSpells(_activePlayer.Player.YouSpells);
             }
 
             InitializeComponent();
 			base.Init();
-			this._logParser.SpellWornOtherOffEvent += LogParser_SpellWornOtherOffEvent;
-			this._logParser.CampEvent += LogParser_CampEvent;
-			this._logParser.EnteredWorldEvent += LogParser_EnteredWorldEvent;
-			this._logParser.SpellWornOffSelfEvent += LogParser_SpellWornOffSelfEvent;
-			this._logParser.StartCastingEvent += LogParser_StartCastingEvent;
-			this._logParser.DeadEvent += LogParser_DeadEvent;
-			this._logParser.StartTimerEvent += LogParser_StartTimerEvent;
-			this._logParser.CancelTimerEvent += LogParser_CancelTimerEvent;
-			this._logParser.POFDTEvent += LogParser_POFDTEvent;
-			this._logParser.ResistSpellEvent += LogParser_ResistSpellEvent;
-			this._logParser.RandomRollEvent += LogParser_RandomRollEvent;
-			this._logParser.ModRodUsedEvent += LogParser_ModRodUsedEvent;
+			_logParser.SpellWornOtherOffEvent += LogParser_SpellWornOtherOffEvent;
+			_logParser.CampEvent += LogParser_CampEvent;
+			_logParser.EnteredWorldEvent += LogParser_EnteredWorldEvent;
+			_logParser.SpellWornOffSelfEvent += LogParser_SpellWornOffSelfEvent;
+			_logParser.StartCastingEvent += LogParser_StartCastingEvent;
+			_logParser.DeadEvent += LogParser_DeadEvent;
+			_logParser.StartTimerEvent += LogParser_StartTimerEvent;
+			_logParser.CancelTimerEvent += LogParser_CancelTimerEvent;
+			_logParser.POFDTEvent += LogParser_POFDTEvent;
+			_logParser.ResistSpellEvent += LogParser_ResistSpellEvent;
+			_logParser.RandomRollEvent += LogParser_RandomRollEvent;
+			_logParser.ModRodUsedEvent += LogParser_ModRodUsedEvent;
+			LocationChanged += Window_LocationChanged;
+			Closed += BaseTimerWindow_Closed;
+			Loaded += BaseTimerWindow_Opened;
 			_uiTimer = new System.Timers.Timer(1000);
 			_uiTimer.Elapsed += PollUI;
 			_uiTimer.Enabled = true;
@@ -121,16 +77,76 @@ namespace EQTool
 			view.SortDescriptions.Add(new SortDescription(nameof(UISpell.SecondsLeftOnSpell), ListSortDirection.Ascending));
 			view.IsLiveSorting = true;
 			view.LiveSortingProperties.Add(nameof(UISpell.SecondsLeftOnSpell));
+
+			Topmost = baseTimerWindowViewModel.WindowState.AlwaysOnTop;
+		}
+
+		private void BaseTimerWindow_Closed(object sender, EventArgs e)
+		{
+			BaseTimerWindowViewModel vm = ((BaseTimerWindowViewModel)((Window)sender).DataContext);
+			var timerOptions = TimerWindowService.LoadTimerWindow(vm.ID);
+			if (timerOptions != null)
+			{
+				timerOptions.Closed = true;
+				timerOptions.WindowRect = ((Window)sender).Top + "," + ((Window)sender).Left + "," + ((Window)sender).Width + "," + ((Window)sender).Height;
+				_settings.TimerWindows.FirstOrDefault(tw => tw.ID == timerOptions.ID).WindowRect = timerOptions.WindowRect;
+			}
+
+			TimerWindowService.UpdateTimerWindow(timerOptions);
+		}
+		private void BaseTimerWindow_Opened(object sender, EventArgs e)
+		{
+			BaseTimerWindowViewModel vm = ((BaseTimerWindowViewModel)((Window)sender).DataContext);
+			var timerOptions = TimerWindowService.LoadTimerWindow(vm.ID);
+			if (timerOptions != null)
+			{
+				timerOptions.Closed = false;
+			}
+
+			TimerWindowService.UpdateTimerWindow(timerOptions);
+		}
+
+		private void Window_LocationChanged(object sender, EventArgs e)
+		{
+			#region Keep window on screen
+			if (((Window)sender).Top <= SystemParameters.VirtualScreenTop)
+			{
+				((Window)sender).Top = SystemParameters.VirtualScreenTop + 1;
+			}
+			if (((Window)sender).Left < SystemParameters.VirtualScreenLeft)
+			{
+				((Window)sender).Left = SystemParameters.VirtualScreenLeft + 1;
+			}
+			if (((Window)sender).Top + ((Window)sender).Height > SystemParameters.VirtualScreenHeight)
+			{
+				((Window)sender).Top = SystemParameters.VirtualScreenHeight - ((Window)sender).Height - 1;
+			}
+			if (((Window)sender).Left + ((Window)sender).Width > SystemParameters.VirtualScreenLeft + SystemParameters.VirtualScreenWidth)
+			{
+				((Window)sender).Left = SystemParameters.VirtualScreenWidth + SystemParameters.VirtualScreenLeft - ((Window)sender).Width - 1;
+			}
+			#endregion
+			BaseTimerWindowViewModel vm = ((BaseTimerWindowViewModel)((Window)sender).DataContext);
+			var timerOptions = TimerWindowService.LoadTimerWindow(vm.ID);
+			if (timerOptions != null)
+			{
+				timerOptions.WindowRect = ((Window)sender).Top + "," + ((Window)sender).Left + "," + ((Window)sender).Width + "," + ((Window)sender).Height;
+				_settings.TimerWindows.FirstOrDefault(tw => tw.ID == timerOptions.ID).WindowRect = timerOptions.WindowRect;
+			}
+
+			TimerWindowService.UpdateTimerWindow(timerOptions);
+
+			LastWindowInteraction = DateTime.UtcNow;
 		}
 
 		private void LogParser_RandomRollEvent(object sender, LogParser.RandomRollEventArgs e)
 		{
-			this._baseTimerWindowViewModel.TryAddCustom(new CustomTimer
+			_baseTimerWindowViewModel.TryAddCustom(new CustomTimer
 			{
-				TargetName = $"Random -- {e.RandomRollData.MaxRoll}",
+				TargetName = $"Random -- {e.RandomRollData.MinRoll}-{e.RandomRollData.MaxRoll}",
 				Name = e.RandomRollData.PlayerName,
 				SpellNameIcon = "Invisibility",
-				SpellType = EQToolShared.Enums.SpellTypes.RandomRoll,
+				SpellType = SpellTypes.RandomRoll,
 				Roll = e.RandomRollData.Roll,
 				DurationInSeconds = 60 * 3,
 				ExecutionTime = e.ExecutionTime

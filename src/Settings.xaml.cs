@@ -1205,7 +1205,6 @@ namespace EQTool
 			var temp = (sender as System.Windows.Controls.Button).DataContext as int?;
 			var window = new EditTimerWindow(_settings, _timerWindowFactory, temp);
 
-
 			window.TimerWindowEdited += (s, ev) =>
 			{
 				if (ev.Success)
@@ -1216,8 +1215,54 @@ namespace EQTool
 				}
 			};
 
-
 			window.Show();
+		}
+
+		private void TimerWindowAlwaysOnTop_Click(object sender, RoutedEventArgs e)
+		{
+			var temp = (sender as System.Windows.Controls.CheckBox).DataContext as TimerWindowOptions;
+			var timer = _settings.TimerWindows.FirstOrDefault(a => a.ID == temp.ID);
+
+			if (timer != null)
+			{
+				var s = sender as System.Windows.Controls.CheckBox;
+				temp.AlwaysOnTop = s.IsChecked.Value;
+				TimerWindowService.UpdateTimerWindow(temp);
+				(System.Windows.Application.Current as App).UpdateSpawnableTimerWindowContext(timer);
+
+				OnPropertyChanged(new DependencyPropertyChangedEventArgs(TopmostProperty, !s.IsChecked.Value, s.IsChecked.Value));
+			}
+		}
+
+		private void DeleteTimerWindow_Click(object sender, RoutedEventArgs e)
+		{
+			var temp = (sender as System.Windows.Controls.Button).DataContext as int?;
+			var timerToDelete = _settings.TimerWindows.FirstOrDefault(a => a.ID == temp.Value);
+
+			var messageBoxText = $"Are you sure that you want to delete your {timerToDelete.Title} window?";
+			var caption = "Are you sure?";
+			var button = (MessageBoxButton)Enum.Parse(typeof(MessageBoxButton), "YesNo");
+			var icon = (MessageBoxImage)Enum.Parse(typeof(MessageBoxImage), "Warning");
+			var defaultResult =
+				(MessageBoxResult)Enum.Parse(typeof(MessageBoxResult), "None");
+			var options = (System.Windows.MessageBoxOptions)Enum.Parse(typeof(System.Windows.MessageBoxOptions), "None");
+
+			// Show message box, passing the window owner if specified
+			MessageBoxResult result = System.Windows.MessageBox.Show(this, messageBoxText, caption, button, icon, defaultResult, options);
+
+			// Show the result
+			if (result == MessageBoxResult.Yes)
+			{
+				(App.Current as App).GetSpawnableTimerWindowBase(timerToDelete).Close();
+
+				if (temp != null && temp.HasValue)
+				{
+					if (TimerWindowService.DeleteTimerWindow(timerToDelete))
+					{
+						_settings.TimerWindows.Remove(timerToDelete);
+					}
+				}
+			}
 		}
 	}
 }
