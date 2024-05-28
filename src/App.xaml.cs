@@ -644,10 +644,12 @@ namespace EQTool
 				vm.ShowRandomRolls = options.ShowRandomRolls;
 				vm.YouOnlySpells = options.YouOnlySpells;
 				vm.ID = options.ID;
-				w.Topmost = options.AlwaysOnTop;
 				vm.WindowState.AlwaysOnTop = options.AlwaysOnTop;
+				w.Topmost = !options.AlwaysOnTop;
+				w.Topmost = options.AlwaysOnTop;
 				vm.WindowState.Opacity = options.Opacity;
-				
+
+				w.Activate();
 			}
 		}
 

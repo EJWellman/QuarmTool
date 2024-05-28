@@ -8,6 +8,7 @@ using EQToolShared.HubModels;
 using EQToolShared.Map;
 using System;
 using System.ComponentModel;
+using System.Configuration;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
@@ -63,8 +64,8 @@ namespace EQTool
 			_logParser.RandomRollEvent += LogParser_RandomRollEvent;
 			_logParser.ModRodUsedEvent += LogParser_ModRodUsedEvent;
 			LocationChanged += Window_LocationChanged;
-			Closed += BaseTimerWindow_Closed;
 			Loaded += BaseTimerWindow_Opened;
+			Activated += OnActivated;
 			_uiTimer = new System.Timers.Timer(1000);
 			_uiTimer.Elapsed += PollUI;
 			_uiTimer.Enabled = true;
@@ -78,22 +79,9 @@ namespace EQTool
 			view.IsLiveSorting = true;
 			view.LiveSortingProperties.Add(nameof(UISpell.SecondsLeftOnSpell));
 
-			Topmost = baseTimerWindowViewModel.WindowState.AlwaysOnTop;
+			Topmost = baseTimerWindowViewModel._windowOptions.AlwaysOnTop;
 		}
 
-		private void BaseTimerWindow_Closed(object sender, EventArgs e)
-		{
-			BaseTimerWindowViewModel vm = ((BaseTimerWindowViewModel)((Window)sender).DataContext);
-			var timerOptions = TimerWindowService.LoadTimerWindow(vm.ID);
-			if (timerOptions != null)
-			{
-				timerOptions.Closed = true;
-				timerOptions.WindowRect = ((Window)sender).Top + "," + ((Window)sender).Left + "," + ((Window)sender).Width + "," + ((Window)sender).Height;
-				_settings.TimerWindows.FirstOrDefault(tw => tw.ID == timerOptions.ID).WindowRect = timerOptions.WindowRect;
-			}
-
-			TimerWindowService.UpdateTimerWindow(timerOptions);
-		}
 		private void BaseTimerWindow_Opened(object sender, EventArgs e)
 		{
 			BaseTimerWindowViewModel vm = ((BaseTimerWindowViewModel)((Window)sender).DataContext);
@@ -325,6 +313,21 @@ namespace EQTool
 			{
 				_ = _baseTimerWindowViewModel.SpellList.Remove(item);
 			}
+		}
+
+		private void OnActivated(object sender, EventArgs e)
+		{
+			Topmost = !_baseTimerWindowViewModel._windowOptions.AlwaysOnTop;
+			Topmost = _baseTimerWindowViewModel._windowOptions.AlwaysOnTop;
+
+		}
+		public override void SaveState()
+		{
+			_baseTimerWindowViewModel._windowOptions.AlwaysOnTop = this.Topmost;
+			_baseTimerWindowViewModel._windowOptions.Closed = this.GetClosedState();
+
+			base.SaveState();
+			TimerWindowService.UpdateTimerWindow(_baseTimerWindowViewModel._windowOptions);
 		}
 	}
 }

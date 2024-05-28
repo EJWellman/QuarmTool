@@ -9,7 +9,8 @@
         Height="450" 
         Width="300"  
         WindowStyle="None" 
-        AllowsTransparency="True">
+        AllowsTransparency="True"
+        Topmost="{Binding AlwaysOnTop}">
     <WindowChrome.WindowChrome>
         <WindowChrome 
         CaptionHeight="0"

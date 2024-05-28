@@ -57,7 +57,7 @@ namespace EQTool
 		{
 			var temp = (sender as System.Windows.Controls.Button).DataContext as TimerWindowOptions;
 
-			if(temp != null)
+			if(temp.ID != 0)
 			{
 				temp.Title = WindowTitle.Text;
 				temp.BestGuessSpells = ShowBestGuess.IsChecked ?? false;
@@ -81,7 +81,9 @@ namespace EQTool
 				ShowSpells = ShowSpells.IsChecked ?? false,
 				ShowTimers = ShowDeaths.IsChecked ?? false,
 				ShowRandomRolls = ShowRolls.IsChecked ?? false,
-				YouOnlySpells = ShowYouOnly.IsChecked ?? false
+				YouOnlySpells = ShowYouOnly.IsChecked ?? false,
+				WindowRect = "0,0,250,400",
+				Closed = false
 			};
 
 			if (TimerWindowService.AddNewTimerWindow(windowOptions))
@@ -99,7 +101,7 @@ namespace EQTool
 					}
 				}
 				var newWindow = _timerWindowFactory.CreateTimerWindow(windowOptions);
-				newWindow.Show();
+				(App.Current as App).OpenSpawnableWindow<BaseTimerWindow>(newWindow);
 			}
 
 			//unset

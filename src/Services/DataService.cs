@@ -148,7 +148,8 @@ namespace EQTool.Services
 				using (SQLiteConnection cnn = new SQLiteConnection(sqliteConnString))
 				{
 					cnn.Open();
-					if (typeof(T) == typeof(CustomOverlay))
+					if (typeof(T) == typeof(CustomOverlay)
+						|| typeof(T) == typeof(TimerWindowOptions))
 					{
 						return cnn.Delete(obj);
 					}

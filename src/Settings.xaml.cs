@@ -130,8 +130,8 @@ namespace EQTool
                 _SettingsWindowData.EqLogPath = logfounddata.Location;
             }
             _SettingsWindowData.Update();
-            BestGuessSpells.IsChecked = _settings.BestGuessSpells;
-            YouSpellsOnly.IsChecked = _settings.YouOnlySpells;
+            //BestGuessSpells.IsChecked = _settings.BestGuessSpells;
+            //YouSpellsOnly.IsChecked = _settings.YouOnlySpells;
             var player = _SettingsWindowData.ActivePlayer.Player;
 
             if (player?.ShowSpellsForClasses != null)
@@ -1253,7 +1253,7 @@ namespace EQTool
 			// Show the result
 			if (result == MessageBoxResult.Yes)
 			{
-				(App.Current as App).GetSpawnableTimerWindowBase(timerToDelete).Close();
+				(App.Current as App).GetSpawnableTimerWindowBase(timerToDelete)?.Close();
 
 				if (temp != null && temp.HasValue)
 				{

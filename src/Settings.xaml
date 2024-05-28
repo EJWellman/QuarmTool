@@ -311,7 +311,18 @@
                 <StackPanel Orientation="Vertical"  Margin="0, 0, 0, 8">
                     <Button Content="Create Timer Window" Click="CreateTimerWindow_Click"></Button>
                     <Separator/>
-                        <ListView ItemsSource="{Binding TimerWindows}">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="85"/>
+                            <ColumnDefinition Width="35"/>
+                            <ColumnDefinition Width="90"/>
+                            <ColumnDefinition Width="90"/>
+                            <ColumnDefinition Width="0"/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="Always On Top" VerticalAlignment="Center" FontWeight="Bold"  MaxWidth="125" Grid.Column="3"/>
+                    </Grid>
+                    <ListView ItemsSource="{Binding TimerWindows}">
                             <ListView.ItemTemplate>
                                 <DataTemplate x:Name="TimerWindowsTemplate" DataType="local:TimerWindowOptions">
                                     <Grid>
@@ -337,7 +348,7 @@
                             </ListView.ItemTemplate>
                         </ListView>
                     <Separator/>
-                    <StackPanel Orientation="Horizontal">
+                    <!--<StackPanel Orientation="Horizontal">
                         <TextBlock Text="Combo - Always on top" VerticalAlignment="Center"  FontWeight="Bold"  MinWidth="150"/>
                         <CheckBox IsChecked="{Binding ComboAlwaysOnTop}" Click="SaveAlwaysOntopCheckBoxSettings" ></CheckBox>
                     </StackPanel>
@@ -381,19 +392,19 @@
                     </StackPanel>
                     <Separator/>
                     <Label Height="16" HorizontalAlignment="Center" FontSize="10" FontWeight="SemiBold" Padding="0,0,0,0">Spell Settings - Combo &amp; Spell</Label>
-                    <Separator/>
+                    <Separator/>-->
                     <StackPanel Orientation="Horizontal">
                         <TextBlock Text="Window Opacity"  VerticalAlignment="Center"  FontWeight="Bold"  MinWidth="100"/>
                         <Slider Value="{Binding TriggerWindowOpacity}" Minimum=".01" Maximum="1" SmallChange=".1" TickFrequency=".1" ValueChanged="SaveSettings" MinWidth="150"/>
                     </StackPanel>
-                    <StackPanel Orientation="Horizontal">
+                    <!--<StackPanel Orientation="Horizontal">
                         <TextBlock Text="Guess Spells"  VerticalAlignment="Center"  FontWeight="Bold"  MinWidth="100"/>
                         <CheckBox x:Name="BestGuessSpells" Click="GuessSpells_Click" />
                     </StackPanel>
                     <StackPanel Orientation="Horizontal">
                         <TextBlock Text="Spells Me only"  VerticalAlignment="Center"  FontWeight="Bold"  MinWidth="100"/>
                         <CheckBox x:Name="YouSpellsOnly" Click="YouSpells_Click" />
-                    </StackPanel>
+                    </StackPanel>-->
                 </StackPanel>
                 <Separator></Separator>
                 <Expander ExpandDirection="Down" IsExpanded="False" Header="Timer Colors" FontWeight="Bold">

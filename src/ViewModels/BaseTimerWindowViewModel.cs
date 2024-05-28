@@ -130,7 +130,35 @@ namespace EQTool.ViewModels
 				OnPropertyChanged();
 			}
 		}
-		public Models.WindowState WindowState { get; set; } = new Models.WindowState();
+		public bool AlwaysOnTop
+		{
+			get
+			{
+				return _windowOptions.AlwaysOnTop;
+			}
+			set
+			{
+				_windowOptions.AlwaysOnTop = value;
+				OnPropertyChanged();
+			}
+		}
+		private Models.WindowState _windowState;
+		public Models.WindowState WindowState
+		{
+			get
+			{
+				if(_windowState == null)
+				{
+					_windowState = new Models.WindowState();
+				}
+				return _windowState;
+			}
+			set
+			{
+				_windowState = value ?? new Models.WindowState();
+				OnPropertyChanged();
+			}
+		}
 
 		public ObservableCollection<UISpell> _SpellList = new ObservableCollection<UISpell>();
 		public ObservableCollection<UISpell> SpellList
