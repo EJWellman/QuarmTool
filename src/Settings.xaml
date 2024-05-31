@@ -478,12 +478,16 @@
                     <CheckBox IsChecked="{Binding ActivePlayer.Player.MapKillTimers}"></CheckBox>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="Visible Tracking" ToolTip="Adjust the visibility of the Tracking Ring. This is a per character setting" VerticalAlignment="Center"  FontWeight="Bold"  MinWidth="100"/>
+                    <CheckBox IsChecked="{Binding MapTrackingVisiblity}" Click="MapVisibleTracking_Click"></CheckBox>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
                     <TextBlock Text="Window Opacity" VerticalAlignment="Center"  FontWeight="Bold"  MinWidth="100"/>
                     <Slider Value="{Binding MapWindowOpacity}" Minimum=".01" Maximum="1" SmallChange=".1" TickFrequency=".1" ValueChanged="SaveSettings" MinWidth="150"/>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal">
                     <TextBlock Text="Location Share" VerticalAlignment="Center"  FontWeight="Bold" MinWidth="100"/>
-                    <ComboBox SelectedItem="{Binding ActivePlayer.Player.MapLocationSharing}" ItemsSource="{Binding LocationShareOptions}" MinWidth="150"></ComboBox>
+                    <ComboBox SelectedItem="{Binding ActivePlayer.Player.MapLocationSharing}" ItemsSource="{Binding LocationShareOptions}" SelectionChanged="LocationShare_SelectionChanged" MinWidth="150"></ComboBox>
                 </StackPanel>
                 <Separator/>
                 <StackPanel Orientation="Horizontal">

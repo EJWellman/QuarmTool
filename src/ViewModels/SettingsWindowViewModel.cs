@@ -16,11 +16,11 @@ namespace EQTool.ViewModels
 {
     public class SettingsWindowViewModel : INotifyPropertyChanged
     {
-        private readonly EQToolSettings toolSettings;
+        private readonly EQToolSettings _settings;
 
         public SettingsWindowViewModel(ActivePlayer activePlayer, EQToolSettings toolSettings)
         {
-            this.toolSettings = toolSettings;
+            this._settings = toolSettings;
             ActivePlayer = activePlayer;
             for (var i = 12; i < 72; i++)
             {
@@ -48,7 +48,7 @@ namespace EQTool.ViewModels
             }
 
             this.InstalledVoices = new ObservableCollection<string>(new SpeechSynthesizer().GetInstalledVoices().Select(a => a.VoiceInfo.Name).ToList());
-            this.SelectedVoice = this.toolSettings.SelectedVoice;
+            this.SelectedVoice = this._settings.SelectedVoice;
             if (string.IsNullOrWhiteSpace(this.SelectedVoice))
             {
                 this.SelectedVoice = this.InstalledVoices.FirstOrDefault();
@@ -59,15 +59,15 @@ namespace EQTool.ViewModels
         {
             get
             {
-                return this.toolSettings.FontSize.Value;
+                return this._settings.FontSize.Value;
             }
             set
             {
-                this.toolSettings.FontSize = value;
+                this._settings.FontSize = value;
                 App.Current.Resources["GlobalFontSize"] = (double)value;
-                ((App)System.Windows.Application.Current).UpdateBackgroundOpacity("MyWindowStyleDPS", this.toolSettings.DpsWindowState.Opacity.Value);
-                ((App)System.Windows.Application.Current).UpdateBackgroundOpacity("MyWindowStyleMap", this.toolSettings.MapWindowState.Opacity.Value);
-                ((App)System.Windows.Application.Current).UpdateBackgroundOpacity("MyWindowStyleTrigger", this.toolSettings.SpellWindowState.Opacity.Value);
+                ((App)System.Windows.Application.Current).UpdateBackgroundOpacity("MyWindowStyleDPS", this._settings.DpsWindowState.Opacity.Value);
+                ((App)System.Windows.Application.Current).UpdateBackgroundOpacity("MyWindowStyleMap", this._settings.MapWindowState.Opacity.Value);
+                ((App)System.Windows.Application.Current).UpdateBackgroundOpacity("MyWindowStyleTrigger", this._settings.SpellWindowState.Opacity.Value);
                 OnPropertyChanged();
             }
         }
@@ -76,11 +76,11 @@ namespace EQTool.ViewModels
         {
             get
             {
-                return this.toolSettings.DpsWindowState.AlwaysOnTop;
+                return this._settings.DpsWindowState.AlwaysOnTop;
             }
             set
             {
-                this.toolSettings.DpsWindowState.AlwaysOnTop = value;
+                this._settings.DpsWindowState.AlwaysOnTop = value;
                 OnPropertyChanged();
             }
 		}
@@ -89,11 +89,11 @@ namespace EQTool.ViewModels
 		{
 			get
 			{
-				return this.toolSettings.OverlayFontSize.Value;
+				return this._settings.OverlayFontSize.Value;
 			}
 			set
 			{
-				this.toolSettings.OverlayFontSize = value;
+				this._settings.OverlayFontSize = value;
 				OnPropertyChanged();
 			}
 		}
@@ -102,11 +102,11 @@ namespace EQTool.ViewModels
 		{
 			get
 			{
-				return this.toolSettings.AudioTriggerVolume;
+				return this._settings.AudioTriggerVolume;
 			}
 			set
 			{
-				this.toolSettings.AudioTriggerVolume = value;
+				this._settings.AudioTriggerVolume = value;
 				OnPropertyChanged();
 			}
 		}
@@ -115,11 +115,11 @@ namespace EQTool.ViewModels
 		{
 			get
 			{
-				return this.toolSettings.EnrageOverlayColor;
+				return this._settings.EnrageOverlayColor;
 			}
 			set
 			{
-				this.toolSettings.EnrageOverlayColor = value;
+				this._settings.EnrageOverlayColor = value;
 				OnPropertyChanged();
 			}
 		}
@@ -127,11 +127,11 @@ namespace EQTool.ViewModels
 		{
 			get
 			{
-				return this.toolSettings.LevFadingOverlayColor;
+				return this._settings.LevFadingOverlayColor;
 			}
 			set
 			{
-				this.toolSettings.LevFadingOverlayColor = value;
+				this._settings.LevFadingOverlayColor = value;
 				OnPropertyChanged();
 			}
 		}
@@ -139,11 +139,11 @@ namespace EQTool.ViewModels
 		{ 
 			get
 			{
-				return this.toolSettings.InvisFadingOverlayColor;
+				return this._settings.InvisFadingOverlayColor;
 			}
 			set
 			{
-				this.toolSettings.InvisFadingOverlayColor = value;
+				this._settings.InvisFadingOverlayColor = value;
 				OnPropertyChanged();
 			}
 		}
@@ -151,11 +151,11 @@ namespace EQTool.ViewModels
 		{ 
 			get 
 			{ 
-				return this.toolSettings.FTEOverlayColor;
+				return this._settings.FTEOverlayColor;
 			}
 			set
 			{
-				this.toolSettings.FTEOverlayColor = value;
+				this._settings.FTEOverlayColor = value;
 				OnPropertyChanged();
 			}
 		}
@@ -163,11 +163,11 @@ namespace EQTool.ViewModels
 		{ 
 			get 
 			{ 
-				return this.toolSettings.CharmBreakOverlayColor;
+				return this._settings.CharmBreakOverlayColor;
 			}
 			set
 			{
-				this.toolSettings.CharmBreakOverlayColor = value;
+				this._settings.CharmBreakOverlayColor = value;
 				OnPropertyChanged();
 			}
 		}
@@ -175,11 +175,11 @@ namespace EQTool.ViewModels
 		{ 
 			get 
 			{
-				return this.toolSettings.FailedFeignOverlayColor;
+				return this._settings.FailedFeignOverlayColor;
 			}
 			set
 			{
-				this.toolSettings.FailedFeignOverlayColor = value;
+				this._settings.FailedFeignOverlayColor = value;
 				OnPropertyChanged();
 			}
 		}
@@ -187,11 +187,11 @@ namespace EQTool.ViewModels
 		{ 
 			get 
 			{
-				return this.toolSettings.GroupInviteOverlayColor;
+				return this._settings.GroupInviteOverlayColor;
 			}
 			set
 			{
-				this.toolSettings.GroupInviteOverlayColor = value;
+				this._settings.GroupInviteOverlayColor = value;
 				OnPropertyChanged();
 			}
 		}
@@ -199,11 +199,11 @@ namespace EQTool.ViewModels
 		{ 
 			get 
 			{
-				return this.toolSettings.DragonRoarOverlayColor;
+				return this._settings.DragonRoarOverlayColor;
 			}
 			set
 			{
-				this.toolSettings.DragonRoarOverlayColor = value;
+				this._settings.DragonRoarOverlayColor = value;
 				OnPropertyChanged();
 			}
 		}
@@ -211,11 +211,11 @@ namespace EQTool.ViewModels
 		{ 
 			get 
 			{
-				return this.toolSettings.RootWarningOverlayColor;
+				return this._settings.RootWarningOverlayColor;
 			}
 			set
 			{
-				this.toolSettings.RootWarningOverlayColor = value;
+				this._settings.RootWarningOverlayColor = value;
 				OnPropertyChanged();
 			}
 		}
@@ -223,11 +223,11 @@ namespace EQTool.ViewModels
 		{ 
 			get 
 			{
-				return this.toolSettings.ResistWarningOverlayColor;
+				return this._settings.ResistWarningOverlayColor;
 			}
 			set
 			{
-				this.toolSettings.ResistWarningOverlayColor = value;
+				this._settings.ResistWarningOverlayColor = value;
 				OnPropertyChanged();
 			}
 		}
@@ -236,11 +236,11 @@ namespace EQTool.ViewModels
         {
             get
             {
-                return this.toolSettings.DpsWindowState.Opacity ?? 1.0;
+                return this._settings.DpsWindowState.Opacity ?? 1.0;
             }
             set
             {
-                this.toolSettings.DpsWindowState.Opacity = value;
+                this._settings.DpsWindowState.Opacity = value;
                 ((App)System.Windows.Application.Current).UpdateBackgroundOpacity("MyWindowStyleDPS", value);
                 OnPropertyChanged();
             }
@@ -250,11 +250,11 @@ namespace EQTool.ViewModels
         {
             get
             {
-                return this.toolSettings.MapWindowState.AlwaysOnTop;
+                return this._settings.MapWindowState.AlwaysOnTop;
             }
             set
             {
-                this.toolSettings.MapWindowState.AlwaysOnTop = value;
+                this._settings.MapWindowState.AlwaysOnTop = value;
                 OnPropertyChanged();
             }
         }
@@ -263,12 +263,12 @@ namespace EQTool.ViewModels
         {
             get
             {
-                return this.toolSettings.MapWindowState.Opacity ?? 1.0;
+                return this._settings.MapWindowState.Opacity ?? 1.0;
             }
 
             set
             {
-                this.toolSettings.MapWindowState.Opacity = value;
+                this._settings.MapWindowState.Opacity = value;
                 ((App)System.Windows.Application.Current).UpdateBackgroundOpacity("MyWindowStyleMap", value);
                 OnPropertyChanged();
             }
@@ -277,24 +277,37 @@ namespace EQTool.ViewModels
         {
             get
             {
-                return this.toolSettings.MobWindowState.AlwaysOnTop;
+                return this._settings.MobWindowState.AlwaysOnTop;
             }
             set
             {
-                this.toolSettings.MobWindowState.AlwaysOnTop = value;
+                this._settings.MobWindowState.AlwaysOnTop = value;
                 OnPropertyChanged();
             }
         }
+
+		public bool MapTrackingVisiblity
+		{
+			get
+			{
+				return _settings.TrackingVisibility;
+			}
+			set
+			{
+				_settings.TrackingVisibility = value;
+				OnPropertyChanged();
+			}
+		}
 
         public bool ComboAlwaysOnTop
         {
             get
             {
-                return this.toolSettings.ComboTimerWindowState.AlwaysOnTop;
+                return this._settings.ComboTimerWindowState.AlwaysOnTop;
             }
             set
             {
-                this.toolSettings.ComboTimerWindowState.AlwaysOnTop = value;
+                this._settings.ComboTimerWindowState.AlwaysOnTop = value;
                 OnPropertyChanged();
             }
 		}
@@ -303,11 +316,11 @@ namespace EQTool.ViewModels
 		{
 			get
 			{
-				return this.toolSettings.SpellWindowState.AlwaysOnTop;
+				return this._settings.SpellWindowState.AlwaysOnTop;
 			}
 			set
 			{
-				this.toolSettings.SpellWindowState.AlwaysOnTop = value;
+				this._settings.SpellWindowState.AlwaysOnTop = value;
 				OnPropertyChanged();
 			}
 		}
@@ -316,11 +329,11 @@ namespace EQTool.ViewModels
 		{
 			get
 			{
-				return this.toolSettings.TimerWindowState.AlwaysOnTop;
+				return this._settings.TimerWindowState.AlwaysOnTop;
 			}
 			set
 			{
-				this.toolSettings.TimerWindowState.AlwaysOnTop = value;
+				this._settings.TimerWindowState.AlwaysOnTop = value;
 				OnPropertyChanged();
 			}
 		}
@@ -329,11 +342,11 @@ namespace EQTool.ViewModels
 		{
 			get
 			{
-				return this.toolSettings.OverlayWindowState.AlwaysOnTop;
+				return this._settings.OverlayWindowState.AlwaysOnTop;
 			}
 			set
 			{
-				this.toolSettings.OverlayWindowState.AlwaysOnTop = value;
+				this._settings.OverlayWindowState.AlwaysOnTop = value;
 				OnPropertyChanged();
 			}
 		}
@@ -342,11 +355,11 @@ namespace EQTool.ViewModels
 		{
 			get
 			{
-				return this.toolSettings.ComboShowRandomRolls;
+				return this._settings.ComboShowRandomRolls;
 			}
 			set
 			{
-				this.toolSettings.ComboShowRandomRolls = value;
+				this._settings.ComboShowRandomRolls = value;
 				OnPropertyChanged();
 			}
 		}
@@ -354,11 +367,11 @@ namespace EQTool.ViewModels
 		{
 			get
 			{
-				return this.toolSettings.ComboShowSpells;
+				return this._settings.ComboShowSpells;
 			}
 			set
 			{
-				this.toolSettings.ComboShowSpells = value;
+				this._settings.ComboShowSpells = value;
 				OnPropertyChanged();
 			}
 		}
@@ -366,11 +379,11 @@ namespace EQTool.ViewModels
 		{
 			get
 			{
-				return this.toolSettings.ComboShowTimers;
+				return this._settings.ComboShowTimers;
 			}
 			set
 			{
-				this.toolSettings.ComboShowTimers = value;
+				this._settings.ComboShowTimers = value;
 				OnPropertyChanged();
 			}
 		}
@@ -378,11 +391,11 @@ namespace EQTool.ViewModels
 		{
 			get
 			{
-				return this.toolSettings.ComboShowModRodTimers;
+				return this._settings.ComboShowModRodTimers;
 			}
 			set
 			{
-				this.toolSettings.ComboShowModRodTimers = value;
+				this._settings.ComboShowModRodTimers = value;
 				OnPropertyChanged();
 			}
 		}
@@ -391,7 +404,7 @@ namespace EQTool.ViewModels
 		{
 			get
 			{
-				return this.toolSettings.CustomOverlays;
+				return this._settings.CustomOverlays;
 			}
 		}
 
@@ -399,7 +412,7 @@ namespace EQTool.ViewModels
 		{
 			get
 			{
-				return this.toolSettings.TimerWindows;
+				return this._settings.TimerWindows;
 			}
 		}
 
@@ -407,11 +420,11 @@ namespace EQTool.ViewModels
         {
             get
             {
-                return this.toolSettings.ShowRandomRolls;
+                return this._settings.ShowRandomRolls;
             }
             set
             {
-                this.toolSettings.ShowRandomRolls = value;
+                this._settings.ShowRandomRolls = value;
                 OnPropertyChanged();
             }
         }
@@ -420,11 +433,11 @@ namespace EQTool.ViewModels
         {
             get
             {
-                return this.toolSettings.SpellWindowState.Opacity ?? 1.0;
+                return this._settings.SpellWindowState.Opacity ?? 1.0;
             }
             set
             {
-                this.toolSettings.SpellWindowState.Opacity = value;
+                this._settings.SpellWindowState.Opacity = value;
                 ((App)System.Windows.Application.Current).UpdateBackgroundOpacity("MyWindowStyleTrigger", value);
                 OnPropertyChanged();
             }
@@ -450,7 +463,7 @@ namespace EQTool.ViewModels
             set
             {
                 _SelectedVoice = value;
-                this.toolSettings.SelectedVoice = value;
+                this._settings.SelectedVoice = value;
                 OnPropertyChanged();
             }
         }
@@ -548,11 +561,11 @@ namespace EQTool.ViewModels
 		{
 			get
 			{
-				return this.toolSettings.SpellTimerNameColor;
+				return this._settings.SpellTimerNameColor;
 			}
 			set
 			{
-				this.toolSettings.SpellTimerNameColor = value;
+				this._settings.SpellTimerNameColor = value;
 				OnPropertyChanged();
 			}
 		}
@@ -560,11 +573,11 @@ namespace EQTool.ViewModels
 		{ 
 			get 
 			{
-				return this.toolSettings.BeneficialSpellTimerColor;
+				return this._settings.BeneficialSpellTimerColor;
 			}
 			set
 			{
-				this.toolSettings.BeneficialSpellTimerColor = value;
+				this._settings.BeneficialSpellTimerColor = value;
 				OnPropertyChanged();
 			}
 		}
@@ -572,11 +585,11 @@ namespace EQTool.ViewModels
 		{ 
 			get 
 			{
-				return this.toolSettings.DetrimentalSpellTimerColor;
+				return this._settings.DetrimentalSpellTimerColor;
 			}
 			set
 			{
-				this.toolSettings.DetrimentalSpellTimerColor = value;
+				this._settings.DetrimentalSpellTimerColor = value;
 				OnPropertyChanged();
 			}
 		}
@@ -584,11 +597,11 @@ namespace EQTool.ViewModels
 		{ 
 			get 
 			{
-				return this.toolSettings.RespawnTimerColor;
+				return this._settings.RespawnTimerColor;
 			}
 			set
 			{
-				this.toolSettings.RespawnTimerColor = value;
+				this._settings.RespawnTimerColor = value;
 				OnPropertyChanged();
 			}
 		}
@@ -596,11 +609,11 @@ namespace EQTool.ViewModels
 		{ 
 			get 
 			{
-				return this.toolSettings.DisciplineTimerColor;
+				return this._settings.DisciplineTimerColor;
 			}
 			set
 			{
-				this.toolSettings.DisciplineTimerColor = value;
+				this._settings.DisciplineTimerColor = value;
 				OnPropertyChanged();
 			}
 		}
@@ -608,11 +621,11 @@ namespace EQTool.ViewModels
 		{ 
 			get 
 			{
-				return this.toolSettings.ModRodTimerColor;
+				return this._settings.ModRodTimerColor;
 			}
 			set
 			{
-				this.toolSettings.ModRodTimerColor = value;
+				this._settings.ModRodTimerColor = value;
 				OnPropertyChanged();
 			}
 		}
@@ -620,11 +633,11 @@ namespace EQTool.ViewModels
 		{ 
 			get 
 			{
-				return this.toolSettings.OtherTimerColor;
+				return this._settings.OtherTimerColor;
 			}
 			set
 			{
-				this.toolSettings.OtherTimerColor = value;
+				this._settings.OtherTimerColor = value;
 				OnPropertyChanged();
 			}
 		}

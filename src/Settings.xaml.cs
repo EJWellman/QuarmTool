@@ -307,6 +307,12 @@ namespace EQTool
 			_settings.ShowModRodTimers = s.IsChecked ?? false;
 			SaveConfig();
 		}
+		private void MapVisibleTracking_Click(object sender, RoutedEventArgs e)
+		{
+			var s = sender as System.Windows.Controls.CheckBox;
+			_settings.TrackingVisibility = s.IsChecked ?? false;
+			SaveConfig();
+		}
 
 		private void OverlayColor_Selected(object sender, RoutedEventArgs e)
 		{
@@ -1263,6 +1269,11 @@ namespace EQTool
 					}
 				}
 			}
+		}
+
+		private void LocationShare_SelectionChanged(object sender, SelectionChangedEventArgs e)
+		{
+			SaveConfig();
 		}
 	}
 }

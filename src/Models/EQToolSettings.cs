@@ -63,19 +63,6 @@ namespace EQTool.Models
 			}
 		}
 
-		private int _audioTriggerVolume = 100;
-		public int AudioTriggerVolume
-		{
-			get
-			{
-				return _audioTriggerVolume;
-			}
-			set
-			{
-				_audioTriggerVolume = value;
-			}
-		}
-
 		private Color _EnrageOverlayColor = Color.FromRgb(255, 255, 0); //Red
 		private Color _LevFadingOverlayColor = Color.FromRgb(255, 255, 0); //Red
 		private Color _InvisFadingOverlayColor = Color.FromRgb(255, 255, 0); //Red
@@ -225,6 +212,22 @@ namespace EQTool.Models
 			}
 			set => _MapWindowState = value ?? new WindowState();
 		}
+
+
+		private bool _TrackingVisibility = true;
+		public bool TrackingVisibility
+		{
+			get
+			{
+				return _TrackingVisibility;
+			}
+			set
+			{
+				_TrackingVisibility = value;
+				OnPropertyChanged();
+			}
+		}
+
 
 		private WindowState _MobWindowState;
 		public WindowState MobWindowState

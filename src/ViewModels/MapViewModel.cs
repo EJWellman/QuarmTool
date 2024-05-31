@@ -395,10 +395,9 @@ namespace EQTool.ViewModels
             PlayerLocation.ArrowLine.Visibility = Visibility.Visible;
             PlayerLocation.Ellipse.Visibility = Visibility.Visible;
             PlayerLocation.PlayerName.Visibility = Visibility.Visible;
-            PlayerLocation.TrackingEllipse.Visibility = Visibility.Visible;
             MapViewModelService.UpdateLocation(new UpdateLocationData
             {
-                Trackingdistance = this.activePlayer?.Player?.TrackingDistance,
+                Trackingdistance = _settings.TrackingVisibility ? this.activePlayer?.Player?.TrackingDistance : 0,
                 CurrentScaling = CurrentScaling,
                 MapOffset = MapOffset,
                 Oldlocation = Lastlocation,
@@ -471,46 +470,6 @@ namespace EQTool.ViewModels
 				MoveMap(yScale * -1, xScale * -1);
 			}
 		}
-		private void CenterMapOnPlayer()
-        {
-            if (CenterOnPlayer)
-            {
-                Debug.WriteLine("C " + CenterRelativeToCanvas.ToString());
-                var centerinworldspace = Transform.Inverse.Transform(CenterRelativeToCanvas);
-                centerinworldspace.X += MapOffset.X;
-                centerinworldspace.Y += MapOffset.Y;
-                centerinworldspace.X *= -1;
-                centerinworldspace.Y *= -1;
-                // centerinworldspace = new Point(centerinworldspace.Y, centerinworldspace.X);
-                Debug.WriteLine("C1 " + centerinworldspace.ToString());
-                var loc = new Point(Lastlocation.X, Lastlocation.Y);
-                var delta = Point.Subtract(loc, centerinworldspace);
-                Debug.WriteLine("CD " + delta.ToString());
-                var translate = new TranslateTransform(delta.X, delta.Y);
-                Transform.Matrix = Transform.Matrix * translate.Value;
-                foreach (UIElement child in Canvas.Children)
-                {
-                    if (child is ArrowLine c)
-                    {
-                        var transform = new MatrixTransform();
-                        var translation = new TranslateTransform(Transform.Value.OffsetX, Transform.Value.OffsetY);
-                        transform.Matrix = c.RotateTransform.Value * translation.Value;
-                        c.RenderTransform = transform;
-                    }
-                    else if (child is Ellipse el)
-                    {
-                        var transform = new MatrixTransform();
-                        var translation = new TranslateTransform(Transform.Value.OffsetX, Transform.Value.OffsetY);
-                        transform.Matrix = translation.Value;
-                        el.RenderTransform = transform;
-                    }
-                    else
-                    {
-                        child.RenderTransform = Transform;
-                    }
-                }
-            }
-        }
         public void UpdateTimerWidgest()
         {
             var removewidgets = new List<MapWidget>();
