@@ -1,4 +1,5 @@
-﻿using EQTool.Models;
+﻿using EQTool.Factories;
+using EQTool.Models;
 using EQTool.Services;
 using EQTool.ViewModels;
 using EQToolShared.Enums;
@@ -21,28 +22,34 @@ namespace EQTool
     /// </summary>
     public partial class MobInfo : BaseSaveStateWindow
     {
-        private readonly LogParser logParser;
-        private ViewModels.MobInfoViewModel mobInfoViewModel;
+        private readonly LogParser _logParser;
+        private ViewModels.MobInfoViewModel _mobInfoViewModel;
         private readonly QuarmDataService _quarmService;
-		private readonly PlayerTrackerService playerTrackerService;
-        private readonly ActivePlayer activePlayer;
-        public MobInfo(ActivePlayer activePlayer, 
+		private readonly PlayerTrackerService _playerTrackerService;
+        private readonly ActivePlayer _activePlayer;
+		private readonly TimerWindowFactory _timerWindowFactory;
+		private readonly EQToolSettings _settings;
+		public MobInfo(ActivePlayer activePlayer, 
 			QuarmDataService quarmService, 
 			PlayerTrackerService playerTrackerService,
 			LogParser logParser, 
 			EQToolSettings settings, 
 			EQToolSettingsLoad toolSettingsLoad, 
-			LoggingService loggingService) : base(settings.MobWindowState, toolSettingsLoad, settings)
+			LoggingService loggingService,
+			TimerWindowFactory timerWindowFactory) : base(settings.MobWindowState, toolSettingsLoad, settings)
         {
             loggingService.Log(string.Empty, EventType.OpenMobInfo, activePlayer?.Player?.Server);
-            this.activePlayer = activePlayer;
-			this.playerTrackerService = playerTrackerService;
-            this._quarmService = quarmService;
-            this.logParser = logParser;
-            DataContext = mobInfoViewModel = new ViewModels.MobInfoViewModel();
+            _activePlayer = activePlayer;
+			_playerTrackerService = playerTrackerService;
+            _quarmService = quarmService;
+            _logParser = logParser;
+			_timerWindowFactory = timerWindowFactory;
+			_settings = settings;
+            DataContext = _mobInfoViewModel = new ViewModels.MobInfoViewModel();
             InitializeComponent();
             base.Init();
-            this.logParser.ConEvent += LogParser_ConEvent;
+            this._logParser.ConEvent += LogParser_ConEvent;
+			ContextMenuOpening += MobInfo_TimerMenu_OpenedEvent;
 
 			foreach (var timer in settings.TimerWindows)
 			{
@@ -61,38 +68,38 @@ namespace EQTool
         {
             try
             {
-                if (e.Name != mobInfoViewModel.Name)
+                if (e.Name != _mobInfoViewModel.Name)
                 {
-					mobInfoViewModel.NewResults = _quarmService.GetData(e.Name);
-					FactionHitsStack.Visibility = mobInfoViewModel.HasFactionHits;
-					QuestsStack.Visibility = mobInfoViewModel.HasQuests;
-					KnownLootStack.Visibility = mobInfoViewModel.HasKnownLoot;
-					MerchandiseStack.Visibility = mobInfoViewModel.HasMerchandise;
-					SpecialAbilitiesStack.Visibility = mobInfoViewModel.HasSpecials;
+					_mobInfoViewModel.NewResults = _quarmService.GetData(e.Name);
+					FactionHitsStack.Visibility = _mobInfoViewModel.HasFactionHits;
+					QuestsStack.Visibility = _mobInfoViewModel.HasQuests;
+					KnownLootStack.Visibility = _mobInfoViewModel.HasKnownLoot;
+					MerchandiseStack.Visibility = _mobInfoViewModel.HasMerchandise;
+					SpecialAbilitiesStack.Visibility = _mobInfoViewModel.HasSpecials;
 
-					invis_rad.IsChecked = mobInfoViewModel.See_Invis;
-					ivu_rad.IsChecked = mobInfoViewModel.See_Invis_Undead;
-					sneak_rad.IsChecked = mobInfoViewModel.See_Sneak;
-					ihide_rad.IsChecked = mobInfoViewModel.See_Imp_Hide;
+					invis_rad.IsChecked = _mobInfoViewModel.See_Invis;
+					ivu_rad.IsChecked = _mobInfoViewModel.See_Invis_Undead;
+					sneak_rad.IsChecked = _mobInfoViewModel.See_Sneak;
+					ihide_rad.IsChecked = _mobInfoViewModel.See_Imp_Hide;
 
 				}
             }
             catch (Exception ex)
             {
-                mobInfoViewModel.ErrorResults = ex.Message;
-                if (!mobInfoViewModel.ErrorResults.Contains("The underlying connection was closed:"))
+                _mobInfoViewModel.ErrorResults = ex.Message;
+                if (!_mobInfoViewModel.ErrorResults.Contains("The underlying connection was closed:"))
                 {
-                    mobInfoViewModel.ErrorResults = "The server is down. Try again";
-                    App.LogUnhandledException(ex, $"LogParser_ConEvent {e.Name}", activePlayer?.Player?.Server);
+                    _mobInfoViewModel.ErrorResults = "The server is down. Try again";
+                    App.LogUnhandledException(ex, $"LogParser_ConEvent {e.Name}", _activePlayer?.Player?.Server);
                 }
             }
         }
 
         protected override void OnClosing(CancelEventArgs e)
         {
-            if (logParser != null)
+            if (_logParser != null)
             {
-                logParser.ConEvent -= LogParser_ConEvent;
+                _logParser.ConEvent -= LogParser_ConEvent;
             }
             base.OnClosing(e);
         }
@@ -105,19 +112,17 @@ namespace EQTool
 
         private void Hyperlink_RequestNavigatebutton(object sender, RoutedEventArgs args)
         {
-            _ = Process.Start(new ProcessStartInfo(mobInfoViewModel.Url));
+            _ = Process.Start(new ProcessStartInfo(_mobInfoViewModel.Url));
 		}
 
-		private void Map_TimerMenu_Open(object sender, EventArgs e)
+		private void MobInfo_TimerMenu_OpenedEvent(object sender, RoutedEventArgs e)
 		{
-			var cm = ContextMenuService.GetContextMenu(sender as DependencyObject);
-			if (cm == null)
-			{
-				return;
-			}
-			cm.Placement = System.Windows.Controls.Primitives.PlacementMode.MousePoint;
-			cm.PlacementTarget = sender as UIElement;
-			cm.IsOpen = true;
+			FrameworkElement fe = e.Source as FrameworkElement;
+			fe.ContextMenu = _timerWindowFactory.CreateTimerMenu(_settings.TimerWindows);
+
+			fe.ContextMenu.Placement = System.Windows.Controls.Primitives.PlacementMode.MousePoint;
+			fe.ContextMenu.PlacementTarget = sender as UIElement;
+			fe.ContextMenu.IsOpen = true;
 		}
 	}
 }

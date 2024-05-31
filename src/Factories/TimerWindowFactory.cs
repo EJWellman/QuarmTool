@@ -3,9 +3,12 @@ using Autofac.Core;
 using EQTool.Models;
 using EQTool.Services;
 using EQTool.ViewModels;
+using EQToolShared.ExtendedClasses;
 using Microsoft.Extensions.DependencyInjection;
+using System;
 using System.Linq;
 using System.Windows;
+using System.Windows.Controls;
 
 namespace EQTool.Factories
 {
@@ -37,19 +40,9 @@ namespace EQTool.Factories
 		{
 			var newTimerWindowViewModel = new BaseTimerWindowViewModel(_activePlayer, _appDispatcher, _settings, _spells, _colorService, timerWindow);
 
-			var logParser = App.Container.Resolve<LogParser>();
-			var playerTrackerService = App.Container.Resolve<PlayerTrackerService>();
-			var quarmDataService = App.Container.Resolve<QuarmDataService>();
-			var loggingService = App.Container.Resolve<LoggingService>();
-
-			var newTimerWindow = new BaseTimerWindow(playerTrackerService, _settings, newTimerWindowViewModel, logParser, _toolSettingsLoad, _activePlayer, quarmDataService, loggingService)
-			{
-				Title = timerWindow.Title
-			};
-
 			string[] rectParts = timerWindow.WindowRect?.Split(',');
 			Rect rect = new Rect();
-			if(rectParts != null)
+			if (rectParts != null)
 			{
 				var windowPoint = new Point(int.Parse(rectParts[1]), int.Parse(rectParts[0]));
 				var windowSize = new Size(int.Parse(rectParts[2]), int.Parse(rectParts[3]));
@@ -72,6 +65,17 @@ namespace EQTool.Factories
 				WindowRect = rect,
 			};
 
+			var logParser = App.Container.Resolve<LogParser>();
+			var playerTrackerService = App.Container.Resolve<PlayerTrackerService>();
+			var quarmDataService = App.Container.Resolve<QuarmDataService>();
+			var loggingService = App.Container.Resolve<LoggingService>();
+
+			var newTimerWindow = new BaseTimerWindow(playerTrackerService, _settings, newTimerWindowViewModel, logParser, _toolSettingsLoad, _activePlayer, quarmDataService, loggingService)
+			{
+				Title = timerWindow.Title,
+				Topmost = timerWindow.AlwaysOnTop
+			};
+
 			newTimerWindow.DataContext = newTimerWindowViewModel;
 			newTimerWindow.Top = rect.Top;
 			newTimerWindow.Left = rect.Left;
@@ -84,6 +88,25 @@ namespace EQTool.Factories
 		{
 			var windowOptions = _settings.TimerWindows.FirstOrDefault(s => s.ID == windowId);
 			return CreateTimerWindow(windowOptions);
+		}
+
+		public ContextMenu CreateTimerMenu(ObservableCollectionRange<TimerWindowOptions> timerWindows)
+		{
+			ContextMenu menu = new ContextMenu();
+			foreach (var timerWindow in timerWindows)
+			{
+				MenuItem menuItem = new MenuItem();
+				menuItem.Header = timerWindow.Title;
+				menuItem.Tag = timerWindow.ID;
+				menuItem.Click += (s, e) =>
+				{
+					var newTimerWindow = CreateTimerWindow((int)menuItem.Tag);
+					newTimerWindow.Show();
+				};
+				menu.Items.Add(menuItem);
+			}
+
+			return menu;
 		}
 	}
 }

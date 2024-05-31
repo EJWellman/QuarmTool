@@ -1,4 +1,5 @@
-﻿using EQTool.Models;
+﻿using EQTool.Factories;
+using EQTool.Models;
 using EQTool.Services;
 using EQTool.ViewModels;
 using EQToolShared.Enums;
@@ -20,13 +21,16 @@ namespace EQTool
         private readonly LogParser logParser;
         private readonly DPSWindowViewModel dPSWindowViewModel;
         private readonly ActivePlayer activePlayer;
+		private readonly EQToolSettings _settings;
+		private readonly TimerWindowFactory _timerWindowFactory;
 
         public DPSMeter(LogParser logParser, 
 			DPSWindowViewModel dPSWindowViewModel, 
 			EQToolSettings settings, 
 			EQToolSettingsLoad toolSettingsLoad, 
 			LoggingService loggingService, 
-			ActivePlayer activePlayer)
+			ActivePlayer activePlayer,
+			TimerWindowFactory timerWindowFactory)
              : base(settings.DpsWindowState, toolSettingsLoad, settings)
         {
             this.activePlayer = activePlayer;
@@ -34,6 +38,8 @@ namespace EQTool
             this.logParser = logParser;
             this.dPSWindowViewModel = dPSWindowViewModel;
             this.dPSWindowViewModel.EntityList = new System.Collections.ObjectModel.ObservableCollection<EntityDPS>();
+			_settings = settings;
+			_timerWindowFactory = timerWindowFactory;
             DataContext = dPSWindowViewModel;
             InitializeComponent();
             base.Init();
@@ -51,6 +57,8 @@ namespace EQTool
             view.SortDescriptions.Add(new SortDescription(nameof(EntityDPS.TotalDamage), ListSortDirection.Descending));
             view.IsLiveSorting = true;
             view.LiveSortingProperties.Add(nameof(EntityDPS.TotalDamage));
+
+			ContextMenuOpening += Dps_TimerMenu_OpenedEvent;
 
 			foreach (var timer in settings.TimerWindows)
 			{
@@ -135,16 +143,14 @@ namespace EQTool
             }
         }
 
-		private void Map_TimerMenu_Open(object sender, EventArgs e)
+		private void Dps_TimerMenu_OpenedEvent(object sender, RoutedEventArgs e)
 		{
-			var cm = ContextMenuService.GetContextMenu(sender as DependencyObject);
-			if (cm == null)
-			{
-				return;
-			}
-			cm.Placement = System.Windows.Controls.Primitives.PlacementMode.MousePoint;
-			cm.PlacementTarget = sender as UIElement;
-			cm.IsOpen = true;
+			FrameworkElement fe = e.Source as FrameworkElement;
+			fe.ContextMenu = _timerWindowFactory.CreateTimerMenu(_settings.TimerWindows);
+
+			fe.ContextMenu.Placement = System.Windows.Controls.Primitives.PlacementMode.MousePoint;
+			fe.ContextMenu.PlacementTarget = sender as UIElement;
+			fe.ContextMenu.IsOpen = true;
 		}
 
 		private void MoveCurrentToLastSession(object sender, RoutedEventArgs e)

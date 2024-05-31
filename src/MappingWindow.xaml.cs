@@ -23,6 +23,7 @@ namespace EQTool
         private readonly IAppDispatcher appDispatcher;
         private readonly ISignalrPlayerHub signalrPlayerHub;
         private readonly System.Timers.Timer UITimer;
+		private readonly EQToolSettings _settings;
 		private QuarmDataService _quarmDataService;
 		private TimerWindowFactory _timerWindowFactory;
 
@@ -48,6 +49,7 @@ namespace EQTool
 			_quarmDataService = quarmDataService;
 			_timerWindowFactory = timerWindowFactory;
 			DataContext = this.mapViewModel = mapViewModel;
+			_settings = settings;
             InitializeComponent();
             base.Init();
             _ = mapViewModel.LoadDefaultMap(Map);
@@ -63,6 +65,7 @@ namespace EQTool
             KeyDown += PanAndZoomCanvas_KeyDown;
             Map.StartTimerEvent += Map_StartTimerEvent;
             Map.CancelTimerEvent += Map_CancelTimerEvent;
+			ContextMenuOpening += Map_TimerMenu_OpenedEvent;
             Map.TimerMenu_ClosedEvent += Map_TimerMenu_ClosedEvent;
             Map.TimerMenu_OpenedEvent += Map_TimerMenu_OpenedEvent;
             this.signalrPlayerHub.PlayerLocationEvent += SignalrPlayerHub_PlayerLocationEvent;
@@ -72,12 +75,13 @@ namespace EQTool
             UITimer.Enabled = true;
 			this.MouseEnter += ToggleMouseLocation_Event;
 			this.MouseLeave += ToggleMouseLocation_Event;
-			foreach(var timer in settings.TimerWindows)
+
+			foreach (var timer in settings.TimerWindows)
 			{
 				var item = new System.Windows.Controls.MenuItem()
 				{
 					Header = timer.Title,
-					DataContext = timer.ID,	
+					DataContext = timer.ID,
 				};
 				item.Click += (App.Current as App).OpenTimerWindow;
 
@@ -108,6 +112,9 @@ namespace EQTool
 
         private void Map_TimerMenu_OpenedEvent(object sender, RoutedEventArgs e)
         {
+			FrameworkElement fe = e.Source as FrameworkElement;
+			fe.ContextMenu = _timerWindowFactory.CreateTimerMenu(_settings.TimerWindows);
+
             mapViewModel.TimerMenu_Opened();
         }
 
@@ -140,8 +147,8 @@ namespace EQTool
 
 		private void Map_TimerMenu_Open(object sender, EventArgs e)
 		{
-			var cm = ContextMenuService.GetContextMenu(sender as DependencyObject);
-			if(cm == null)
+			var cm = _timerWindowFactory.CreateTimerMenu(_settings.TimerWindows);
+			if (cm == null)
 			{
 				return;
 			}

@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:EQTool"
         mc:Ignorable="d"
         Style="{DynamicResource MyWindowStyleMap}"
-        Title="{Binding Title}" 
+        Title="{Binding WindowTitle}" 
         Height="450" 
         Width="640"  
         WindowStyle="None"    
@@ -30,10 +30,11 @@
             </Grid.RowDefinitions>
             <Grid Grid.Row="1" Name="MapWrapper" MouseMove="PanAndZoomCanvas_MouseMove" MouseDown="Map_PanAndZoomCanvas_MouseDownEvent" MouseUp="PanAndZoomCanvas_MouseUp" MouseWheel="PanAndZoomCanvas_MouseWheel" Background="Transparent">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="437*"/>
+                    <ColumnDefinition Width="345*"/>
+                    <ColumnDefinition Width="92*"/>
                     <ColumnDefinition Width="201*"/>
                 </Grid.ColumnDefinitions>
-                <Viewbox Stretch="Uniform" Grid.ColumnSpan="2">
+                <Viewbox Stretch="Uniform" Grid.ColumnSpan="3">
                     <local:PanAndZoomCanvas x:Name="Map" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
                 </Viewbox>
                 <ListView HorizontalAlignment="Left" VerticalAlignment="Top" ItemsSource="{Binding Players}" Background="Transparent">
@@ -46,7 +47,7 @@
                         </DataTemplate>
                     </ListView.ItemTemplate>
                 </ListView>
-                <TextBlock Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Bottom" 
+                <TextBlock Grid.Column="2" HorizontalAlignment="Right" VerticalAlignment="Bottom" 
                     Foreground="White" Margin="0,0,5,1" Text="{Binding MouseLocation}"
                     Visibility="{Binding ShowMouseLocation}"/>
 
@@ -70,6 +71,7 @@
                             <Button Margin="1" FontSize="7" Width="14" Height="14" Padding="0" Click="openmobinfo" ToolTip="Open Mob Info Window">
                                 <Image Source="pack://application:,,,/toolbox.png"/>
                             </Button>
+
                             <Button Margin="1" FontSize="7" Width="14" Height="14" Padding="0" ToolTip="Open a Timer Window" Click="Map_TimerMenu_Open">
                                 <Image Source="pack://application:,,,/combo.png"/>
                                 <Button.ContextMenu>

@@ -2,6 +2,7 @@
 using EQTool.Services;
 using EQTool.Shapes;
 using EQToolShared.Enums;
+using EQToolShared.ExtendedClasses;
 using EQToolShared.Map;
 using System;
 using System.Collections.Generic;
@@ -64,34 +65,34 @@ namespace EQTool.ViewModels
 
     }
 
-    public class MapViewModel : INotifyPropertyChanged
-    {
-        private readonly MapLoad mapLoad;
-        private readonly ActivePlayer activePlayer;
-        private readonly LoggingService loggingService;
-        private MatrixTransform Transform = new MatrixTransform();
-        private MatrixTransform EllipseTransform = new MatrixTransform();
-        private Point _initialMousePosition;
-        private Point _mouseuppoint;
-        private Point3D MapOffset = new Point3D(0, 0, 0);
-        private bool MapLoading = false;
-        private PlayerLocationCircle PlayerLocation;
-        public ObservableCollection<PlayerLocation> Players { get; set; }
-        private Canvas Canvas;
-        private float CurrentScaling = 1.0f;
-        private readonly float Zoomfactor = 1.1f;
-        private bool _dragging;
-        private UIElement _selectedElement;
-        private Vector _draggingDelta;
-        private bool TimerOpen = false;
-        private readonly TimersService timersService;
-        private bool CenterOnPlayer = false;
-        public Point CenterRelativeToCanvas = new Point(0, 0);
+	public class MapViewModel : INotifyPropertyChanged
+	{
+		private readonly MapLoad mapLoad;
+		private readonly ActivePlayer activePlayer;
+		private readonly LoggingService loggingService;
+		private MatrixTransform Transform = new MatrixTransform();
+		private MatrixTransform EllipseTransform = new MatrixTransform();
+		private Point _initialMousePosition;
+		private Point _mouseuppoint;
+		private Point3D MapOffset = new Point3D(0, 0, 0);
+		private bool MapLoading = false;
+		private PlayerLocationCircle PlayerLocation;
+		public ObservableCollection<PlayerLocation> Players { get; set; }
+		private Canvas Canvas;
+		private float CurrentScaling = 1.0f;
+		private readonly float Zoomfactor = 1.1f;
+		private bool _dragging;
+		private UIElement _selectedElement;
+		private Vector _draggingDelta;
+		private bool TimerOpen = false;
+		private readonly TimersService timersService;
+		private bool CenterOnPlayer = false;
+		public Point CenterRelativeToCanvas = new Point(0, 0);
 
-        public string MouseLocation => $"   {LastMouselocation.Y:0.##}, {LastMouselocation.X:0.##}";
+		public string MouseLocation => $"   {LastMouselocation.Y:0.##}, {LastMouselocation.X:0.##}";
 
 		private bool _ShowMouseLocation = false;
-			// => _ShowMouseLocation ? Visibility.Visible : Visibility.Hidden;
+		// => _ShowMouseLocation ? Visibility.Visible : Visibility.Hidden;
 		public Visibility ShowMouseLocation
 		{
 			get
@@ -105,41 +106,51 @@ namespace EQTool.ViewModels
 			}
 		}
 
-        public AABB AABB = new AABB();
+		public AABB AABB = new AABB();
 
-        public MapViewModel(MapLoad mapLoad, ActivePlayer activePlayer, LoggingService loggingService, TimersService timersService)
-        {
-            this.Players = new ObservableCollection<PlayerLocation>();
-            this.timersService = timersService;
-            this.mapLoad = mapLoad;
-            this.activePlayer = activePlayer;
-            this.loggingService = loggingService;
-        }
+		private EQToolSettings _settings;
+		public MapViewModel(MapLoad mapLoad, ActivePlayer activePlayer, LoggingService loggingService, TimersService timersService, EQToolSettings settings)
+		{
+			this.Players = new ObservableCollection<PlayerLocation>();
+			this.timersService = timersService;
+			this.mapLoad = mapLoad;
+			this.activePlayer = activePlayer;
+			this.loggingService = loggingService;
+			_settings = settings;
+		}
 
-        private TimeSpan _TimerValue = TimeSpan.FromMinutes(72);
-        public TimeSpan TimerValue
-        {
-            get => _TimerValue;
-            set
-            {
-                _TimerValue = value;
-                OnPropertyChanged();
-            }
-        }
+		public ObservableCollectionRange<TimerWindowOptions> TimerWindows
+		{
+			get
+			{
+				return _settings.TimerWindows;
+			}
+		}
 
-        private Point3D _Lastlocation = new Point3D(0, 0, 0);
-        public Point3D Lastlocation
-        {
-            get => _Lastlocation;
-            set
-            {
-                _Lastlocation = value;
-                OnPropertyChanged();
-                OnPropertyChanged(nameof(Title));
-            }
-        }
+		private TimeSpan _TimerValue = TimeSpan.FromMinutes(72);
+		public TimeSpan TimerValue
+		{
+			get => _TimerValue;
+			set
+			{
+				_TimerValue = value;
+				OnPropertyChanged();
+			}
+		}
 
-        public string Title => _ZoneName + "  v" + App.Version + $"   {Lastlocation.X:0.##}, {Lastlocation.Y:0.##}, {Lastlocation.Z:0.##}";
+		private Point3D _Lastlocation = new Point3D(0, 0, 0);
+		public Point3D Lastlocation
+		{
+			get => _Lastlocation;
+			set
+			{
+				_Lastlocation = value;
+				OnPropertyChanged();
+				OnPropertyChanged(nameof(Title));
+			}
+		}
+
+		public string Title => $"Map: {_ZoneName}  v{App.Version}   {Lastlocation.X:0.##}, {Lastlocation.Y:0.##}, {Lastlocation.Z:0.##}";
 
         private string _ZoneName = string.Empty;
 

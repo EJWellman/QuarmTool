@@ -239,98 +239,97 @@ namespace EQTool
         }
 
         private void InitStuff()
-        {
-            Container = DI.Init();
-            UITimer = new System.Timers.Timer(1000 * 60);
+		{
+			Container = DI.Init();
+			UITimer = new System.Timers.Timer(1000 * 60);
 #if !DEBUG
             UITimer.Elapsed += UITimer_Elapsed;
             UITimer.Enabled = true;
 #endif
-            Container.Resolve<LoggingService>().Log(string.Empty, EventType.StartUp, null);
-            SettingsMenuItem = new System.Windows.Forms.MenuItem("Settings", ToggleSettingsWindow);
-            var standardgroup = new System.Windows.Forms.MenuItem("Standard Groups", CreateStandardGroup);
-            var hotclericsamegroup = new System.Windows.Forms.MenuItem("HOT Clerics Same Group", CreateHOTClericsSameGroup);
-            var hotclericsparsegroup = new System.Windows.Forms.MenuItem("HOT Clerics Sparse Group", CreateHOTClericsSparseGroup);
-            GroupSuggestionsMenuItem = new System.Windows.Forms.MenuItem("Group Suggestions", new System.Windows.Forms.MenuItem[] { standardgroup, hotclericsamegroup, hotclericsparsegroup });
-            SpellsMenuItem = new System.Windows.Forms.MenuItem("Spells", ToggleSpellsWindow);
+			Container.Resolve<LoggingService>().Log(string.Empty, EventType.StartUp, null);
+			SettingsMenuItem = new System.Windows.Forms.MenuItem("Settings", ToggleSettingsWindow);
+			var standardgroup = new System.Windows.Forms.MenuItem("Standard Groups", CreateStandardGroup);
+			var hotclericsamegroup = new System.Windows.Forms.MenuItem("HOT Clerics Same Group", CreateHOTClericsSameGroup);
+			var hotclericsparsegroup = new System.Windows.Forms.MenuItem("HOT Clerics Sparse Group", CreateHOTClericsSparseGroup);
+			GroupSuggestionsMenuItem = new System.Windows.Forms.MenuItem("Group Suggestions", new System.Windows.Forms.MenuItem[] { standardgroup, hotclericsamegroup, hotclericsparsegroup });
+			SpellsMenuItem = new System.Windows.Forms.MenuItem("Spells", ToggleSpellsWindow);
 			TimerMenuItem = new System.Windows.Forms.MenuItem("Timers", ToggleTimerWindow);
 			ComboTimerMenuItem = new System.Windows.Forms.MenuItem("Combined Timers", ToggleComboTimerWindow);
 			MapMenuItem = new System.Windows.Forms.MenuItem("Map", ToggleMapWindow);
-            DpsMeterMenuItem = new System.Windows.Forms.MenuItem("Dps", ToggleDPSWindow);
-            OverlayMenuItem = new System.Windows.Forms.MenuItem("Overlay", ToggleOverlayWindow);
-            MobInfoMenuItem = new System.Windows.Forms.MenuItem("Mob Info", ToggleMobInfoWindow);
-            var gitHubMenuItem = new System.Windows.Forms.MenuItem("Suggestions", Suggestions);
-            //var whythepig = new System.Windows.Forms.MenuItem("Pigparse Discord", Discord);
-            //var updates = new System.Windows.Forms.MenuItem("Check for Update", CheckForUpdates);
-            var versionstring = Assembly.GetExecutingAssembly().GetName().Version.ToString();
-            var beta = false;
+			DpsMeterMenuItem = new System.Windows.Forms.MenuItem("Dps", ToggleDPSWindow);
+			OverlayMenuItem = new System.Windows.Forms.MenuItem("Overlay", ToggleOverlayWindow);
+			MobInfoMenuItem = new System.Windows.Forms.MenuItem("Mob Info", ToggleMobInfoWindow);
+			var gitHubMenuItem = new System.Windows.Forms.MenuItem("Suggestions", Suggestions);
+			//var whythepig = new System.Windows.Forms.MenuItem("Pigparse Discord", Discord);
+			//var updates = new System.Windows.Forms.MenuItem("Check for Update", CheckForUpdates);
+			var versionstring = Assembly.GetExecutingAssembly().GetName().Version.ToString();
+			var beta = false;
 
 #if BETA || DEBUG
-            beta = true;
+			beta = true;
 #endif
 
-            var logo = EQTool.Properties.Resources.pig;
+			var logo = EQTool.Properties.Resources.pig;
 #if QUARM
-            logo = EQTool.Properties.Resources.Quarm;
+			logo = EQTool.Properties.Resources.Quarm;
 #endif
-            if (beta)
-            {
-                versionstring = "Beta-" + versionstring;
-                logo = EQTool.Properties.Resources.sickpic;
-            }
+			if (beta)
+			{
+				versionstring = "Beta-" + versionstring;
+				logo = EQTool.Properties.Resources.sickpic;
+			}
 
-            var version = new System.Windows.Forms.MenuItem(versionstring)
-            {
-                Enabled = false
-            };
-            ToggleMenuButtons(false);
+			var version = new System.Windows.Forms.MenuItem(versionstring)
+			{
+				Enabled = false
+			};
+			ToggleMenuButtons(false);
 
 			MenuItem timersMenu = new MenuItem("Timers");
-			foreach (var timer in _settings.TimerWindows)
+			GenerateTimerMenu(timersMenu);
+			timersMenu.Popup += (s, e) =>
 			{
-				var item = new MenuItem(timer.Title, OpenTimerWindow);
-				item.Tag = timer.ID;
-
-				timersMenu.MenuItems.Add(item);
-			}
+				timersMenu.MenuItems.Clear();
+				GenerateTimerMenu(timersMenu);
+			};
 			SystemTrayIcon = new System.Windows.Forms.NotifyIcon
-            {
-                Icon = logo,
-                Visible = true,
-                ContextMenu = new System.Windows.Forms.ContextMenu(new System.Windows.Forms.MenuItem[]
-                {
+			{
+				Icon = logo,
+				Visible = true,
+				ContextMenu = new System.Windows.Forms.ContextMenu(new System.Windows.Forms.MenuItem[]
+				{
                     //GroupSuggestionsMenuItem,
                     //whythepig,
                     OverlayMenuItem,
-                    DpsMeterMenuItem,
-                    MapMenuItem,
+					DpsMeterMenuItem,
+					MapMenuItem,
 					timersMenu,
 					//SpellsMenuItem,
 					//TimerMenuItem,
 					//ComboTimerMenuItem,
                     MobInfoMenuItem,
-                    SettingsMenuItem,
-                    gitHubMenuItem,
+					SettingsMenuItem,
+					gitHubMenuItem,
                     //updates,
                     version,
-                    new System.Windows.Forms.MenuItem("Exit", OnExit)
-                }),
-            };
-            var hasvalideqdir = FindEq.IsValidEqFolder(_settings.DefaultEqDirectory);
-            if (!hasvalideqdir || FindEq.TryCheckLoggingEnabled(_settings.DefaultEqDirectory) == false)
-            {
-                if (!hasvalideqdir)
-                {
-                    _settings.DefaultEqDirectory = string.Empty;
-                }
-                OpenSettingsWindow();
-            }
-            else
-            {
-                ToggleMenuButtons(true);
-                if (!_settings.SpellWindowState.Closed)
-                {
-                    OpenSpellsWindow();
+					new System.Windows.Forms.MenuItem("Exit", OnExit)
+				}),
+			};
+			var hasvalideqdir = FindEq.IsValidEqFolder(_settings.DefaultEqDirectory);
+			if (!hasvalideqdir || FindEq.TryCheckLoggingEnabled(_settings.DefaultEqDirectory) == false)
+			{
+				if (!hasvalideqdir)
+				{
+					_settings.DefaultEqDirectory = string.Empty;
+				}
+				OpenSettingsWindow();
+			}
+			else
+			{
+				ToggleMenuButtons(true);
+				if (!_settings.SpellWindowState.Closed)
+				{
+					OpenSpellsWindow();
 				}
 				if (!_settings.TimerWindowState.Closed)
 				{
@@ -341,22 +340,22 @@ namespace EQTool
 					OpenComboTimersWindow();
 				}
 				if (!_settings.DpsWindowState.Closed)
-                {
-                    OpenDPSWindow();
-                }
-                if (!_settings.MapWindowState.Closed)
-                {
-                    OpenMapWindow();
-                }
-                if (!_settings.MobWindowState.Closed)
-                {
-                    OpenMobInfoWindow();
-                }
-                if (!_settings.OverlayWindowState.Closed)
-                {
-                    OpenOverLayWindow();
-                }
-				if(_settings.TimerWindows.Any(tw => !tw.Closed))
+				{
+					OpenDPSWindow();
+				}
+				if (!_settings.MapWindowState.Closed)
+				{
+					OpenMapWindow();
+				}
+				if (!_settings.MobWindowState.Closed)
+				{
+					OpenMobInfoWindow();
+				}
+				if (!_settings.OverlayWindowState.Closed)
+				{
+					OpenOverLayWindow();
+				}
+				if (_settings.TimerWindows.Any(tw => !tw.Closed))
 				{
 					_timerWindowFactory = Container.Resolve<TimerWindowFactory>();
 
@@ -375,16 +374,32 @@ namespace EQTool
 			}
 			signalrPlayerHub = Container.Resolve<ISignalrPlayerHub>();
 
-            PlayerTrackerService = Container.Resolve<PlayerTrackerService>();
-            ZoneActivityTrackingService = Container.Resolve<ZoneActivityTrackingService>();
-            audioService = Container.Resolve<AudioService>();
-            logParser.QuakeEvent += LogParser_QuakeEvent;
-            App.Current.Resources["GlobalFontSize"] = (double)(this._settings?.FontSize ?? 12);
-            ((App)System.Windows.Application.Current).UpdateBackgroundOpacity("MyWindowStyleDPS", this._settings.DpsWindowState.Opacity.Value);
-            ((App)System.Windows.Application.Current).UpdateBackgroundOpacity("MyWindowStyleMap", this._settings.MapWindowState.Opacity.Value);
-            ((App)System.Windows.Application.Current).UpdateBackgroundOpacity("MyWindowStyleTrigger", this._settings.SpellWindowState.Opacity.Value);
-        }
-        public void UpdateBackgroundOpacity(string name, double opacity)
+			PlayerTrackerService = Container.Resolve<PlayerTrackerService>();
+			ZoneActivityTrackingService = Container.Resolve<ZoneActivityTrackingService>();
+			audioService = Container.Resolve<AudioService>();
+			logParser.QuakeEvent += LogParser_QuakeEvent;
+			App.Current.Resources["GlobalFontSize"] = (double)(this._settings?.FontSize ?? 12);
+			((App)System.Windows.Application.Current).UpdateBackgroundOpacity("MyWindowStyleDPS", this._settings.DpsWindowState.Opacity.Value);
+			((App)System.Windows.Application.Current).UpdateBackgroundOpacity("MyWindowStyleMap", this._settings.MapWindowState.Opacity.Value);
+			((App)System.Windows.Application.Current).UpdateBackgroundOpacity("MyWindowStyleTrigger", this._settings.SpellWindowState.Opacity.Value);
+		}
+
+		private void GenerateTimerMenu(MenuItem timersMenu)
+		{
+			foreach (var timer in _settings.TimerWindows)
+			{
+				var item = new MenuItem(timer.Title, OpenTimerWindow);
+				item.Tag = timer.ID;
+
+				timersMenu.MenuItems.Add(item);
+			}
+			if (timersMenu.MenuItems.Count == 0)
+			{
+				timersMenu.MenuItems.Add(new MenuItem("No Timers Available"));
+			}
+		}
+
+		public void UpdateBackgroundOpacity(string name, double opacity)
         {
             var newcolor = (SolidColorBrush)new BrushConverter().ConvertFrom("#1a1919");
             newcolor.Opacity = opacity;
@@ -645,6 +660,7 @@ namespace EQTool
 				vm.YouOnlySpells = options.YouOnlySpells;
 				vm.ID = options.ID;
 				vm.WindowState.AlwaysOnTop = options.AlwaysOnTop;
+				vm.AlwaysOnTop = options.AlwaysOnTop;
 				w.Topmost = !options.AlwaysOnTop;
 				w.Topmost = options.AlwaysOnTop;
 				vm.WindowState.Opacity = options.Opacity;

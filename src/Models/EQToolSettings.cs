@@ -303,6 +303,7 @@ namespace EQTool.Models
 			set
 			{
 				_timerWindows = value;
+				OnPropertyChanged();
 			}
 		}
 
