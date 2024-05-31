@@ -297,6 +297,42 @@ namespace EQTool.Models
 			}
 		}
 
+		private ObservableCollectionRange<TimerWindowOptions> _timerWindows = new ObservableCollectionRange<TimerWindowOptions>();
+		[JsonIgnore]
+		public ObservableCollectionRange<TimerWindowOptions> TimerWindows
+		{
+			get
+			{
+				if (_timerWindows.Count == 0)
+				{
+					var tmp = TimerWindowService.LoadTimerWindows();
+					if (tmp != null)
+					{
+						_timerWindows.AddRange(tmp);
+					}
+				}
+				return _timerWindows;
+			}
+			set
+			{
+				_timerWindows = value;
+				OnPropertyChanged();
+			}
+		}
+
+		private int _AudioTriggerVolume = 100;
+		public int AudioTriggerVolume
+		{
+			get
+			{
+				return _AudioTriggerVolume;
+			}
+			set
+			{
+				_AudioTriggerVolume = value;
+			}
+		}
+
 		public event PropertyChangedEventHandler PropertyChanged;
 
 		protected void OnPropertyChanged([CallerMemberName] string name = null)

@@ -13,17 +13,17 @@ using static EQTool.Services.FindEq;
 
 namespace EQTool.Services
 {
-	public class DataService
+	public static class DataService
 	{
 		private const string _gameDataFileName = "Quarmtool_Data.db";
 		private const string _userDataFileName = "Quarmtool_User.db";
 		private static bool versionChecked = false;
-		private DataFileInfo _fileLocations;
+		private static DataFileInfo _fileLocations;
 
-		private QueryType _queryType;
 
-		public IEnumerable<T> GetData<T>(string query, object parameters = null)
+		public static IEnumerable<T> GetData<T>(string query, object parameters = null)
 		{
+			QueryType _queryType;
 			StringBuilder fileToUse = new StringBuilder();
 			if(typeof(T) == typeof(QuarmMonster) 
 				|| typeof(T) == typeof(QuarmMonsterFaction)
@@ -34,7 +34,7 @@ namespace EQTool.Services
 			{
 				_queryType = QueryType.Data;
 			}
-			else if(typeof(T) == typeof(CustomOverlay))
+			else
 			{
 				_queryType = QueryType.User;
 			}
@@ -48,7 +48,7 @@ namespace EQTool.Services
 			}
 			else if(!versionChecked && _queryType == QueryType.User)
 			{
-				CheckDatabaseVersion();
+				CheckDatabaseVersion(_queryType);
 			}
 
 			if (_fileLocations != null)
@@ -73,9 +73,10 @@ namespace EQTool.Services
 			}			
 		}
 
-		public long Insert<T>(T obj)
+		public static long Insert<T>(T obj)
 			where T : class
 		{
+			QueryType _queryType;
 			StringBuilder fileToUse = new StringBuilder();
 			if (typeof(T) == typeof(QuarmMonster)
 				|| typeof(T) == typeof(QuarmMonsterFaction)
@@ -86,7 +87,7 @@ namespace EQTool.Services
 			{
 				_queryType = QueryType.Data;
 			}
-			else if (typeof(T) == typeof(CustomOverlay))
+			else
 			{
 				_queryType = QueryType.User;
 			}
@@ -104,7 +105,8 @@ namespace EQTool.Services
 				using (SQLiteConnection cnn = new SQLiteConnection(sqliteConnString))
 				{
 					cnn.Open();
-					if (typeof(T) == typeof(CustomOverlay))
+					if (typeof(T) == typeof(CustomOverlay)
+				|| typeof(T) == typeof(TimerWindowOptions))
 					{
 						return cnn.Insert(obj);
 					}
@@ -114,9 +116,10 @@ namespace EQTool.Services
 			return 0;
 		}
 
-		public bool Delete<T>(T obj)
+		public static bool Delete<T>(T obj)
 			where T : class
 		{
+			QueryType _queryType;
 			StringBuilder fileToUse = new StringBuilder();
 			if (typeof(T) == typeof(QuarmMonster)
 				|| typeof(T) == typeof(QuarmMonsterFaction)
@@ -127,7 +130,7 @@ namespace EQTool.Services
 			{
 				_queryType = QueryType.Data;
 			}
-			else if (typeof(T) == typeof(CustomOverlay))
+			else
 			{
 				_queryType = QueryType.User;
 			}
@@ -145,7 +148,8 @@ namespace EQTool.Services
 				using (SQLiteConnection cnn = new SQLiteConnection(sqliteConnString))
 				{
 					cnn.Open();
-					if (typeof(T) == typeof(CustomOverlay))
+					if (typeof(T) == typeof(CustomOverlay)
+						|| typeof(T) == typeof(TimerWindowOptions))
 					{
 						return cnn.Delete(obj);
 					}
@@ -155,9 +159,9 @@ namespace EQTool.Services
 			return false;
 		}
 
-		private void CheckDatabaseVersion()
+		private static void CheckDatabaseVersion(QueryType queryType)
 		{
-			string sqliteConnString = GetConnectionString(_queryType);
+			string sqliteConnString = GetConnectionString(queryType);
 			using (SQLiteConnection cnn = new SQLiteConnection(sqliteConnString))
 			{
 				cnn.Open();
@@ -173,11 +177,23 @@ namespace EQTool.Services
 
 					cnn.Execute(queryBuilder.ToString());
 				}
+
+				if (version == 1)
+				{
+					StringBuilder queryBuilder = new StringBuilder();
+					queryBuilder.AppendLine("CREATE TABLE IF NOT EXISTS TimerWindows (ID INTEGER PRIMARY KEY, Title TEXT, BestGuessSpells BOOL, " +
+							"ShowModRodTimers BOOL, ShowSpells BOOL, ShowTimers BOOL, ShowRandomRolls BOOL, YouOnlySpells BOOL, WindowRect TEXT, State INTEGER," +
+							"Closed BOOL, AlwaysOnTop BOOL, Opacity DOUBLE);");
+
+					cnn.Execute(queryBuilder.ToString());
+				}
+
+
 			}
 			versionChecked = true;
 		}
 
-		public bool UpdateCustomOverlay(CustomOverlay obj)
+		public static bool UpdateCustomOverlay(CustomOverlay obj)
 		{
 			if (_fileLocations == null && !DatabaseExists())
 			{
@@ -199,8 +215,29 @@ namespace EQTool.Services
 			return false;
 		}
 
+		public static bool UpdateTimerWindow(TimerWindowOptions obj)
+		{
+			if (_fileLocations == null && !DatabaseExists())
+			{
+				if (_fileLocations != null && string.IsNullOrWhiteSpace(_fileLocations.User_File))
+				{
+					CreateDatabase(_userDataFileName);
+				}
+			}
+			if (_fileLocations != null)
+			{
+				string sqliteConnString = GetConnectionString(QueryType.User);
+				using (SQLiteConnection cnn = new SQLiteConnection(sqliteConnString))
+				{
+					cnn.Open();
+					return cnn.Update<TimerWindowOptions>(obj);
+				}
+			}
 
-		private bool DatabaseExists()
+			return false;
+		}
+
+		private static bool DatabaseExists()
 		{
 			_fileLocations = GetDataLocation("Data", _gameDataFileName, _userDataFileName);
 			if (_fileLocations == null || !_fileLocations.Found || string.IsNullOrWhiteSpace(_fileLocations.User_File))
@@ -210,7 +247,7 @@ namespace EQTool.Services
 			return true;
 		}
 
-		private bool CreateDatabase(string fileName)
+		private static bool CreateDatabase(string fileName)
 		{
 			Directory.CreateDirectory(Path.Combine(AppContext.BaseDirectory, "Data"));
 			SQLiteConnection.CreateFile(Path.Combine(AppContext.BaseDirectory, "Data", fileName));
@@ -227,8 +264,12 @@ namespace EQTool.Services
 				StringBuilder queryBuilder = new StringBuilder();
 				if(fileName == _userDataFileName)
 				{
-					queryBuilder.AppendLine("CREATE TABLE IF NOT EXISTS CustomOverlays (ID INTEGER PRIMARY KEY, Trigger TEXT, Alternate_Trigger TEXT, Name TEXT, Message TEXT, DisplayColor TEXT, IsEnabled BOOL, AudioMessage TEXT, IsAudioEnabled BOOL);");
-					queryBuilder.AppendLine("PRAGMA user_version = 1;");
+					queryBuilder.AppendLine("CREATE TABLE IF NOT EXISTS CustomOverlays (ID INTEGER PRIMARY KEY, Trigger TEXT, Alternate_Trigger TEXT, " +
+						"Name TEXT, Message TEXT, DisplayColor TEXT, IsEnabled BOOL, AudioMessage TEXT, IsAudioEnabled BOOL);");
+					queryBuilder.AppendLine("CREATE TABLE IF NOT EXISTS TimerWindows (ID INTEGER PRIMARY KEY, Title TEXT, BestGuessSpells BOOL, " +
+						"ShowModRodTimers BOOL, ShowSpells BOOL, ShowTimers BOOL, ShowRandomRolls BOOL, YouOnlySpells BOOL, WindowRect TEXT, State INTEGER," +
+						"Closed BOOL, AlwaysOnTop BOOL, Opacity DOUBLE);");
+					queryBuilder.AppendLine("PRAGMA user_version = 2;");
 					cnn.Execute(queryBuilder.ToString());
 				}
 			}
@@ -238,7 +279,7 @@ namespace EQTool.Services
 			return true;
 		}
 
-		private string GetConnectionString(QueryType type)
+		private static string GetConnectionString(QueryType type)
 		{
 			if(type == QueryType.Data)
 			{

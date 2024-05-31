@@ -1,4 +1,5 @@
-﻿using EQTool.Models;
+﻿using EQTool.Factories;
+using EQTool.Models;
 using EQTool.Services;
 using System;
 using System.ComponentModel;
@@ -55,11 +56,16 @@ namespace EQTool
             timer.Start();
         }
 
-        public void SaveState()
+        public virtual void SaveState()
         {
             SaveWindowState(windowState);
             toolSettingsLoad.Save(settings);
         }
+
+		public virtual bool GetClosedState()
+		{
+			return windowState.Closed;
+		}
 
         public void CloseWindow()
         {
@@ -92,7 +98,6 @@ namespace EQTool
 			{
 				((Window)sender).Left = SystemParameters.VirtualScreenWidth + SystemParameters.VirtualScreenLeft - ((Window)sender).Width - 1;
 			}
-
 
             LastWindowInteraction = DateTime.UtcNow;
             DebounceSave();
@@ -134,6 +139,7 @@ namespace EQTool
             };
             windowState.State = this.WindowState;
             windowState.AlwaysOnTop = this.Topmost;
+			windowState.Closed = this.windowState.Closed;
         }
 
         protected override void OnClosing(CancelEventArgs e)

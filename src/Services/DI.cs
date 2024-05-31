@@ -1,5 +1,6 @@
 ﻿using Autofac;
 using Autofac.Features.ResolveAnything;
+using EQTool.Factories;
 using EQTool.Models;
 using EQTool.ViewModels;
 
@@ -16,7 +17,7 @@ namespace EQTool.Services
             {
                 return a.Resolve<EQToolSettingsLoad>().Load();
             }).AsSelf().SingleInstance();
-            builder.RegisterType<AppDispatcher>().As<IAppDispatcher>().SingleInstance();
+			builder.RegisterType<AppDispatcher>().As<IAppDispatcher>().SingleInstance();
             builder.RegisterType<SpellIcons>().AsSelf().SingleInstance();
             builder.RegisterType<ParseSpells_spells_us>().AsSelf().SingleInstance();
             builder.RegisterType<SettingsWindowViewModel>().AsSelf().SingleInstance();
@@ -35,6 +36,8 @@ namespace EQTool.Services
             builder.RegisterType<AudioService>().AsSelf().SingleInstance();
 			builder.RegisterType<QuarmDataService>().AsSelf().SingleInstance();
 			builder.RegisterType<CustomOverlayService>().AsSelf().SingleInstance();
+			builder.RegisterType<TimerWindowService>().AsSelf().SingleInstance();
+			builder.RegisterType<TimerWindowFactory>().AsSelf().SingleInstance();
 
             return builder.Build();
         }
