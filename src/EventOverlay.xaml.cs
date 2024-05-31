@@ -562,7 +562,7 @@ namespace EQTool
                 this.appDispatcher.DispatchUI(() =>
 				{
 					CenterText.FontSize = settings.OverlayFontSize.Value;
-					CenterText.Text = "ENGRAGE OFF";
+					CenterText.Text = "ENRAGE OFF";
                     CenterText.Foreground = Brushes.Red;
                 });
                 System.Threading.Thread.Sleep(1000 * 3);

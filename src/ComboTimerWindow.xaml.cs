@@ -81,10 +81,10 @@ namespace EQTool
 		{
 			this.comboTimerWindowViewModel.TryAddCustom(new CustomTimer
 			{
-				TargetName = $"Random -- {e.RandomRollData.MaxRoll}",
+				TargetName = $"Random -- {e.RandomRollData.MinRoll}-{e.RandomRollData.MaxRoll}",
 				Name = e.RandomRollData.PlayerName,
 				SpellNameIcon = "Invisibility",
-				SpellType = EQToolShared.Enums.SpellTypes.RandomRoll,
+				SpellType = SpellTypes.RandomRoll,
 				Roll = e.RandomRollData.Roll,
 				DurationInSeconds = 60 * 3,
 				ExecutionTime = e.ExecutionTime

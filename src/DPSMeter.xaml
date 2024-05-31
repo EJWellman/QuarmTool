@@ -36,11 +36,11 @@
                         <Button Margin="1" FontSize="7" Width="14" Height="14" Padding="0" Click="openmobinfo" ToolTip="Open Mob Info Window">
                             <Image Source="pack://application:,,,/toolbox.png"/>
                         </Button>
-                        <Button Margin="1" FontSize="7" Width="14" Height="14" Padding="0" Click="openspells" ToolTip="Open Spell Timer Window">
-                            <Image Source="pack://application:,,,/wizard.png"/>
-                        </Button>
-                        <Button Margin="1" FontSize="7" Width="14" Height="14" Padding="0" Click="OpenTimers" ToolTip="Open Timer Window">
-                            <Image Source="pack://application:,,,/clock.png"/>
+                        <Button Margin="1" FontSize="7" Width="14" Height="14" Padding="0" ToolTip="Open a Timer Window" Click="Dps_TimerMenu_OpenedEvent">
+                            <Image Source="pack://application:,,,/combo.png"/>
+                            <Button.ContextMenu>
+                                <ContextMenu StaysOpen="True" x:Name="TimerWindowsMenu" />
+                            </Button.ContextMenu>
                         </Button>
                         <Button Margin="1" FontSize="7" Width="14" Height="14" Padding="0" Click="openmap" ToolTip="Open Map Window">
                             <Image Source="pack://application:,,,/map.png"/>

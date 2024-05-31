@@ -214,6 +214,22 @@ namespace EQTool.Models
 			set => _MapWindowState = value ?? new WindowState();
 		}
 
+
+		private bool _TrackingVisibility = true;
+		public bool TrackingVisibility
+		{
+			get
+			{
+				return _TrackingVisibility;
+			}
+			set
+			{
+				_TrackingVisibility = value;
+				OnPropertyChanged();
+			}
+		}
+
+
 		private WindowState _MobWindowState;
 		public WindowState MobWindowState
 		{
@@ -254,6 +270,7 @@ namespace EQTool.Models
 		public bool ComboShowModRodTimers { get; set; }
 		public bool ShowModRodTimers { get; set; }
 
+		public bool ShowTimerDropShadows { get; set; } = false;
 		public Color SpellTimerNameColor { get; set; } = Color.FromRgb(255, 255, 255);
 		public Color BeneficialSpellTimerColor { get; set; } = Color.FromRgb(102, 205, 170);
 		public Color DetrimentalSpellTimerColor { get; set; } = Color.FromRgb(255, 69, 0);
@@ -285,6 +302,42 @@ namespace EQTool.Models
 		}
 		[JsonIgnore]
 		public ZealMessageService ZealMessageService { get; set; }
+
+		private ObservableCollectionRange<TimerWindowOptions> _timerWindows = new ObservableCollectionRange<TimerWindowOptions>();
+		[JsonIgnore]
+		public ObservableCollectionRange<TimerWindowOptions> TimerWindows
+		{
+			get
+			{
+				if (_timerWindows.Count == 0)
+				{
+					var tmp = TimerWindowService.LoadTimerWindows();
+					if (tmp != null)
+					{
+						_timerWindows.AddRange(tmp);
+					}
+				}
+				return _timerWindows;
+			}
+			set
+			{
+				_timerWindows = value;
+				OnPropertyChanged();
+			}
+		}
+
+		private int _AudioTriggerVolume = 100;
+		public int AudioTriggerVolume
+		{
+			get
+			{
+				return _AudioTriggerVolume;
+			}
+			set
+			{
+				_AudioTriggerVolume = value;
+			}
+		}
 
 		public event PropertyChangedEventHandler PropertyChanged;
 

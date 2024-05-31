@@ -1,16 +1,16 @@
-﻿using EQTool.Models;
+﻿using EQTool.Factories;
+using EQTool.Models;
 using EQTool.Services;
 using EQTool.Services.Spells.Log;
 using EQTool.ViewModels;
 using EQToolShared.Enums;
 using EQToolShared.ExtendedClasses;
 using EQToolShared.HubModels;
-using EQToolShared.Map;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Drawing;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -20,9 +20,10 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
 using System.Windows.Forms;
+using System.Windows.Interop;
 using System.Windows.Media;
+using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using Xceed.Wpf.Toolkit;
 
@@ -55,16 +56,18 @@ namespace EQTool
 
     public partial class Settings : BaseSaveStateWindow
     {
-        private readonly SettingsWindowViewModel SettingsWindowData;
+        private readonly SettingsWindowViewModel _SettingsWindowData;
         private readonly EQToolSettings _settings;
-        private readonly EQToolSettingsLoad toolSettingsLoad;
-        private readonly SpellWindowViewModel spellWindowViewModel;
-        private readonly EQSpells spells;
-        private readonly DPSLogParse dPSLogParse;
-        private readonly IAppDispatcher appDispatcher;
-        private readonly ISignalrPlayerHub signalrPlayerHub;
-        private readonly LogParser logParser;
-        private readonly MapLoad mapLoad;
+        private readonly EQToolSettingsLoad _toolSettingsLoad;
+        private readonly SpellWindowViewModel _spellWindowViewModel;
+        private readonly EQSpells _spells;
+        private readonly DPSLogParse _dPSLogParse;
+		private readonly TimerWindowFactory _timerWindowFactory;
+		private readonly TimerWindowService _timerWindowService;
+		private readonly IAppDispatcher _appDispatcher;
+        private readonly ISignalrPlayerHub _signalrPlayerHub;
+        private readonly LogParser _logParser;
+        private readonly MapLoad _mapLoad;
 
         public Settings(
             LogParser logParser,
@@ -76,19 +79,23 @@ namespace EQTool
             EQToolSettings settings,
             EQToolSettingsLoad toolSettingsLoad,
             SettingsWindowViewModel settingsWindowData,
-            SpellWindowViewModel spellWindowViewModel) : base(settings.SettingsWindowState, toolSettingsLoad, settings)
+            SpellWindowViewModel spellWindowViewModel,
+			TimerWindowFactory timerFactory,
+			TimerWindowService timerWindowService) : base(settings.SettingsWindowState, toolSettingsLoad, settings)
         {
-            this.signalrPlayerHub = signalrPlayerHub;
-            this.logParser = logParser;
-            this.mapLoad = mapLoad;
-            this.appDispatcher = appDispatcher;
-            this.dPSLogParse = dPSLogParse;
-            this.spells = spells;
-            this._settings = settings;
-            this.spellWindowViewModel = spellWindowViewModel;
-            this.toolSettingsLoad = toolSettingsLoad;
-            DataContext = SettingsWindowData = settingsWindowData;
-            SettingsWindowData.EqPath = this._settings.DefaultEqDirectory;
+            _signalrPlayerHub = signalrPlayerHub;
+            _logParser = logParser;
+            _mapLoad = mapLoad;
+            _appDispatcher = appDispatcher;
+            _dPSLogParse = dPSLogParse;
+            _spells = spells;
+            _settings = settings;
+            _spellWindowViewModel = spellWindowViewModel;
+            _toolSettingsLoad = toolSettingsLoad;
+			_timerWindowFactory = timerFactory;
+			_timerWindowService = timerWindowService;
+            DataContext = _SettingsWindowData = settingsWindowData;
+            _SettingsWindowData.EqPath = this._settings.DefaultEqDirectory;
             InitializeComponent();
             base.Init();
             TryCheckLoggingEnabled();
@@ -105,12 +112,13 @@ namespace EQTool
             this.DebugTab.Visibility = Visibility.Visible;
 #endif
 
-        }
+			MapInfoIcon.Source = Imaging.CreateBitmapSourceFromHIcon(SystemIcons.Information.Handle, Int32Rect.Empty, BitmapSizeOptions.FromEmptyOptions());
+		}
 
 		#region Private Methods
 		private void SaveConfig()
         {
-            toolSettingsLoad.Save(_settings);
+            _toolSettingsLoad.Save(_settings);
         }
 
         private void TryUpdateSettings()
@@ -119,23 +127,23 @@ namespace EQTool
             if (logfounddata?.Found == true)
             {
                 _settings.EqLogDirectory = logfounddata.Location;
-                SettingsWindowData.EqLogPath = logfounddata.Location;
+                _SettingsWindowData.EqLogPath = logfounddata.Location;
             }
-            SettingsWindowData.Update();
-            BestGuessSpells.IsChecked = _settings.BestGuessSpells;
-            YouSpellsOnly.IsChecked = _settings.YouOnlySpells;
-            var player = SettingsWindowData.ActivePlayer.Player;
+            _SettingsWindowData.Update();
+            //BestGuessSpells.IsChecked = _settings.BestGuessSpells;
+            //YouSpellsOnly.IsChecked = _settings.YouOnlySpells;
+            var player = _SettingsWindowData.ActivePlayer.Player;
 
             if (player?.ShowSpellsForClasses != null)
             {
-                foreach (var item in SettingsWindowData.SelectedPlayerClasses)
+                foreach (var item in _SettingsWindowData.SelectedPlayerClasses)
                 {
                     item.IsChecked = player.ShowSpellsForClasses.Contains(item.TheValue);
                 }
             }
             else
             {
-                foreach (var item in SettingsWindowData.SelectedPlayerClasses)
+                foreach (var item in _SettingsWindowData.SelectedPlayerClasses)
                 {
                     item.IsChecked = false;
                 }
@@ -158,7 +166,7 @@ namespace EQTool
 
         private void TryCheckLoggingEnabled()
         {
-            SettingsWindowData.IsLoggingEnabled = FindEq.TryCheckLoggingEnabled(_settings.DefaultEqDirectory) ?? false;
+            _SettingsWindowData.IsLoggingEnabled = FindEq.TryCheckLoggingEnabled(_settings.DefaultEqDirectory) ?? false;
         }
 
         private void fontsizescombobox_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
@@ -180,8 +188,8 @@ namespace EQTool
                 {
                     if (FindEq.IsValidEqFolder(fbd.SelectedPath))
                     {
-                        SettingsWindowData.EqPath = _settings.DefaultEqDirectory = fbd.SelectedPath;
-                        this.appDispatcher.DispatchUI(() =>
+                        _SettingsWindowData.EqPath = _settings.DefaultEqDirectory = fbd.SelectedPath;
+                        this._appDispatcher.DispatchUI(() =>
                         {
                             TryUpdateSettings();
                             TryCheckLoggingEnabled();
@@ -242,7 +250,14 @@ namespace EQTool
             SaveConfig();
         }
 
-        private void YouSpells_Click(object sender, RoutedEventArgs e)
+		private void TextShadow_Click(object sender, RoutedEventArgs e)
+		{
+			var s = sender as System.Windows.Controls.CheckBox;
+			_settings.ShowTimerDropShadows = s.IsChecked ?? false;
+			SaveConfig();
+		}
+
+		private void YouSpells_Click(object sender, RoutedEventArgs e)
         {
             var s = sender as System.Windows.Controls.CheckBox;
             _settings.YouOnlySpells = s.IsChecked ?? false;
@@ -292,8 +307,12 @@ namespace EQTool
 			_settings.ShowModRodTimers = s.IsChecked ?? false;
 			SaveConfig();
 		}
-
-
+		private void MapVisibleTracking_Click(object sender, RoutedEventArgs e)
+		{
+			var s = sender as System.Windows.Controls.CheckBox;
+			_settings.TrackingVisibility = s.IsChecked ?? false;
+			SaveConfig();
+		}
 
 		private void OverlayColor_Selected(object sender, RoutedEventArgs e)
 		{
@@ -366,56 +385,56 @@ namespace EQTool
         {
             var listofspells = new List<SpellParsingMatch>
             {
-                new SpellParsingMatch { Spell = spells.AllSpells.FirstOrDefault(a => a.name == "Disease Cloud"), TargetName = "Joe", MultipleMatchesFound = false },
-                new SpellParsingMatch { Spell = spells.AllSpells.FirstOrDefault(a => a.name == "Lesser Shielding"), TargetName = "Joe", MultipleMatchesFound = false },
-                new SpellParsingMatch { Spell = spells.AllSpells.FirstOrDefault(a => a.name == "Shadow Compact"), TargetName = "Joe", MultipleMatchesFound = false },
-                new SpellParsingMatch { Spell = spells.AllSpells.FirstOrDefault(a => a.name == "Heroic Bond"), TargetName = "Joe", MultipleMatchesFound = false },
-                new SpellParsingMatch { Spell = spells.AllSpells.FirstOrDefault(a => a.name == "Improved Invis to Undead"), TargetName = "Joe", MultipleMatchesFound = false },
-                new SpellParsingMatch { Spell = spells.AllSpells.FirstOrDefault(a => a.name == "Grim Aura"), TargetName = "Joe", MultipleMatchesFound = false },
+                new SpellParsingMatch { Spell = _spells.AllSpells.FirstOrDefault(a => a.name == "Disease Cloud"), TargetName = "Joe", MultipleMatchesFound = false },
+                new SpellParsingMatch { Spell = _spells.AllSpells.FirstOrDefault(a => a.name == "Lesser Shielding"), TargetName = "Joe", MultipleMatchesFound = false },
+                new SpellParsingMatch { Spell = _spells.AllSpells.FirstOrDefault(a => a.name == "Shadow Compact"), TargetName = "Joe", MultipleMatchesFound = false },
+                new SpellParsingMatch { Spell = _spells.AllSpells.FirstOrDefault(a => a.name == "Heroic Bond"), TargetName = "Joe", MultipleMatchesFound = false },
+                new SpellParsingMatch { Spell = _spells.AllSpells.FirstOrDefault(a => a.name == "Improved Invis to Undead"), TargetName = "Joe", MultipleMatchesFound = false },
+                new SpellParsingMatch { Spell = _spells.AllSpells.FirstOrDefault(a => a.name == "Grim Aura"), TargetName = "Joe", MultipleMatchesFound = false },
 
-                new SpellParsingMatch { Spell = spells.AllSpells.FirstOrDefault(a => a.name == "Heroic Bond"), TargetName = EQSpells.SpaceYou, MultipleMatchesFound = false },
+                new SpellParsingMatch { Spell = _spells.AllSpells.FirstOrDefault(a => a.name == "Heroic Bond"), TargetName = EQSpells.SpaceYou, MultipleMatchesFound = false },
 
-                new SpellParsingMatch { Spell = spells.AllSpells.FirstOrDefault(a => a.name == "Heroic Bond"), TargetName = "Aasgard", MultipleMatchesFound = false },
-                new SpellParsingMatch { Spell = spells.AllSpells.FirstOrDefault(a => a.name == "Chloroplast"), TargetName = "Aasgard", MultipleMatchesFound = true },
-                new SpellParsingMatch { Spell = spells.AllSpells.FirstOrDefault(a => a.name == "Shield of Words"), TargetName = "Aasgard", MultipleMatchesFound = false },
-                new SpellParsingMatch { Spell = spells.AllSpells.FirstOrDefault(a => a.name == "Boon of the Clear Mind"), TargetName = "Aasgard", MultipleMatchesFound = false },
-                new SpellParsingMatch { Spell = spells.AllSpells.FirstOrDefault(a => a.name == "Gift of Brilliance"), TargetName = "Aasgard", MultipleMatchesFound = false },
-                new SpellParsingMatch { Spell = spells.AllSpells.FirstOrDefault(a => a.name == "Mana Sieve"), TargetName = "a bad guy", MultipleMatchesFound = false },
-                new SpellParsingMatch { Spell = spells.AllSpells.FirstOrDefault(a => a.name == "Mana Sieve"), TargetName = "a bad guy", MultipleMatchesFound = false },
-                new SpellParsingMatch { Spell = spells.AllSpells.FirstOrDefault(a => a.name == "Harvest"), TargetName = EQSpells.SpaceYou, MultipleMatchesFound = false },
-                new SpellParsingMatch { Spell = spells.AllSpells.FirstOrDefault(a => a.name == "LowerElement"), TargetName = "Tunare", MultipleMatchesFound = false },
-                new SpellParsingMatch { Spell = spells.AllSpells.FirstOrDefault(a => a.name == "LowerElement"), TargetName = "Tunare", MultipleMatchesFound = false },
-                new SpellParsingMatch { Spell = spells.AllSpells.FirstOrDefault(a => a.name == "LowerElement"), TargetName = "Tunare", MultipleMatchesFound = false },
-                new SpellParsingMatch { Spell = spells.AllSpells.FirstOrDefault(a => a.name == "LowerElement"), TargetName = "Tunare", MultipleMatchesFound = false },
-                new SpellParsingMatch { Spell = spells.AllSpells.FirstOrDefault(a => a.name == "LowerElement"), TargetName = "Tunare", MultipleMatchesFound = false },
-                new SpellParsingMatch { Spell = spells.AllSpells.FirstOrDefault(a => a.name == "LowerElement"), TargetName = "Tunare", MultipleMatchesFound = false },
+                new SpellParsingMatch { Spell = _spells.AllSpells.FirstOrDefault(a => a.name == "Heroic Bond"), TargetName = "Aasgard", MultipleMatchesFound = false },
+                new SpellParsingMatch { Spell = _spells.AllSpells.FirstOrDefault(a => a.name == "Chloroplast"), TargetName = "Aasgard", MultipleMatchesFound = true },
+                new SpellParsingMatch { Spell = _spells.AllSpells.FirstOrDefault(a => a.name == "Shield of Words"), TargetName = "Aasgard", MultipleMatchesFound = false },
+                new SpellParsingMatch { Spell = _spells.AllSpells.FirstOrDefault(a => a.name == "Boon of the Clear Mind"), TargetName = "Aasgard", MultipleMatchesFound = false },
+                new SpellParsingMatch { Spell = _spells.AllSpells.FirstOrDefault(a => a.name == "Gift of Brilliance"), TargetName = "Aasgard", MultipleMatchesFound = false },
+                new SpellParsingMatch { Spell = _spells.AllSpells.FirstOrDefault(a => a.name == "Mana Sieve"), TargetName = "a bad guy", MultipleMatchesFound = false },
+                new SpellParsingMatch { Spell = _spells.AllSpells.FirstOrDefault(a => a.name == "Mana Sieve"), TargetName = "a bad guy", MultipleMatchesFound = false },
+                new SpellParsingMatch { Spell = _spells.AllSpells.FirstOrDefault(a => a.name == "Harvest"), TargetName = EQSpells.SpaceYou, MultipleMatchesFound = false },
+                new SpellParsingMatch { Spell = _spells.AllSpells.FirstOrDefault(a => a.name == "LowerElement"), TargetName = "Tunare", MultipleMatchesFound = false },
+                new SpellParsingMatch { Spell = _spells.AllSpells.FirstOrDefault(a => a.name == "LowerElement"), TargetName = "Tunare", MultipleMatchesFound = false },
+                new SpellParsingMatch { Spell = _spells.AllSpells.FirstOrDefault(a => a.name == "LowerElement"), TargetName = "Tunare", MultipleMatchesFound = false },
+                new SpellParsingMatch { Spell = _spells.AllSpells.FirstOrDefault(a => a.name == "LowerElement"), TargetName = "Tunare", MultipleMatchesFound = false },
+                new SpellParsingMatch { Spell = _spells.AllSpells.FirstOrDefault(a => a.name == "LowerElement"), TargetName = "Tunare", MultipleMatchesFound = false },
+                new SpellParsingMatch { Spell = _spells.AllSpells.FirstOrDefault(a => a.name == "LowerElement"), TargetName = "Tunare", MultipleMatchesFound = false },
 
-                new SpellParsingMatch { Spell = spells.AllSpells.FirstOrDefault(a => a.name == "Concussion"), TargetName = "Tunare", MultipleMatchesFound = false },
-                new SpellParsingMatch { Spell = spells.AllSpells.FirstOrDefault(a => a.name == "Concussion"), TargetName = "Tunare", MultipleMatchesFound = false },
+                new SpellParsingMatch { Spell = _spells.AllSpells.FirstOrDefault(a => a.name == "Concussion"), TargetName = "Tunare", MultipleMatchesFound = false },
+                new SpellParsingMatch { Spell = _spells.AllSpells.FirstOrDefault(a => a.name == "Concussion"), TargetName = "Tunare", MultipleMatchesFound = false },
 
-                new SpellParsingMatch { Spell = spells.AllSpells.FirstOrDefault(a => a.name == "Flame Lick"), TargetName = "Tunare", MultipleMatchesFound = false },
-                new SpellParsingMatch { Spell = spells.AllSpells.FirstOrDefault(a => a.name == "Flame Lick"), TargetName = "Tunare", MultipleMatchesFound = false },
+                new SpellParsingMatch { Spell = _spells.AllSpells.FirstOrDefault(a => a.name == "Flame Lick"), TargetName = "Tunare", MultipleMatchesFound = false },
+                new SpellParsingMatch { Spell = _spells.AllSpells.FirstOrDefault(a => a.name == "Flame Lick"), TargetName = "Tunare", MultipleMatchesFound = false },
 
-                new SpellParsingMatch { Spell = spells.AllSpells.FirstOrDefault(a => a.name == "Jolt"), TargetName = "Tunare", MultipleMatchesFound = false },
-                new SpellParsingMatch { Spell = spells.AllSpells.FirstOrDefault(a => a.name == "Jolt"), TargetName = "Tunare", MultipleMatchesFound = false },
+                new SpellParsingMatch { Spell = _spells.AllSpells.FirstOrDefault(a => a.name == "Jolt"), TargetName = "Tunare", MultipleMatchesFound = false },
+                new SpellParsingMatch { Spell = _spells.AllSpells.FirstOrDefault(a => a.name == "Jolt"), TargetName = "Tunare", MultipleMatchesFound = false },
 
-                new SpellParsingMatch { Spell = spells.AllSpells.FirstOrDefault(a => a.name == "Cinder Jolt"), TargetName = "Tunare", MultipleMatchesFound = false },
-                new SpellParsingMatch { Spell = spells.AllSpells.FirstOrDefault(a => a.name == "Cinder Jolt"), TargetName = "Tunare", MultipleMatchesFound = false }
+                new SpellParsingMatch { Spell = _spells.AllSpells.FirstOrDefault(a => a.name == "Cinder Jolt"), TargetName = "Tunare", MultipleMatchesFound = false },
+                new SpellParsingMatch { Spell = _spells.AllSpells.FirstOrDefault(a => a.name == "Cinder Jolt"), TargetName = "Tunare", MultipleMatchesFound = false }
             };
 
             foreach (var item in listofspells)
             {
-                spellWindowViewModel.TryAdd(item, false);
+                _spellWindowViewModel.TryAdd(item, false);
             }
-            spellWindowViewModel.TryAddCustom(new CustomTimer { DurationInSeconds = 45, Name = "--DT-- Luetin", SpellType = SpellTypes.BadGuyCoolDown, SpellNameIcon = "Disease Cloud" });
-            spellWindowViewModel.TryAddCustom(new CustomTimer { DurationInSeconds = 60 * 27, Name = "King" });
-            spellWindowViewModel.TryAddCustom(new CustomTimer { DurationInSeconds = 60 * 18, Name = "hall Wanderer 1" });
+            _spellWindowViewModel.TryAddCustom(new CustomTimer { DurationInSeconds = 45, Name = "--DT-- Luetin", SpellType = SpellTypes.BadGuyCoolDown, SpellNameIcon = "Disease Cloud" });
+            _spellWindowViewModel.TryAddCustom(new CustomTimer { DurationInSeconds = 60 * 27, Name = "King" });
+            _spellWindowViewModel.TryAddCustom(new CustomTimer { DurationInSeconds = 60 * 18, Name = "hall Wanderer 1" });
         }
 
         private void CheckBoxZone_Checked(object sender, RoutedEventArgs e)
         {
             var chkZone = (System.Windows.Controls.CheckBox)sender;
-            var player = SettingsWindowData.ActivePlayer.Player;
+            var player = _SettingsWindowData.ActivePlayer.Player;
             if (player != null)
             {
                 var item = (PlayerClasses)chkZone.Tag;
@@ -434,13 +453,13 @@ namespace EQTool
 
         private void zoneselectionchanged(object sender, SelectionChangedEventArgs e)
         {
-            var player = SettingsWindowData.ActivePlayer.Player;
+            var player = _SettingsWindowData.ActivePlayer.Player;
             if (player != null)
             {
                 var t = DateTime.Now;
                 var format = "ddd MMM dd HH:mm:ss yyyy";
                 var msg = "[" + t.ToString(format) + "] You have entered " + player.Zone;
-                logParser.Push(msg);
+                _logParser.Push(msg);
                 SaveConfig();
             }
         }
@@ -471,12 +490,12 @@ namespace EQTool
                     PushLog("**A Magic Die is rolled by Sanare.");
                     PushLog($"**It could have been any number from 0 to 333, but this time it turned up a {r}.");
 
-                    appDispatcher.DispatchUI(() => { testbutton.IsEnabled = true; });
+                    _appDispatcher.DispatchUI(() => { testbutton.IsEnabled = true; });
                 }
                 catch (Exception ex)
                 {
                     Debug.WriteLine(ex.ToString());
-                    appDispatcher.DispatchUI(() => { testbutton.IsEnabled = true; });
+                    _appDispatcher.DispatchUI(() => { testbutton.IsEnabled = true; });
                 }
             });
         }
@@ -514,7 +533,7 @@ namespace EQTool
                         catch (FormatException)
                         {
                         }
-                        var match = dPSLogParse.Match(message, timestamp);
+                        var match = _dPSLogParse.Match(message, timestamp);
                         if (match != null)
                         {
                             fightlist.Add(new KeyValuePair<string, DPSParseMatch>(item, match));
@@ -540,17 +559,17 @@ namespace EQTool
                                 var msgwithout = line.Substring(indexline);
                                 var format = "ddd MMM dd HH:mm:ss yyyy";
                                 msgwithout = "[" + t.ToString(format) + msgwithout;
-                                logParser.Push(msgwithout);
+                                _logParser.Push(msgwithout);
                             }
                         }
                         Thread.Sleep(100);
                     } while (index < fightlist.Count);
-                    appDispatcher.DispatchUI(() => { testdpsbutton.IsEnabled = true; });
+                    _appDispatcher.DispatchUI(() => { testdpsbutton.IsEnabled = true; });
                 }
                 catch (Exception ex)
                 {
                     Debug.WriteLine(ex.ToString());
-                    appDispatcher.DispatchUI(() => { testdpsbutton.IsEnabled = true; });
+                    _appDispatcher.DispatchUI(() => { testdpsbutton.IsEnabled = true; });
                 }
             });
         }
@@ -574,7 +593,7 @@ namespace EQTool
                 var d = DateTime.Now;
                 logtext = "[" + d.ToString(format) + "] " + logtext;
             }
-            logParser.Push(logtext);
+            _logParser.Push(logtext);
         }
 
         private void selectLogFile(object sender, RoutedEventArgs e)
@@ -637,18 +656,18 @@ namespace EQTool
                                     var msgwithout = line.Substring(indexline);
                                     var format = "ddd MMM dd HH:mm:ss yyyy";
                                     msgwithout = "[" + t.ToString(format) + msgwithout;
-                                    logParser.Push(msgwithout);
+                                    _logParser.Push(msgwithout);
                                 }
                             }
                             Thread.Sleep(100);
                         } while (index < lines.Count);
 
-                        appDispatcher.DispatchUI(() => { button.IsEnabled = true; });
+                        _appDispatcher.DispatchUI(() => { button.IsEnabled = true; });
                     }
                     catch (Exception ex)
                     {
                         Debug.WriteLine(ex.ToString());
-                        appDispatcher.DispatchUI(() => { button.IsEnabled = true; });
+                        _appDispatcher.DispatchUI(() => { button.IsEnabled = true; });
                     }
                 });
             }
@@ -708,18 +727,18 @@ namespace EQTool
                                 var msgwithout = line.Substring(indexline);
                                 var format = "ddd MMM dd HH:mm:ss yyyy";
                                 msgwithout = "[" + t.ToString(format) + msgwithout;
-                                logParser.Push(msgwithout);
+                                _logParser.Push(msgwithout);
                             }
                         }
                         Thread.Sleep(100);
                     } while (index < lines.Count);
 
-                    appDispatcher.DispatchUI(() => { testmap.IsEnabled = true; });
+                    _appDispatcher.DispatchUI(() => { testmap.IsEnabled = true; });
                 }
                 catch (Exception ex)
                 {
                     Debug.WriteLine(ex.ToString());
-                    appDispatcher.DispatchUI(() => { testmap.IsEnabled = true; });
+                    _appDispatcher.DispatchUI(() => { testmap.IsEnabled = true; });
                 }
             });
         }
@@ -732,13 +751,13 @@ namespace EQTool
                 return;
             }
 
-            var player = SettingsWindowData.ActivePlayer?.Player;
+            var player = _SettingsWindowData.ActivePlayer?.Player;
             if (player == null)
             {
                 return;
             }
 
-            var map = mapLoad.Load(player.Zone);
+            var map = _mapLoad.Load(player.Zone);
             if (map == null)
             {
                 return;
@@ -770,7 +789,7 @@ namespace EQTool
                     };
 
                     pnames.Add(p);
-                    signalrPlayerHub.PushPlayerLocationEvent(p);
+                    _signalrPlayerHub.PushPlayerLocationEvent(p);
                 }
                 movementoffset = (int)(map.AABB.MaxWidth / 50);
                 try
@@ -793,17 +812,17 @@ namespace EQTool
                                 Z = item.Z + r.Next(-movementoffset, movementoffset)
                             };
 
-                            signalrPlayerHub.PushPlayerLocationEvent(p);
+                            _signalrPlayerHub.PushPlayerLocationEvent(p);
                         }
                         Thread.Sleep(1000);
                     }
 
-                    appDispatcher.DispatchUI(() => { testmap.IsEnabled = true; });
+                    _appDispatcher.DispatchUI(() => { testmap.IsEnabled = true; });
                 }
                 catch (Exception ex)
                 {
                     Debug.WriteLine(ex.ToString());
-                    appDispatcher.DispatchUI(() => { testmap.IsEnabled = true; });
+                    _appDispatcher.DispatchUI(() => { testmap.IsEnabled = true; });
                 }
             });
         }
@@ -819,109 +838,103 @@ namespace EQTool
         }
         private void testenrage(object sender, RoutedEventArgs e)
         {
-            var z = SettingsWindowData.ActivePlayer?.Player?.Zone;
+            var z = _SettingsWindowData.ActivePlayer?.Player?.Zone;
             if (string.IsNullOrWhiteSpace(z))
             {
                 return;
             }
-            if (SettingsWindowData.ActivePlayer?.Player == null)
+            if (_SettingsWindowData.ActivePlayer?.Player == null)
             {
                 return;
             }
-            SettingsWindowData.ActivePlayer.Player.EnrageAudio = true;
-            SettingsWindowData.ActivePlayer.Player.EnrageOverlay = true;
+            _SettingsWindowData.ActivePlayer.Player.EnrageAudio = true;
+            _SettingsWindowData.ActivePlayer.Player.EnrageOverlay = true;
             ((App)System.Windows.Application.Current).OpenOverLayWindow();
-            if (ZoneParser.ZoneInfoMap.TryGetValue(z, out var zone))
-            {
-                if (zone.NotableNPCs.Any())
-                {
-                    this.PushLog(zone.NotableNPCs.FirstOrDefault() + " has become ENRAGED.");
-                }
-            }
+            this.PushLog("Lord Nagafen has become ENRAGED.");
         }
 
         private void testlevfading(object sender, RoutedEventArgs e)
         {
-            if (SettingsWindowData.ActivePlayer?.Player == null)
+            if (_SettingsWindowData.ActivePlayer?.Player == null)
             {
                 return;
             }
-            SettingsWindowData.ActivePlayer.Player.LevFadingAudio = true;
-            SettingsWindowData.ActivePlayer.Player.LevFadingOverlay = true;
+            _SettingsWindowData.ActivePlayer.Player.LevFadingAudio = true;
+            _SettingsWindowData.ActivePlayer.Player.LevFadingOverlay = true;
             ((App)System.Windows.Application.Current).OpenOverLayWindow();
             this.PushLog("You feel as if you are about to fall.");
         }
         private void testinvisfading(object sender, RoutedEventArgs e)
         {
-            if (SettingsWindowData.ActivePlayer?.Player == null)
+            if (_SettingsWindowData.ActivePlayer?.Player == null)
             {
                 return;
             }
-            SettingsWindowData.ActivePlayer.Player.InvisFadingAudio = true;
-            SettingsWindowData.ActivePlayer.Player.InvisFadingOverlay = true;
+            _SettingsWindowData.ActivePlayer.Player.InvisFadingAudio = true;
+            _SettingsWindowData.ActivePlayer.Player.InvisFadingOverlay = true;
             ((App)System.Windows.Application.Current).OpenOverLayWindow();
             this.PushLog("You feel yourself starting to appear.");
         }
 
         private void testCharmBreak(object sender, RoutedEventArgs e)
         {
-            if (SettingsWindowData.ActivePlayer?.Player == null)
+            if (_SettingsWindowData.ActivePlayer?.Player == null)
             {
                 return;
             }
-            SettingsWindowData.ActivePlayer.Player.CharmBreakAudio = true;
-            SettingsWindowData.ActivePlayer.Player.CharmBreakOverlay = true;
+            _SettingsWindowData.ActivePlayer.Player.CharmBreakAudio = true;
+            _SettingsWindowData.ActivePlayer.Player.CharmBreakOverlay = true;
             ((App)System.Windows.Application.Current).OpenOverLayWindow();
             this.PushLog("Your charm spell has worn off.");
         }
 
         private void testFailedFeign(object sender, RoutedEventArgs e)
         {
-            if (SettingsWindowData.ActivePlayer?.Player == null)
+            if (_SettingsWindowData.ActivePlayer?.Player == null)
             {
                 return;
             }
-            SettingsWindowData.ActivePlayer.Player.FailedFeignAudio = true;
-            SettingsWindowData.ActivePlayer.Player.FailedFeignOverlay = true;
+            _SettingsWindowData.ActivePlayer.Player.FailedFeignAudio = true;
+            _SettingsWindowData.ActivePlayer.Player.FailedFeignOverlay = true;
             ((App)System.Windows.Application.Current).OpenOverLayWindow();
-            this.PushLog($"{SettingsWindowData.ActivePlayer?.Player?.Name} has fallen to the ground.");
+            this.PushLog($"{_SettingsWindowData.ActivePlayer?.Player?.Name} has fallen to the ground.");
         }
         private void testFTE(object sender, RoutedEventArgs e)
         {
-            if (SettingsWindowData.ActivePlayer?.Player == null)
+            if (_SettingsWindowData.ActivePlayer?.Player == null)
             {
                 return;
             }
-            SettingsWindowData.ActivePlayer.Player.FTEOverlay = true;
-            SettingsWindowData.ActivePlayer.Player.FTEAudio = true;
+            _SettingsWindowData.ActivePlayer.Player.FTEOverlay = true;
+            _SettingsWindowData.ActivePlayer.Player.FTEAudio = true;
             ((App)System.Windows.Application.Current).OpenOverLayWindow();
             this.PushLog("Dagarn the Destroyer engages Tzvia!");
         }
         private void testGroupInvite(object sender, RoutedEventArgs e)
         {
-            if (SettingsWindowData.ActivePlayer?.Player == null)
+            if (_SettingsWindowData.ActivePlayer?.Player == null)
             {
                 return;
             }
-            SettingsWindowData.ActivePlayer.Player.GroupInviteOverlay = true;
-            SettingsWindowData.ActivePlayer.Player.GroupInviteAudio = true;
+            _SettingsWindowData.ActivePlayer.Player.GroupInviteOverlay = true;
+            _SettingsWindowData.ActivePlayer.Player.GroupInviteAudio = true;
             ((App)System.Windows.Application.Current).OpenOverLayWindow();
             this.PushLog($"Tzvia invites you to join a group.");
         }
         private void testDragonRoar(object sender, RoutedEventArgs e)
         {
-            if (SettingsWindowData.ActivePlayer?.Player == null)
+            if (_SettingsWindowData.ActivePlayer?.Player == null)
             {
                 return;
             }
-            SettingsWindowData.ActivePlayer.Player.DragonRoarAudio = true;
-            SettingsWindowData.ActivePlayer.Player.DragonRoarOverlay = true;
+            _SettingsWindowData.ActivePlayer.Player.DragonRoarAudio = true;
+            _SettingsWindowData.ActivePlayer.Player.DragonRoarOverlay = true;
             ((App)System.Windows.Application.Current).OpenOverLayWindow();
             this.PushLog($"You resist the Dragon Roar spell!");
         }
         private void textvoice(object sender, RoutedEventArgs e)
         {
-            if (string.IsNullOrWhiteSpace(this.SettingsWindowData.SelectedVoice))
+            if (string.IsNullOrWhiteSpace(this._SettingsWindowData.SelectedVoice))
             {
                 return;
             }
@@ -929,7 +942,7 @@ namespace EQTool
             System.Threading.Tasks.Task.Factory.StartNew(() =>
             {
                 var synth = new SpeechSynthesizer();
-                synth.SelectVoice(this.SettingsWindowData.SelectedVoice);
+                synth.SelectVoice(this._SettingsWindowData.SelectedVoice);
                 synth.Speak($"You resist the Dragon Roar spell!");
             });
         }
@@ -941,20 +954,20 @@ namespace EQTool
             {
                 return;
             }
-            if (SettingsWindowData.ActivePlayer?.Player == null)
+            if (_SettingsWindowData.ActivePlayer?.Player == null)
             {
                 return;
             }
-            SettingsWindowData.ActivePlayer.Player.ChChainOverlay = true;
-            SettingsWindowData.ActivePlayer.Player.ChChainWarningOverlay = true;
-            SettingsWindowData.ActivePlayer.Player.ChChainWarningAudio = true;
+            _SettingsWindowData.ActivePlayer.Player.ChChainOverlay = true;
+            _SettingsWindowData.ActivePlayer.Player.ChChainWarningOverlay = true;
+            _SettingsWindowData.ActivePlayer.Player.ChChainWarningAudio = true;
             ((App)System.Windows.Application.Current).OpenOverLayWindow();
             button.IsEnabled = false;
             _ = Task.Factory.StartNew(() =>
             {
                 try
                 {
-                    var tag = SettingsWindowData.ActivePlayer.Player.ChChainTagOverlay;
+                    var tag = _SettingsWindowData.ActivePlayer.Player.ChChainTagOverlay;
                     var msg = $"You shout, '{tag} 001 CH -- Beefwich'";
                     PushLog(msg);
                     Thread.Sleep(2000);
@@ -1006,12 +1019,12 @@ namespace EQTool
                     msg = $"Mycro shouts, '{tag}  002 CH -- Huntor'";
                     PushLog(msg);
                     Thread.Sleep(1500);
-                    appDispatcher.DispatchUI(() => { button.IsEnabled = true; });
+                    _appDispatcher.DispatchUI(() => { button.IsEnabled = true; });
                 }
                 catch (Exception ex)
                 {
                     Debug.WriteLine(ex.ToString());
-                    appDispatcher.DispatchUI(() => { button.IsEnabled = true; });
+                    _appDispatcher.DispatchUI(() => { button.IsEnabled = true; });
                 }
             });
         }
@@ -1023,12 +1036,12 @@ namespace EQTool
             {
                 return;
             }
-            if (SettingsWindowData.ActivePlayer?.Player == null)
+            if (_SettingsWindowData.ActivePlayer?.Player == null)
             {
                 return;
             }
-            SettingsWindowData.ActivePlayer.Player.RootWarningAudio = true;
-            SettingsWindowData.ActivePlayer.Player.RootWarningOverlay = true;
+            _SettingsWindowData.ActivePlayer.Player.RootWarningAudio = true;
+            _SettingsWindowData.ActivePlayer.Player.RootWarningOverlay = true;
             ((App)System.Windows.Application.Current).OpenOverLayWindow();
             button.IsEnabled = false;
             _ = Task.Factory.StartNew(() =>
@@ -1037,12 +1050,12 @@ namespace EQTool
                 {
 
                     PushLog("Your Paralyzing Earth spell has worn off.");
-                    appDispatcher.DispatchUI(() => { button.IsEnabled = true; });
+                    _appDispatcher.DispatchUI(() => { button.IsEnabled = true; });
                 }
                 catch (Exception ex)
                 {
                     Debug.WriteLine(ex.ToString());
-                    appDispatcher.DispatchUI(() => { button.IsEnabled = true; });
+                    _appDispatcher.DispatchUI(() => { button.IsEnabled = true; });
                 }
             });
         }
@@ -1054,12 +1067,12 @@ namespace EQTool
             {
                 return;
             }
-            if (SettingsWindowData.ActivePlayer?.Player == null)
+            if (_SettingsWindowData.ActivePlayer?.Player == null)
             {
                 return;
             }
-            SettingsWindowData.ActivePlayer.Player.ResistWarningAudio = true;
-            SettingsWindowData.ActivePlayer.Player.ResistWarningOverlay = true;
+            _SettingsWindowData.ActivePlayer.Player.ResistWarningAudio = true;
+            _SettingsWindowData.ActivePlayer.Player.ResistWarningOverlay = true;
             ((App)System.Windows.Application.Current).OpenOverLayWindow();
             button.IsEnabled = false;
             _ = Task.Factory.StartNew(() =>
@@ -1068,12 +1081,12 @@ namespace EQTool
                 {
 
                     PushLog("Your target resisted the Rest the Dead spell.");
-                    appDispatcher.DispatchUI(() => { button.IsEnabled = true; });
+                    _appDispatcher.DispatchUI(() => { button.IsEnabled = true; });
                 }
                 catch (Exception ex)
                 {
                     Debug.WriteLine(ex.ToString());
-                    appDispatcher.DispatchUI(() => { button.IsEnabled = true; });
+                    _appDispatcher.DispatchUI(() => { button.IsEnabled = true; });
                 }
             });
         }
@@ -1118,6 +1131,20 @@ namespace EQTool
 			//close popup
 			ToggleCreateNewButton.IsChecked = false;
 		}
+
+		private void CustomOverlayVisual_Click(object sender, RoutedEventArgs e)
+		{
+			var s = sender as System.Windows.Controls.CheckBox;
+			CustomOverlayService.UpdateCustomOverlay((CustomOverlay)s.DataContext);
+			SaveConfig();
+		}
+
+		private void CustomOverlayAudio_Click(object sender, RoutedEventArgs e)
+		{
+			var s = sender as System.Windows.Controls.CheckBox;
+			CustomOverlayService.UpdateCustomOverlay((CustomOverlay)s.DataContext);
+			SaveConfig();
+		}
 		#endregion
 
 		protected override void OnClosing(CancelEventArgs e)
@@ -1143,6 +1170,110 @@ namespace EQTool
 
 				editWindow.ShowDialog();
 			}
+		}
+
+		private void Delete_ExistingCustomOverlay(object sender, RoutedEventArgs e)
+		{
+			var temp = (sender as System.Windows.Controls.Button).DataContext as int?;
+			var overlayToDelete = _settings.CustomOverlays.FirstOrDefault(a => a.ID == temp.Value);
+
+			var messageBoxText = $"Are you sure that you want to delete your {overlayToDelete.Name} trigger?";
+			var caption = "Are you sure?";
+			var button = (MessageBoxButton)Enum.Parse(typeof(MessageBoxButton), "YesNo");
+			var icon = (MessageBoxImage)Enum.Parse(typeof(MessageBoxImage), "Warning");
+			var defaultResult =
+				(MessageBoxResult)Enum.Parse(typeof(MessageBoxResult), "None");
+			var options = (System.Windows.MessageBoxOptions)Enum.Parse(typeof(System.Windows.MessageBoxOptions), "None");
+
+			// Show message box, passing the window owner if specified
+			MessageBoxResult result = System.Windows.MessageBox.Show(this, messageBoxText, caption, button, icon, defaultResult, options);
+
+			// Show the result
+			if(result == MessageBoxResult.Yes)
+			{
+				if (temp != null && temp.HasValue)
+				{
+					if (CustomOverlayService.DeleteCustomOverlay(overlayToDelete))
+					{
+						_settings.CustomOverlays.Remove(overlayToDelete);
+					}
+				}
+			}
+		}
+
+		private void ClearCachedMapsClicked(object sender, RoutedEventArgs e)
+		{
+			_mapLoad.ClearCachedMaps();
+        }
+
+		private void CreateTimerWindow_Click(object sender, RoutedEventArgs e)
+		{
+			var temp = (sender as System.Windows.Controls.Button).DataContext as int?;
+			var window = new EditTimerWindow(_settings, _timerWindowFactory, temp);
+
+			window.TimerWindowEdited += (s, ev) =>
+			{
+				if (ev.Success)
+				{
+					var found = _settings.TimerWindows.FirstOrDefault(a => a.ID == ev.UpdatedWindow.ID);
+					int i = _settings.TimerWindows.IndexOf(found);
+					_settings.TimerWindows[i] = ev.UpdatedWindow;
+				}
+			};
+
+			window.Show();
+		}
+
+		private void TimerWindowAlwaysOnTop_Click(object sender, RoutedEventArgs e)
+		{
+			var temp = (sender as System.Windows.Controls.CheckBox).DataContext as TimerWindowOptions;
+			var timer = _settings.TimerWindows.FirstOrDefault(a => a.ID == temp.ID);
+
+			if (timer != null)
+			{
+				var s = sender as System.Windows.Controls.CheckBox;
+				temp.AlwaysOnTop = s.IsChecked.Value;
+				TimerWindowService.UpdateTimerWindow(temp);
+				(System.Windows.Application.Current as App).UpdateSpawnableTimerWindowContext(timer);
+
+				OnPropertyChanged(new DependencyPropertyChangedEventArgs(TopmostProperty, !s.IsChecked.Value, s.IsChecked.Value));
+			}
+		}
+
+		private void DeleteTimerWindow_Click(object sender, RoutedEventArgs e)
+		{
+			var temp = (sender as System.Windows.Controls.Button).DataContext as int?;
+			var timerToDelete = _settings.TimerWindows.FirstOrDefault(a => a.ID == temp.Value);
+
+			var messageBoxText = $"Are you sure that you want to delete your {timerToDelete.Title} window?";
+			var caption = "Are you sure?";
+			var button = (MessageBoxButton)Enum.Parse(typeof(MessageBoxButton), "YesNo");
+			var icon = (MessageBoxImage)Enum.Parse(typeof(MessageBoxImage), "Warning");
+			var defaultResult =
+				(MessageBoxResult)Enum.Parse(typeof(MessageBoxResult), "None");
+			var options = (System.Windows.MessageBoxOptions)Enum.Parse(typeof(System.Windows.MessageBoxOptions), "None");
+
+			// Show message box, passing the window owner if specified
+			MessageBoxResult result = System.Windows.MessageBox.Show(this, messageBoxText, caption, button, icon, defaultResult, options);
+
+			// Show the result
+			if (result == MessageBoxResult.Yes)
+			{
+				(App.Current as App).GetSpawnableTimerWindowBase(timerToDelete)?.Close();
+
+				if (temp != null && temp.HasValue)
+				{
+					if (TimerWindowService.DeleteTimerWindow(timerToDelete))
+					{
+						_settings.TimerWindows.Remove(timerToDelete);
+					}
+				}
+			}
+		}
+
+		private void LocationShare_SelectionChanged(object sender, SelectionChangedEventArgs e)
+		{
+			SaveConfig();
 		}
 	}
 }

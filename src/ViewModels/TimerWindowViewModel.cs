@@ -11,6 +11,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Windows;
 using System.Windows.Media;
 
 namespace EQTool.ViewModels
@@ -63,7 +64,8 @@ namespace EQTool.ViewModels
         }
 
         private long? _LastReadOffset = null;
-        public long? LastReadOffset
+
+		public long? LastReadOffset
         {
             get => _LastReadOffset;
             set
@@ -71,9 +73,9 @@ namespace EQTool.ViewModels
                 _LastReadOffset = value;
                 OnPropertyChanged();
             }
-        }
+		}
 
-        public void ClearYouSpells()
+		public void ClearYouSpells()
         {
             var itemstoremove = SpellList.Where(a => a.TargetName == EQSpells.SpaceYou).ToList();
             foreach (var item in itemstoremove)
@@ -232,7 +234,8 @@ namespace EQTool.ViewModels
                     RollOrder = rollorder + 1,
 					ExecutionTime = match.ExecutionTime,
 					SpellNameColor = new SolidColorBrush(_settings.SpellTimerNameColor),
-					ProgressBarColor = _colorService.GetColorFromSpellType(match.SpellType)
+					ProgressBarColor = _colorService.GetColorFromSpellType(match.SpellType),
+					DropShadowVisibility = _settings.ShowTimerDropShadows ? Visibility.Visible : Visibility.Collapsed
                 });
             });
         }

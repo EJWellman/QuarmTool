@@ -2,6 +2,7 @@
 using EQTool.Services;
 using EQTool.Shapes;
 using EQToolShared.Enums;
+using EQToolShared.ExtendedClasses;
 using EQToolShared.Map;
 using System;
 using System.Collections.Generic;
@@ -64,34 +65,34 @@ namespace EQTool.ViewModels
 
     }
 
-    public class MapViewModel : INotifyPropertyChanged
-    {
-        private readonly MapLoad mapLoad;
-        private readonly ActivePlayer activePlayer;
-        private readonly LoggingService loggingService;
-        private MatrixTransform Transform = new MatrixTransform();
-        private MatrixTransform EllipseTransform = new MatrixTransform();
-        private Point _initialMousePosition;
-        private Point _mouseuppoint;
-        private Point3D MapOffset = new Point3D(0, 0, 0);
-        private bool MapLoading = false;
-        private PlayerLocationCircle PlayerLocation;
-        public ObservableCollection<PlayerLocation> Players { get; set; }
-        private Canvas Canvas;
-        private float CurrentScaling = 1.0f;
-        private readonly float Zoomfactor = 1.1f;
-        private bool _dragging;
-        private UIElement _selectedElement;
-        private Vector _draggingDelta;
-        private bool TimerOpen = false;
-        private readonly TimersService timersService;
-        private bool CenterOnPlayer = false;
-        public Point CenterRelativeToCanvas = new Point(0, 0);
+	public class MapViewModel : INotifyPropertyChanged
+	{
+		private readonly MapLoad mapLoad;
+		private readonly ActivePlayer activePlayer;
+		private readonly LoggingService loggingService;
+		private MatrixTransform Transform = new MatrixTransform();
+		private MatrixTransform EllipseTransform = new MatrixTransform();
+		private Point _initialMousePosition;
+		private Point _mouseuppoint;
+		private Point3D MapOffset = new Point3D(0, 0, 0);
+		private bool MapLoading = false;
+		private PlayerLocationCircle PlayerLocation;
+		public ObservableCollection<PlayerLocation> Players { get; set; }
+		private Canvas Canvas;
+		private float CurrentScaling = 1.0f;
+		private readonly float Zoomfactor = 1.1f;
+		private bool _dragging;
+		private UIElement _selectedElement;
+		private Vector _draggingDelta;
+		private bool TimerOpen = false;
+		private readonly TimersService timersService;
+		private bool CenterOnPlayer = false;
+		public Point CenterRelativeToCanvas = new Point(0, 0);
 
-        public string MouseLocation => $"   {LastMouselocation.Y:0.##}, {LastMouselocation.X:0.##}";
+		public string MouseLocation => $"   {LastMouselocation.Y:0.##}, {LastMouselocation.X:0.##}";
 
 		private bool _ShowMouseLocation = false;
-			// => _ShowMouseLocation ? Visibility.Visible : Visibility.Hidden;
+		// => _ShowMouseLocation ? Visibility.Visible : Visibility.Hidden;
 		public Visibility ShowMouseLocation
 		{
 			get
@@ -105,41 +106,51 @@ namespace EQTool.ViewModels
 			}
 		}
 
-        public AABB AABB = new AABB();
+		public AABB AABB = new AABB();
 
-        public MapViewModel(MapLoad mapLoad, ActivePlayer activePlayer, LoggingService loggingService, TimersService timersService)
-        {
-            this.Players = new ObservableCollection<PlayerLocation>();
-            this.timersService = timersService;
-            this.mapLoad = mapLoad;
-            this.activePlayer = activePlayer;
-            this.loggingService = loggingService;
-        }
+		private EQToolSettings _settings;
+		public MapViewModel(MapLoad mapLoad, ActivePlayer activePlayer, LoggingService loggingService, TimersService timersService, EQToolSettings settings)
+		{
+			this.Players = new ObservableCollection<PlayerLocation>();
+			this.timersService = timersService;
+			this.mapLoad = mapLoad;
+			this.activePlayer = activePlayer;
+			this.loggingService = loggingService;
+			_settings = settings;
+		}
 
-        private TimeSpan _TimerValue = TimeSpan.FromMinutes(72);
-        public TimeSpan TimerValue
-        {
-            get => _TimerValue;
-            set
-            {
-                _TimerValue = value;
-                OnPropertyChanged();
-            }
-        }
+		public ObservableCollectionRange<TimerWindowOptions> TimerWindows
+		{
+			get
+			{
+				return _settings.TimerWindows;
+			}
+		}
 
-        private Point3D _Lastlocation = new Point3D(0, 0, 0);
-        public Point3D Lastlocation
-        {
-            get => _Lastlocation;
-            set
-            {
-                _Lastlocation = value;
-                OnPropertyChanged();
-                OnPropertyChanged(nameof(Title));
-            }
-        }
+		private TimeSpan _TimerValue = TimeSpan.FromMinutes(72);
+		public TimeSpan TimerValue
+		{
+			get => _TimerValue;
+			set
+			{
+				_TimerValue = value;
+				OnPropertyChanged();
+			}
+		}
 
-        public string Title => _ZoneName + "  v" + App.Version + $"   {Lastlocation.X:0.##}, {Lastlocation.Y:0.##}, {Lastlocation.Z:0.##}";
+		private Point3D _Lastlocation = new Point3D(0, 0, 0);
+		public Point3D Lastlocation
+		{
+			get => _Lastlocation;
+			set
+			{
+				_Lastlocation = value;
+				OnPropertyChanged();
+				OnPropertyChanged(nameof(Title));
+			}
+		}
+
+		public string Title => $"Map: {_ZoneName}  v{App.Version}   {Lastlocation.X:0.##}, {Lastlocation.Y:0.##}, {Lastlocation.Z:0.##}";
 
         private string _ZoneName = string.Empty;
 
@@ -384,10 +395,9 @@ namespace EQTool.ViewModels
             PlayerLocation.ArrowLine.Visibility = Visibility.Visible;
             PlayerLocation.Ellipse.Visibility = Visibility.Visible;
             PlayerLocation.PlayerName.Visibility = Visibility.Visible;
-            PlayerLocation.TrackingEllipse.Visibility = Visibility.Visible;
             MapViewModelService.UpdateLocation(new UpdateLocationData
             {
-                Trackingdistance = this.activePlayer?.Player?.TrackingDistance,
+                Trackingdistance = _settings.TrackingVisibility ? this.activePlayer?.Player?.TrackingDistance : 0,
                 CurrentScaling = CurrentScaling,
                 MapOffset = MapOffset,
                 Oldlocation = Lastlocation,
@@ -461,46 +471,6 @@ namespace EQTool.ViewModels
 				MoveMap(yScale * -1, xScale * -1);
 			}
 		}
-		private void CenterMapOnPlayer()
-        {
-            if (CenterOnPlayer)
-            {
-                Debug.WriteLine("C " + CenterRelativeToCanvas.ToString());
-                var centerinworldspace = Transform.Inverse.Transform(CenterRelativeToCanvas);
-                centerinworldspace.X += MapOffset.X;
-                centerinworldspace.Y += MapOffset.Y;
-                centerinworldspace.X *= -1;
-                centerinworldspace.Y *= -1;
-                // centerinworldspace = new Point(centerinworldspace.Y, centerinworldspace.X);
-                Debug.WriteLine("C1 " + centerinworldspace.ToString());
-                var loc = new Point(Lastlocation.X, Lastlocation.Y);
-                var delta = Point.Subtract(loc, centerinworldspace);
-                Debug.WriteLine("CD " + delta.ToString());
-                var translate = new TranslateTransform(delta.X, delta.Y);
-                Transform.Matrix = Transform.Matrix * translate.Value;
-                foreach (UIElement child in Canvas.Children)
-                {
-                    if (child is ArrowLine c)
-                    {
-                        var transform = new MatrixTransform();
-                        var translation = new TranslateTransform(Transform.Value.OffsetX, Transform.Value.OffsetY);
-                        transform.Matrix = c.RotateTransform.Value * translation.Value;
-                        c.RenderTransform = transform;
-                    }
-                    else if (child is Ellipse el)
-                    {
-                        var transform = new MatrixTransform();
-                        var translation = new TranslateTransform(Transform.Value.OffsetX, Transform.Value.OffsetY);
-                        transform.Matrix = translation.Value;
-                        el.RenderTransform = transform;
-                    }
-                    else
-                    {
-                        child.RenderTransform = Transform;
-                    }
-                }
-            }
-        }
         public void UpdateTimerWidgest()
         {
             var removewidgets = new List<MapWidget>();

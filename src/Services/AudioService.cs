@@ -18,14 +18,14 @@ namespace EQTool.Services
     {
         private readonly LogParser logParser;
         private readonly ActivePlayer activePlayer;
-        private readonly EQToolSettings eQToolSettings;
+        private readonly EQToolSettings _settings;
         private readonly List<ChainAudioData> chainDatas = new List<ChainAudioData>();
 
         public AudioService(LogParser logParser, ActivePlayer activePlayer, EQToolSettings eQToolSettings)
         {
             this.logParser = logParser;
             this.activePlayer = activePlayer;
-            this.eQToolSettings = eQToolSettings;
+			_settings = eQToolSettings;
             this.logParser.InvisEvent += LogParser_InvisEvent;
             this.logParser.EnrageEvent += LogParser_EnrageEvent;
             this.logParser.LevEvent += LogParser_LevEvent;
@@ -188,15 +188,15 @@ namespace EQTool.Services
             System.Threading.Tasks.Task.Factory.StartNew(() =>
             {
                 var synth = new SpeechSynthesizer();
-                if (string.IsNullOrWhiteSpace(this.eQToolSettings.SelectedVoice))
+                if (string.IsNullOrWhiteSpace(this._settings.SelectedVoice))
                 {
                     synth.SetOutputToDefaultAudioDevice();
                 }
                 else
                 {
-                    synth.SelectVoice(this.eQToolSettings.SelectedVoice);
+                    synth.SelectVoice(this._settings.SelectedVoice);
                 }
-
+				synth.Volume = this._settings.AudioTriggerVolume;
                 synth.Speak(text);
             });
         }

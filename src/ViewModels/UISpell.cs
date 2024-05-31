@@ -261,6 +261,20 @@ namespace EQTool.ViewModels
             }
         }
 
+		private Visibility _dropShadowVisibility = Visibility.Collapsed;
+		public Visibility DropShadowVisibility
+		{
+			get
+			{
+				return _dropShadowVisibility;
+			}
+			set
+			{
+				_dropShadowVisibility = value;
+				OnPropertyChanged();
+			}
+		}
+
         public string SecondsLeftOnSpellPretty
         {
             get
