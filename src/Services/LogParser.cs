@@ -112,7 +112,7 @@ namespace EQTool.Services
 
         public class PlayerZonedEventArgs : EventArgs
         {
-            public string Zone { get; set; }
+			public PlayerZonedInfo ZoneInfo { get; set;}
         }
         public class PlayerLocationEventArgs : EventArgs
         {
@@ -470,14 +470,14 @@ namespace EQTool.Services
 
                 _levelLogParse.MatchLevel(message);
                 var matchedzone = ZoneParser.Match(message);
-                if (!string.IsNullOrWhiteSpace(matchedzone))
+                if (matchedzone != null)
                 {
-                    var b4matchedzone = matchedzone;
+                    string b4matchedzone = matchedzone.ZoneName;
 
 					if (!string.IsNullOrWhiteSpace(_activePlayer.Player?.LastZoneEntered) 
-						&& ZoneParser.CheckWhoAgainstPreviousZone(message, matchedzone, _activePlayer.Player?.LastZoneEntered))
+						&& ZoneParser.CheckWhoAgainstPreviousZone(message, matchedzone.ZoneName, _activePlayer.Player?.LastZoneEntered))
 					{
-						matchedzone = _activePlayer.Player?.LastZoneEntered;
+						matchedzone.ZoneName = _activePlayer.Player?.LastZoneEntered;
 					}
 					else
 					{
@@ -487,15 +487,15 @@ namespace EQTool.Services
 						}
 					}
 
-					matchedzone = ZoneParser.TranslateToMapName(matchedzone);
-                    Debug.WriteLine($"Zone Change Detected {matchedzone}--{b4matchedzone}");
+					matchedzone.ZoneName = ZoneParser.TranslateToMapName(matchedzone.ZoneName);
+                    Debug.WriteLine($"Zone Change Detected {matchedzone.ZoneName}--{b4matchedzone}");
                     var p = _activePlayer.Player;
                     if (p != null)
                     {
-                        p.Zone = matchedzone;
+                        p.Zone = matchedzone.ZoneName;
                         _toolSettingsLoad.Save(_settings);
                     }
-                    PlayerZonedEvent?.Invoke(this, new PlayerZonedEventArgs { Zone = matchedzone });
+                    PlayerZonedEvent?.Invoke(this, new PlayerZonedEventArgs { ZoneInfo = matchedzone });
                     return;
                 }
             }

@@ -193,18 +193,18 @@ namespace EQTool.ViewModels
             CenterMapOnPlayer(Lastlocation);
         }
 
-        public bool LoadMap(string zone, Canvas canvas)
+        public bool LoadMap(PlayerZonedInfo zoneInfo, Canvas canvas)
         {
             if (MapLoading)
             {
                 return false;
             }
-            zone = ZoneParser.TranslateToMapName(zone);
-            if (string.IsNullOrWhiteSpace(zone))
+			zoneInfo.ZoneName = ZoneParser.TranslateToMapName(zoneInfo.ZoneName);
+            if (string.IsNullOrWhiteSpace(zoneInfo.ZoneName))
             {
-                zone = "freportw";
+				zoneInfo.ZoneName = "freportw";
             }
-            if (zone == ZoneName)
+            if (zoneInfo.ZoneName == ZoneName && !zoneInfo.ForceUpdate)
             {
                 return false;
             }
@@ -214,13 +214,13 @@ namespace EQTool.ViewModels
             stop.Start();
             try
             {
-                var map = mapLoad.Load(zone);
+                var map = mapLoad.Load(zoneInfo.ZoneName);
                 if (map.Labels.Any() || map.Lines.Any())
                 {
                     Reset();
                     AABB = map.AABB;
-                    ZoneName = zone;
-                    Debug.WriteLine($"Loading: {zone}");
+                    ZoneName = zoneInfo.ZoneName;
+                    Debug.WriteLine($"Loading: {zoneInfo.ZoneName}");
                     MapOffset = map.Offset;
                     var linethickness = MapViewModelService.MapLinethickness(this.AABB);
                     foreach (var item in map.Lines)
@@ -244,8 +244,8 @@ namespace EQTool.ViewModels
                     Debug.WriteLine($"Labels: {map.Labels.Count}");
                     var locationdotsize = MapViewModelService.PlayerEllipsesSize(this.AABB);
                     var locationthickness = MapViewModelService.PlayerEllipsesThickness(this.AABB);
-                    var zoneLabelFontSize = MapViewModelService.ZoneLabelFontSize(this.AABB);
-                    var otherLabelFontSize = MapViewModelService.OtherLabelFontSize(this.AABB);
+                    var zoneLabelFontSize = MapViewModelService.ZoneLabelFontSize(this.AABB) * _settings.MapLabelMultiplier;
+                    var otherLabelFontSize = MapViewModelService.OtherLabelFontSize(this.AABB) * _settings.MapLabelMultiplier;
                     foreach (var item in map.Labels)
                     {
                         var text = new TextBlock
@@ -311,7 +311,7 @@ namespace EQTool.ViewModels
             finally
             {
                 stop.Stop();
-                Debug.WriteLine($"Time to load {zone} - {stop.ElapsedMilliseconds}ms");
+                Debug.WriteLine($"Time to load {zoneInfo.ZoneName} - {stop.ElapsedMilliseconds}ms");
                 MapLoading = false;
             }
         }
@@ -337,7 +337,6 @@ namespace EQTool.ViewModels
                 Name = signalrPlayer.Name
             };
         }
-
 
         private void RemoveFromCanvas(PlayerLocationCircle playerLocationCircle)
         {
@@ -367,9 +366,13 @@ namespace EQTool.ViewModels
             {
                 z = "freportw";
             }
-            return LoadMap(z, canvas);
+			PlayerZonedInfo zoneInfo = new PlayerZonedInfo()
+			{
+				ForceUpdate = false,
+				ZoneName = z
+			};
+            return LoadMap(zoneInfo, canvas);
         }
-
 
         private static T Clamp<T>(T val, T min, T max) where T : IComparable<T>
         {

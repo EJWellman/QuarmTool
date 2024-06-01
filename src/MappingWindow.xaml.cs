@@ -98,7 +98,10 @@ namespace EQTool
 
 		private void _zealMessageService_OnPlayerMessageReceived(object sender, ZealMessageService.PlayerMessageReceivedEventArgs e)
 		{
-			appDispatcher.DispatchUI(() => mapViewModel.UpdateLocation(new Point3D(e.Message.Data.Position.X, e.Message.Data.Position.Y, e.Message.Data.Position.Z), e.Message.Data.heading));
+			if (_settings.ZealEnabled && _settings.ZealMap_AutoUpdate)
+			{
+				appDispatcher.DispatchUI(() => mapViewModel.UpdateLocation(new Point3D(e.Message.Data.Position.X, e.Message.Data.Position.Y, e.Message.Data.Position.Z), e.Message.Data.heading));
+			}
 		}
 
 		private void ToggleMouseLocation_Event(object sender, MouseEventArgs e)
@@ -235,7 +238,7 @@ namespace EQTool
 
         private void LogParser_PlayerZonedEvent(object sender, LogParser.PlayerZonedEventArgs e)
         {
-            if (mapViewModel.LoadMap(e.Zone, Map))
+            if (mapViewModel.LoadMap(e.ZoneInfo, Map))
             {
                 Map.ZoneName = mapViewModel.ZoneName;
                 Map.Height = Math.Abs(mapViewModel.AABB.MaxHeight);

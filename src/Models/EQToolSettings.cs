@@ -214,6 +214,19 @@ namespace EQTool.Models
 			set => _MapWindowState = value ?? new WindowState();
 		}
 
+		private double _mapLabelMultiplier = 1.0;
+		public double MapLabelMultiplier
+		{
+			get
+			{
+				return _mapLabelMultiplier;
+			}
+			set
+			{
+				_mapLabelMultiplier = value;
+				OnPropertyChanged();
+			}
+		}
 
 		private bool _TrackingVisibility = true;
 		public bool TrackingVisibility
@@ -338,6 +351,49 @@ namespace EQTool.Models
 				_AudioTriggerVolume = value;
 			}
 		}
+
+		#region Zeal
+		private bool _zealEnabled;
+		public bool ZealEnabled
+		{
+			get
+			{
+				return _zealEnabled;
+			}
+			set
+			{
+				_zealEnabled = value;
+				OnPropertyChanged();
+			}
+		}
+		private bool _zealMap_AutoUpdate;
+		public bool ZealMap_AutoUpdate
+		{
+			get
+			{
+				return _zealMap_AutoUpdate;
+			}
+			set
+			{
+				_zealMap_AutoUpdate = value;
+				OnPropertyChanged();
+			}
+		}
+		private bool _zealMobInfo_AutoUpdate;
+		public bool ZealMobInfo_AutoUpdate
+		{
+			get
+			{
+				return _zealMobInfo_AutoUpdate;
+			}
+			set
+			{
+				_zealMobInfo_AutoUpdate = value;
+				OnPropertyChanged();
+			}
+		}
+
+		#endregion
 
 		public event PropertyChangedEventHandler PropertyChanged;
 

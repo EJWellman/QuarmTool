@@ -50,7 +50,7 @@ namespace EQTool.Services
 				var settings = ctx.Resolve<ZealSettings>();
 				var processMonitor = ctx.Resolve<ProcessMonitor>();
 				ZealPipeReader pipeReader = ctx.Resolve<ZealPipeReader>();
-				return new ZealMessageService(processMonitor, settings, pipeReader);
+				return new ZealMessageService(processMonitor, pipeReader);
 			}).As<ZealMessageService>().SingleInstance();
 			builder.RegisterType<ZealMessageService>().AsSelf().SingleInstance();
 

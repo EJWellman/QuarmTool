@@ -198,6 +198,20 @@ namespace EQTool.Models
 			}
 		}
 
+		private string _LastTarget = string.Empty;
+		public string LastTarget
+		{
+			get
+			{
+				return _LastTarget;
+			}
+			set
+			{
+				_LastTarget = value;
+				OnPropertyChanged();
+			}
+		}
+
         private bool _SpellDebuffShare;
         public bool SpellDebuffShare
         {

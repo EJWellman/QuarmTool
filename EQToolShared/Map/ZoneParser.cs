@@ -18,6 +18,12 @@ namespace EQToolShared.Map
 		public string Name { get; set; }
 	}
 
+	public class PlayerZonedInfo
+	{
+		public string ZoneName { get; set; }
+		public bool ForceUpdate { get; set; } = false;
+	}
+
 	public static class ZoneParser
 	{
 		private const string Youhaveentered = "You have entered ";
@@ -1152,17 +1158,29 @@ namespace EQToolShared.Map
 			return !string.IsNullOrWhiteSpace(messageZone);
 		}
 
-		public static string Match(string message)
+		public static PlayerZonedInfo Match(string message)
 		{
+			PlayerZonedInfo ret = new PlayerZonedInfo();
+			if (string.IsNullOrWhiteSpace(message))
+			{
+				return null;
+			}
+			else if(message.Contains(" FORCECLEAR"))
+			{
+				ret.ForceUpdate = true;
+				message = message.Replace(" FORCECLEAR", string.Empty);
+			}
+
 			//Debug.WriteLine($"ZoneParse: "+ message);
 			if (message.StartsWith(Therearenoplayers) || message.StartsWith(Youhaveenteredareapvp))
 			{
-				return string.Empty;
+				return null;
 			}
 			else if (message.StartsWith(Youhaveentered))
 			{
 				message = message.Replace(Youhaveentered, string.Empty).Trim().TrimEnd('.').ToLower();
-				return message;
+				ret.ZoneName = message;
+				return ret;
 			}
 			else if (message.StartsWith(ThereAre))
 			{
@@ -1173,7 +1191,8 @@ namespace EQToolShared.Map
 					message = message.Substring(inindex + spaceinspace.Length).Trim().TrimEnd('.').ToLower();
 					if (message != "everquest")
 					{
-						return message;
+						ret.ZoneName = message;
+						return ret;
 					}
 				}
 			}
@@ -1186,12 +1205,13 @@ namespace EQToolShared.Map
 					message = message.Substring(inindex + spaceinspace.Length).Trim().TrimEnd('.').ToLower();
 					if (message != "everquest")
 					{
-						return message;
+						ret.ZoneName = message;
+						return ret;
 					}
 				}
 			}
 
-			return string.Empty;
+			return null;
 		}
 	}
 }
