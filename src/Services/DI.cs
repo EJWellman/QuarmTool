@@ -3,6 +3,9 @@ using Autofac.Features.ResolveAnything;
 using EQTool.Factories;
 using EQTool.Models;
 using EQTool.ViewModels;
+using ZealPipes.Common;
+using ZealPipes.Services;
+using ZealPipes.Services.Helpers;
 
 namespace EQTool.Services
 {
@@ -38,6 +41,19 @@ namespace EQTool.Services
 			builder.RegisterType<CustomOverlayService>().AsSelf().SingleInstance();
 			builder.RegisterType<TimerWindowService>().AsSelf().SingleInstance();
 			builder.RegisterType<TimerWindowFactory>().AsSelf().SingleInstance();
+			//Zeal Pipes
+			builder.RegisterType<ProcessMonitor>().AsSelf().SingleInstance();
+			builder.RegisterType<ZealPipeReader>().AsSelf().SingleInstance();
+			builder.RegisterType<ZealSettings>().AsSelf().SingleInstance();
+			builder.Register(ctx =>
+			{
+				var settings = ctx.Resolve<ZealSettings>();
+				var processMonitor = ctx.Resolve<ProcessMonitor>();
+				ZealPipeReader pipeReader = ctx.Resolve<ZealPipeReader>();
+				return new ZealMessageService(processMonitor, pipeReader);
+			}).As<ZealMessageService>().SingleInstance();
+			builder.RegisterType<ZealMessageService>().AsSelf().SingleInstance();
+
 
             return builder.Build();
         }

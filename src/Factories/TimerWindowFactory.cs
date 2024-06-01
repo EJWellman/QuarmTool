@@ -65,10 +65,10 @@ namespace EQTool.Factories
 				WindowRect = rect,
 			};
 
-			var logParser = App.Container.Resolve<LogParser>();
-			var playerTrackerService = App.Container.Resolve<PlayerTrackerService>();
-			var quarmDataService = App.Container.Resolve<QuarmDataService>();
-			var loggingService = App.Container.Resolve<LoggingService>();
+			var logParser = App.container.Resolve<LogParser>();
+			var playerTrackerService = App.container.Resolve<PlayerTrackerService>();
+			var quarmDataService = App.container.Resolve<QuarmDataService>();
+			var loggingService = App.container.Resolve<LoggingService>();
 
 			var newTimerWindow = new BaseTimerWindow(playerTrackerService, _settings, newTimerWindowViewModel, logParser, _toolSettingsLoad, _activePlayer, quarmDataService, loggingService)
 			{

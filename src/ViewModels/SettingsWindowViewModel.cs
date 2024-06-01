@@ -111,6 +111,59 @@ namespace EQTool.ViewModels
 			}
 		}
 
+		public double MapLabelMultiplier
+		{
+			get
+			{
+				return _settings.MapLabelMultiplier;
+			}
+			set
+			{
+				_settings.MapLabelMultiplier = value;
+				OnPropertyChanged();
+			}
+		}
+
+		#region Zeal
+		public bool ZealEnabled
+		{
+			get
+			{
+				return _settings.ZealEnabled;
+			}
+			set
+			{
+				_settings.ZealEnabled = value;
+				OnPropertyChanged();
+			}
+		}
+		public bool ZealMap_AutoUpdate
+		{
+			get
+			{
+				return _settings.ZealMap_AutoUpdate;
+			}
+			set
+			{
+				_settings.ZealMap_AutoUpdate = value;
+				OnPropertyChanged();
+			}
+		}
+		public bool ZealMobInfo_AutoUpdate
+		{
+			get 
+			{
+				return _settings.ZealMobInfo_AutoUpdate;
+			}
+			set
+			{
+				_settings.ZealMobInfo_AutoUpdate = value;
+				OnPropertyChanged();
+			}
+		}
+
+		#endregion
+
 		public Color EnrageOverlayColor 
 		{
 			get

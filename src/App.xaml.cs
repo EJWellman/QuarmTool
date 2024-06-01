@@ -19,6 +19,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Media;
+using ZealPipes.Services;
 
 namespace EQTool
 {
@@ -26,7 +27,7 @@ namespace EQTool
     {
         public static HttpClient httpclient = new HttpClient();
 
-        public static IContainer Container;
+        public static IContainer container;
         private System.Windows.Forms.NotifyIcon SystemTrayIcon;
 
         private System.Windows.Forms.MenuItem MapMenuItem;
@@ -38,7 +39,8 @@ namespace EQTool
         private System.Windows.Forms.MenuItem SettingsMenuItem;
         private System.Windows.Forms.MenuItem GroupSuggestionsMenuItem;
         private System.Windows.Forms.MenuItem MobInfoMenuItem;
-        private LogParser logParser => Container.Resolve<LogParser>();
+        private LogParser logParser => container.Resolve<LogParser>();
+		private ZealMessageService _zealMessageService => container.Resolve<ZealMessageService>();
         private System.Timers.Timer UITimer;
         private PlayerTrackerService PlayerTrackerService;
         private ZoneActivityTrackingService ZoneActivityTrackingService;
@@ -55,7 +57,7 @@ namespace EQTool
             {
                 if (_EQToolSettings == null)
                 {
-                    _EQToolSettings = Container.Resolve<EQToolSettings>();
+                    _EQToolSettings = container.Resolve<EQToolSettings>();
                 }
                 return _EQToolSettings;
             }
@@ -125,16 +127,16 @@ namespace EQTool
                     Server = server
                 };
                 if (msg.Message.Contains("Server timeout (30000.00ms) elapsed without receiving a message from the server.") ||
-                    msg.Message.Contains("The 'InvokeCoreAsync' method cannot be called") ||
-                     msg.Message.Contains("The remote party closed the WebSocket connection") ||
-                     msg.Message.Contains("An internal WebSocket error occurred.")
+						msg.Message.Contains("The 'InvokeCoreAsync' method cannot be called") ||
+						msg.Message.Contains("The remote party closed the WebSocket connection") ||
+						msg.Message.Contains("An internal WebSocket error occurred.")
                     )
                 {
                     return;
                 }
-                var msagasjson = Newtonsoft.Json.JsonConvert.SerializeObject(msg);
-                var content = new StringContent(msagasjson, Encoding.UTF8, "application/json");
-                var result = httpclient.PostAsync("https://pigparse.azurewebsites.net/api/eqtool/exception", content).Result;
+                //var msagasjson = Newtonsoft.Json.JsonConvert.SerializeObject(msg);
+                //var content = new StringContent(msagasjson, Encoding.UTF8, "application/json");
+                //var result = httpclient.PostAsync("https://pigparse.azurewebsites.net/api/eqtool/exception", content).Result;
             }
             catch { }
         }
@@ -144,19 +146,19 @@ namespace EQTool
 
             AppDomain.CurrentDomain.UnhandledException += (s, e) =>
             {
-				var server = Container?.Resolve<ActivePlayer>()?.Player?.Server;
+				var server = container?.Resolve<ActivePlayer>()?.Player?.Server;
                 LogUnhandledException((Exception)e.ExceptionObject, "AppDomain.CurrentDomain.UnhandledException", server);
             };
 
             DispatcherUnhandledException += (s, e) =>
             {
-                var server = Container?.Resolve<ActivePlayer>()?.Player?.Server;
+                var server = container?.Resolve<ActivePlayer>()?.Player?.Server;
                 LogUnhandledException(e.Exception, "Application.Current.DispatcherUnhandledException", server);
             };
 
             TaskScheduler.UnobservedTaskException += (s, e) =>
             {
-                var server = Container?.Resolve<ActivePlayer>()?.Player?.Server;
+                var server = container?.Resolve<ActivePlayer>()?.Player?.Server;
                 LogUnhandledException(e.Exception, "TaskScheduler.UnobservedTaskException", server);
             };
         }
@@ -197,7 +199,7 @@ namespace EQTool
             SetupExceptionHandling();
             if (!WaitForEQToolToStop())
             {
-                System.Windows.MessageBox.Show("Another EQTool is currently running. You must shut that one down first!", "Multiple EQTools running!", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Error);
+				System.Windows.MessageBox.Show("Another QuarmTool is currently running. You must shut that one down first!", "Multiple QuarmTools running!", MessageBoxButton.OK, MessageBoxImage.Error);
                 App.Current.Shutdown();
                 return;
             }
@@ -207,7 +209,7 @@ namespace EQTool
                 var path = Path.Combine(curr, "eqgame.exe");
                 if (File.Exists(path))
                 {
-                    System.Windows.MessageBox.Show("Pigparse does not support running from in the EQ directory. Please move the pigparse and try again", "Pigparse Invalid Folder!", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Error);
+					System.Windows.MessageBox.Show("QuarmTool does not support running from in the EQ directory. Please move QuarmTool and try again", "QuarmTool Invalid Folder!", MessageBoxButton.OK, MessageBoxImage.Error);
                     App.Current.Shutdown();
                     return;
                 }
@@ -239,14 +241,15 @@ namespace EQTool
         }
 
         private void InitStuff()
-		{
-			Container = DI.Init();
-			UITimer = new System.Timers.Timer(1000 * 60);
+        {
+            container = DI.Init();
+
+            UITimer = new System.Timers.Timer(1000 * 60);
 #if !DEBUG
             UITimer.Elapsed += UITimer_Elapsed;
             UITimer.Enabled = true;
 #endif
-			Container.Resolve<LoggingService>().Log(string.Empty, EventType.StartUp, null);
+			container.Resolve<LoggingService>().Log(string.Empty, EventType.StartUp, null);
 			SettingsMenuItem = new System.Windows.Forms.MenuItem("Settings", ToggleSettingsWindow);
 			var standardgroup = new System.Windows.Forms.MenuItem("Standard Groups", CreateStandardGroup);
 			var hotclericsamegroup = new System.Windows.Forms.MenuItem("HOT Clerics Same Group", CreateHOTClericsSameGroup);
@@ -357,7 +360,7 @@ namespace EQTool
 				}
 				if (_settings.TimerWindows.Any(tw => !tw.Closed))
 				{
-					_timerWindowFactory = Container.Resolve<TimerWindowFactory>();
+					_timerWindowFactory = container.Resolve<TimerWindowFactory>();
 
 					var windows = _settings.TimerWindows.Where(t => !t.Closed);
 					foreach (var timer in windows)
@@ -372,34 +375,34 @@ namespace EQTool
 					}
 				}
 			}
-			signalrPlayerHub = Container.Resolve<ISignalrPlayerHub>();
+			signalrPlayerHub = container.Resolve<ISignalrPlayerHub>();
 
-			PlayerTrackerService = Container.Resolve<PlayerTrackerService>();
-			ZoneActivityTrackingService = Container.Resolve<ZoneActivityTrackingService>();
-			audioService = Container.Resolve<AudioService>();
-			logParser.QuakeEvent += LogParser_QuakeEvent;
-			App.Current.Resources["GlobalFontSize"] = (double)(this._settings?.FontSize ?? 12);
-			((App)System.Windows.Application.Current).UpdateBackgroundOpacity("MyWindowStyleDPS", this._settings.DpsWindowState.Opacity.Value);
-			((App)System.Windows.Application.Current).UpdateBackgroundOpacity("MyWindowStyleMap", this._settings.MapWindowState.Opacity.Value);
-			((App)System.Windows.Application.Current).UpdateBackgroundOpacity("MyWindowStyleTrigger", this._settings.SpellWindowState.Opacity.Value);
-		}
+            PlayerTrackerService = container.Resolve<PlayerTrackerService>();
+            ZoneActivityTrackingService = container.Resolve<ZoneActivityTrackingService>();
+            audioService = container.Resolve<AudioService>();
+            logParser.QuakeEvent += LogParser_QuakeEvent;
+            App.Current.Resources["GlobalFontSize"] = (double)(_settings?.FontSize ?? 12);
+            ((App)System.Windows.Application.Current).UpdateBackgroundOpacity("MyWindowStyleDPS", _settings.DpsWindowState.Opacity.Value);
+            ((App)System.Windows.Application.Current).UpdateBackgroundOpacity("MyWindowStyleMap", _settings.MapWindowState.Opacity.Value);
+            ((App)System.Windows.Application.Current).UpdateBackgroundOpacity("MyWindowStyleTrigger", _settings.SpellWindowState.Opacity.Value);
 
-		private void GenerateTimerMenu(MenuItem timersMenu)
-		{
-			foreach (var timer in _settings.TimerWindows)
-			{
-				var item = new MenuItem(timer.Title, OpenTimerWindow);
-				item.Tag = timer.ID;
+			_zealMessageService.StartProcessing();
+        }
+        private void GenerateTimerMenu(MenuItem timersMenu)
+        {
+            foreach (var timer in _settings.TimerWindows)
+            {
+                var item = new MenuItem(timer.Title, OpenTimerWindow);
+                item.Tag = timer.ID;
 
-				timersMenu.MenuItems.Add(item);
-			}
-			if (timersMenu.MenuItems.Count == 0)
-			{
-				timersMenu.MenuItems.Add(new MenuItem("No Timers Available"));
-			}
-		}
-
-		public void UpdateBackgroundOpacity(string name, double opacity)
+                timersMenu.MenuItems.Add(item);
+            }
+            if (timersMenu.MenuItems.Count == 0)
+            {
+                timersMenu.MenuItems.Add(new MenuItem("No Timers Available"));
+            }
+        }
+        public void UpdateBackgroundOpacity(string name, double opacity)
         {
             var newcolor = (SolidColorBrush)new BrushConverter().ConvertFrom("#1a1919");
             newcolor.Opacity = opacity;
@@ -411,7 +414,7 @@ namespace EQTool
 
         private void LogParser_QuakeEvent(object sender, LogParser.QuakeArgs e)
         {
-            Container.Resolve<PigParseApi>().SendQuake();
+            container.Resolve<PigParseApi>().SendQuake();
         }
 
         [DllImport("user32.dll")]
@@ -437,7 +440,7 @@ namespace EQTool
         private bool updatecalled = false;
         private void UITimer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
         {
-            var dispatcher = Container.Resolve<IAppDispatcher>();
+            var dispatcher = container.Resolve<IAppDispatcher>();
             dispatcher.DispatchUI(() =>
             {
                 if (updatecalled)
@@ -448,8 +451,8 @@ namespace EQTool
                 try
                 {
                     var idletime = GetIdleTime();
-                    var spellstuff = Container.Resolve<SpellWindowViewModel>();
-                    var logParser = Container.Resolve<LogParser>();
+                    var spellstuff = container.Resolve<SpellWindowViewModel>();
+                    var logParser = container.Resolve<LogParser>();
                     //if (spellstuff != null)
                     //{
                     //    if (spellstuff.SpellList.Count() < 2 && (DateTime.UtcNow - logParser.LastYouActivity).TotalMinutes > 10 && idletime.TotalMinutes > 10)
@@ -583,7 +586,7 @@ namespace EQTool
                 else
                 {
                     w?.Close();
-                    w = Container.Resolve<T>();
+                    w = container.Resolve<T>();
                     WindowList.Add(w);
                     w.Closed += (se, ee) =>
                     {
@@ -611,7 +614,7 @@ namespace EQTool
             {
                 m.Checked = true;
                 w?.Close();
-                w = Container.Resolve<T>();
+                w = container.Resolve<T>();
                 WindowList.Add(w);
                 w.Closed += (se, ee) =>
                 {
@@ -779,14 +782,15 @@ namespace EQTool
 
 		private void OnExit(object sender, EventArgs e)
         {
-            System.Windows.Application.Current.Shutdown();
+			_zealMessageService.StopProcessing();
+            Current.Shutdown();
         }
 
 		public void OpenTimerWindow(object sender, EventArgs e)
 		{
 			if(_timerWindowFactory == null)
 			{
-				_timerWindowFactory = Container.Resolve<TimerWindowFactory>();
+				_timerWindowFactory = container.Resolve<TimerWindowFactory>();
 			}
 
 			if((sender as System.Windows.Controls.MenuItem)?.DataContext != null)

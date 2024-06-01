@@ -169,11 +169,6 @@ namespace EQTool
             _SettingsWindowData.IsLoggingEnabled = FindEq.TryCheckLoggingEnabled(_settings.DefaultEqDirectory) ?? false;
         }
 
-        private void fontsizescombobox_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
-        {
-            SaveConfig();
-        }
-
         private void EqFolderButtonClicked(object sender, RoutedEventArgs e)
         {
             var descriptiontext = "Select Project 1999 EQ Directory";
@@ -238,9 +233,9 @@ namespace EQTool
             catch { }
             TryUpdateSettings();
             TryCheckLoggingEnabled();
-        }
+		}
 
-        private void Savesettings(object sender, RoutedEventArgs e)
+		private void SaveSettings(object sender, RoutedEventArgs e)
         {
             SaveConfig();
         }
@@ -826,11 +821,6 @@ namespace EQTool
                 }
             });
         }
-
-        private void CHTextBox_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            this.SaveConfig();
-        }
         private void SaveAlwaysOntopCheckBoxSettings(object sender, RoutedEventArgs e)
         {
             SaveConfig();
@@ -1204,7 +1194,16 @@ namespace EQTool
 		private void ClearCachedMapsClicked(object sender, RoutedEventArgs e)
 		{
 			_mapLoad.ClearCachedMaps();
-        }
+			var player = _SettingsWindowData.ActivePlayer.Player;
+			if (player != null)
+			{
+				var t = DateTime.Now;
+				var format = "ddd MMM dd HH:mm:ss yyyy";
+				var msg = "[" + t.ToString(format) + "] You have entered " + player.Zone + " FORCECLEAR";
+				_logParser.Push(msg);
+				SaveConfig();
+			}
+		}
 
 		private void CreateTimerWindow_Click(object sender, RoutedEventArgs e)
 		{
@@ -1269,11 +1268,6 @@ namespace EQTool
 					}
 				}
 			}
-		}
-
-		private void LocationShare_SelectionChanged(object sender, SelectionChangedEventArgs e)
-		{
-			SaveConfig();
 		}
 	}
 }

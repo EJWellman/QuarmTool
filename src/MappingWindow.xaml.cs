@@ -11,6 +11,9 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Media.Media3D;
+using ZealPipes.Common.Models;
+using ZealPipes.Services;
 
 namespace EQTool
 {
@@ -26,6 +29,7 @@ namespace EQTool
 		private readonly EQToolSettings _settings;
 		private QuarmDataService _quarmDataService;
 		private TimerWindowFactory _timerWindowFactory;
+		private ZealMessageService _zealMessageService;
 
 		public MappingWindow(
             ISignalrPlayerHub signalrPlayerHub,
@@ -38,7 +42,8 @@ namespace EQTool
             IAppDispatcher appDispatcher,
             LoggingService loggingService,
 			QuarmDataService quarmDataService,
-			TimerWindowFactory timerWindowFactory) : base(settings.MapWindowState, toolSettingsLoad, settings)
+			TimerWindowFactory timerWindowFactory,
+			ZealMessageService zealMessageService) : base(settings.MapWindowState, toolSettingsLoad, settings)
         {
             loggingService.Log(string.Empty, EventType.OpenMap, activePlayer?.Player?.Server);
             this.activePlayer = activePlayer;
@@ -48,8 +53,9 @@ namespace EQTool
             this.logParser = logParser;
 			_quarmDataService = quarmDataService;
 			_timerWindowFactory = timerWindowFactory;
-			DataContext = this.mapViewModel = mapViewModel;
 			_settings = settings;
+			_zealMessageService = zealMessageService;
+			DataContext = this.mapViewModel = mapViewModel;
             InitializeComponent();
             base.Init();
             _ = mapViewModel.LoadDefaultMap(Map);
@@ -68,6 +74,7 @@ namespace EQTool
 			ContextMenuOpening += Map_TimerMenu_OpenedEvent;
             Map.TimerMenu_ClosedEvent += Map_TimerMenu_ClosedEvent;
             Map.TimerMenu_OpenedEvent += Map_TimerMenu_OpenedEvent;
+			_zealMessageService.OnPlayerMessageReceived += _zealMessageService_OnPlayerMessageReceived;
             this.signalrPlayerHub.PlayerLocationEvent += SignalrPlayerHub_PlayerLocationEvent;
             this.signalrPlayerHub.PlayerDisconnected += SignalrPlayerHub_PlayerDisconnected;
             UITimer = new System.Timers.Timer(1000);
@@ -86,6 +93,14 @@ namespace EQTool
 				item.Click += (App.Current as App).OpenTimerWindow;
 
 				TimerWindowsMenu.Items.Add(item);
+			}
+		}
+
+		private void _zealMessageService_OnPlayerMessageReceived(object sender, ZealMessageService.PlayerMessageReceivedEventArgs e)
+		{
+			if (_settings.ZealEnabled && _settings.ZealMap_AutoUpdate)
+			{
+				appDispatcher.DispatchUI(() => mapViewModel.UpdateLocation(new Point3D(e.Message.Data.Position.X, e.Message.Data.Position.Y, e.Message.Data.Position.Z), e.Message.Data.heading));
 			}
 		}
 
@@ -223,7 +238,7 @@ namespace EQTool
 
         private void LogParser_PlayerZonedEvent(object sender, LogParser.PlayerZonedEventArgs e)
         {
-            if (mapViewModel.LoadMap(e.Zone, Map))
+            if (mapViewModel.LoadMap(e.ZoneInfo, Map))
             {
                 Map.ZoneName = mapViewModel.ZoneName;
                 Map.Height = Math.Abs(mapViewModel.AABB.MaxHeight);

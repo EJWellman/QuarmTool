@@ -126,7 +126,7 @@ namespace EQTool.Services
 			{
 				Directory.GetFiles(cachedMapsFullFolderPath).ToList().ForEach(File.Delete);
 
-				Load(_activePlayer.Player.LastZoneEntered);
+				//Load(_activePlayer.Player.LastZoneEntered);
 			}
 
 		}
