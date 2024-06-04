@@ -36,7 +36,7 @@ namespace EQTool.ViewModels
                 TrackSkills.Add(i);
             }
 
-            foreach (var item in EQToolShared.Map.ZoneParser.Zones.OrderBy(a => a))
+            foreach (var item in EQToolShared.Map.ZoneParser.Zones.Distinct().OrderBy(a => a))
             {
                 Zones.Add(item);
             }
@@ -67,7 +67,8 @@ namespace EQTool.ViewModels
                 App.Current.Resources["GlobalFontSize"] = (double)value;
                 ((App)System.Windows.Application.Current).UpdateBackgroundOpacity("MyWindowStyleDPS", this._settings.DpsWindowState.Opacity.Value);
                 ((App)System.Windows.Application.Current).UpdateBackgroundOpacity("MyWindowStyleMap", this._settings.MapWindowState.Opacity.Value);
-                ((App)System.Windows.Application.Current).UpdateBackgroundOpacity("MyWindowStyleTrigger", this._settings.SpellWindowState.Opacity.Value);
+				((App)System.Windows.Application.Current).UpdateBackgroundOpacity("MyMobWindowSyle", _settings.MobWindowState.Opacity.Value);
+				((App)System.Windows.Application.Current).UpdateBackgroundOpacity("MyWindowStyleTrigger", this._settings.SpellWindowState.Opacity.Value);
                 OnPropertyChanged();
             }
         }
@@ -325,8 +326,24 @@ namespace EQTool.ViewModels
                 ((App)System.Windows.Application.Current).UpdateBackgroundOpacity("MyWindowStyleMap", value);
                 OnPropertyChanged();
             }
-        }
-        public bool MobAlwaysOnTop
+		}
+		public double MobWindowOpacity
+		{
+			get
+			{
+				return this._settings.MobWindowState.Opacity ?? 1.0;
+			}
+
+			set
+			{
+				this._settings.MobWindowState.Opacity = value;
+				((App)System.Windows.Application.Current).UpdateBackgroundOpacity("MyMobWindowSyle", value);
+				((App)System.Windows.Application.Current).UpdateBackgroundOpacity("MyListViewStyle", value);
+				
+				OnPropertyChanged();
+			}
+		}
+		public bool MobAlwaysOnTop
         {
             get
             {

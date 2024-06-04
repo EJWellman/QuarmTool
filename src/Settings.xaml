@@ -102,6 +102,10 @@
                             <TextBlock Text="Update Via Zeal" VerticalAlignment="Center"  FontWeight="Bold"  MinWidth="100"/>
                             <CheckBox IsChecked="{Binding ZealMobInfo_AutoUpdate}" Click="SaveSettings" ></CheckBox>
                         </StackPanel>
+                        <!--<StackPanel Orientation="Horizontal">
+                            <TextBlock Text="Window Opacity"  VerticalAlignment="Center"  FontWeight="Bold"  MinWidth="100"/>
+                            <Slider Value="{Binding MobWindowOpacity}" Minimum=".01" Maximum="1" SmallChange=".1" TickFrequency=".1" ValueChanged="SaveSettings" MinWidth="150"/>
+                        </StackPanel>-->
                     </StackPanel>
                 </StackPanel>
             </StackPanel>
@@ -322,91 +326,6 @@
                 </Expander>
             </StackPanel>
         </TabItem>
-        <!--<TabItem Header="Custom Overlays">
-            <StackPanel Orientation="Vertical" Margin="5, 5, 5, 5" Width="auto">
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="85"/>
-                        <ColumnDefinition Width="35"/>
-                        <ColumnDefinition Width="90"/>
-                        <ColumnDefinition Width="45"/>
-                        <ColumnDefinition Width="55"/>
-                    </Grid.ColumnDefinitions>
-                    <TextBlock Grid.Column="1">Visual</TextBlock>
-                    <TextBlock Grid.Column="3" Margin="10,0,0,0">Audio</TextBlock>
-                </Grid>
-                <ListView ItemsSource="{Binding CustomOverlays}">
-                    <ListView.ItemTemplate>
-                        <DataTemplate x:Name="CustomOverlaysTemplate" DataType="local:CustomOverlay">
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="85"/>
-                                    <ColumnDefinition Width="35"/>
-                                    <ColumnDefinition Width="90"/>
-                                    <ColumnDefinition Width="30"/>
-                                    <ColumnDefinition Width="60"/>
-                                    <ColumnDefinition/>
-                                </Grid.ColumnDefinitions>
-                                <TextBlock Text="{Binding Name}" VerticalAlignment="Center" FontWeight="Bold"  MaxWidth="125" Grid.Column="0"/>
-                                <CheckBox IsChecked="{Binding IsEnabled}" Margin="5,4,5,0" Click="CustomOverlayVisual_Click" MinWidth="20" Grid.Column="1"/>
-                                <xctk:ColorPicker SelectedColor="{Binding Color}" IsEnabled="False" Width="85" Grid.Column="2"/>
-                                <CheckBox IsChecked="{Binding IsAudioEnabled}" Margin="10,4,5,0" Click="CustomOverlayAudio_Click" MinWidth="20" Grid.Column="3"/>
-                                <Button Click="Open_EditExistingCustomOverlay" HorizontalAlignment="Right" DataContext="{Binding ID}" Margin="10,0,0,0" Content="Edit" Width="50" Grid.Column="4"/>
-                                <Button Click="Delete_ExistingCustomOverlay" DataContext="{Binding ID}" Margin="10,0,0,0" Grid.Column="5">
-                                    <TextBlock Foreground="Red">X</TextBlock>
-                                </Button>
-                            </Grid>
-
-                            --><!--<StackPanel Orientation="Horizontal" Width="auto">-->
-                            <!--</StackPanel>--><!--
-                        </DataTemplate>
-                    </ListView.ItemTemplate>
-                </ListView>
-
-                <Separator/>
-                <ToggleButton x:Name="ToggleCreateNewButton" IsChecked="{Binding IsChecked}" Height="30" Width="150" HorizontalAlignment="Left">
-                    <StackPanel>
-                        <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center">
-                            <Run Text="Add New" />
-                        </TextBlock>
-
-                        <Popup Name="CreateNewOverlayPopup" IsOpen="{Binding IsChecked, ElementName=ToggleCreateNewButton}">
-                            <Border BorderThickness="0.1" Padding="0" Background="White">
-                                <StackPanel Background="White" Orientation="Vertical" Width="200" Margin="8">
-                                    <StackPanel Orientation="Horizontal" Width="250">
-                                        <TextBlock Text="Name" Width="85"></TextBlock>
-                                        <TextBox Name="NewOverlay_Name" Width="165"></TextBox>
-                                    </StackPanel>
-                                    <StackPanel Orientation="Horizontal" Width="250">
-                                        <TextBlock Text="Trigger" Width="85"></TextBlock>
-                                        <TextBox Name="NewOverlay_Trigger" Width="165"></TextBox>
-                                    </StackPanel>
-                                    <StackPanel Orientation="Horizontal" Width="250">
-                                        <TextBlock Text="Alt. Trigger" Width="85"></TextBlock>
-                                        <TextBox Name="NewOverlay_AltTrigger" Width="165"></TextBox>
-                                    </StackPanel>
-                                    <StackPanel Orientation="Horizontal" Width="250">
-                                        <TextBlock Text="Message" Width="85"></TextBlock>
-                                        <TextBox Name="NewOverlay_Message" Width="165"></TextBox>
-                                    </StackPanel>
-                                    <StackPanel Orientation="Horizontal" Width="250">
-                                        <TextBlock Text="Audio Message" Width="85"></TextBlock>
-                                        <TextBox Name="NewOverlay_AudioMessage" Width="165"></TextBox>
-                                    </StackPanel>
-                                    <StackPanel Orientation="Horizontal" Width="250">
-                                        <TextBlock Text="Color" Width="85"></TextBlock>
-                                        <xctk:ColorPicker Name="NewOverlay_TriggerColor" Width="165" Margin="0, 0, 5, 0" ></xctk:ColorPicker>
-                                    </StackPanel>
-                                    <Separator/>
-                                    <Button Height="20" Click="NewOverlay_Save">Save</Button>
-                                </StackPanel>
-                            </Border>
-                        </Popup>
-                    </StackPanel>
-                </ToggleButton>
-
-            </StackPanel>
-        </TabItem>-->
         <TabItem Header="Timers">
             <StackPanel Orientation="Vertical" Margin="5, 5, 5, 5">
                 <StackPanel Orientation="Vertical"  Margin="0, 0, 0, 8">
@@ -442,70 +361,14 @@
                                         <TextBlock Foreground="Red">X</TextBlock>
                                     </Button>
                                 </Grid>
-
-                                <!--<StackPanel Orientation="Horizontal" Width="auto">-->
-                                <!--</StackPanel>-->
                             </DataTemplate>
                         </ListView.ItemTemplate>
                     </ListView>
                     <Separator/>
-                    <!--<StackPanel Orientation="Horizontal">
-                        <TextBlock Text="Combo - Always on top" VerticalAlignment="Center"  FontWeight="Bold"  MinWidth="150"/>
-                        <CheckBox IsChecked="{Binding ComboAlwaysOnTop}" Click="SaveAlwaysOntopCheckBoxSettings" ></CheckBox>
-                    </StackPanel>
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="Spells - Always on top" VerticalAlignment="Center"  FontWeight="Bold"  MinWidth="150"/>
-                        <CheckBox IsChecked="{Binding SpellAlwaysOnTop}" Click="SaveAlwaysOntopCheckBoxSettings" ></CheckBox>
-                    </StackPanel>
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="Timers - Always on top" VerticalAlignment="Center"  FontWeight="Bold"  MinWidth="150"/>
-                        <CheckBox IsChecked="{Binding TimerAlwaysOnTop}" Click="SaveAlwaysOntopCheckBoxSettings" ></CheckBox>
-                    </StackPanel>
-                    <Separator/>
-                    <Label Height="16" HorizontalAlignment="Center" FontSize="10" FontWeight="SemiBold" Padding="0,0,0,0">Combo Settings</Label>
-                    <Separator/>
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="Show /Random" VerticalAlignment="Center" FontWeight="Bold"  MinWidth="100"/>
-                        <CheckBox IsChecked="{Binding ComboShowRandomRolls}" Click="ComboShowRandom_Click" ></CheckBox>
-                    </StackPanel>
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="Show Spells" VerticalAlignment="Center"  FontWeight="Bold"  MinWidth="100"/>
-                        <CheckBox IsChecked="{Binding ComboShowSpells}" Click="ComboShowSpells_Click" ></CheckBox>
-                    </StackPanel>
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="Show Respawns" VerticalAlignment="Center"  FontWeight="Bold"  MinWidth="100"/>
-                        <CheckBox IsChecked="{Binding ComboShowTimers}" Click="ComboShowTimer_Click" ></CheckBox>
-                    </StackPanel>
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="Show Mod Rods" VerticalAlignment="Center"  FontWeight="Bold"  MinWidth="100"/>
-                        <CheckBox IsChecked="{Binding ComboShowModRodTimers}" Click="ComboShowModRodTimers_Click" ></CheckBox>
-                    </StackPanel>
-                    <Separator/>
-                    <Label Height="16" HorizontalAlignment="Center" FontSize="10" FontWeight="SemiBold" Padding="0,0,0,0">Timer Settings</Label>
-                    <Separator/>
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="Random Rolls" ToolTip="Show Random rolls in Triggers window" VerticalAlignment="Center"  FontWeight="Bold"  MinWidth="100"/>
-                        <CheckBox IsChecked="{Binding ShowRandomRolls}" Click="TimerShowRandom_Click"></CheckBox>
-                    </StackPanel>
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="Show Mod Rods" VerticalAlignment="Center"  FontWeight="Bold"  MinWidth="100"/>
-                        <CheckBox IsChecked="{Binding ShowModRodTimers}" Click="TimerShowModRodTimers_Click" ></CheckBox>
-                    </StackPanel>
-                    <Separator/>
-                    <Label Height="16" HorizontalAlignment="Center" FontSize="10" FontWeight="SemiBold" Padding="0,0,0,0">Spell Settings - Combo &amp; Spell</Label>
-                    <Separator/>-->
                     <StackPanel Orientation="Horizontal">
                         <TextBlock Text="Window Opacity"  VerticalAlignment="Center"  FontWeight="Bold"  MinWidth="100"/>
                         <Slider Value="{Binding TriggerWindowOpacity}" Minimum=".01" Maximum="1" SmallChange=".1" TickFrequency=".1" ValueChanged="SaveSettings" MinWidth="150"/>
                     </StackPanel>
-                    <!--<StackPanel Orientation="Horizontal">
-                        <TextBlock Text="Guess Spells"  VerticalAlignment="Center"  FontWeight="Bold"  MinWidth="100"/>
-                        <CheckBox x:Name="BestGuessSpells" Click="GuessSpells_Click" />
-                    </StackPanel>
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="Spells Me only"  VerticalAlignment="Center"  FontWeight="Bold"  MinWidth="100"/>
-                        <CheckBox x:Name="YouSpellsOnly" Click="YouSpells_Click" />
-                    </StackPanel>-->
                 </StackPanel>
                 <Separator></Separator>
                 <Expander ExpandDirection="Down" IsExpanded="False" Header="Timer Colors" FontWeight="Bold">

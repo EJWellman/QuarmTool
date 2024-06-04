@@ -242,7 +242,7 @@ namespace EQTool.ViewModels
                     }
 
                     Debug.WriteLine($"Labels: {map.Labels.Count}");
-                    var locationdotsize = MapViewModelService.PlayerEllipsesSize(this.AABB);
+                    var locationdotsize = MapViewModelService.PlayerEllipsesSize(this.AABB) * 0.5;
                     var locationthickness = MapViewModelService.PlayerEllipsesThickness(this.AABB);
                     var zoneLabelFontSize = MapViewModelService.ZoneLabelFontSize(this.AABB) * _settings.MapLabelMultiplier;
                     var otherLabelFontSize = MapViewModelService.OtherLabelFontSize(this.AABB) * _settings.MapLabelMultiplier;
@@ -797,8 +797,8 @@ namespace EQTool.ViewModels
             Transform.Matrix = scaleMatrix;
             CurrentScaling *= scaleFactor;
             var currentlabelscaling = (CurrentScaling / 40 * -1) + 1;
-            var zoneLabelFontSize = MapViewModelService.ZoneLabelFontSize(this.AABB);
-            var otherLabelFontSize = MapViewModelService.OtherLabelFontSize(this.AABB);
+            var zoneLabelFontSize = MapViewModelService.ZoneLabelFontSize(this.AABB) * _settings.MapLabelMultiplier;
+            var otherLabelFontSize = MapViewModelService.OtherLabelFontSize(this.AABB) * _settings.MapLabelMultiplier;
             var translation = new TranslateTransform(Transform.Value.OffsetX, Transform.Value.OffsetY);
             EllipseTransform.Matrix = translation.Value;
             foreach (FrameworkElement child in Canvas.Children)
