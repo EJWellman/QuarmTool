@@ -929,7 +929,8 @@ namespace EQToolShared.Map
 			ZoneNames.Add(new ZoneNameInfo("the feerrott", "feerrott"));
 			ZoneNames.Add(new ZoneNameInfo("northern felwithe", "felwithea", "felwithe"));
 			ZoneNames.Add(new ZoneNameInfo("southern felwithe", "felwitheb", "felwithe"));
-			ZoneNames.Add(new ZoneNameInfo("field of bone", "fieldofbone"));
+			ZoneNames.Add(new ZoneNameInfo("field of bone", "fieldofbone", "the field of bone"));
+			ZoneNames.Add(new ZoneNameInfo("field of bone (alt)", "fieldofbone", "the field of bone"));
 			ZoneNames.Add(new ZoneNameInfo("firiona vie", "firiona"));
 			ZoneNames.Add(new ZoneNameInfo("east freeport", "freporte"));
 			ZoneNames.Add(new ZoneNameInfo("north freeport", "freportn"));
@@ -966,6 +967,7 @@ namespace EQToolShared.Map
 			ZoneNames.Add(new ZoneNameInfo("kerra isle", "kerraridge"));
 			ZoneNames.Add(new ZoneNameInfo("kithicor forest", "kithicor"));
 			ZoneNames.Add(new ZoneNameInfo("kurn's tower", "kurn"));
+			ZoneNames.Add(new ZoneNameInfo("kurn's tower (alt)", "kurn"));
 			ZoneNames.Add(new ZoneNameInfo("lake of ill omen", "lakeofillomen"));
 			ZoneNames.Add(new ZoneNameInfo("lake rathetear", "lakerathe"));
 			ZoneNames.Add(new ZoneNameInfo("lavastorm mountains", "lavastorm"));

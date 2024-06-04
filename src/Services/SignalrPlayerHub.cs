@@ -13,6 +13,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Timers;
 using System.Windows.Media.Media3D;
+using ZealPipes.Services;
 
 namespace EQTool.Models
 {
@@ -37,12 +38,22 @@ namespace EQTool.Models
         private Servers? LastServer;
         private ClientWebSocket NParseWebsocketConnection;
         private CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
-        public SignalrPlayerHub(IAppDispatcher appDispatcher, LogParser logParser, ActivePlayer activePlayer, SpellWindowViewModel spellWindowViewModel)
+		private readonly EQToolSettings _settings;
+		private ZealMessageService _zealMessageService;
+
+
+		private double LastX;
+		private double LastY;
+		private double LastZ;
+
+        public SignalrPlayerHub(IAppDispatcher appDispatcher, LogParser logParser, ActivePlayer activePlayer, SpellWindowViewModel spellWindowViewModel, ZealMessageService zealMessageService, EQToolSettings eQToolSettings)
         {
             this.appDispatcher = appDispatcher;
             this.activePlayer = activePlayer;
             this.logParser = logParser;
             this.spellWindowViewModel = spellWindowViewModel;
+			_zealMessageService = zealMessageService;
+			_settings = eQToolSettings;
             var url = "https://www.pigparse.org/EqToolMap";
             connection = new HubConnectionBuilder()
               .WithUrl(url)
@@ -94,6 +105,7 @@ namespace EQTool.Models
             }
 
             this.logParser.PlayerLocationEvent += LogParser_PlayerLocationEvent;
+			this._zealMessageService.OnPlayerMessageReceived += _zealMessageService_OnPlayerMessageReceived;
             this.logParser.CampEvent += LogParser_CampEvent;
             this.logParser.StartCastingEvent += LogParser_StartCastingEvent;
             timer = new System.Timers.Timer();
@@ -337,7 +349,38 @@ namespace EQTool.Models
                 });
             }
         }
-        private string TranslateZoneNameToNParse(string zoneName)
+
+		private void _zealMessageService_OnPlayerMessageReceived(object sender, ZealMessageService.PlayerMessageReceivedEventArgs e)
+		{
+			if (_settings.ZealEnabled && _settings.ZealMap_AutoUpdate
+				&& activePlayer.Player != null
+				&& ((Math.Abs(LastX - e.Message.Data.Position.X) > 10)
+				|| (Math.Abs(LastY - e.Message.Data.Position.Y) > 10)))
+			{
+				LastPlayer = new SignalrPlayer
+				{
+					Zone = activePlayer.Player.Zone,
+					GuildName = activePlayer.Player.GuildName,
+					PlayerClass = activePlayer.Player.PlayerClass,
+					Server = Servers.Quarm,
+					MapLocationSharing = activePlayer.Player.MapLocationSharing,
+					Name = activePlayer.Player.Name,
+					TrackingDistance = this.activePlayer.Player.TrackingDistance,
+					X = e.Message.Data.Position.X,
+					Y = e.Message.Data.Position.Y,
+					Z = e.Message.Data.Position.Z,
+				};
+
+				LastX = e.Message.Data.Position.X;
+				LastY = e.Message.Data.Position.Y;
+				LastZ = e.Message.Data.Position.Z;
+
+				Debug.WriteLine($"PlayerLocationEvent {LastPlayer.Name}");
+
+				InvokeAsync("PlayerLocationEvent", this.LastPlayer);
+			}
+		}
+		private string TranslateZoneNameToNParse(string zoneName)
         {
             if (zoneName == "cazicthule")
             {
