@@ -44,8 +44,8 @@ namespace EQTool.Factories
 			Rect rect = new Rect();
 			if (rectParts != null)
 			{
-				var windowPoint = new Point(int.Parse(rectParts[1]), int.Parse(rectParts[0]));
-				var windowSize = new Size(int.Parse(rectParts[2]), int.Parse(rectParts[3]));
+				var windowPoint = new Point(double.Parse(rectParts[1]), double.Parse(rectParts[0]));
+				var windowSize = new Size(double.Parse(rectParts[2]), double.Parse(rectParts[3]));
 				rect = new Rect(windowPoint, windowSize);
 			}
 

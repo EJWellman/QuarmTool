@@ -72,7 +72,7 @@
                                 <Image Source="pack://application:,,,/toolbox.png"/>
                             </Button>
 
-                            <Button Margin="1" FontSize="7" Width="14" Height="14" Padding="0" ToolTip="Open a Timer Window" Click="Map_TimerMenu_Open">
+                            <Button Margin="1" FontSize="7" Width="14" Height="14" Padding="0" ToolTip="Open a Timer Window" Name="TimerMenuBtn" Click="Map_TimerMenu_Open">
                                 <Image Source="pack://application:,,,/combo.png"/>
                                 <Button.ContextMenu>
                                     <ContextMenu StaysOpen="True" x:Name="TimerWindowsMenu" />

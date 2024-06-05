@@ -126,14 +126,27 @@ namespace EQTool
         }
 
         private void Map_TimerMenu_OpenedEvent(object sender, RoutedEventArgs e)
-        {
-			FrameworkElement fe = e.Source as FrameworkElement;
-			fe.ContextMenu = _timerWindowFactory.CreateTimerMenu(_settings.TimerWindows);
+		{
+			if (e.Source.GetType() != typeof(Button) || (e.Source as Button).Name != "TimerMenuBtn")
+			{
+				e.Handled = true;
+			}
+			else
+			{
+				FrameworkElement fe = e.Source as FrameworkElement;
+				fe.ContextMenu = _timerWindowFactory.CreateTimerMenu(_settings.TimerWindows);
 
-            mapViewModel.TimerMenu_Opened();
-        }
+				mapViewModel.TimerMenu_Opened();
+			}
+		}
+		protected override void OnPreviewMouseRightButtonDown(MouseButtonEventArgs e)
+		{
+			e.Handled = true;
+			mapViewModel.TimerMenu_Opened();
+			mapViewModel.PanAndZoomCanvas_MouseDown(e.GetPosition(Map), e);
+		}
 
-        private void Map_TimerMenu_ClosedEvent(object sender, RoutedEventArgs e)
+		private void Map_TimerMenu_ClosedEvent(object sender, RoutedEventArgs e)
         {
             mapViewModel.TimerMenu_Closed();
         }

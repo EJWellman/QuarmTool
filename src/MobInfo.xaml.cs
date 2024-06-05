@@ -5,6 +5,7 @@ using EQTool.ViewModels;
 using EQToolShared.Enums;
 using System;
 using System.ComponentModel;
+using System.Configuration;
 using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
@@ -12,6 +13,7 @@ using System.Reflection.Emit;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
+using System.Windows.Input;
 using System.Windows.Navigation;
 using ZealPipes.Common.Models;
 using ZealPipes.Services;
@@ -71,6 +73,11 @@ namespace EQTool
 
 				TimerWindowsMenu.Items.Add(item);
 			}
+		}
+
+		protected override void OnPreviewMouseRightButtonDown(MouseButtonEventArgs e)
+		{
+			e.Handled = true;
 		}
 
 		private void ZealMessageService_OnCharacterUpdated(object sender, ZealCharacter.ZealCharacterUpdatedEventArgs e)
@@ -155,12 +162,19 @@ namespace EQTool
 
 		private void MobInfo_TimerMenu_OpenedEvent(object sender, RoutedEventArgs e)
 		{
-			FrameworkElement fe = e.Source as FrameworkElement;
-			fe.ContextMenu = _timerWindowFactory.CreateTimerMenu(_settings.TimerWindows);
+			if(e.Source.GetType() != typeof(Button) || (e.Source as Button).Name != "TimerMenuBtn")
+			{
+				e.Handled = true;
+			}
+			else
+			{
+				FrameworkElement fe = e.Source as FrameworkElement;
+				fe.ContextMenu = _timerWindowFactory.CreateTimerMenu(_settings.TimerWindows);
 
-			fe.ContextMenu.Placement = System.Windows.Controls.Primitives.PlacementMode.MousePoint;
-			fe.ContextMenu.PlacementTarget = sender as UIElement;
-			fe.ContextMenu.IsOpen = true;
+				fe.ContextMenu.Placement = System.Windows.Controls.Primitives.PlacementMode.MousePoint;
+				fe.ContextMenu.PlacementTarget = sender as UIElement;
+				fe.ContextMenu.IsOpen = true;
+			}
 		}
 	}
 }
