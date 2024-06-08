@@ -16,31 +16,16 @@ namespace EQTool.Services.Parsing
 {
 	public class CustomOverlayParser
 	{
-		private readonly CustomOverlayService _customOverlayService;
-		private static EQToolSettings _settings;
 
-		public CustomOverlayParser(CustomOverlayService customOverlayService,
-			EQToolSettings settings)
+		public static CustomOverlay Parse(string message, IEnumerable<CustomOverlay> overlays)
 		{
-			_customOverlayService = customOverlayService;
-			_settings = settings;
-		}
-
-		public static CustomOverlay Parse(string message)
-		{
-			if(_settings == null)
+			if(overlays == null)
 			{
-				_settings = new EQToolSettings();
+				return null;
 			}
-
-			if(_settings.CustomOverlays == null)
+			if(overlays.Count() > 0)
 			{
-				_settings.CustomOverlays = new EQToolShared.ExtendedClasses.ObservableCollectionRange<CustomOverlay>();
-				_settings.CustomOverlays.AddRange(CustomOverlayService.LoadCustomOverlayMessages());
-			}
-			if(_settings.CustomOverlays.Count > 0)
-			{
-				foreach(var overlay in _settings.CustomOverlays)
+				foreach(var overlay in overlays)
 				{
 					var triggerMatches = Regex.Matches(message, overlay.Trigger, RegexOptions.IgnoreCase);
 					var altTriggerMatches = Regex.Matches(message, overlay.Alternate_Trigger, RegexOptions.IgnoreCase);

@@ -150,6 +150,8 @@ namespace EQTool.ViewModels
 			}
 		}
 
+		public string WindowTitle => $"Map: {_ZoneName}  v{App.Version}";
+
 		public string Title => $"Map: {_ZoneName}  v{App.Version}   {Lastlocation.X:0.##}, {Lastlocation.Y:0.##}, {Lastlocation.Z:0.##}";
 
         private string _ZoneName = string.Empty;
@@ -162,7 +164,8 @@ namespace EQTool.ViewModels
                 _ZoneName = value;
                 OnPropertyChanged();
                 OnPropertyChanged(nameof(Title));
-            }
+				OnPropertyChanged(nameof(WindowTitle));
+			}
         }
 
         private Point _LastMouselocation = new Point(0, 0);

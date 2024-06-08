@@ -236,7 +236,7 @@ namespace EQTool.Services
 
 				try
 				{
-					var customOverlay = CustomOverlayParser.Parse(message);
+					var customOverlay = CustomOverlayParser.Parse(message, _settings.CustomOverlays);
 					if (customOverlay != null)
 					{
 						_appDispatcher.DispatchUI(() =>

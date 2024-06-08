@@ -4,12 +4,14 @@ using EQTool.Services;
 using EQTool.ViewModels;
 using EQToolShared;
 using EQToolShared.Enums;
+using EQToolShared.ExtendedClasses;
 using EQToolShared.HubModels;
 using EQToolShared.Map;
 using System;
 using System.ComponentModel;
 using System.Configuration;
 using System.Linq;
+using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -64,6 +66,7 @@ namespace EQTool
 			_logParser.RandomRollEvent += LogParser_RandomRollEvent;
 			_logParser.ModRodUsedEvent += LogParser_ModRodUsedEvent;
 			LocationChanged += Window_LocationChanged;
+			SizeChanged += Window_SizeChanged;
 			Loaded += BaseTimerWindow_Opened;
 			Activated += OnActivated;
 			_uiTimer = new System.Timers.Timer(1000);
@@ -82,8 +85,25 @@ namespace EQTool
 			Topmost = baseTimerWindowViewModel._windowOptions.AlwaysOnTop;
 		}
 
+		private void Window_SizeChanged(object sender, SizeChangedEventArgs e)
+		{
+			Window_LocationChanged(sender, null);
+			BaseTimerWindowViewModel vm = ((BaseTimerWindowViewModel)((Window)sender).DataContext);
+			var timerOptions = TimerWindowService.LoadTimerWindow(vm.ID);
+			if (timerOptions != null)
+			{
+				timerOptions.WindowRect = ((Window)sender).Top + "," + ((Window)sender).Left + "," + ((Window)sender).Width + "," + ((Window)sender).Height;
+				_settings.TimerWindows.FirstOrDefault(tw => tw.ID == timerOptions.ID).WindowRect = timerOptions.WindowRect;
+			}
+
+			TimerWindowService.UpdateTimerWindow(timerOptions);
+
+			LastWindowInteraction = DateTime.UtcNow;
+		}
+
 		private void BaseTimerWindow_Opened(object sender, EventArgs e)
 		{
+			KeepWindowOnScreen(sender);
 			BaseTimerWindowViewModel vm = ((BaseTimerWindowViewModel)((Window)sender).DataContext);
 			var timerOptions = TimerWindowService.LoadTimerWindow(vm.ID);
 			if (timerOptions != null)
@@ -96,7 +116,22 @@ namespace EQTool
 
 		private void Window_LocationChanged(object sender, EventArgs e)
 		{
-			#region Keep window on screen
+			KeepWindowOnScreen(sender);
+			BaseTimerWindowViewModel vm = ((BaseTimerWindowViewModel)((Window)sender).DataContext);
+			var timerOptions = TimerWindowService.LoadTimerWindow(vm.ID);
+			if (timerOptions != null)
+			{
+				timerOptions.WindowRect = ((Window)sender).Top + "," + ((Window)sender).Left + "," + ((Window)sender).Width + "," + ((Window)sender).Height;
+				_settings.TimerWindows.FirstOrDefault(tw => tw.ID == timerOptions.ID).WindowRect = timerOptions.WindowRect;
+			}
+
+			TimerWindowService.UpdateTimerWindow(timerOptions);
+
+			LastWindowInteraction = DateTime.UtcNow;
+		}
+
+		private void KeepWindowOnScreen(object sender)
+		{
 			if (((Window)sender).Top <= SystemParameters.VirtualScreenTop)
 			{
 				((Window)sender).Top = SystemParameters.VirtualScreenTop + 1;
@@ -113,18 +148,6 @@ namespace EQTool
 			{
 				((Window)sender).Left = SystemParameters.VirtualScreenWidth + SystemParameters.VirtualScreenLeft - ((Window)sender).Width - 1;
 			}
-			#endregion
-			BaseTimerWindowViewModel vm = ((BaseTimerWindowViewModel)((Window)sender).DataContext);
-			var timerOptions = TimerWindowService.LoadTimerWindow(vm.ID);
-			if (timerOptions != null)
-			{
-				timerOptions.WindowRect = ((Window)sender).Top + "," + ((Window)sender).Left + "," + ((Window)sender).Width + "," + ((Window)sender).Height;
-				_settings.TimerWindows.FirstOrDefault(tw => tw.ID == timerOptions.ID).WindowRect = timerOptions.WindowRect;
-			}
-
-			TimerWindowService.UpdateTimerWindow(timerOptions);
-
-			LastWindowInteraction = DateTime.UtcNow;
 		}
 
 		private void LogParser_RandomRollEvent(object sender, LogParser.RandomRollEventArgs e)
@@ -202,16 +225,18 @@ namespace EQTool
 		private void LogParser_DeadEvent(object sender, LogParser.DeadEventArgs e)
 		{
 			_baseTimerWindowViewModel.TryRemoveTarget(e.Name);
-			if (_playerTrackerService.IsPlayer(e.Name) || !MasterNPCList.NPCs.Contains(e.Name))
+			string name = e.Name.CleanUpZealName();
+			string cleanName = e.Name.CleanUpZealName(true);
+			if (_playerTrackerService.IsPlayer(cleanName) || !MasterNPCList.NPCs.Contains(cleanName))
 			{
 				return;
 			}
-			var deathTimer = _quarmDataService.GetMonsterTimer(e.Name);
+			var deathTimer = _quarmDataService.GetMonsterTimer(cleanName);
 			if (deathTimer != null)
 			{
 				var add = new CustomTimer
 				{
-					Name = "--Dead-- " + e.Name,
+					Name = "--Dead-- " + name,
 					DurationInSeconds = (int)(deathTimer.RespawnTimer != 0 ? deathTimer.RespawnTimer : deathTimer.Min_RespawnTimer),
 					NegativeDurationToShow = (int)(deathTimer.Max_RespawnTimer),
 					SpellNameIcon = "Disease Cloud",

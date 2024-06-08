@@ -72,7 +72,10 @@ namespace EQTool
             Map.StartTimerEvent += Map_StartTimerEvent;
             Map.CancelTimerEvent += Map_CancelTimerEvent;
 			ContextMenuOpening += Map_TimerMenu_OpenedEvent;
-            Map.TimerMenu_ClosedEvent += Map_TimerMenu_ClosedEvent;
+			ContextMenuClosing += Map_TimerMenu_ClosedEvent;
+			Map.ContextMenuOpening += Map_TimerMenu_OpenedEvent;
+			Map.ContextMenuClosing += Map_TimerMenu_ClosedEvent;
+			Map.TimerMenu_ClosedEvent += Map_TimerMenu_ClosedEvent;
             Map.TimerMenu_OpenedEvent += Map_TimerMenu_OpenedEvent;
 			_zealMessageService.OnPlayerMessageReceived += _zealMessageService_OnPlayerMessageReceived;
             this.signalrPlayerHub.PlayerLocationEvent += SignalrPlayerHub_PlayerLocationEvent;
@@ -127,23 +130,17 @@ namespace EQTool
 
         private void Map_TimerMenu_OpenedEvent(object sender, RoutedEventArgs e)
 		{
-			if (e.Source.GetType() != typeof(Button) || (e.Source as Button).Name != "TimerMenuBtn")
-			{
-				e.Handled = true;
-			}
-			else
+			if (e.Source.GetType() == typeof(Button) && (e.Source as Button).Name == "TimerMenuBtn")
 			{
 				FrameworkElement fe = e.Source as FrameworkElement;
 				fe.ContextMenu = _timerWindowFactory.CreateTimerMenu(_settings.TimerWindows);
 
 				mapViewModel.TimerMenu_Opened();
 			}
-		}
-		protected override void OnPreviewMouseRightButtonDown(MouseButtonEventArgs e)
-		{
-			e.Handled = true;
-			mapViewModel.TimerMenu_Opened();
-			mapViewModel.PanAndZoomCanvas_MouseDown(e.GetPosition(Map), e);
+			else
+			{
+				//e.Handled = true;
+			}
 		}
 
 		private void Map_TimerMenu_ClosedEvent(object sender, RoutedEventArgs e)
@@ -186,24 +183,30 @@ namespace EQTool
 		}
 
 		private void LogParser_DeadEvent(object sender, LogParser.DeadEventArgs e)
-        {
-            if (playerTrackerService.IsPlayer(e.Name))
+		{
+			string name = CleanUpZealName(e.Name);
+			if (playerTrackerService.IsPlayer(name))
             {
                 return;
             }
 
             if (activePlayer.Player?.MapKillTimers == true)
             {
-				var deathTimer = _quarmDataService.GetMonsterTimer(e.Name);
+				var deathTimer = _quarmDataService.GetMonsterTimer(name);
 				if(deathTimer != null)
 				{
-					var mw = mapViewModel.AddTimer(TimeSpan.FromSeconds(deathTimer.RespawnTimer), e.Name, false);
+					var mw = mapViewModel.AddTimer(TimeSpan.FromSeconds(deathTimer.RespawnTimer), name, false);
 					mapViewModel.MoveToPlayerLocation(mw);
 				}
 			}
-        }
+		}
+		private string CleanUpZealName(string name)
+		{
+			string ret = name.Substring(0, name.Length - 3).Replace("_", " ");
+			return ret;
+		}
 
-        private void UITimer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
+		private void UITimer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
         {
             appDispatcher.DispatchUI(() => mapViewModel.UpdateTimerWidgest());
         }

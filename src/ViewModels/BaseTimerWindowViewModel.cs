@@ -4,6 +4,7 @@ using EQTool.Services.Spells;
 using EQToolShared;
 using EQToolShared.Enums;
 using EQToolShared.HubModels;
+using EQToolShared.ExtendedClasses;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -12,6 +13,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Windows;
+using System.Text.RegularExpressions;
 
 namespace EQTool.ViewModels
 {
@@ -326,6 +328,8 @@ namespace EQTool.ViewModels
 				return;
 			}
 
+			match.TargetName = match.TargetName.CleanUpZealName();
+
 			_appDispatcher.DispatchUI(() =>
 			{
 				var spellname = match.Spell.name;
@@ -445,6 +449,9 @@ namespace EQTool.ViewModels
 			{
 				return;
 			}
+
+			match.Name = match.Name.CleanUpZealName();
+			match.TargetName = match.TargetName.CleanUpZealName();
 
 			_appDispatcher.DispatchUI(() =>
 			{
@@ -590,6 +597,8 @@ namespace EQTool.ViewModels
 			{
 				return;
 			}
+			
+			name = name.CleanUpZealName();
 
 			_appDispatcher.DispatchUI(() =>
 			{
@@ -607,6 +616,8 @@ namespace EQTool.ViewModels
 			{
 				return;
 			}
+
+			target = target.CleanUpZealName();
 
 			_appDispatcher.DispatchUI(() =>
 			{

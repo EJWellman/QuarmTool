@@ -311,6 +311,7 @@ namespace EQTool.Models
 			set
 			{
 				_customOverlays = value;
+				OnPropertyChanged();
 			}
 		}
 		[JsonIgnore]

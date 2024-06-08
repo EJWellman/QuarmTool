@@ -3,6 +3,7 @@ using EQTool.Models;
 using EQTool.Services;
 using EQTool.ViewModels;
 using EQToolShared.Enums;
+using EQToolShared.ExtendedClasses;
 using EQToolShared.Map;
 using System;
 using System.Collections.Generic;
@@ -73,8 +74,11 @@ namespace EQTool
 			}
 		}
 
-        private void LogParser_FightHitEvent(object sender, LogParser.FightHitEventArgs e)
+		private void LogParser_FightHitEvent(object sender, LogParser.FightHitEventArgs e)
         {
+			e.HitInformation.SourceName = e.HitInformation.SourceName.CleanUpZealName();
+			string targetName = e.HitInformation.TargetName.CleanUpZealName();
+			e.HitInformation.TargetName = e.HitInformation.TargetName.CleanUpZealName();
             dPSWindowViewModel.TryAdd(e.HitInformation);
         }
 
@@ -90,7 +94,7 @@ namespace EQTool
             //    }
             //}
 
-            dPSWindowViewModel.TargetDied(e.Name);
+            dPSWindowViewModel.TargetDied(e.Name.CleanUpZealName());
         }
 
         protected override void OnClosing(CancelEventArgs e)
