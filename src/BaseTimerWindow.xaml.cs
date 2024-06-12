@@ -87,7 +87,7 @@ namespace EQTool
 
 		private void Window_SizeChanged(object sender, SizeChangedEventArgs e)
 		{
-			Window_LocationChanged(sender, null);
+			KeepWindowOnScreen(sender);
 			BaseTimerWindowViewModel vm = ((BaseTimerWindowViewModel)((Window)sender).DataContext);
 			var timerOptions = TimerWindowService.LoadTimerWindow(vm.ID);
 			if (timerOptions != null)
@@ -116,7 +116,6 @@ namespace EQTool
 
 		private void Window_LocationChanged(object sender, EventArgs e)
 		{
-			KeepWindowOnScreen(sender);
 			BaseTimerWindowViewModel vm = ((BaseTimerWindowViewModel)((Window)sender).DataContext);
 			var timerOptions = TimerWindowService.LoadTimerWindow(vm.ID);
 			if (timerOptions != null)
