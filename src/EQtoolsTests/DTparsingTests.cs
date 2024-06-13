@@ -16,7 +16,7 @@ namespace EQtoolsTests
         [TestMethod]
         public void Test1()
         {
-            var result = new POFDTParser().DtCheck("Dread says 'TINIALITA'");
+            var result = new DTParser().DtCheck("Dread says 'TINIALITA'");
             Assert.AreEqual("Dread", result.NpcName);
             Assert.AreEqual("TINIALITA", result.DTReceiver);
         }
@@ -24,14 +24,14 @@ namespace EQtoolsTests
         [TestMethod]
         public void Test2()
         {
-            var result = new POFDTParser().DtCheck("Dread says 'You will not evade me Silvose!'");
+            var result = new DTParser().DtCheck("Dread says 'You will not evade me Silvose!'");
             Assert.IsNull(result);
         }
 
         [TestMethod]
         public void Test3()
         {
-            var result = new POFDTParser().DtCheck("Fright says 'TINIALITA'");
+            var result = new DTParser().DtCheck("Fright says 'TINIALITA'");
             Assert.AreEqual("Fright", result.NpcName);
             Assert.AreEqual("TINIALITA", result.DTReceiver);
         }

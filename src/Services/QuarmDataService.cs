@@ -263,5 +263,17 @@ namespace EQTool.Services
 				return null;
 			}
 		}
+
+		public bool DoesMonsterExistInZone(string mobName)
+		{
+			if(_monsters != null && _monsters.Count > 0)
+			{
+				return _monsters.Any(m => m.Name.Replace("_"," ") == mobName);
+			}
+			else
+			{
+				return false;
+			}
+		}
 	}
 }

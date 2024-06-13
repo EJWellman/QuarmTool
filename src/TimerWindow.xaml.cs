@@ -84,7 +84,7 @@ namespace EQTool
 			});
         }
 
-        private void LogParser_POFDTEvent(object sender, POFDTParser.POF_DT_Event e)
+        private void LogParser_POFDTEvent(object sender, DTParser.DT_Event e)
         {
             this.timerWindowViewModel.TryAddCustom(new CustomTimer
             {

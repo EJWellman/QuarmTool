@@ -19,7 +19,7 @@ using static EQTool.Services.FindEq;
 using static EQTool.Services.FTEParser;
 using static EQTool.Services.InvisParser;
 using static EQTool.Services.LevParser;
-using static EQTool.Services.POFDTParser;
+using static EQTool.Services.DTParser;
 using static EQTool.Services.RandomParser;
 using static EQTool.Services.ResistSpellParser;
 
@@ -44,7 +44,7 @@ namespace EQTool.Services
         private readonly PlayerWhoLogParse _playerWhoLogParse;
         private readonly EnterWorldParser _enterWorldParser;
         private readonly QuakeParser _quakeParser;
-        private readonly POFDTParser _pOFDTParser;
+        private readonly DTParser _pOFDTParser;
         private readonly EnrageParser _enrageParser;
         private readonly ChParser _chParser;
         private readonly InvisParser _invisParser;
@@ -83,7 +83,7 @@ namespace EQTool.Services
             _levParser = new LevParser();
             _chParser = new ChParser(activePlayer);
             _enrageParser = new EnrageParser(activePlayer);
-            _pOFDTParser = new POFDTParser();
+            _pOFDTParser = new DTParser();
             _quakeParser = new QuakeParser();
             _enterWorldParser = new EnterWorldParser();
             _spellWornOffLogParse = spellWornOffLogParser;
@@ -180,7 +180,7 @@ namespace EQTool.Services
         public event EventHandler<WhoPlayerEventArgs> WhoPlayerEvent;
         public event EventHandler<SpellWornOffSelfEventArgs> SpellWornOffSelfEvent;
         public event EventHandler<QuakeArgs> QuakeEvent;
-        public event EventHandler<POF_DT_Event> POFDTEvent;
+        public event EventHandler<DT_Event> POFDTEvent;
         public event EventHandler<EnrageEvent> EnrageEvent;
         public event EventHandler<ChParseData> CHEvent;
         public event EventHandler<LevStatus> LevEvent;

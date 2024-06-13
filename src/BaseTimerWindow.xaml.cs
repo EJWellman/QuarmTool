@@ -177,12 +177,13 @@ namespace EQTool
 			}
 		}
 
-		private void LogParser_POFDTEvent(object sender, POFDTParser.POF_DT_Event e)
+		private void LogParser_POFDTEvent(object sender, DTParser.DT_Event e)
 		{
 			this._baseTimerWindowViewModel.TryAddCustom(new CustomTimer
 			{
+				TargetName = "Death Touches",
 				DurationInSeconds = 45,
-				Name = $"--DT-- '{e.DTReceiver}'",
+				Name = $"--DT-- {e.NpcName} > {e.DTReceiver}",
 				SpellNameIcon = "Disease Cloud",
 				SpellType = EQToolShared.Enums.SpellTypes.BadGuyCoolDown,
 				ExecutionTime = e.ExecutionTime
