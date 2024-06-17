@@ -478,9 +478,9 @@ namespace EQTool.Models
                 _FTEAudio = value;
                 OnPropertyChanged();
             }
-        }
+		}
 
-        private bool _FTEOverlay;
+		private bool _FTEOverlay;
         public bool FTEOverlay
         {
             get => _FTEOverlay;

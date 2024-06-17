@@ -62,8 +62,6 @@ namespace EQTool.Services
             {
                 DefaultEqDirectory = match?.EqBaseLocation,
                 EqLogDirectory = match?.EQlogLocation,
-                BestGuessSpells = true,
-                YouOnlySpells = false,
                 Players = new System.Collections.Generic.List<PlayerInfo>(),
                 DpsWindowState = new WindowState
                 {
@@ -76,11 +74,6 @@ namespace EQTool.Services
                     State = System.Windows.WindowState.Normal
                 },
                 MobWindowState = new WindowState
-                {
-                    Closed = false,
-                    State = System.Windows.WindowState.Normal
-                },
-                SpellWindowState = new WindowState
                 {
                     Closed = false,
                     State = System.Windows.WindowState.Normal

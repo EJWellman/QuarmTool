@@ -46,10 +46,14 @@ namespace EQTool
 				WindowTitle.Text = timer.Title;
 				ShowBestGuess.IsChecked = timer.BestGuessSpells;
 				ShowModRods.IsChecked = timer.ShowModRodTimers;
+				ShowDeathTouches.IsChecked = timer.ShowDeathTouches;
 				ShowSpells.IsChecked = timer.ShowSpells;
 				ShowDeaths.IsChecked = timer.ShowTimers;
 				ShowRolls.IsChecked = timer.ShowRandomRolls;
 				ShowYouOnly.IsChecked = timer.YouOnlySpells;
+				ShowSimpleTimers.IsChecked = timer.ShowSimpleTimers;
+				ShowNPCs.IsChecked = timer.ShowNPCs;
+				ShowPCs.IsChecked = timer.ShowPCs;
 			}
 		}
 
@@ -62,11 +66,14 @@ namespace EQTool
 				temp.Title = WindowTitle.Text;
 				temp.BestGuessSpells = ShowBestGuess.IsChecked ?? false;
 				temp.ShowModRodTimers = ShowModRods.IsChecked ?? false;
+				temp.ShowDeathTouches = ShowDeathTouches.IsChecked ?? false;
 				temp.ShowSpells = ShowSpells.IsChecked ?? false;
 				temp.ShowTimers = ShowDeaths.IsChecked ?? false;
 				temp.ShowRandomRolls = ShowRolls.IsChecked ?? false;
 				temp.YouOnlySpells = ShowYouOnly.IsChecked ?? false;
-
+				temp.ShowSimpleTimers = ShowSimpleTimers.IsChecked ?? false;
+				temp.ShowNPCs = ShowNPCs.IsChecked ?? false;
+				temp.ShowPCs = ShowPCs.IsChecked ?? false;
 
 				UpdateTimerWindow(temp);
 				return;
@@ -78,10 +85,14 @@ namespace EQTool
 				Title = WindowTitle.Text,
 				BestGuessSpells = ShowBestGuess.IsChecked ?? false,
 				ShowModRodTimers = ShowModRods.IsChecked ?? false,
+				ShowDeathTouches = ShowDeathTouches.IsChecked ?? false,
 				ShowSpells = ShowSpells.IsChecked ?? false,
 				ShowTimers = ShowDeaths.IsChecked ?? false,
 				ShowRandomRolls = ShowRolls.IsChecked ?? false,
 				YouOnlySpells = ShowYouOnly.IsChecked ?? false,
+				ShowSimpleTimers = ShowSimpleTimers.IsChecked ?? false,
+				ShowNPCs = ShowNPCs.IsChecked ?? false,
+				ShowPCs = ShowPCs.IsChecked ?? false,
 				WindowRect = "0,0,250,400",
 				Closed = false
 			};
@@ -108,10 +119,14 @@ namespace EQTool
 			WindowTitle.Text = string.Empty;
 			ShowBestGuess.IsChecked = false;
 			ShowModRods.IsChecked = false;
+			ShowDeathTouches.IsChecked = false;
 			ShowSpells.IsChecked = false;
 			ShowDeaths.IsChecked = false;
 			ShowRolls.IsChecked = false;
 			ShowYouOnly.IsChecked = false;
+			ShowSimpleTimers.IsChecked = false;
+			ShowNPCs.IsChecked = false;
+			ShowPCs.IsChecked = false;
 
 			//close popup
 			this.Close();

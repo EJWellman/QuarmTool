@@ -10,7 +10,8 @@
         Beneficial = -1,
         Detrimental = 0,
         Other = 1,
-		ModRod = 2
+		ModRod = 2,
+		DeathTouch = 3
 
     }
 }

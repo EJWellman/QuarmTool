@@ -30,6 +30,7 @@
     <MapFileExtensions>true</MapFileExtensions>
     <ApplicationRevision>1</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
@@ -506,23 +507,14 @@
     <Compile Include="Shapes\ArrowEnds.cs" />
     <Compile Include="Shapes\ArrowLine.cs" />
     <Compile Include="Shapes\ArrowLineBase.cs" />
-    <Compile Include="ComboTimerWindow.xaml.cs">
-      <DependentUpon>ComboTimerWindow.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="TimerWindow.xaml.cs">
-      <DependentUpon>TimerWindow.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Utilities\ZoneSwapper.cs" />
     <Compile Include="ViewModels\ActivePlayerInfo.cs" />
     <Compile Include="Services\TimersService.cs" />
     <Compile Include="ViewModels\BaseTimerWindowViewModel.cs" />
-    <Compile Include="ViewModels\ComboTimerWindowViewModel.cs" />
-    <Compile Include="ViewModels\TimerWindowViewModel.cs" />
     <Compile Include="ViewModels\ZoneViewModel.cs" />
     <Compile Include="ViewModels\MobInfoViewModel.cs" />
     <Compile Include="ViewModels\MapViewModel.cs" />
     <Compile Include="ViewModels\DPSWindowViewModel.cs" />
-    <Compile Include="ViewModels\SpellWindowViewModel.cs" />
     <Compile Include="ViewModels\EntityDPS.cs" />
     <Compile Include="ViewModels\SettingsWindowViewModel.cs" />
     <Compile Include="Models\PlayerInfo.cs" />
@@ -545,9 +537,6 @@
     <Compile Include="Services\TGASharpLib.cs" />
     <Compile Include="Settings.xaml.cs">
       <DependentUpon>Settings.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="SpellWindow.xaml.cs">
-      <DependentUpon>SpellWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="BaseSaveStateWindow.cs" />
     <Page Include="BaseTimerWindow.xaml">
@@ -591,18 +580,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Settings.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="ComboTimerWindow.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="TimerWindow.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="SpellWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

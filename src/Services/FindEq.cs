@@ -57,9 +57,9 @@ namespace EQTool.Services
 							if (eqmaxexists)
 							{
 								var dirdata = GetUIFiles(root)
-															.OrderByDescending(a => a.LastWriteTime)
-															.Select(a => new { a.LastWriteTime, a.FullName })
-															.FirstOrDefault();
+									.OrderByDescending(a => a.LastWriteTime)
+									.Select(a => new { a.LastWriteTime, a.FullName })
+									.FirstOrDefault();
 								if (dirdata != null)
 								{
 									var directory = new DirectoryInfo(root);
@@ -93,26 +93,26 @@ namespace EQTool.Services
 				}));
 			}
 			var allran = Task.WaitAll(tasks.ToArray(), 1000 * 5);
-			var rootfolder = possibles.Where(a => a.HasCharUiFiles).OrderByDescending(a => a.LastModifiedDate).FirstOrDefault();
-			if (rootfolder == null)
+			var rootFolder = possibles.Where(a => a.HasCharUiFiles).OrderByDescending(a => a.LastModifiedDate).FirstOrDefault();
+			if (rootFolder == null)
 			{
-				rootfolder = possibles.OrderByDescending(a => a.LastModifiedDate).FirstOrDefault();
+				rootFolder = possibles.OrderByDescending(a => a.LastModifiedDate).FirstOrDefault();
 			}
 
-			if (rootfolder != null)
+			if (rootFolder != null)
 			{
-				var logifles = GetLogFileLocation(new FindEQData
+				var logFiles = GetLogFileLocation(new FindEQData
 				{
-					EqBaseLocation = rootfolder.EqBaseLocation,
-					EQlogLocation = rootfolder.EQlogLocation,
+					EqBaseLocation = rootFolder.EqBaseLocation,
+					EQlogLocation = rootFolder.EQlogLocation,
 				});
-				if (logifles.Found)
+				if (logFiles.Found)
 				{
-					rootfolder.EQlogLocation = logifles.Location;
+					rootFolder.EQlogLocation = logFiles.Location;
 				}
 			}
 
-			return rootfolder;
+			return rootFolder;
 		}
 
 		private FindEQData LoadEQPath_ForP99()
@@ -343,12 +343,29 @@ namespace EQTool.Services
 			public bool Found { get; set; }
 		}
 
+		public class LogFile
+		{
+			public string Location { get; set; }
+			public string Name { get; set; }
+			public string CharName { get; set; }
+		}
+
 		public static LogFileInfo GetLogFileLocation(FindEQData data)
 		{
-			var searchPatterm = "eqlog*.txt";
+			return GetLogFileLocation(data, null);
+		}
+
+		public static LogFileInfo GetLogFileLocation(FindEQData data, string selectedCharacter)
+		{
+			var searchPattern = "eqlog*.txt";
 #if QUARM
-			searchPatterm = "eqlog_*_pq.proj.txt";
+			searchPattern = "eqlog_*_pq.proj.txt";
 #endif
+			if (!string.IsNullOrWhiteSpace(selectedCharacter))
+			{
+				searchPattern = searchPattern.Replace("*", selectedCharacter);
+			}
+
 			var seperator = "\\";
 			if (!string.IsNullOrWhiteSpace(data.EqBaseLocation))
 			{
@@ -360,7 +377,7 @@ namespace EQTool.Services
 			{
 				if (!string.IsNullOrWhiteSpace(data.EQlogLocation))
 				{
-					ret.Found = Directory.EnumerateFiles(data.EQlogLocation, searchPatterm, SearchOption.TopDirectoryOnly).Any();
+					ret.Found = Directory.EnumerateFiles(data.EQlogLocation, searchPattern, SearchOption.TopDirectoryOnly).Any();
 					if (ret.Found)
 					{
 						ret.Location = data.EQlogLocation;
@@ -379,7 +396,7 @@ namespace EQTool.Services
 				if (!string.IsNullOrWhiteSpace(data.EqBaseLocation))
 				{
 					var directory = new DirectoryInfo(data.EqBaseLocation + logs);
-					var files = directory.GetFiles(searchPatterm, SearchOption.TopDirectoryOnly);
+					var files = directory.GetFiles(searchPattern, SearchOption.TopDirectoryOnly);
 					filepossibles.AddRange(files);
 				}
 			}
@@ -391,7 +408,7 @@ namespace EQTool.Services
 				{
 					var root = GetVirtualStoreLocation(data.EqBaseLocation) + logs;
 					var directory = new DirectoryInfo(root);
-					var files = directory.GetFiles(searchPatterm, SearchOption.TopDirectoryOnly);
+					var files = directory.GetFiles(searchPattern, SearchOption.TopDirectoryOnly);
 					filepossibles.AddRange(files);
 				}
 			}

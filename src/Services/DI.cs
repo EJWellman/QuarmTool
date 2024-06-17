@@ -26,7 +26,6 @@ namespace EQTool.Services
             builder.RegisterType<SettingsWindowViewModel>().AsSelf().SingleInstance();
             builder.RegisterType<EQSpells>().AsSelf().SingleInstance();
             builder.RegisterType<ActivePlayer>().AsSelf().SingleInstance();
-            builder.RegisterType<SpellWindowViewModel>().AsSelf().SingleInstance();
             builder.RegisterType<LogParser>().AsSelf().SingleInstance();
             builder.RegisterType<DPSWindowViewModel>().AsSelf().SingleInstance();
             builder.RegisterType<ZoneViewModel>().AsSelf().SingleInstance();

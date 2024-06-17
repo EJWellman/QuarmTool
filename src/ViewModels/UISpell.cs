@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using System.Text;
 using System.Windows;
 using System.Windows.Media;
 
@@ -20,7 +21,7 @@ namespace EQTool.ViewModels
             TotalSecondsOnSpell = (int)(TimerEndDateTime - DateTime.Now).TotalSeconds;
             UpdateTimeLeft();
 		}
-		public UISpell(DateTime endTime, DateTime maxEndTime, bool isNPC)
+		public UISpell(DateTime endTime, DateTime maxEndTime, bool isNPC, bool simpleTimers)
 		{
 			this.IsNPC = isNPC;
 			TimerEndDateTime = endTime;
@@ -28,6 +29,7 @@ namespace EQTool.ViewModels
 			TotalSecondsOnSpell = (int)(TimerEndDateTime - DateTime.Now).TotalSeconds;
 			NegativeSecondsOnSpell = (int)(maxEndTime - DateTime.Now).TotalSeconds;
 			UpdateTimeLeft();
+			ShowSimpleTimers = simpleTimers;
 		}
 
 		public SpellIcon SpellIcon { get; set; }
@@ -98,7 +100,9 @@ namespace EQTool.ViewModels
 			OnPropertyChanged(nameof(NegativeSecondsOnSpell));
             OnPropertyChanged(nameof(SecondsLeftOnSpell));
             OnPropertyChanged(nameof(SecondsLeftOnSpellPretty));
-            OnPropertyChanged(nameof(PercentLeftOnSpell));
+			OnPropertyChanged(nameof(SimpleSpellDuration));
+			OnPropertyChanged(nameof(SpellDuration));
+			OnPropertyChanged(nameof(PercentLeftOnSpell));
         }
 
         public bool HasSpellIcon => SpellIcon != null;
@@ -252,7 +256,7 @@ namespace EQTool.ViewModels
                 {
                     return Visibility.Visible;
                 }
-                else if (_ShowOnlyYou && TargetName != EQSpells.SpaceYou)
+                else if (_ShowOnlyYou && TargetName != EQSpells.SpaceYou/* && TargetName != "Death Touches"*/)
                 {
                     return Visibility.Collapsed;
                 }
@@ -275,38 +279,88 @@ namespace EQTool.ViewModels
 			}
 		}
 
+		public bool ShowSimpleTimers;
+
+		public string SpellDuration
+		{
+			get
+			{
+				if(ShowSimpleTimers)
+				{
+					return SimpleSpellDuration;
+				}
+				else
+				{
+					return SecondsLeftOnSpellPretty;
+				}
+			}
+		}
+
         public string SecondsLeftOnSpellPretty
         {
             get
             {
-                var st = "";
+				StringBuilder st = new StringBuilder();
                 if (_SecondsLeftOnSpell.Hours > 0)
                 {
-                    st += _SecondsLeftOnSpell.Hours + "h ";
+                    st.Append(_SecondsLeftOnSpell.Hours + "h ");
                 }
 				else if (_SecondsLeftOnSpell.Hours <= 0 && _SecondsLeftOnSpell.Seconds <= 0 && _NegativeDurationToShow.Hours > 0)
 				{
-					st += "-" + _NegativeDurationToShow.Hours + "h ";
+					st.Append("-" + _NegativeDurationToShow.Hours + "h ");
 				}
                 if (_SecondsLeftOnSpell.Minutes > 0)
                 {
-                    st += _SecondsLeftOnSpell.Minutes + "m ";
+                    st.Append(_SecondsLeftOnSpell.Minutes + "m ");
                 }
 				else if (_SecondsLeftOnSpell.Minutes <= 0 && _SecondsLeftOnSpell.Seconds <= 0 && _NegativeDurationToShow.Minutes > 0)
 				{
-					st += "-" + _NegativeDurationToShow.Minutes + "m ";
+					st.Append("-" + _NegativeDurationToShow.Minutes + "m ");
 				}
                 if (_SecondsLeftOnSpell.Seconds > 0)
                 {
-                    st += _SecondsLeftOnSpell.Seconds + "s";
+                    st.Append(_SecondsLeftOnSpell.Seconds + "s");
                 }
 				else if (_SecondsLeftOnSpell.Seconds <= 0 && _SecondsLeftOnSpell.Seconds <= 0 && _NegativeDurationToShow.Seconds > 0)
 				{
-					st += "-" + _NegativeDurationToShow.Seconds + "s";
+					st.Append("-" + _NegativeDurationToShow.Seconds + "s");
 				}
-                return st;
+                return st.ToString();
 
             }
+		}
+
+		public string SimpleSpellDuration
+		{
+			get
+			{
+				if (_SecondsLeftOnSpell.Hours > 0)
+				{
+					return _SecondsLeftOnSpell.Hours + "h ";
+				}
+				else if (_SecondsLeftOnSpell.Hours <= 0 && _SecondsLeftOnSpell.Seconds <= 0 && _NegativeDurationToShow.Hours > 0)
+				{
+					return "-" + _NegativeDurationToShow.Hours + "h ";
+				}
+				if (_SecondsLeftOnSpell.Minutes > 0)
+				{
+					return _SecondsLeftOnSpell.Minutes + "m ";
+				}
+				else if (_SecondsLeftOnSpell.Minutes <= 0 && _SecondsLeftOnSpell.Seconds <= 0 && _NegativeDurationToShow.Minutes > 0)
+				{
+					return "-" + _NegativeDurationToShow.Minutes + "m ";
+				}
+				if (_SecondsLeftOnSpell.Seconds > 0)
+				{
+					return _SecondsLeftOnSpell.Seconds + "s";
+				}
+				else if (_SecondsLeftOnSpell.Seconds <= 0 && _SecondsLeftOnSpell.Seconds <= 0 && _NegativeDurationToShow.Seconds > 0)
+				{
+					return "-" + _NegativeDurationToShow.Seconds + "s";
+				}
+
+				return string.Empty;
+			}
 		}
 
 		public bool PersistentSpell { get; set; }

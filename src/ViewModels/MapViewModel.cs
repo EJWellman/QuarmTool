@@ -450,23 +450,6 @@ namespace EQTool.ViewModels
                     }
                 }
             }
-            //var translate = new TranslateTransform(x, y);
-            //Transform.Matrix = translate.Value * Transform.Matrix;
-            //foreach (UIElement child in Canvas.Children)
-            //{
-            //    if (child is ArrowLine c)
-            //    {
-            //        var transform = new MatrixTransform();
-            //        var translation = new TranslateTransform(Transform.Value.OffsetX, Transform.Value.OffsetY);
-            //        transform.Matrix = c.RotateTransform.Value * translation.Value;
-            //        c.RenderTransform = transform;
-            //    }
-            //    else
-            //    {
-            //        child.RenderTransform = Transform;
-            //    }
-            //}
-            //CenterMapOnPlayer();
         }
 		private void CenterMapOnPlayer(Point3D value1)
 		{
@@ -911,17 +894,20 @@ namespace EQTool.ViewModels
             }
             else
             {
-                MapViewModelService.UpdateLocation(new UpdateLocationData
-                {
-                    Trackingdistance = e.TrackingDistance,
-                    CurrentScaling = CurrentScaling,
-                    MapOffset = MapOffset,
-                    Oldlocation = new Point3D(p.Player.X, p.Player.Y, p.Player.Z),
-                    Newlocation = new Point3D(e.X, e.Y, e.Z),
-                    PlayerLocationCircle = p,
-                    Transform = Transform
-                });
-                p.Player = e;
+				if(p.Player.X != e.X || p.Player.Y != e.Y)
+				{
+					MapViewModelService.UpdateLocation(new UpdateLocationData
+					{
+						Trackingdistance = e.TrackingDistance,
+						CurrentScaling = CurrentScaling,
+						MapOffset = MapOffset,
+						Oldlocation = new Point3D(p.Player.X, p.Player.Y, p.Player.Z),
+						Newlocation = new Point3D(e.X, e.Y, e.Z),
+						PlayerLocationCircle = p,
+						Transform = Transform
+					});
+					p.Player = e;
+				}
             }
         }
 

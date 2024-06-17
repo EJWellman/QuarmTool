@@ -108,6 +108,18 @@ namespace EQTool.ViewModels
 				OnPropertyChanged();
 			}
 		}
+		public bool ShowDeathTouches
+		{
+			get
+			{
+				return _windowOptions.ShowDeathTouches;
+			}
+			set
+			{
+				_windowOptions.ShowDeathTouches = value;
+				OnPropertyChanged();
+			}
+		}
 		public bool ShowSpells
 		{
 			get
@@ -117,6 +129,42 @@ namespace EQTool.ViewModels
 			set
 			{
 				_windowOptions.ShowSpells = value;
+				OnPropertyChanged();
+			}
+		}
+		public bool ShowNPCs
+		{
+			get
+			{
+				return _windowOptions.ShowNPCs;
+			}
+			set
+			{
+				_windowOptions.ShowNPCs = value;
+				OnPropertyChanged();
+			}
+		}
+		public bool ShowPCs
+		{
+			get
+			{
+				return _windowOptions.ShowPCs;
+			}
+			set
+			{
+				_windowOptions.ShowPCs = value;
+				OnPropertyChanged();
+			}
+		}
+		public bool ShowSimpleTimers
+		{
+			get
+			{
+				return _windowOptions.ShowSimpleTimers;
+			}
+			set
+			{
+				_windowOptions.ShowSimpleTimers = value;
 				OnPropertyChanged();
 			}
 		}
@@ -191,56 +239,14 @@ namespace EQTool.ViewModels
 		{
 			_appDispatcher.DispatchUI(() =>
 			{
+				var d = DateTime.Now;
 				var player = _activePlayer.Player;
 				var itemsToRemove = new List<UISpell>();
 
-				var d = DateTime.Now;
 				foreach (var item in SpellList)
 				{
 					item.UpdateTimeLeft();
-					if ((item.SpellType != SpellTypes.RandomRoll && item.SpellType != SpellTypes.RespawnTimer)
-						&& YouOnlySpells && item.TargetName != EQSpells.SpaceYou)
-					{
-						itemsToRemove.Add(item);
-					}
-					else if (item.MaxTimerEndDateTime != null && item.MaxTimerEndDateTime < DateTime.Now)
-					{
-						itemsToRemove.Add(item);
-					}
-					else if (item.NegativeDurationToShow.TotalSeconds <= 0 && !item.PersistentSpell)
-					{
-						itemsToRemove.Add(item);
-					}
-					else if (item.PersistentSpell && (d - item.UpdatedDateTime).TotalMinutes > 30)
-					{
-						itemsToRemove.Add(item);
-					}
-					item.HideGuesses = !BestGuessSpells;
-					item.ShowOnlyYou = YouOnlySpells;
-					item.HideClasses = player != null && SpellUIExtensions.HideSpell(player.ShowSpellsForClasses, item.Classes) && item.TargetName != EQSpells.SpaceYou;
-					if (item.SpellType == SpellTypes.RandomRoll)
-					{
-						item.HideClasses = !ShowRandomRolls;
-					}
-					if (item.SpellType == SpellTypes.RespawnTimer
-						&& !ShowTimers)
-					{
-						itemsToRemove.Add(item);
-					}
-					else if (item.SpellType == SpellTypes.RandomRoll
-					&& !ShowRandomRolls)
-					{
-						itemsToRemove.Add(item);
-					}
-					else if (!ShowModRodTimers
-						&& item.SpellType == SpellTypes.ModRod)
-					{
-						itemsToRemove.Add(item);
-					}
-					else if (!ShowSpells
-						&& item.SpellType != SpellTypes.RandomRoll
-						&& item.SpellType != SpellTypes.RespawnTimer
-						&& item.SpellType != SpellTypes.ModRod)
+					if (!ShouldProduceTimer(item))
 					{
 						itemsToRemove.Add(item);
 					}
@@ -320,6 +326,18 @@ namespace EQTool.ViewModels
 			"Tsunami",
 			"Ancient Breath"
 		};
+
+		public void UpdateSpellVisuals(TimerWindowOptions options)
+		{
+			foreach (var item in SpellList)
+			{
+				item.ShowSimpleTimers = options.ShowSimpleTimers;
+				item.SpellNameColor = new System.Windows.Media.SolidColorBrush(_settings.SpellTimerNameColor);
+				item.ProgressBarColor = _colorService.GetColorFromSpellType(item.SpellType);
+				item.DropShadowVisibility = _settings.ShowTimerDropShadows ? Visibility.Visible : Visibility.Collapsed;
+				item.UpdateTimeLeft();
+			}
+		}
 
 		public void TryAdd(SpellParsingMatch match, bool resisted)
 		{
@@ -401,11 +419,12 @@ namespace EQTool.ViewModels
 				{
 					return;
 				}
-				var needscount = SpellsThatNeedCounts.Contains(spellname);
+				//var needscount = SpellsThatNeedCounts.Contains(spellname);
 				var spellduration = TimeSpan.FromSeconds(SpellDurations.GetDuration_inSeconds(match.Spell, _activePlayer.Player));
-				var duration = needscount ? 0 : match.TotalSecondsOverride ?? spellduration.TotalSeconds;
+				var duration = match.TotalSecondsOverride ?? spellduration.TotalSeconds;
+				//var duration = needscount ? 0 : match.TotalSecondsOverride ?? spellduration.TotalSeconds;
 				var isnpc = MasterNPCList.NPCs.Contains(match.TargetName);
-				var uispell = new UISpell(DateTime.Now.AddSeconds((int)duration), DateTime.Now.AddSeconds((int)duration), isnpc)
+				var uispell = new UISpell(DateTime.Now.AddSeconds((int)duration), DateTime.Now.AddSeconds((int)duration), isnpc, _windowOptions.ShowSimpleTimers)
 				{
 					UpdatedDateTime = DateTime.Now,
 					PercentLeftOnSpell = 100,
@@ -413,28 +432,32 @@ namespace EQTool.ViewModels
 					TargetName = match.TargetName,
 					SpellName = spellname,
 					Rect = match.Spell.Rect,
-					PersistentSpell = needscount,
-					Counter = needscount ? 1 : (int?)null,
+					//PersistentSpell = needscount,
+					//Counter = needscount ? 1 : (int?)null,
 					SpellIcon = match.Spell.SpellIcon,
 					Classes = match.Spell.Classes,
-					GuessedSpell = match.MultipleMatchesFound,
+					GuessedSpell = match.IsGuess,
 					SpellNameColor = new System.Windows.Media.SolidColorBrush(_settings.SpellTimerNameColor),
 					ProgressBarColor = _colorService.GetColorFromSpellType(match.Spell.type),
 					DropShadowVisibility = _settings.ShowTimerDropShadows ? Visibility.Visible : Visibility.Collapsed
 				};
+				if (!ShouldProduceTimer(uispell))
+				{
+					return;
+				}
 				var s = SpellList.FirstOrDefault(a => a.SpellName == spellname && match.TargetName == a.TargetName);
 				if (s != null)
 				{
-					if (needscount)
-					{
-						s.Counter += 1;
-						s.UpdatedDateTime = DateTime.Now;
-					}
-					else
-					{
+					//if (needscount)
+					//{
+					//	s.Counter += 1;
+					//	s.UpdatedDateTime = DateTime.Now;
+					//}
+					//else
+					//{
 						_ = SpellList.Remove(s);
 						SpellList.Add(uispell);
-					}
+					//}
 				}
 				else
 				{
@@ -455,14 +478,14 @@ namespace EQTool.ViewModels
 
 			_appDispatcher.DispatchUI(() =>
 			{
-				var s = SpellList.FirstOrDefault(a => a.SpellName == match.Name && match.TargetName == a.TargetName);
-				if (s != null)
-				{
-					if (match.SpellType != SpellTypes.RandomRoll)
-					{
-						_ = SpellList.Remove(s);
-					}
-				}
+				//var s = SpellList.FirstOrDefault(a => a.SpellName == match.Name && match.TargetName == a.TargetName);
+				//if (s != null)
+				//{
+				//	if (match.SpellType != SpellTypes.RandomRoll)
+				//	{
+				//		_ = SpellList.Remove(s);
+				//	}
+				//}
 
 				var spellduration = match.DurationInSeconds;
 				var negativeDuration = match.NegativeDurationToShow;
@@ -496,7 +519,7 @@ namespace EQTool.ViewModels
 					negativeEndTime = DateTime.Now.AddSeconds(negativeDuration > spellduration ? negativeDuration : spellduration);
 				}
 
-				SpellList.Add(new UISpell(endTime, negativeEndTime, false)
+				SpellList.Add(new UISpell(endTime, negativeEndTime, false, _windowOptions.ShowSimpleTimers)
 				{
 					UpdatedDateTime = match.ExecutionTime,
 					PercentLeftOnSpell = 100,
@@ -628,6 +651,76 @@ namespace EQTool.ViewModels
 					_ = SpellList.Remove(item);
 				}
 			});
+		}
+
+		private bool ShouldProduceTimer(UISpell item)
+		{
+			var d = DateTime.Now;
+			var player = _activePlayer.Player;
+
+			if ((item.SpellType != SpellTypes.RandomRoll && item.SpellType != SpellTypes.RespawnTimer)
+				&& YouOnlySpells && item.TargetName != EQSpells.SpaceYou)
+			{
+				return false;
+			}
+			//else if (item.MaxTimerEndDateTime != null && item.MaxTimerEndDateTime < DateTime.Now)
+			//{
+			//	return false;
+			//}
+			else if (item.NegativeDurationToShow.TotalSeconds <= 0 && !item.PersistentSpell)
+			{
+				return false;
+			}
+			else if (item.PersistentSpell && (d - item.UpdatedDateTime).TotalMinutes > 30)
+			{
+				return false;
+			}
+			else if (item.IsNPC && !_windowOptions.ShowNPCs)
+			{
+				return false;
+			}
+			else if (!item.IsNPC && !_windowOptions.ShowPCs)
+			{
+				return false;
+			}
+
+			item.HideGuesses = !_windowOptions.BestGuessSpells;
+			item.ShowOnlyYou = _windowOptions.YouOnlySpells;
+			item.HideClasses = player != null && SpellUIExtensions.HideSpell(player.ShowSpellsForClasses, item.Classes) && item.TargetName != EQSpells.SpaceYou;
+			if (item.SpellType == SpellTypes.RandomRoll)
+			{
+				item.HideClasses = !ShowRandomRolls;
+			}
+			if (item.SpellType == SpellTypes.DeathTouch 
+				&& !_windowOptions.ShowDeathTouches)
+			{
+				return false;
+			}
+			if (item.SpellType == SpellTypes.RespawnTimer
+				&& !ShowTimers)
+			{
+				return false;
+			}
+			else if (item.SpellType == SpellTypes.RandomRoll
+			&& !ShowRandomRolls)
+			{
+				return false;
+			}
+			else if (!ShowModRodTimers
+				&& item.SpellType == SpellTypes.ModRod)
+			{
+				return false;
+			}
+			else if (!ShowSpells
+				&& item.SpellType != SpellTypes.RandomRoll
+				&& item.SpellType != SpellTypes.RespawnTimer
+				&& item.SpellType != SpellTypes.ModRod 
+				&& !_windowOptions.ShowDeathTouches)
+			{
+				return false;
+			}
+
+			return true;
 		}
 
 		public event PropertyChangedEventHandler PropertyChanged;

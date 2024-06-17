@@ -175,7 +175,13 @@ namespace EQTool.Services
         public class QuakeArgs : EventArgs { }
         public class CharmBreakArgs : EventArgs { }
 
-        public event EventHandler<RandomRollEventArgs> RandomRollEvent;
+		public class SignalRLocationEventArgs : EventArgs
+		{
+			public Point3D Location { get; set; }
+		}
+
+
+		public event EventHandler<RandomRollEventArgs> RandomRollEvent;
         public event EventHandler<WhoEventArgs> WhoEvent;
         public event EventHandler<WhoPlayerEventArgs> WhoPlayerEvent;
         public event EventHandler<SpellWornOffSelfEventArgs> SpellWornOffSelfEvent;
@@ -203,6 +209,8 @@ namespace EQTool.Services
         public event EventHandler<EnteredWorldArgs> EnteredWorldEvent;
 		public event EventHandler<ModRodUsageArgs> ModRodUsedEvent;
 		public event EventHandler<CustomOverlayEventArgs> CustomOverlayEvent;
+
+		public event EventHandler<SignalRLocationEventArgs> Zeal_SignalRLocationEvent;
 
         public void Push(string log)
         {
@@ -269,6 +277,11 @@ namespace EQTool.Services
                             {
                                 Debug.WriteLine("CampEvent");
                                 CampEvent?.Invoke(this, new CampEventArgs());
+
+								if(_settings.SelectedCharacter != null)
+								{
+									_settings.SelectedCharacter = null;
+								}
                             });
                         }
                     });
@@ -284,7 +297,10 @@ namespace EQTool.Services
                     HasUsedStartupEnterWorld = true;
                     Debug.WriteLine("EnteredWorldEvent In Game");
                     EnteredWorldEvent?.Invoke(this, new EnteredWorldArgs());
-					//Add log lock
+					if(_settings.SelectedCharacter == null)
+					{
+						_settings.SelectedCharacter = _activePlayer.Player.Name;
+					}
                     return;
                 }
 
@@ -515,7 +531,7 @@ namespace EQTool.Services
             LogFileInfo logfounddata = null;
             try
             {
-                logfounddata = FindEq.GetLogFileLocation(new FindEq.FindEQData { EqBaseLocation = _settings.DefaultEqDirectory, EQlogLocation = _settings.EqLogDirectory });
+                logfounddata = FindEq.GetLogFileLocation(new FindEq.FindEQData { EqBaseLocation = _settings.DefaultEqDirectory, EQlogLocation = _settings.EqLogDirectory }, _settings.SelectedCharacter);
             }
             catch { }
             if (logfounddata == null || !logfounddata.Found)
@@ -528,6 +544,10 @@ namespace EQTool.Services
             {
                 try
                 {
+					if(_settings.SelectedCharacter != null)
+					{
+					}
+
                     var playerchanged = _activePlayer.Update();
                     var filepath = _activePlayer.LogFileName;
                     if (playerchanged || filepath != _lastLogFilename)
@@ -606,6 +626,14 @@ namespace EQTool.Services
                 }
             });
         }
+
+		public void PingSignalRLocationEvent(Point3D loc)
+		{
+			_appDispatcher.DispatchUI(() =>
+			{
+				Zeal_SignalRLocationEvent?.Invoke(null, new SignalRLocationEventArgs() { Location = loc });
+			});
+		}
 
         public void Dispose()
         {

@@ -16,7 +16,7 @@ namespace EQTool.Services
 
         public DT_Event DtCheck(string line)
         {
-			string mobShoutRegex = "^(\\w.+)(?=shouts ')(shouts ')([A-z]+)!'$";
+			string mobShoutRegex = "^(\\w.+) shouts '([A-z]+)!'$";
 
 			if(Regex.IsMatch(line, mobShoutRegex))
 			{
@@ -24,7 +24,7 @@ namespace EQTool.Services
 				if(match.Success)
 				{
 					string mobName = match.Groups[1].Value.Trim();
-					string dtReceiver = match.Groups[3].Value;
+					string dtReceiver = match.Groups[2].Value;
 
 					return new DT_Event { NpcName = mobName, DTReceiver = dtReceiver };
 				}

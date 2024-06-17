@@ -4,7 +4,9 @@ using EQTool.Models;
 using EQToolShared.Enums;
 using System;
 using System.Collections.Generic;
+using System.Data.Common;
 using System.Data.SQLite;
+using System.Diagnostics.Metrics;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -181,9 +183,21 @@ namespace EQTool.Services
 				if (version == 1)
 				{
 					StringBuilder queryBuilder = new StringBuilder();
+					queryBuilder.AppendLine("PRAGMA user_version = 2;");
 					queryBuilder.AppendLine("CREATE TABLE IF NOT EXISTS TimerWindows (ID INTEGER PRIMARY KEY, Title TEXT, BestGuessSpells BOOL, " +
 							"ShowModRodTimers BOOL, ShowSpells BOOL, ShowTimers BOOL, ShowRandomRolls BOOL, YouOnlySpells BOOL, WindowRect TEXT, State INTEGER," +
 							"Closed BOOL, AlwaysOnTop BOOL, Opacity DOUBLE);");
+
+					cnn.Execute(queryBuilder.ToString());
+				}
+				if(version == 2)
+				{
+					StringBuilder queryBuilder = new StringBuilder();
+					queryBuilder.AppendLine("PRAGMA user_version = 3;");
+					queryBuilder.AppendLine("ALTER TABLE TimerWindows ADD COLUMN ShowSimpleTimers BOOL;");
+					queryBuilder.AppendLine("ALTER TABLE TimerWindows ADD COLUMN ShowNPCs BOOL;");
+					queryBuilder.AppendLine("ALTER TABLE TimerWindows ADD COLUMN ShowPCs BOOL;");
+					queryBuilder.AppendLine("ALTER TABLE TimerWindows ADD COLUMN ShowDeathTouches BOOL;");
 
 					cnn.Execute(queryBuilder.ToString());
 				}

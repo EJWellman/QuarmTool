@@ -185,7 +185,7 @@ namespace EQTool
 				DurationInSeconds = 45,
 				Name = $"--DT-- {e.NpcName} > {e.DTReceiver}",
 				SpellNameIcon = "Disease Cloud",
-				SpellType = EQToolShared.Enums.SpellTypes.BadGuyCoolDown,
+				SpellType = EQToolShared.Enums.SpellTypes.DeathTouch,
 				ExecutionTime = e.ExecutionTime
 			});
 		}

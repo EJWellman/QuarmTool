@@ -109,12 +109,14 @@
                                         <Image Source="pack://application:,,,/Trash.png"/>
                                     </Button>
 
-                                    <TextBlock MinWidth="70" TextAlignment="Right" FontWeight="Bold" Text="{Binding SecondsLeftOnSpellPretty}" Visibility="{Binding DropShadowVisibility}" Foreground="{Binding SpellNameInverseColor}" Grid.Column="1">
+
+
+                                    <TextBlock MinWidth="70" TextAlignment="Right" FontWeight="Bold" Text="{Binding SpellDuration}" Visibility="{Binding DropShadowVisibility}" Foreground="{Binding SpellNameInverseColor}" Grid.Column="1">
                                         <TextBlock.Effect>
                                             <BlurEffect Radius="2.0" KernelType="Box"/>
                                         </TextBlock.Effect>
                                     </TextBlock>
-                                    <TextBlock MinWidth="70" TextAlignment="Right" FontWeight="Bold" Text="{Binding SecondsLeftOnSpellPretty}" Foreground="{Binding SpellNameColor}" Grid.Column="1"/>
+                                    <TextBlock MinWidth="70" TextAlignment="Right" FontWeight="Bold" Text="{Binding SpellDuration}" Foreground="{Binding SpellNameColor}" Grid.Column="1"/>
                                 </Grid>
                             </StackPanel>
                         </Grid>

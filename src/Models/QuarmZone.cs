@@ -9,6 +9,7 @@ namespace EQTool.Models
 	public class QuarmZone
 	{
 		public int ID { get; set; }
+		public int Zone_ID { get; set; }
 		public string Name { get; set; }
 		public string Code { get; set; }
 		public bool IsDungeon { get; set; }

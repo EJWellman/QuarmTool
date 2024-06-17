@@ -11,6 +11,7 @@ using System.Speech.Synthesis;
 using System.Windows;
 using System.Windows.Data;
 using System.Windows.Media;
+using static EQTool.Services.FindEq;
 
 namespace EQTool.ViewModels
 {
@@ -68,7 +69,6 @@ namespace EQTool.ViewModels
                 ((App)System.Windows.Application.Current).UpdateBackgroundOpacity("MyWindowStyleDPS", this._settings.DpsWindowState.Opacity.Value);
                 ((App)System.Windows.Application.Current).UpdateBackgroundOpacity("MyWindowStyleMap", this._settings.MapWindowState.Opacity.Value);
 				((App)System.Windows.Application.Current).UpdateBackgroundOpacity("MyMobWindowSyle", _settings.MobWindowState.Opacity.Value);
-				((App)System.Windows.Application.Current).UpdateBackgroundOpacity("MyWindowStyleTrigger", this._settings.SpellWindowState.Opacity.Value);
                 OnPropertyChanged();
             }
         }
@@ -369,45 +369,6 @@ namespace EQTool.ViewModels
 			}
 		}
 
-        public bool ComboAlwaysOnTop
-        {
-            get
-            {
-                return this._settings.ComboTimerWindowState.AlwaysOnTop;
-            }
-            set
-            {
-                this._settings.ComboTimerWindowState.AlwaysOnTop = value;
-                OnPropertyChanged();
-            }
-		}
-
-		public bool SpellAlwaysOnTop
-		{
-			get
-			{
-				return this._settings.SpellWindowState.AlwaysOnTop;
-			}
-			set
-			{
-				this._settings.SpellWindowState.AlwaysOnTop = value;
-				OnPropertyChanged();
-			}
-		}
-
-		public bool TimerAlwaysOnTop
-		{
-			get
-			{
-				return this._settings.TimerWindowState.AlwaysOnTop;
-			}
-			set
-			{
-				this._settings.TimerWindowState.AlwaysOnTop = value;
-				OnPropertyChanged();
-			}
-		}
-
 		public bool OverlayAlwaysOnTop
 		{
 			get
@@ -417,55 +378,6 @@ namespace EQTool.ViewModels
 			set
 			{
 				this._settings.OverlayWindowState.AlwaysOnTop = value;
-				OnPropertyChanged();
-			}
-		}
-
-		public bool ComboShowRandomRolls
-		{
-			get
-			{
-				return this._settings.ComboShowRandomRolls;
-			}
-			set
-			{
-				this._settings.ComboShowRandomRolls = value;
-				OnPropertyChanged();
-			}
-		}
-		public bool ComboShowSpells
-		{
-			get
-			{
-				return this._settings.ComboShowSpells;
-			}
-			set
-			{
-				this._settings.ComboShowSpells = value;
-				OnPropertyChanged();
-			}
-		}
-		public bool ComboShowTimers
-		{
-			get
-			{
-				return this._settings.ComboShowTimers;
-			}
-			set
-			{
-				this._settings.ComboShowTimers = value;
-				OnPropertyChanged();
-			}
-		}
-		public bool ComboShowModRodTimers
-		{
-			get
-			{
-				return this._settings.ComboShowModRodTimers;
-			}
-			set
-			{
-				this._settings.ComboShowModRodTimers = value;
 				OnPropertyChanged();
 			}
 		}
@@ -485,33 +397,6 @@ namespace EQTool.ViewModels
 				return this._settings.TimerWindows;
 			}
 		}
-
-		public bool ShowRandomRolls
-        {
-            get
-            {
-                return this._settings.ShowRandomRolls;
-            }
-            set
-            {
-                this._settings.ShowRandomRolls = value;
-                OnPropertyChanged();
-            }
-        }
-
-        public double TriggerWindowOpacity
-        {
-            get
-            {
-                return this._settings.SpellWindowState.Opacity ?? 1.0;
-            }
-            set
-            {
-                this._settings.SpellWindowState.Opacity = value;
-                ((App)System.Windows.Application.Current).UpdateBackgroundOpacity("MyWindowStyleTrigger", value);
-                OnPropertyChanged();
-            }
-        }
 
         private ActivePlayer _ActivePlayer;
         public ActivePlayer ActivePlayer
@@ -581,6 +466,28 @@ namespace EQTool.ViewModels
                 OnPropertyChanged(nameof(NotMissingConfiguration));
             }
         }
+
+		public string SelectedCharacter
+		{
+			get
+			{
+				return _settings.SelectedCharacter;
+			}
+			set
+			{
+				_settings.SelectedCharacter = value;
+				OnPropertyChanged();
+				OnPropertyChanged(_settings.SelectedCharacter);
+			}
+		}
+				
+		public ObservableCollection<string> AvailableCharacters
+		{
+			get
+			{
+				return _settings.AvailableCharacters;
+			}
+		}
 
         public bool IsLoggingDisabled => !_IsLoggingEnabled;
 

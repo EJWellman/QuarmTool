@@ -6,6 +6,8 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
+using Xceed.Wpf.Toolkit.Core.Converters;
 
 namespace EQTool.Models
 {
@@ -104,6 +106,19 @@ namespace EQTool.Models
 				OnPropertyChanged();
 			}
 		}
+		private bool showDeathTouches;
+		public bool ShowDeathTouches
+		{
+			get
+			{
+				return showDeathTouches;
+			}
+			set
+			{
+				showDeathTouches = value;
+				OnPropertyChanged();
+			}
+		}
 		private bool showSpells;
 		public bool ShowSpells
 		{
@@ -118,9 +133,53 @@ namespace EQTool.Models
 			}
 		}
 
-		public string WindowRect { get; set; } //-1092,727,310,413
+		private bool showSimpleTimers;
+		public bool ShowSimpleTimers
+		{
+			get
+			{
+				return showSimpleTimers;
+			}
+			set
+			{
+				showSimpleTimers = value;
+				OnPropertyChanged();
+			}
+		}
+
+		private bool showNPCs;
+		public bool ShowNPCs
+		{
+			get
+			{
+				return showNPCs;
+			}
+			set
+			{
+				showNPCs = value;
+				OnPropertyChanged();
+			}
+		}
+
+		private bool showPCs;
+		public bool ShowPCs
+		{
+			get
+			{
+				return showPCs;
+			}
+			set
+			{
+				showPCs = value;
+				OnPropertyChanged();
+			}
+		}
+
+		public string WindowRect { get; set; } //-1092,727,310,413 - XPos, YPos, Width, Height
 		public int State { get; set; }
 		public bool Closed { get; set; }
+
+
 		private bool alwaysOnTop;
 		public bool AlwaysOnTop
 		{

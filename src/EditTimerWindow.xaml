@@ -36,12 +36,27 @@
                 <TextBlock Text="Death Timers" Width="85"></TextBlock>
                 <CheckBox Name="ShowDeaths" Width="40"/>
             </StackPanel>
+            <StackPanel Orientation="Horizontal" Width="250">
+                <TextBlock Text="Death Touches" Width="85"></TextBlock>
+                <CheckBox Name="ShowDeathTouches" Width="40"/>
+            </StackPanel>
             <Separator/>
             <StackPanel Orientation="Horizontal" Width="250">
                 <TextBlock Text="Guess Spells" Width="85" ToolTip="Will use player level to guess the closest spell based on message."/>
                 <CheckBox Name="ShowBestGuess" Width="40" ToolTip="Will use player level to guess the closest spell based on message."/>
                 <TextBlock Text="You Only" Width="85"></TextBlock>
                 <CheckBox Name="ShowYouOnly" Width="40"/>
+            </StackPanel>
+            <Separator/>
+            <StackPanel Orientation="Horizontal" Width="250">
+                <TextBlock Text="Show PCs" Width="85"></TextBlock>
+                <CheckBox Name="ShowPCs" Width="40"/>
+                <TextBlock Text="Show NPCs" Width="85"></TextBlock>
+                <CheckBox Name="ShowNPCs" Width="40"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" Width="250">
+                <TextBlock Text="Simple Timers" Width="85" ToolTip="Only shows the largest time increment on the timer (1h, instead of 1h 20m 46s)."/>
+                <CheckBox Name="ShowSimpleTimers" Width="40" ToolTip="Only shows the largest time increment on the timer (1h, instead of 1h 20m 46s)."/>
             </StackPanel>
 
             <Button Click="NewOverlay_Save" Margin="0,10,0,0" Width="50" HorizontalAlignment="Center">Save</Button>

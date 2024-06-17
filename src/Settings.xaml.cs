@@ -59,7 +59,7 @@ namespace EQTool
         private readonly SettingsWindowViewModel _SettingsWindowData;
         private readonly EQToolSettings _settings;
         private readonly EQToolSettingsLoad _toolSettingsLoad;
-        private readonly SpellWindowViewModel _spellWindowViewModel;
+        private readonly BaseTimerWindowViewModel _spellWindowViewModel;
         private readonly EQSpells _spells;
         private readonly DPSLogParse _dPSLogParse;
 		private readonly TimerWindowFactory _timerWindowFactory;
@@ -79,7 +79,7 @@ namespace EQTool
             EQToolSettings settings,
             EQToolSettingsLoad toolSettingsLoad,
             SettingsWindowViewModel settingsWindowData,
-            SpellWindowViewModel spellWindowViewModel,
+            BaseTimerWindowViewModel spellWindowViewModel,
 			TimerWindowFactory timerFactory,
 			TimerWindowService timerWindowService) : base(settings.SettingsWindowState, toolSettingsLoad, settings)
         {
@@ -249,57 +249,6 @@ namespace EQTool
 		{
 			var s = sender as System.Windows.Controls.CheckBox;
 			_settings.ShowTimerDropShadows = s.IsChecked ?? false;
-			SaveConfig();
-		}
-
-		private void YouSpells_Click(object sender, RoutedEventArgs e)
-        {
-            var s = sender as System.Windows.Controls.CheckBox;
-            _settings.YouOnlySpells = s.IsChecked ?? false;
-            SaveConfig();
-        }
-
-        private void GuessSpells_Click(object sender, RoutedEventArgs e)
-        {
-            var s = sender as System.Windows.Controls.CheckBox;
-            _settings.BestGuessSpells = s.IsChecked ?? false;
-            SaveConfig();
-        }
-
-		private void ComboShowRandom_Click(object sender, RoutedEventArgs e)
-		{
-			var s = sender as System.Windows.Controls.CheckBox;
-			_settings.ComboShowRandomRolls = s.IsChecked ?? false;
-			SaveConfig();
-		}
-		private void ComboShowSpells_Click(object sender, RoutedEventArgs e)
-		{
-			var s = sender as System.Windows.Controls.CheckBox;
-			_settings.ComboShowSpells = s.IsChecked ?? false;
-			SaveConfig();
-		}
-		private void ComboShowTimer_Click(object sender, RoutedEventArgs e)
-		{
-			var s = sender as System.Windows.Controls.CheckBox;
-			_settings.ComboShowTimers = s.IsChecked ?? false;
-			SaveConfig();
-		}
-		private void ComboShowModRodTimers_Click(object sender, RoutedEventArgs e)
-		{
-			var s = sender as System.Windows.Controls.CheckBox;
-			_settings.ComboShowModRodTimers = s.IsChecked ?? false;
-			SaveConfig();
-		}
-		private void TimerShowRandom_Click(object sender, RoutedEventArgs e)
-		{
-			var s = sender as System.Windows.Controls.CheckBox;
-			_settings.ShowRandomRolls = s.IsChecked ?? false;
-			SaveConfig();
-		}
-		private void TimerShowModRodTimers_Click(object sender, RoutedEventArgs e)
-		{
-			var s = sender as System.Windows.Controls.CheckBox;
-			_settings.ShowModRodTimers = s.IsChecked ?? false;
 			SaveConfig();
 		}
 		private void MapVisibleTracking_Click(object sender, RoutedEventArgs e)

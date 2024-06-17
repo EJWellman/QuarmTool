@@ -101,7 +101,7 @@ namespace EQTool.Services.Spells.Log
                     return spell;
                 }
 
-                return settings.BestGuessSpells ? parseSpellGuess.HandleBestGuessSpell(message) : null;
+                return parseSpellGuess.HandleBestGuessSpell(message);
             }
 
             if (activePlayer?.UserCastingSpell != null)
@@ -116,7 +116,7 @@ namespace EQTool.Services.Spells.Log
                 }
             }
 
-            return settings.BestGuessSpells ? parseSpellGuess.HandleBestGuessSpell(message) : null;
+            return parseSpellGuess.HandleBestGuessSpell(message);
         }
     }
 }

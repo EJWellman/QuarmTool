@@ -7,6 +7,7 @@ using System.Runtime.CompilerServices;
 using System.Windows.Media;
 using System.Windows;
 using ZealPipes.Services;
+using System.Collections.ObjectModel;
 
 namespace EQTool.Models
 {
@@ -109,7 +110,7 @@ namespace EQTool.Models
 		public System.Windows.Media.Color FTEOverlayColor
 		{ 
 			get => _FTEOverlayColor; 
-			set => _FTEOverlayColor = value; 
+			set => _FTEOverlayColor = value;
 		}
 		public System.Windows.Media.Color InvisFadingOverlayColor
 		{ 
@@ -141,49 +142,6 @@ namespace EQTool.Models
 				return _OverlayWindowState;
 			}
 			set => _OverlayWindowState = value ?? new WindowState();
-		}
-
-		private WindowState _SpellWindowState;
-		public WindowState SpellWindowState
-		{
-			get
-			{
-				if (_SpellWindowState == null)
-				{
-					_SpellWindowState = new WindowState();
-				}
-				return _SpellWindowState;
-			}
-			set => _SpellWindowState = value ?? new WindowState();
-		}
-
-		private WindowState _TimerWindowState;
-		public WindowState TimerWindowState
-		{
-			get
-			{
-				if (_TimerWindowState == null)
-				{
-					_TimerWindowState = new WindowState();
-				}
-				return _TimerWindowState;
-			}
-			set => _TimerWindowState = value ?? new WindowState();
-		}
-
-
-		private WindowState _ComboTimerWindowState;
-		public WindowState ComboTimerWindowState
-		{
-			get
-			{
-				if (_ComboTimerWindowState == null)
-				{
-					_ComboTimerWindowState = new WindowState();
-				}
-				return _ComboTimerWindowState;
-			}
-			set => _ComboTimerWindowState = value ?? new WindowState();
 		}
 
 		private WindowState _DpsWindowState;
@@ -272,16 +230,6 @@ namespace EQTool.Models
 		}
 
 		public List<PlayerInfo> Players { get; set; } = new List<PlayerInfo>();
-
-		public bool BestGuessSpells { get; set; }
-		public bool YouOnlySpells { get; set; }
-		public bool ShowRandomRolls { get; set; }
-
-		public bool ComboShowRandomRolls { get; set; }
-		public bool ComboShowSpells { get; set; }
-		public bool ComboShowTimers { get; set; }
-		public bool ComboShowModRodTimers { get; set; }
-		public bool ShowModRodTimers { get; set; }
 
 		public bool ShowTimerDropShadows { get; set; } = false;
 		public Color SpellTimerNameColor { get; set; } = Color.FromRgb(255, 255, 255);
@@ -394,7 +342,52 @@ namespace EQTool.Models
 			}
 		}
 
+		private int _zealProcessID = 0;
+		[JsonIgnore]
+		public int ZealProcessID
+		{
+			get
+			{
+				return _zealProcessID;
+			}
+			set
+			{
+				_zealProcessID = value;
+				OnPropertyChanged();
+			}
+		}
+
 		#endregion
+
+		private string selectedCharacter;
+		[JsonIgnore]
+		public string SelectedCharacter
+		{
+			get
+			{
+				return selectedCharacter;
+			}
+			set
+			{
+				selectedCharacter = value;
+				OnPropertyChanged();
+			}
+		}
+
+		private ObservableCollectionRange<string> availableCharacters = new ObservableCollectionRange<string>();
+		[JsonIgnore]
+		public ObservableCollectionRange<string> AvailableCharacters
+		{
+			get
+			{
+				return availableCharacters;
+			}
+			set
+			{
+				availableCharacters = value;
+				OnPropertyChanged();
+			}
+		}
 
 		public event PropertyChangedEventHandler PropertyChanged;
 

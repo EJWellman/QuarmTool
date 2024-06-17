@@ -16,11 +16,11 @@ namespace EQTool.ViewModels
             this.settings = settings;
         }
 
-        public static PlayerInfo GetInfoFromString(string logfilenbame)
+        public static PlayerInfo GetInfoFromString(string logFileName)
         {
-            var charname_withext = logfilenbame.Replace("eqlog_", string.Empty);
-            var indexpart = charname_withext.IndexOf("_");
-            var charName = charname_withext.Substring(0, indexpart);
+            var charName_WithExt = logFileName.Replace("eqlog_", string.Empty);
+            var indexPart = charName_WithExt.IndexOf("_");
+            var charName = charName_WithExt.Substring(0, indexPart);
 
             var p = new PlayerInfo
             {
@@ -31,10 +31,10 @@ namespace EQTool.ViewModels
                 ShowSpellsForClasses = Enum.GetValues(typeof(PlayerClasses)).Cast<PlayerClasses>().ToList()
             };
 
-            indexpart = charname_withext.LastIndexOf("_");
-            if (indexpart != -1)
+            indexPart = charName_WithExt.LastIndexOf("_");
+            if (indexPart != -1)
             {
-                var server = charname_withext.Substring(indexpart + 1).Replace(".txt", string.Empty);
+                var server = charName_WithExt.Substring(indexPart + 1).Replace(".txt", string.Empty);
                 if (server == "P1999PVP")
                 {
                     p.Server = Servers.Red;
@@ -49,41 +49,79 @@ namespace EQTool.ViewModels
                 }
             }
 
-            if (logfilenbame.IndexOf("pq.proj.txt") != -1)
+            if (logFileName.IndexOf("pq.proj.txt") != -1)
             {
                 p.Server = Servers.Quarm;
             }
 
             return p;
         }
-        public bool Update()
+
+		public string GetCharNameFromLogName(string logFileName)
+		{
+			var charName_WithExt = logFileName.Replace("eqlog_", string.Empty);
+			var indexPart = charName_WithExt.IndexOf("_");
+			var charName = charName_WithExt.Substring(0, indexPart);
+
+			return charName;
+		}
+
+		private bool CheckAvailableCharactersForValueAndAdd(string newCharacter)
+		{
+			if (settings.AvailableCharacters.Contains(newCharacter))
+			{
+				return false;
+			}
+			else
+			{
+				settings.AvailableCharacters.Add(newCharacter);
+				return true;
+			}
+		}
+
+		public bool Update()
         {
-            var playerchanged = false;
+            var playerChanged = false;
             try
             {
                 var players = settings.Players ?? new System.Collections.Generic.List<PlayerInfo>();
                 var directory = new DirectoryInfo(settings.EqLogDirectory);
-                var loggedincharlogfile = directory.GetFiles("eqlog*.txt", SearchOption.TopDirectoryOnly)
+                var loggedInCharLogFile = directory.GetFiles("eqlog*.txt", SearchOption.TopDirectoryOnly)
                     .OrderByDescending(a => a.LastWriteTime)
                     .FirstOrDefault();
 
-                if (loggedincharlogfile != null)
-                {
-                    var parseinfo = GetInfoFromString(loggedincharlogfile.Name);
-                    var tempplayer = players.FirstOrDefault(a => a.Name == parseinfo.Name);
-                    LogFileName = loggedincharlogfile.FullName;
+				var files = directory.GetFiles("eqlog*.txt", SearchOption.TopDirectoryOnly)
+					.OrderByDescending(a => a.Name)
+					.Select(f => f.Name).ToList();
 
-                    if (tempplayer == null)
+				if(files.Count != settings.AvailableCharacters.Count)
+				{
+					files.ForEach(f => CheckAvailableCharactersForValueAndAdd(GetCharNameFromLogName(f)));
+				}
+
+
+				if (loggedInCharLogFile != null)
+                {
+                    var parseInfo = GetInfoFromString(loggedInCharLogFile.Name);
+                    var tempPlayer = players.FirstOrDefault(a => a.Name == parseInfo.Name);
+
+                    if (tempPlayer == null)
                     {
-                        players.Add(parseinfo);
+                        players.Add(parseInfo);
                     }
                     else
                     {
-                        tempplayer.Server = parseinfo.Server;
+                        tempPlayer.Server = parseInfo.Server;
                     }
 
-                    playerchanged = tempplayer != Player;
-                    Player = tempplayer;
+					if ((!string.IsNullOrWhiteSpace(settings.SelectedCharacter) && tempPlayer.Name == settings.SelectedCharacter)
+						|| string.IsNullOrWhiteSpace(settings.SelectedCharacter))
+					{
+						Player = tempPlayer;
+						LogFileName = loggedInCharLogFile.FullName;
+
+						playerChanged = tempPlayer != Player;
+					}
                 }
                 else
                 {
@@ -95,7 +133,7 @@ namespace EQTool.ViewModels
 
             }
 
-            return playerchanged;
+            return playerChanged;
         }
 
         private Spell _UserCastingSpell;

@@ -4,7 +4,9 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:properties="clr-namespace:EQTool.Properties" xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+        xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+        xmlns:properties="clr-namespace:EQTool.Properties" 
+        xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         Style="{StaticResource MySettingsWindowSyle}"
         mc:Ignorable="d"
         SizeToContent="WidthAndHeight"
@@ -75,6 +77,12 @@
                         <TextBlock Text="Font Size"  FontWeight="Bold"  VerticalAlignment="Center" MinWidth="100"/>
                         <ComboBox  SelectedItem="{Binding GlobalFontSize}" ItemsSource="{Binding FontSizes}" SelectionChanged="SaveSettings" MinWidth="150"/>
                     </StackPanel>
+                    <Separator/>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="Locked Character" VerticalAlignment="Center"  FontWeight="Bold"  MinWidth="100"/>
+                        <ComboBox  SelectedItem="{Binding SelectedCharacter}" ItemsSource="{Binding AvailableCharacters}" SelectionChanged="SaveSettings" MinWidth="150"/>
+                    </StackPanel>
+                    <Separator/>
                     <StackPanel Orientation="Horizontal" Margin="0,2,0,0">
                         <TextBlock Text="Enable Zeal" VerticalAlignment="Center"  FontWeight="Bold"  MinWidth="100"/>
                         <CheckBox IsChecked="{Binding ZealEnabled}" Click="SaveAlwaysOntopCheckBoxSettings" ></CheckBox>

@@ -1,18 +1,15 @@
 ﻿using EQTool.Factories;
 using EQTool.Models;
 using EQTool.Services;
-using EQTool.Utilities;
 using EQTool.ViewModels;
 using EQToolShared.Enums;
 using EQToolShared.Map;
 using System;
 using System.ComponentModel;
-using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media.Media3D;
-using ZealPipes.Common.Models;
 using ZealPipes.Services;
 
 namespace EQTool
@@ -101,9 +98,27 @@ namespace EQTool
 
 		private void _zealMessageService_OnPlayerMessageReceived(object sender, ZealMessageService.PlayerMessageReceivedEventArgs e)
 		{
+			if (_settings.ZealProcessID == 0)
+			{
+				if (string.IsNullOrWhiteSpace(_settings.SelectedCharacter))
+				{
+					_settings.ZealProcessID = e.ProcessId;
+				}
+			}
+			if (!string.IsNullOrWhiteSpace(_settings.SelectedCharacter) && string.Compare(_settings.SelectedCharacter, e.Message.Character, true) == 0)
+			{
+				_settings.ZealProcessID = e.ProcessId;
+			}
+
 			if (_settings.ZealEnabled && _settings.ZealMap_AutoUpdate)
 			{
-				appDispatcher.DispatchUI(() => mapViewModel.UpdateLocation(new Point3D(e.Message.Data.Position.X, e.Message.Data.Position.Y, e.Message.Data.Position.Z), e.Message.Data.heading));
+				if(_settings.ZealProcessID != 0 && _settings.ZealProcessID != e.ProcessId)
+				{
+					return;
+				}
+				var loc = new Point3D(e.Message.Data.Position.X, e.Message.Data.Position.Y, e.Message.Data.Position.Z);
+				appDispatcher.DispatchUI(() => mapViewModel.UpdateLocation(loc, e.Message.Data.heading));
+				logParser.PingSignalRLocationEvent(loc);
 			}
 		}
 
@@ -297,6 +312,8 @@ namespace EQTool
 
 			this.MouseEnter -= ToggleMouseLocation_Event;
 			this.MouseLeave -= ToggleMouseLocation_Event;
+			_zealMessageService.OnPlayerMessageReceived -= _zealMessageService_OnPlayerMessageReceived;
+
 			base.OnClosing(e);
         }
 

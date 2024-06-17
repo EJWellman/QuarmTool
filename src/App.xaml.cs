@@ -255,9 +255,6 @@ namespace EQTool
 			var hotclericsamegroup = new System.Windows.Forms.MenuItem("HOT Clerics Same Group", CreateHOTClericsSameGroup);
 			var hotclericsparsegroup = new System.Windows.Forms.MenuItem("HOT Clerics Sparse Group", CreateHOTClericsSparseGroup);
 			GroupSuggestionsMenuItem = new System.Windows.Forms.MenuItem("Group Suggestions", new System.Windows.Forms.MenuItem[] { standardgroup, hotclericsamegroup, hotclericsparsegroup });
-			SpellsMenuItem = new System.Windows.Forms.MenuItem("Spells", ToggleSpellsWindow);
-			TimerMenuItem = new System.Windows.Forms.MenuItem("Timers", ToggleTimerWindow);
-			ComboTimerMenuItem = new System.Windows.Forms.MenuItem("Combined Timers", ToggleComboTimerWindow);
 			MapMenuItem = new System.Windows.Forms.MenuItem("Map", ToggleMapWindow);
 			DpsMeterMenuItem = new System.Windows.Forms.MenuItem("Dps", ToggleDPSWindow);
 			OverlayMenuItem = new System.Windows.Forms.MenuItem("Overlay", ToggleOverlayWindow);
@@ -330,18 +327,6 @@ namespace EQTool
 			else
 			{
 				ToggleMenuButtons(true);
-				if (!_settings.SpellWindowState.Closed)
-				{
-					OpenSpellsWindow();
-				}
-				if (!_settings.TimerWindowState.Closed)
-				{
-					OpenTimersWindow();
-				}
-				if (!_settings.ComboTimerWindowState.Closed)
-				{
-					OpenComboTimersWindow();
-				}
 				if (!_settings.DpsWindowState.Closed)
 				{
 					OpenDPSWindow();
@@ -384,7 +369,6 @@ namespace EQTool
             App.Current.Resources["GlobalFontSize"] = (double)(_settings?.FontSize ?? 12);
             ((App)System.Windows.Application.Current).UpdateBackgroundOpacity("MyWindowStyleDPS", _settings.DpsWindowState.Opacity.Value);
             ((App)System.Windows.Application.Current).UpdateBackgroundOpacity("MyWindowStyleMap", _settings.MapWindowState.Opacity.Value);
-            ((App)System.Windows.Application.Current).UpdateBackgroundOpacity("MyWindowStyleTrigger", _settings.SpellWindowState.Opacity.Value);
 			((App)System.Windows.Application.Current).UpdateBackgroundOpacity("MyMobWindowSyle", _settings.MobWindowState.Opacity.Value);
 
 			_zealMessageService.StartProcessing();
@@ -452,7 +436,7 @@ namespace EQTool
                 try
                 {
                     var idletime = GetIdleTime();
-                    var spellstuff = container.Resolve<SpellWindowViewModel>();
+                    var spellstuff = container.Resolve<BaseTimerWindowViewModel>();
                     var logParser = container.Resolve<LogParser>();
                     //if (spellstuff != null)
                     //{
@@ -509,9 +493,9 @@ namespace EQTool
         public void ToggleMenuButtons(bool value)
         {
             MapMenuItem.Enabled = value;
-            SpellsMenuItem.Enabled = value;
-			TimerMenuItem.Enabled = value;
-			ComboTimerMenuItem.Enabled = value;
+            //SpellsMenuItem.Enabled = value;
+			//TimerMenuItem.Enabled = value;
+			//ComboTimerMenuItem.Enabled = value;
             DpsMeterMenuItem.Enabled = value;
             MobInfoMenuItem.Enabled = value;
             GroupSuggestionsMenuItem.Enabled = value;
@@ -658,16 +642,24 @@ namespace EQTool
 				vm.WindowTitle = options.Title;
 				vm.BestGuessSpells = options.BestGuessSpells;
 				vm.ShowModRodTimers = options.ShowModRodTimers;
+				vm.ShowDeathTouches = options.ShowDeathTouches;
 				vm.ShowSpells = options.ShowSpells;
 				vm.ShowTimers = options.ShowTimers;
 				vm.ShowRandomRolls = options.ShowRandomRolls;
 				vm.YouOnlySpells = options.YouOnlySpells;
+
 				vm.ID = options.ID;
 				vm.WindowState.AlwaysOnTop = options.AlwaysOnTop;
 				vm.AlwaysOnTop = options.AlwaysOnTop;
 				w.Topmost = !options.AlwaysOnTop;
 				w.Topmost = options.AlwaysOnTop;
 				vm.WindowState.Opacity = options.Opacity;
+
+				vm.ShowNPCs = options.ShowNPCs;
+				vm.ShowPCs = options.ShowPCs;
+				vm.ShowSimpleTimers = options.ShowSimpleTimers;
+
+				vm.UpdateSpellVisuals(options);
 
 				w.Activate();
 			}
@@ -717,25 +709,6 @@ namespace EQTool
             ToggleWindow<Settings>(s);
         }
 
-
-        public void ToggleSpellsWindow(object sender, EventArgs e)
-        {
-            var s = (System.Windows.Forms.MenuItem)sender;
-            ToggleWindow<SpellWindow>(s);
-		}
-
-		public void ToggleTimerWindow(object sender, EventArgs e)
-		{
-			var s = (System.Windows.Forms.MenuItem)sender;
-			ToggleWindow<TimerWindow>(s);
-		}
-
-		public void ToggleComboTimerWindow(object sender, EventArgs e)
-		{
-			var s = (System.Windows.Forms.MenuItem)sender;
-			ToggleWindow<ComboTimerWindow>(s);
-		}
-
 		public void OpenDPSWindow()
         {
             OpenWindow<DPSMeter>(DpsMeterMenuItem);
@@ -765,21 +738,6 @@ namespace EQTool
         {
             this.SystemTrayIcon.ShowBalloonTip(timeout, tipTitle, tipText, tipIcon);
         }
-
-        public void OpenSpellsWindow()
-        {
-            OpenWindow<SpellWindow>(SpellsMenuItem);
-		}
-
-		public void OpenTimersWindow()
-		{
-			OpenWindow<TimerWindow>(TimerMenuItem);
-		}
-
-		public void OpenComboTimersWindow()
-		{
-			OpenWindow<ComboTimerWindow>(TimerMenuItem);
-		}
 
 		private void OnExit(object sender, EventArgs e)
         {
@@ -834,18 +792,6 @@ namespace EQTool
                 {
                     w2.Topmost = _settings.MobWindowState.AlwaysOnTop;
                 }
-                else if (item is SpellWindow w3)
-                {
-                    w3.Topmost = _settings.SpellWindowState.AlwaysOnTop;
-				}
-				else if (item is ComboTimerWindow w4)
-				{
-					w4.Topmost = _settings.ComboTimerWindowState.AlwaysOnTop;
-				}
-				else if (item is TimerWindow w5)
-				{
-					w5.Topmost = _settings.TimerWindowState.AlwaysOnTop;
-				}
 				else if (item is EventOverlay w6)
 				{
 					w6.Topmost = _settings.OverlayWindowState.AlwaysOnTop;

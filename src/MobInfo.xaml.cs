@@ -146,6 +146,8 @@ namespace EQTool
 			{
 				_logParser.ConEvent -= LogParser_ConEvent;
 			}
+
+			_zealMessageService.OnCharacterUpdated -= ZealMessageService_OnCharacterUpdated;
 			base.OnClosing(e);
 		}
 
