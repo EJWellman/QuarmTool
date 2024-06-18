@@ -17,7 +17,7 @@ namespace EQToolShared.ExtendedClasses
 			string mobNum = name.Substring(name.Length - 3, 3).Replace("_", " ");
 			if (stripNumbers)
 			{
-				return name.Substring(0, name.Length - 3).Replace("_", " ");
+				return name.Substring(0, name.Length - 3).Replace("_", " ").Trim();
 			}
 			else
 			{

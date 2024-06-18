@@ -61,7 +61,7 @@ namespace EQTool
 			_logParser.DeadEvent += LogParser_DeadEvent;
 			_logParser.StartTimerEvent += LogParser_StartTimerEvent;
 			_logParser.CancelTimerEvent += LogParser_CancelTimerEvent;
-			_logParser.POFDTEvent += LogParser_DTEvent;
+			_logParser.DTEvent += LogParser_DTEvent;
 			_logParser.ResistSpellEvent += LogParser_ResistSpellEvent;
 			_logParser.RandomRollEvent += LogParser_RandomRollEvent;
 			_logParser.ModRodUsedEvent += LogParser_ModRodUsedEvent;
@@ -190,7 +190,8 @@ namespace EQTool
 				SpellType = SpellTypes.RandomRoll,
 				Roll = e.RandomRollData.Roll,
 				DurationInSeconds = 60 * 3,
-				ExecutionTime = e.ExecutionTime
+				ExecutionTime = e.ExecutionTime,
+				IsNPC = false
 			});
 		}
 
@@ -273,11 +274,12 @@ namespace EQTool
 					SpellNameIcon = "Disease Cloud",
 					SpellType = SpellTypes.RespawnTimer,
 					TargetName = "Death Timers",
-					ExecutionTime = e.ExecutionTime
+					ExecutionTime = e.ExecutionTime,
+					IsNPC = true
 			};
 
-				var exisitngdeathentry = _baseTimerWindowViewModel.SpellList.FirstOrDefault(a => a.SpellName == add.Name && a.TargetName == "Death Timers");
-				if (exisitngdeathentry != null)
+				var existingDeathEntry = _baseTimerWindowViewModel.SpellList.FirstOrDefault(a => a.SpellName == add.Name && a.TargetName == "Death Timers");
+				if (existingDeathEntry != null)
 				{
 					deathcounter = ++deathcounter > 999 ? 1 : deathcounter;
 					add.Name += "_" + deathcounter;
@@ -296,7 +298,8 @@ namespace EQTool
 				SpellNameIcon = "Modulation",
 				SpellType = SpellTypes.ModRod,
 				TargetName = "Mod Rod Consumed",
-				ExecutionTime = e.ExecutionTime
+				ExecutionTime = e.ExecutionTime,
+				IsNPC = false
 			});
 		}
 
@@ -324,7 +327,7 @@ namespace EQTool
 				_logParser.DeadEvent -= LogParser_DeadEvent;
 				_logParser.StartTimerEvent -= LogParser_StartTimerEvent;
 				_logParser.CancelTimerEvent -= LogParser_CancelTimerEvent;
-				_logParser.POFDTEvent -= LogParser_DTEvent;
+				_logParser.DTEvent -= LogParser_DTEvent;
 				_logParser.ResistSpellEvent -= LogParser_ResistSpellEvent;
 				_logParser.RandomRollEvent -= LogParser_RandomRollEvent;
 				_logParser.ModRodUsedEvent -= LogParser_ModRodUsedEvent;

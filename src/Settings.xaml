@@ -453,6 +453,10 @@
                     <TextBlock Text="Visible Tracking" ToolTip="Adjust the visibility of the Tracking Ring. This is a per character setting" VerticalAlignment="Center"  FontWeight="Bold"  MinWidth="100"/>
                     <CheckBox IsChecked="{Binding MapTrackingVisiblity}" Click="MapVisibleTracking_Click"></CheckBox>
                 </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="Hide Small Labels" ToolTip="Hides the small labels on the map (Non-Zone). This is a per character setting" VerticalAlignment="Center"  FontWeight="Bold"  MinWidth="100"/>
+                    <CheckBox IsChecked="{Binding HideSmallLabels}" Click="MapVisibleTracking_Click"></CheckBox>
+                </StackPanel>
                 <StackPanel Orientation="Horizontal" Margin="0,2,0,0">
                     <TextBlock Text="Update via Zeal" VerticalAlignment="Center" FontWeight="Bold" MinWidth="100">
                     </TextBlock>

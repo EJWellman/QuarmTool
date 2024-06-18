@@ -369,6 +369,19 @@ namespace EQTool.ViewModels
 			}
 		}
 
+		public bool HideSmallLabels
+		{
+			get
+			{
+				return _settings.HideSmallLabels;
+			}
+			set
+			{
+				_settings.HideSmallLabels = value;
+				OnPropertyChanged();
+			}
+		}
+
 		public bool OverlayAlwaysOnTop
 		{
 			get

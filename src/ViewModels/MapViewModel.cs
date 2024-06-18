@@ -251,6 +251,14 @@ namespace EQTool.ViewModels
                     var otherLabelFontSize = MapViewModelService.OtherLabelFontSize(this.AABB) * _settings.MapLabelMultiplier;
                     foreach (var item in map.Labels)
                     {
+						if (_settings.HideSmallLabels)
+						{
+							if(item.LabelSize == LabelSize.Small)
+							{
+								continue;
+							}
+						}
+
                         var text = new TextBlock
                         {
                             Tag = item,

@@ -186,16 +186,30 @@ namespace EQTool.Models
 			}
 		}
 
-		private bool _TrackingVisibility = true;
+		private bool _trackingVisibility = true;
 		public bool TrackingVisibility
 		{
 			get
 			{
-				return _TrackingVisibility;
+				return _trackingVisibility;
 			}
 			set
 			{
-				_TrackingVisibility = value;
+				_trackingVisibility = value;
+				OnPropertyChanged();
+			}
+		}
+
+		private bool _hideSmallLabels = false;
+		public bool HideSmallLabels
+		{
+			get
+			{
+				return _hideSmallLabels;
+			}
+			set
+			{
+				_hideSmallLabels = value;
 				OnPropertyChanged();
 			}
 		}

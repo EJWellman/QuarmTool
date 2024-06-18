@@ -347,6 +347,7 @@ namespace EQTool.ViewModels
 			}
 
 			match.TargetName = match.TargetName.CleanUpZealName();
+			string cleanTargetName = match.TargetName.CleanUpZealName(true);
 
 			_appDispatcher.DispatchUI(() =>
 			{
@@ -423,7 +424,7 @@ namespace EQTool.ViewModels
 				var spellduration = TimeSpan.FromSeconds(SpellDurations.GetDuration_inSeconds(match.Spell, _activePlayer.Player));
 				var duration = match.TotalSecondsOverride ?? spellduration.TotalSeconds;
 				//var duration = needscount ? 0 : match.TotalSecondsOverride ?? spellduration.TotalSeconds;
-				var isnpc = MasterNPCList.NPCs.Contains(match.TargetName);
+				var isnpc = MasterNPCList.NPCs.Contains(cleanTargetName) || cleanTargetName.Trim().Contains(' ');
 				var uispell = new UISpell(DateTime.Now.AddSeconds((int)duration), DateTime.Now.AddSeconds((int)duration), isnpc, _windowOptions.ShowSimpleTimers)
 				{
 					UpdatedDateTime = DateTime.Now,
@@ -439,7 +440,8 @@ namespace EQTool.ViewModels
 					GuessedSpell = match.IsGuess,
 					SpellNameColor = new System.Windows.Media.SolidColorBrush(_settings.SpellTimerNameColor),
 					ProgressBarColor = _colorService.GetColorFromSpellType(match.Spell.type),
-					DropShadowVisibility = _settings.ShowTimerDropShadows ? Visibility.Visible : Visibility.Collapsed
+					DropShadowVisibility = _settings.ShowTimerDropShadows ? Visibility.Visible : Visibility.Collapsed,
+					IsNPC = isnpc
 				};
 				if (!ShouldProduceTimer(uispell))
 				{
@@ -536,7 +538,8 @@ namespace EQTool.ViewModels
 					ExecutionTime = match.ExecutionTime,
 					SpellNameColor = new System.Windows.Media.SolidColorBrush(_settings.SpellTimerNameColor),
 					ProgressBarColor = _colorService.GetColorFromSpellType(match.SpellType),
-					DropShadowVisibility = _settings.ShowTimerDropShadows ? Visibility.Visible : Visibility.Collapsed
+					DropShadowVisibility = _settings.ShowTimerDropShadows ? Visibility.Visible : Visibility.Collapsed,
+					IsNPC = match.IsNPC
 				});
 			});
 		}

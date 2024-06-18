@@ -186,7 +186,7 @@ namespace EQTool.Services
         public event EventHandler<WhoPlayerEventArgs> WhoPlayerEvent;
         public event EventHandler<SpellWornOffSelfEventArgs> SpellWornOffSelfEvent;
         public event EventHandler<QuakeArgs> QuakeEvent;
-        public event EventHandler<DT_Event> POFDTEvent;
+        public event EventHandler<DT_Event> DTEvent;
         public event EventHandler<EnrageEvent> EnrageEvent;
         public event EventHandler<ChParseData> CHEvent;
         public event EventHandler<LevStatus> LevEvent;
@@ -424,7 +424,7 @@ namespace EQTool.Services
                 if (dt != null)
                 {
 					dt.ExecutionTime = timestamp;
-                    POFDTEvent?.Invoke(this, dt);
+                    DTEvent?.Invoke(this, dt);
                     return;
                 }
 

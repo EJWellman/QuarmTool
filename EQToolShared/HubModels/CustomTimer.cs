@@ -17,7 +17,9 @@ namespace EQToolShared.HubModels
         public string TargetName { get; set; } = CustomerTime;
         public Dictionary<PlayerClasses, int> Classes { get; set; } = Enum.GetValues(typeof(PlayerClasses)).Cast<PlayerClasses>().Select(a => new { key = a, level = 1 }).ToDictionary(a => a.key, a => a.level);
 		public DateTime ExecutionTime { get; set; } = DateTime.Now;
+		public bool IsNPC { get; set; } = false;
     }
+
     public class SignalrCustomTimer : CustomTimer
     {
         public Servers Server { get; set; }
