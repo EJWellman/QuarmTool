@@ -61,7 +61,7 @@ namespace EQTool
 			_logParser.DeadEvent += LogParser_DeadEvent;
 			_logParser.StartTimerEvent += LogParser_StartTimerEvent;
 			_logParser.CancelTimerEvent += LogParser_CancelTimerEvent;
-			_logParser.POFDTEvent += LogParser_POFDTEvent;
+			_logParser.POFDTEvent += LogParser_DTEvent;
 			_logParser.ResistSpellEvent += LogParser_ResistSpellEvent;
 			_logParser.RandomRollEvent += LogParser_RandomRollEvent;
 			_logParser.ModRodUsedEvent += LogParser_ModRodUsedEvent;
@@ -87,6 +87,7 @@ namespace EQTool
 
 		private void Window_SizeChanged(object sender, SizeChangedEventArgs e)
 		{
+			e.Handled = true;
 			KeepWindowOnScreen(sender);
 			BaseTimerWindowViewModel vm = ((BaseTimerWindowViewModel)((Window)sender).DataContext);
 			var timerOptions = TimerWindowService.LoadTimerWindow(vm.ID);
@@ -147,6 +148,36 @@ namespace EQTool
 			{
 				((Window)sender).Left = SystemParameters.VirtualScreenWidth + SystemParameters.VirtualScreenLeft - ((Window)sender).Width - 1;
 			}
+
+			if(WindowIsOffScreen((Window)sender))
+			{
+				((Window)sender).Top = SystemParameters.VirtualScreenTop + 1;
+				((Window)sender).Left = SystemParameters.VirtualScreenLeft + 1;
+			}
+			if(WindowIsTooTall((Window)sender))
+			{
+				((Window)sender).Height = 350;
+			}
+			if (WindowIsTooWide((Window)sender))
+			{
+				((Window)sender).Width = 250;
+			}
+		}
+
+		private bool WindowIsOffScreen(Window sender)
+		{
+			return sender.Top < SystemParameters.VirtualScreenTop 
+				|| sender.Left < SystemParameters.VirtualScreenLeft 
+				|| sender.Top + sender.Height > SystemParameters.VirtualScreenHeight 
+				|| sender.Left + sender.Width > SystemParameters.VirtualScreenWidth + SystemParameters.VirtualScreenLeft;
+		}
+		private bool WindowIsTooTall(Window sender)
+		{
+			return sender.Height > SystemParameters.VirtualScreenHeight;
+		}
+		private bool WindowIsTooWide(Window sender)
+		{
+			return sender.Width > SystemParameters.VirtualScreenWidth;
 		}
 
 		private void LogParser_RandomRollEvent(object sender, LogParser.RandomRollEventArgs e)
@@ -177,7 +208,7 @@ namespace EQTool
 			}
 		}
 
-		private void LogParser_POFDTEvent(object sender, DTParser.DT_Event e)
+		private void LogParser_DTEvent(object sender, DTParser.DT_Event e)
 		{
 			this._baseTimerWindowViewModel.TryAddCustom(new CustomTimer
 			{
@@ -293,7 +324,7 @@ namespace EQTool
 				_logParser.DeadEvent -= LogParser_DeadEvent;
 				_logParser.StartTimerEvent -= LogParser_StartTimerEvent;
 				_logParser.CancelTimerEvent -= LogParser_CancelTimerEvent;
-				_logParser.POFDTEvent -= LogParser_POFDTEvent;
+				_logParser.POFDTEvent -= LogParser_DTEvent;
 				_logParser.ResistSpellEvent -= LogParser_ResistSpellEvent;
 				_logParser.RandomRollEvent -= LogParser_RandomRollEvent;
 				_logParser.ModRodUsedEvent -= LogParser_ModRodUsedEvent;

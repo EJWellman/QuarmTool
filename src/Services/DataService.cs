@@ -189,6 +189,7 @@ namespace EQTool.Services
 							"Closed BOOL, AlwaysOnTop BOOL, Opacity DOUBLE);");
 
 					cnn.Execute(queryBuilder.ToString());
+					version = 2;
 				}
 				if(version == 2)
 				{

@@ -658,7 +658,7 @@ namespace EQTool.ViewModels
 			var d = DateTime.Now;
 			var player = _activePlayer.Player;
 
-			if ((item.SpellType != SpellTypes.RandomRoll && item.SpellType != SpellTypes.RespawnTimer)
+			if ((item.SpellType != SpellTypes.RandomRoll && item.SpellType != SpellTypes.RespawnTimer && item.SpellType != SpellTypes.DeathTouch)
 				&& YouOnlySpells && item.TargetName != EQSpells.SpaceYou)
 			{
 				return false;

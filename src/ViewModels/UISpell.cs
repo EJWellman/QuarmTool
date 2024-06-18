@@ -240,7 +240,7 @@ namespace EQTool.ViewModels
         {
             get
             {
-                if (TargetName == CustomTimer.CustomerTime || _SpellType == SpellTypes.Detrimental)
+                if (TargetName == CustomTimer.CustomerTime || _SpellType == SpellTypes.Detrimental || _SpellType == SpellTypes.DeathTouch)
                 {
                     return Visibility.Visible;
                 }

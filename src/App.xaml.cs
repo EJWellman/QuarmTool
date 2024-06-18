@@ -298,15 +298,10 @@ namespace EQTool
 				Visible = true,
 				ContextMenu = new System.Windows.Forms.ContextMenu(new System.Windows.Forms.MenuItem[]
 				{
-                    //GroupSuggestionsMenuItem,
-                    //whythepig,
                     OverlayMenuItem,
 					DpsMeterMenuItem,
 					MapMenuItem,
 					timersMenu,
-					//SpellsMenuItem,
-					//TimerMenuItem,
-					//ComboTimerMenuItem,
                     MobInfoMenuItem,
 					SettingsMenuItem,
 					gitHubMenuItem,

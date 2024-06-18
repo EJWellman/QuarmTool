@@ -127,12 +127,12 @@ namespace EQTool.Services
                     spell_ticks = duration;
                     if (spell_ticks == 0)
                     {
-                        spell_ticks = 3;
+                        spell_ticks = 2;
                     }
 
                     break;
                 case 6:
-                    spell_ticks = (int)Math.Ceiling(level / 2.0f);
+                    spell_ticks = (int)Math.Ceiling(level / 2.0f) + 2;
                     spell_ticks = Math.Min(spell_ticks, duration);
                     break;
                 case 7:
@@ -152,11 +152,14 @@ namespace EQTool.Services
                     spell_ticks = Math.Min(spell_ticks, duration);
                     break;
                 case 11:
-                case 12:
-                case 15:
-                    spell_ticks = duration;
-                    break;
-                case 50:
+					spell_ticks = (level * 30) + 90;
+					spell_ticks = Math.Min(spell_ticks, duration);
+					break;
+                case 12: //Not used by any spells
+					spell_ticks = (int)Math.Ceiling(level / 4f);
+					spell_ticks = Math.Min(spell_ticks, duration);
+					break;
+                case 50: // Permanent buff
                     spell_ticks = 72000;
                     break;
                 case 3600:
