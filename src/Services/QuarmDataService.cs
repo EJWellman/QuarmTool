@@ -38,11 +38,7 @@ namespace EQTool.Services
 
 			var mobsTemp = DataService.GetData<QuarmMonster>("SELECT * " +
 				"FROM NPC " +
-				"WHERE (HP < 33000" +
-				"	OR NPC_Class_ID IN(" +
-				"		20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34" +
-				"	)" +
-				")	AND (Zone_Code LIKE @Zone_CodeLike1" +
+				"WHERE (Zone_Code LIKE @Zone_CodeLike1" +
 				"	OR Zone_Code LIKE @Zone_CodeLike2" +
 				"	OR Zone_Code = @Zone_Code" +
 				"	OR Zone_Code_Guess = @Zone_Code)", new { Zone_CodeLike1 = likeZoneCode1, Zone_CodeLike2 = likeZoneCode2, Zone_Code = zoneCode });
