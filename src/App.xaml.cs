@@ -364,6 +364,7 @@ namespace EQTool
             App.Current.Resources["GlobalFontSize"] = (double)(_settings?.FontSize ?? 12);
             ((App)System.Windows.Application.Current).UpdateBackgroundOpacity("MyWindowStyleDPS", _settings.DpsWindowState.Opacity.Value);
             ((App)System.Windows.Application.Current).UpdateBackgroundOpacity("MyWindowStyleMap", _settings.MapWindowState.Opacity.Value);
+			((App)System.Windows.Application.Current).UpdateBackgroundOpacity("MyWindowStyleTrigger", _settings.TimerWindowOpacity);
 			((App)System.Windows.Application.Current).UpdateBackgroundOpacity("MyMobWindowSyle", _settings.MobWindowState.Opacity.Value);
 
 			_zealMessageService.StartProcessing();
@@ -648,7 +649,7 @@ namespace EQTool
 				vm.AlwaysOnTop = options.AlwaysOnTop;
 				w.Topmost = !options.AlwaysOnTop;
 				w.Topmost = options.AlwaysOnTop;
-				vm.WindowState.Opacity = options.Opacity;
+				vm.WindowState.Opacity = _settings.TimerWindowOpacity;
 
 				vm.ShowNPCs = options.ShowNPCs;
 				vm.ShowPCs = options.ShowPCs;

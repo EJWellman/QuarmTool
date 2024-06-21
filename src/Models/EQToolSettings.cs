@@ -302,6 +302,20 @@ namespace EQTool.Models
 			}
 		}
 
+		private double _timerWindowOpacity = 1.0;
+		public double TimerWindowOpacity
+		{
+			get
+			{
+				return _timerWindowOpacity;
+			}
+			set
+			{
+				_timerWindowOpacity = value;
+				OnPropertyChanged();
+			}
+		}
+
 		private int _AudioTriggerVolume = 100;
 		public int AudioTriggerVolume
 		{

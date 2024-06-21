@@ -5,7 +5,7 @@
         Style="{StaticResource MyMobWindowSyle}"
         Title="{Binding Title}" 
         Height="350" 
-        Width="700"  
+        Width="400"  
         WindowStyle="None" 
         SizeToContent="WidthAndHeight"
         AllowsTransparency="True">
@@ -62,128 +62,149 @@
                         <TextBlock FontSize="16" Foreground="Red" Text="{Binding ErrorResults}"></TextBlock>
                     </StackPanel>
                 </StackPanel>
-                <StackPanel Orientation="Vertical" Margin="0, 0, 8, 0" Width="250" Visibility="{Binding HasNoErrors}">
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="Name" Width="100"></TextBlock>
-                        <TextBlock>
-                             <Hyperlink NavigateUri="{Binding Url}" RequestNavigate="Hyperlink_RequestNavigate">
-                                 <TextBlock Text="{Binding Name}"></TextBlock>     
-                                 <Button Visibility="{Binding HasUrl}" Margin="1" FontSize="7" Width="14" Height="14" Padding="0" ToolTip="Open in Web Browser" Click="Hyperlink_RequestNavigatebutton">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="2*" />
+                        <ColumnDefinition Width="3*" />
+                    </Grid.ColumnDefinitions>
+                    <StackPanel Orientation="Vertical" Grid.Column="0" MinWidth="150" Margin="0, 0, 8, 0" Visibility="{Binding HasNoErrors}">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="Name" Width="100"></TextBlock>
+                            <TextBlock>
+                            <Hyperlink NavigateUri="{Binding Url}" RequestNavigate="Hyperlink_RequestNavigate">
+                                <TextBlock Text="{Binding Name}"></TextBlock>     
+                                <Button Visibility="{Binding HasUrl}" Margin="1" FontSize="7" Width="14" Height="14" Padding="0" ToolTip="Open in Web Browser" Click="Hyperlink_RequestNavigatebutton">
                                     <Image Source="pack://application:,,,/HyperlinkForward.png"/>
                                 </Button>
-                             </Hyperlink> 
+                            </Hyperlink> 
                         </TextBlock>
-                    </StackPanel>
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="Race" Width="100"></TextBlock>
-                        <TextBlock Text="{Binding Race}"></TextBlock>
-                    </StackPanel>
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="Level - Class" Width="100"></TextBlock>
-                        <TextBlock>
-                            <TextBlock.Text>
-                                <MultiBinding StringFormat="{}{0} - {1}">
-                                    <Binding Path="Level"/>
-                                    <Binding Path="Class"/>
-                                </MultiBinding>
-                            </TextBlock.Text>
-                        </TextBlock>
-                    </StackPanel>
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="Primary Faction" Width="100"></TextBlock>
-                        <TextBlock Text="{Binding PrimaryFaction}"></TextBlock>
-                    </StackPanel>
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="Run Speed" Width="100"></TextBlock>
-                        <TextBlock Text="{Binding RunSpeed}"></TextBlock>
-                    </StackPanel>
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="AC" Width="100"></TextBlock>
-                        <TextBlock Text="{Binding AC}"></TextBlock>
-                    </StackPanel>
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="HP" Width="100"></TextBlock>
-                        <TextBlock Text="{Binding HP}"></TextBlock>
-                    </StackPanel>
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="HP Regen" Width="100"></TextBlock>
-                        <TextBlock Text="{Binding HPRegen}"></TextBlock>
-                    </StackPanel>
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="Mana Regen" Width="100"></TextBlock>
-                        <TextBlock Text="{Binding ManaRegen}"></TextBlock>
-                    </StackPanel>
-                    <!--<StackPanel Orientation="Horizontal">
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="Race" Width="100"></TextBlock>
+                            <TextBlock Text="{Binding Race}"></TextBlock>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="Level - Class" Width="100"></TextBlock>
+                            <TextBlock>
+                                <TextBlock.Text>
+                                    <MultiBinding StringFormat="{}{0} - {1}">
+                                        <Binding Path="Level"/>
+                                        <Binding Path="Class"/>
+                                    </MultiBinding>
+                                </TextBlock.Text>
+                            </TextBlock>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="Primary Faction" Width="100"></TextBlock>
+                            <TextBlock Text="{Binding PrimaryFaction}"></TextBlock>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="Run Speed" Width="100"></TextBlock>
+                            <TextBlock Text="{Binding RunSpeed}"></TextBlock>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="AC" Width="100"></TextBlock>
+                            <TextBlock Text="{Binding AC}"></TextBlock>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="HP" Width="100"></TextBlock>
+                            <TextBlock Text="{Binding HP}"></TextBlock>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="HP Regen" Width="100"></TextBlock>
+                            <TextBlock Text="{Binding HPRegen}"></TextBlock>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="Mana Regen" Width="100"></TextBlock>
+                            <TextBlock Text="{Binding ManaRegen}"></TextBlock>
+                        </StackPanel>
+                        <!--<StackPanel Orientation="Horizontal">
                         <TextBlock Text="AttacksPerRound" Width="100"></TextBlock>
                         <TextBlock Text="{Binding AttacksPerRound}"></TextBlock>
                     </StackPanel>-->
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="Attack Speed" Width="100"></TextBlock>
-                        <TextBlock Text="{Binding AttackSpeed}"></TextBlock>
-                    </StackPanel>
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="Damage Per Hit" Width="100"></TextBlock>
-                        <TextBlock Text="{Binding DamagePerHit}"></TextBlock>
-                    </StackPanel>
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="MR FR CR PR DR" Width="100"></TextBlock>
                         <StackPanel Orientation="Horizontal">
-                            <Label Foreground="White" Content="{Binding Resist_Magic}"  Padding="5,0,5,0"/>
-                            <Label Foreground="Red" Content="{Binding Resist_Fire}"  Padding="5,0,5,0"/>
-                            <Label Foreground="Aqua" Content="{Binding Resist_Cold}"  Padding="5,0,5,0"/>
-                            <Label Foreground="GreenYellow" Content="{Binding Resist_Poison}"  Padding="5,0,5,0"/>
-                            <Label Foreground="ForestGreen" Content="{Binding Resist_Disease}"  Padding="5,0,5,0"/>
-                            
+                            <TextBlock Text="Attack Speed" Width="100"></TextBlock>
+                            <TextBlock Text="{Binding AttackSpeed}"></TextBlock>
                         </StackPanel>
-                            <!--<TextBlock VerticalAlignment="Center">
-                            </TextBlock>-->
-                    </StackPanel>
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="See: Invis" Margin="0, 0, 4, 0" Width="50"></TextBlock>
-                        <CheckBox Name="invis_rad" IsEnabled="False" IsChecked="False"></CheckBox>
-                        <TextBlock Text="IVU" Margin="3, 0, 0, 0" Width="25"></TextBlock>
-                        <CheckBox Name="ivu_rad" IsEnabled="False" IsChecked="False"></CheckBox>
-                        <TextBlock Text="Sneak" Margin="3, 0, 0, 0" Width="35"></TextBlock>
-                        <CheckBox Name="sneak_rad" IsEnabled="False" IsChecked="False"></CheckBox>
-                        <TextBlock Text="Imp Hide" Margin="2, 0, 2, 0" Width="50"></TextBlock>
-                        <CheckBox Name="ihide_rad" IsEnabled="False" IsChecked="False"></CheckBox>
-                    </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="Damage Per Hit" Width="100"></TextBlock>
+                            <TextBlock Text="{Binding DamagePerHit}"></TextBlock>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="MR FR CR PR DR" Width="100"></TextBlock>
+                            <StackPanel Orientation="Horizontal">
+                                <Label Foreground="White" Content="{Binding Resist_Magic}"  Padding="5,0,5,0"/>
+                                <Label Foreground="Red" Content="{Binding Resist_Fire}"  Padding="5,0,5,0"/>
+                                <Label Foreground="Aqua" Content="{Binding Resist_Cold}"  Padding="5,0,5,0"/>
+                                <Label Foreground="GreenYellow" Content="{Binding Resist_Poison}"  Padding="5,0,5,0"/>
+                                <Label Foreground="ForestGreen" Content="{Binding Resist_Disease}"  Padding="5,0,5,0"/>
 
-                    <StackPanel Name="FactionHitsStack">
-                        <TextBlock>Factions</TextBlock>
-                        <ListView Margin="10, 0, 0, 0" Style="{StaticResource MyListViewStyle}" ItemsSource="{Binding Factions}">
-                            <ListView.ItemTemplate>
-                                <DataTemplate>
-                                    <StackPanel>
-                                        <TextBlock>
+                            </StackPanel>
+                        </StackPanel>
+                        <StackPanel Orientation="Vertical">
+                            <StackPanel Orientation="Horizontal" Name="Sees_Invis_Stack">
+                                <TextBlock Text="Sees Invis"></TextBlock>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" Name="Might_See_Invis_Stack">
+                                <TextBlock Text="Might See Invis"></TextBlock>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" Name="Sees_IVU_Stack">
+                                <TextBlock Text="Sees IVU"></TextBlock>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" Name="Might_See_IVU_Stack">
+                                <TextBlock Text="Might See IVU"></TextBlock>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" Name="Sees_Sneak_Stack">
+                                <TextBlock Text="Sees Sneak"></TextBlock>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" Name="Might_See_Sneak_Stack">
+                                <TextBlock Text="Might See Sneak"></TextBlock>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" Name="Sees_ImpHide_Stack">
+                                <TextBlock Text="Sees Imp. Hide"></TextBlock>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" Name="Might_See_ImpHide_Stack">
+                                <TextBlock Text="Might See Imp. Hide"></TextBlock>
+                            </StackPanel>
+                        </StackPanel>
+                    </StackPanel>
+                    <StackPanel Orientation="Vertical" MinWidth="150" Grid.Column="1">
+
+                        <StackPanel Name="FactionHitsStack">
+                            <TextBlock>Factions</TextBlock>
+                            <ListView Margin="10, 0, 0, 0" Style="{StaticResource MyListViewStyle}" ItemsSource="{Binding Factions}">
+                                <ListView.ItemTemplate>
+                                    <DataTemplate>
+                                        <StackPanel>
+                                            <TextBlock>
                                             <Hyperlink NavigateUri="{Binding Url}" RequestNavigate="Hyperlink_RequestNavigate">
                                                 <TextBlock Text="{Binding DisplayText}" Style="{StaticResource MyMobUrlSyle}"></TextBlock>
                                              </Hyperlink> 
                                         </TextBlock>
-                                    </StackPanel>
-                                </DataTemplate>
-                            </ListView.ItemTemplate>
-                            <ListView.ItemContainerStyle>
-                                <Style TargetType="{x:Type ListViewItem}">
-                                    <Setter Property="Background" Value="Transparent" />
-                                    <Setter Property="Template">
-                                        <Setter.Value>
-                                            <ControlTemplate TargetType="{x:Type ListViewItem}">
-                                                <ContentPresenter />
-                                            </ControlTemplate>
-                                        </Setter.Value>
-                                    </Setter>
-                                </Style>
-                            </ListView.ItemContainerStyle>
-                        </ListView>
-                    </StackPanel>
-                    <StackPanel Name="QuestsStack">
-                        <TextBlock>Related Quests</TextBlock>
-                        <ListView Margin="10, 0, 0, 0" Style="{StaticResource MyListViewStyle}" ItemsSource="{Binding RelatedQuests}">
-                            <ListView.ItemTemplate>
-                                <DataTemplate>
-                                    <StackPanel>
-                                        <TextBlock Visibility="{Binding HasUrl}">
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </ListView.ItemTemplate>
+                                <ListView.ItemContainerStyle>
+                                    <Style TargetType="{x:Type ListViewItem}">
+                                        <Setter Property="Background" Value="Transparent" />
+                                        <Setter Property="Template">
+                                            <Setter.Value>
+                                                <ControlTemplate TargetType="{x:Type ListViewItem}">
+                                                    <ContentPresenter />
+                                                </ControlTemplate>
+                                            </Setter.Value>
+                                        </Setter>
+                                    </Style>
+                                </ListView.ItemContainerStyle>
+                            </ListView>
+                        </StackPanel>
+                        <StackPanel Name="QuestsStack">
+                            <TextBlock>Related Quests</TextBlock>
+                            <ListView Margin="10, 0, 0, 0" Style="{StaticResource MyListViewStyle}" ItemsSource="{Binding RelatedQuests}">
+                                <ListView.ItemTemplate>
+                                    <DataTemplate>
+                                        <StackPanel>
+                                            <TextBlock Visibility="{Binding HasUrl}">
                                          <Hyperlink NavigateUri="{Binding Url}" RequestNavigate="Hyperlink_RequestNavigate">
                                           <TextBlock Text="{Binding Name}" Style="{StaticResource MyMobUrlSyle}"></TextBlock>     
                                              <Button Visibility="{Binding HasUrl}" Margin="1" FontSize="7" Width="14" Height="14" Padding="0" ToolTip="Open in Web Browser" Click="Hyperlink_RequestNavigatebutton">
@@ -191,78 +212,76 @@
                                             </Button>
                                          </Hyperlink> 
                                         </TextBlock>
-                                        <TextBlock Visibility="{Binding HasNoUrl}" Text="{Binding Name}">
-                                        </TextBlock>
-                                    </StackPanel>
-                                </DataTemplate>
-                            </ListView.ItemTemplate>
-                            <ListView.ItemContainerStyle>
-                                <Style TargetType="{x:Type ListViewItem}">
-                                    <Setter Property="Background" Value="Transparent" />
-                                    <Setter Property="Template">
-                                        <Setter.Value>
-                                            <ControlTemplate TargetType="{x:Type ListViewItem}">
-                                                <ContentPresenter />
-                                            </ControlTemplate>
-                                        </Setter.Value>
-                                    </Setter>
-                                </Style>
-                            </ListView.ItemContainerStyle>
-                        </ListView>
-                    </StackPanel>
-                </StackPanel>
-                <StackPanel Orientation="Vertical" Width="245">
-                    <StackPanel Name="KnownLootStack">
-                        <TextBlock>Known Loot</TextBlock>
-                        <ListView Margin="10, 0, 0, 0" Style="{StaticResource MyListViewStyle}" ItemsSource="{Binding KnownLoot}" 
+                                            <TextBlock Visibility="{Binding HasNoUrl}" Text="{Binding Name}">
+                                            </TextBlock>
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </ListView.ItemTemplate>
+                                <ListView.ItemContainerStyle>
+                                    <Style TargetType="{x:Type ListViewItem}">
+                                        <Setter Property="Background" Value="Transparent" />
+                                        <Setter Property="Template">
+                                            <Setter.Value>
+                                                <ControlTemplate TargetType="{x:Type ListViewItem}">
+                                                    <ContentPresenter />
+                                                </ControlTemplate>
+                                            </Setter.Value>
+                                        </Setter>
+                                    </Style>
+                                </ListView.ItemContainerStyle>
+                            </ListView>
+                        </StackPanel>
+                        <StackPanel Name="KnownLootStack">
+                            <TextBlock>Known Loot</TextBlock>
+                            <ListView Margin="10, 0, 0, 0" Style="{StaticResource MyListViewStyle}" ItemsSource="{Binding KnownLoot}" 
                               ScrollViewer.VerticalScrollBarVisibility="Visible" ScrollViewer.CanContentScroll="False"
                               MaxHeight="145">
-                            <ListView.ItemTemplate>
-                                <DataTemplate>
-                                    <StackPanel Orientation="Horizontal" MinWidth="100">
-                                        <TextBlock Visibility="{Binding HasUrl}">
+                                <ListView.ItemTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Orientation="Horizontal" MinWidth="100">
+                                            <TextBlock Visibility="{Binding HasUrl}">
                                         <Hyperlink NavigateUri="{Binding Url}" RequestNavigate="Hyperlink_RequestNavigate">
                                             <TextBlock Style="{StaticResource MyMobUrlSyle}">
-                                                    <TextBlock.Text>
-                                                        <MultiBinding StringFormat="{}{0} - {1}%">
-                                                            <Binding Path="Name"/>
-                                                            <Binding Path="Value"/>
-                                                        </MultiBinding>
-                                                    </TextBlock.Text>
+                                                        <TextBlock.Text>
+                                                            <MultiBinding StringFormat="{}{0} - {1}%">
+                                                                <Binding Path="Name"/>
+                                                                <Binding Path="Value"/>
+                                                            </MultiBinding>
+                                                        </TextBlock.Text>
                                             </TextBlock>
                                             <!--<TextBlock Text="{Binding Name}" Style="{StaticResource MyMobUrlSyle}"></TextBlock>-->     
                                         </Hyperlink> 
                                     </TextBlock>
-                                    </StackPanel>
-                                </DataTemplate>
-                            </ListView.ItemTemplate>
-                        </ListView>
-                    </StackPanel>
-                    <StackPanel Name="MerchandiseStack">
-                        <TextBlock>Merchandise</TextBlock>
-                        <ListView Margin="10, 0, 0, 0" Style="{StaticResource MyListViewStyle}" ItemsSource="{Binding MerchantItems}" 
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </ListView.ItemTemplate>
+                            </ListView>
+                        </StackPanel>
+                        <StackPanel Name="MerchandiseStack">
+                            <TextBlock>Merchandise</TextBlock>
+                            <ListView Margin="10, 0, 0, 0" Style="{StaticResource MyListViewStyle}" ItemsSource="{Binding MerchantItems}" 
                           ScrollViewer.VerticalScrollBarVisibility="Visible" ScrollViewer.CanContentScroll="False"
                           MaxHeight="145">
-                            <ListView.ItemTemplate>
-                                <DataTemplate>
-                                    <StackPanel Orientation="Horizontal" MinWidth="100">
-                                        <TextBlock Visibility="{Binding HasUrl}">
+                                <ListView.ItemTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Orientation="Horizontal" MinWidth="100">
+                                            <TextBlock Visibility="{Binding HasUrl}">
                                             <Hyperlink NavigateUri="{Binding Url}" RequestNavigate="Hyperlink_RequestNavigate">
                                                 <TextBlock Text="{Binding Name}"  Style="{StaticResource MyMobUrlSyle}"></TextBlock> 
                                             </Hyperlink> 
                                         </TextBlock>
-                                    </StackPanel>
-                                </DataTemplate>
-                            </ListView.ItemTemplate>
-                        </ListView>
-                    </StackPanel>
-                    <StackPanel Name="SpecialAbilitiesStack">
-                        <TextBlock>Specials</TextBlock>
-                        <ListView Margin="10, 0, 0, 0" Style="{StaticResource MyListViewStyle}" ItemsSource="{Binding Specials}">
-                            <ListView.ItemTemplate>
-                                <DataTemplate>
-                                    <StackPanel>
-                                        <TextBlock Visibility="{Binding HasUrl}">
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </ListView.ItemTemplate>
+                            </ListView>
+                        </StackPanel>
+                        <StackPanel Name="SpecialAbilitiesStack">
+                            <TextBlock>Specials</TextBlock>
+                            <ListView Margin="10, 0, 0, 0" Style="{StaticResource MyListViewStyle}" ItemsSource="{Binding Specials}">
+                                <ListView.ItemTemplate>
+                                    <DataTemplate>
+                                        <StackPanel>
+                                            <TextBlock Visibility="{Binding HasUrl}">
                                          <Hyperlink NavigateUri="{Binding Url}" RequestNavigate="Hyperlink_RequestNavigate">
                                           <TextBlock Text="{Binding Name}" Style="{StaticResource MyMobUrlSyle}"></TextBlock>     
                                              <Button Visibility="{Binding HasUrl}" Margin="1" FontSize="7" Width="14" Height="14" Padding="0" ToolTip="Open in Web Browser" Click="Hyperlink_RequestNavigatebutton">
@@ -270,26 +289,27 @@
                                             </Button>
                                          </Hyperlink> 
                                         </TextBlock>
-                                        <TextBlock Visibility="{Binding HasNoUrl}" Text="{Binding Name}">
-                                        </TextBlock>
-                                    </StackPanel>
-                                </DataTemplate>
-                            </ListView.ItemTemplate>
-                            <ListView.ItemContainerStyle>
-                                <Style TargetType="{x:Type ListViewItem}">
-                                    <Setter Property="Background" Value="Transparent" />
-                                    <Setter Property="Template">
-                                        <Setter.Value>
-                                            <ControlTemplate TargetType="{x:Type ListViewItem}">
-                                                <ContentPresenter />
-                                            </ControlTemplate>
-                                        </Setter.Value>
-                                    </Setter>
-                                </Style>
-                            </ListView.ItemContainerStyle>
-                        </ListView>
+                                            <TextBlock Visibility="{Binding HasNoUrl}" Text="{Binding Name}">
+                                            </TextBlock>
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </ListView.ItemTemplate>
+                                <ListView.ItemContainerStyle>
+                                    <Style TargetType="{x:Type ListViewItem}">
+                                        <Setter Property="Background" Value="Transparent" />
+                                        <Setter Property="Template">
+                                            <Setter.Value>
+                                                <ControlTemplate TargetType="{x:Type ListViewItem}">
+                                                    <ContentPresenter />
+                                                </ControlTemplate>
+                                            </Setter.Value>
+                                        </Setter>
+                                    </Style>
+                                </ListView.ItemContainerStyle>
+                            </ListView>
+                        </StackPanel>
                     </StackPanel>
-                </StackPanel>
+                </Grid>
             </StackPanel>
         </Grid>
     </Border>

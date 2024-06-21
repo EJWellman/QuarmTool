@@ -105,6 +105,7 @@ namespace EQTool
 					_settings.ZealProcessID = e.ProcessId;
 				}
 			}
+			//adjust this logic
 			if (!string.IsNullOrWhiteSpace(_settings.SelectedCharacter) && string.Compare(_settings.SelectedCharacter, e.Message.Character, true) == 0)
 			{
 				_settings.ZealProcessID = e.ProcessId;

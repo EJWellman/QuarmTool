@@ -517,8 +517,8 @@ namespace EQTool.ViewModels
 			}
 		}
 
-		private bool see_Invis;
-		public bool See_Invis
+		private int see_Invis;
+		public int See_Invis
 		{
 			get => see_Invis;
 			set
@@ -528,8 +528,8 @@ namespace EQTool.ViewModels
 			}
 		}
 
-		private bool see_Invis_Undead;
-		public bool See_Invis_Undead
+		private int see_Invis_Undead;
+		public int See_Invis_Undead
 		{
 			get => see_Invis_Undead;
 			set
@@ -539,8 +539,8 @@ namespace EQTool.ViewModels
 			}
 		}
 
-		private bool see_Sneak;
-		public bool See_Sneak
+		private int see_Sneak;
+		public int See_Sneak
 		{
 			get => see_Sneak;
 			set
@@ -550,8 +550,8 @@ namespace EQTool.ViewModels
 			}
 		}
 
-		private bool see_Imp_Hide;
-		public bool See_Imp_Hide
+		private int see_Imp_Hide;
+		public int See_Imp_Hide
 		{
 			get => see_Imp_Hide;
 			set
@@ -674,10 +674,10 @@ namespace EQTool.ViewModels
 				Resist_Magic = monster.MR.ToString();
 				Resist_Poison = monster.PR.ToString();
 				Resist_Disease = monster.DR.ToString();
-				See_Invis = monster.See_Invis == 1 ? true : false;
-				See_Invis_Undead = monster.See_Invis_Undead == 1 ? true : false;
-				See_Sneak = monster.See_Sneak == 1 ? true : false;
-				See_Imp_Hide = monster.See_Improved_Hidee == 1 ? true : false;
+				See_Invis = monster.See_Invis;
+				See_Invis_Undead = monster.See_Invis_Undead;
+				See_Sneak = monster.See_Sneak;
+				See_Imp_Hide = monster.See_Improved_Hidee;
 
 				#region Clear existing Data
 				if (Factions.Count > 0)

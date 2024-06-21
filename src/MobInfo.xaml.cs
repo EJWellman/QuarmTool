@@ -96,10 +96,14 @@ namespace EQTool
 						MerchandiseStack.Visibility = _mobInfoViewModel.HasMerchandise;
 						SpecialAbilitiesStack.Visibility = _mobInfoViewModel.HasSpecials;
 
-						invis_rad.IsChecked = _mobInfoViewModel.See_Invis;
-						ivu_rad.IsChecked = _mobInfoViewModel.See_Invis_Undead;
-						sneak_rad.IsChecked = _mobInfoViewModel.See_Sneak;
-						ihide_rad.IsChecked = _mobInfoViewModel.See_Imp_Hide;
+						Sees_Invis_Stack.Visibility = _mobInfoViewModel.See_Invis == 1 ? Visibility.Visible : Visibility.Collapsed;
+						Might_See_Invis_Stack.Visibility = _mobInfoViewModel.See_Invis > 1 ? Visibility.Visible : Visibility.Collapsed;
+						Sees_IVU_Stack.Visibility = _mobInfoViewModel.See_Invis_Undead == 1 ? Visibility.Visible : Visibility.Collapsed;
+						Might_See_IVU_Stack.Visibility = _mobInfoViewModel.See_Invis_Undead > 1 ? Visibility.Visible : Visibility.Collapsed;
+						Sees_Sneak_Stack.Visibility = _mobInfoViewModel.See_Sneak == 1 ? Visibility.Visible : Visibility.Collapsed;
+						Might_See_Sneak_Stack.Visibility = _mobInfoViewModel.See_Sneak > 1 ? Visibility.Visible : Visibility.Collapsed;
+						Sees_ImpHide_Stack.Visibility = _mobInfoViewModel.See_Imp_Hide == 1 ? Visibility.Visible : Visibility.Collapsed;
+						Might_See_ImpHide_Stack.Visibility = _mobInfoViewModel.See_Imp_Hide > 1 ? Visibility.Visible : Visibility.Collapsed;
 
 						_activePlayer.Player.LastTarget = mobName;
 					});
@@ -122,11 +126,14 @@ namespace EQTool
 					MerchandiseStack.Visibility = _mobInfoViewModel.HasMerchandise;
 					SpecialAbilitiesStack.Visibility = _mobInfoViewModel.HasSpecials;
 
-					invis_rad.IsChecked = _mobInfoViewModel.See_Invis;
-					ivu_rad.IsChecked = _mobInfoViewModel.See_Invis_Undead;
-					sneak_rad.IsChecked = _mobInfoViewModel.See_Sneak;
-					ihide_rad.IsChecked = _mobInfoViewModel.See_Imp_Hide;
-
+					Sees_Invis_Stack.Visibility = _mobInfoViewModel.See_Invis == 1 ? Visibility.Visible : Visibility.Collapsed;
+					Might_See_Invis_Stack.Visibility = _mobInfoViewModel.See_Invis > 1 ? Visibility.Visible : Visibility.Collapsed;
+					Sees_IVU_Stack.Visibility = _mobInfoViewModel.See_Invis_Undead == 1 ? Visibility.Visible : Visibility.Collapsed;
+					Might_See_IVU_Stack.Visibility = _mobInfoViewModel.See_Invis_Undead > 1 ? Visibility.Visible : Visibility.Collapsed;
+					Sees_Sneak_Stack.Visibility = _mobInfoViewModel.See_Sneak == 1 ? Visibility.Visible : Visibility.Collapsed;
+					Might_See_Sneak_Stack.Visibility = _mobInfoViewModel.See_Sneak > 1 ? Visibility.Visible : Visibility.Collapsed;
+					Sees_ImpHide_Stack.Visibility = _mobInfoViewModel.See_Imp_Hide == 1 ? Visibility.Visible : Visibility.Collapsed;
+					Might_See_ImpHide_Stack.Visibility = _mobInfoViewModel.See_Imp_Hide > 1 ? Visibility.Visible : Visibility.Collapsed;
 				}
 			}
 			catch (Exception ex)

@@ -61,7 +61,7 @@ namespace EQTool.Factories
 				State = (System.Windows.WindowState)timerWindow.State,
 				Closed = timerWindow.Closed,
 				AlwaysOnTop = timerWindow.AlwaysOnTop,
-				Opacity = timerWindow.Opacity,
+				Opacity = _settings.TimerWindowOpacity,
 				WindowRect = rect,
 			};
 

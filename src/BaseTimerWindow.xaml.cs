@@ -111,7 +111,6 @@ namespace EQTool
 			{
 				timerOptions.Closed = false;
 			}
-
 			TimerWindowService.UpdateTimerWindow(timerOptions);
 		}
 

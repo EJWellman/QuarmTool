@@ -69,7 +69,7 @@ namespace EQTool.ViewModels
                 ((App)System.Windows.Application.Current).UpdateBackgroundOpacity("MyWindowStyleDPS", this._settings.DpsWindowState.Opacity.Value);
                 ((App)System.Windows.Application.Current).UpdateBackgroundOpacity("MyWindowStyleMap", this._settings.MapWindowState.Opacity.Value);
 				((App)System.Windows.Application.Current).UpdateBackgroundOpacity("MyMobWindowSyle", _settings.MobWindowState.Opacity.Value);
-                OnPropertyChanged();
+				OnPropertyChanged();
             }
         }
 
@@ -411,7 +411,22 @@ namespace EQTool.ViewModels
 			}
 		}
 
-        private ActivePlayer _ActivePlayer;
+		public double TimerWindowOpacity
+		{
+			get
+			{
+				return _settings.TimerWindowOpacity;
+			}
+			set
+			{
+				_settings.TimerWindowOpacity = value;
+				((App)System.Windows.Application.Current).UpdateBackgroundOpacity("MyWindowStyleTrigger", value);
+				OnPropertyChanged();
+			}
+		}
+
+
+		private ActivePlayer _ActivePlayer;
         public ActivePlayer ActivePlayer
         {
             get => _ActivePlayer;

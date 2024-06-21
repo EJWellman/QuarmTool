@@ -324,14 +324,15 @@
                         <StackPanel Orientation="Horizontal">
                             <TextBlock Text="Above will warn you when its your turn to cast CH" Foreground="Red"/>
                         </StackPanel>
-                        <StackPanel Orientation="Vertical" Margin="0, 0, 0, 8">
-                            <StackPanel Orientation="Horizontal">
-                                <TextBlock Text="Always on top" VerticalAlignment="Center"  FontWeight="Bold"  MinWidth="100"/>
-                                <CheckBox IsChecked="{Binding OverlayAlwaysOnTop}" Click="SaveAlwaysOntopCheckBoxSettings" ></CheckBox>
-                            </StackPanel>
-                        </StackPanel>
                     </StackPanel>
                 </Expander>
+                <Separator/>
+                <StackPanel Orientation="Vertical" Margin="0, 0, 0, 8">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="Always on top" VerticalAlignment="Center"  FontWeight="Bold"  MinWidth="100"/>
+                        <CheckBox IsChecked="{Binding OverlayAlwaysOnTop}" Click="SaveAlwaysOntopCheckBoxSettings" ></CheckBox>
+                    </StackPanel>
+                </StackPanel>
             </StackPanel>
         </TabItem>
         <TabItem Header="Timers">
@@ -375,7 +376,7 @@
                     <Separator/>
                     <StackPanel Orientation="Horizontal">
                         <TextBlock Text="Window Opacity"  VerticalAlignment="Center"  FontWeight="Bold"  MinWidth="100"/>
-                        <Slider Value="{Binding TriggerWindowOpacity}" Minimum=".01" Maximum="1" SmallChange=".1" TickFrequency=".1" ValueChanged="SaveSettings" MinWidth="150"/>
+                        <Slider Value="{Binding TimerWindowOpacity}" Minimum=".01" Maximum="1" SmallChange=".1" TickFrequency=".1" ValueChanged="SaveSettings" MinWidth="150"/>
                     </StackPanel>
                 </StackPanel>
                 <Separator></Separator>

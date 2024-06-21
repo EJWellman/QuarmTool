@@ -20,8 +20,6 @@ namespace EQToolTests
                 {
                     DefaultEqDirectory = string.Empty,
                     EqLogDirectory = string.Empty,
-                    BestGuessSpells = true,
-                    YouOnlySpells = false,
                     Players = new System.Collections.Generic.List<PlayerInfo>(),
                     DpsWindowState = new WindowState
                     {
@@ -37,12 +35,13 @@ namespace EQToolTests
                     {
                         Closed = false,
                         State = System.Windows.WindowState.Normal
-                    },
-                    SpellWindowState = new WindowState
-                    {
-                        Closed = false,
-                        State = System.Windows.WindowState.Normal
                     }
+					//,
+     //               SpellWindowState = new WindowState
+     //               {
+     //                   Closed = false,
+     //                   State = System.Windows.WindowState.Normal
+     //               }
                 };
             }).AsSelf().SingleInstance();
             _ = builder.RegisterType<FakeAppDispatcher>().As<IAppDispatcher>().SingleInstance();
@@ -51,7 +50,7 @@ namespace EQToolTests
             _ = builder.RegisterType<SettingsWindowViewModel>().AsSelf().SingleInstance();
             _ = builder.RegisterType<EQSpells>().AsSelf().SingleInstance();
             _ = builder.RegisterType<ActivePlayer>().AsSelf().SingleInstance();
-            _ = builder.RegisterType<SpellWindowViewModel>().AsSelf().SingleInstance();
+            //_ = builder.RegisterType<SpellWindowViewModel>().AsSelf().SingleInstance();
             _ = builder.RegisterType<LogParser>().AsSelf().SingleInstance();
             _ = builder.RegisterType<DPSWindowViewModel>().AsSelf().SingleInstance();
             _ = builder.RegisterType<DiscordAuctionParse>().AsSelf().SingleInstance();
