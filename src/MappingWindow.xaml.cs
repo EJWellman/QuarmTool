@@ -90,7 +90,6 @@ namespace EQTool
 					Header = timer.Title,
 					DataContext = timer.ID,
 				};
-				item.Click += (App.Current as App).OpenTimerWindow;
 
 				TimerWindowsMenu.Items.Add(item);
 			}
@@ -109,6 +108,10 @@ namespace EQTool
 			if (!string.IsNullOrWhiteSpace(_settings.SelectedCharacter) && string.Compare(_settings.SelectedCharacter, e.Message.Character, true) == 0)
 			{
 				_settings.ZealProcessID = e.ProcessId;
+			}
+			if(_settings.ZealProcessID != e.ProcessId)
+			{
+				return;
 			}
 
 			if (_settings.ZealEnabled && _settings.ZealMap_AutoUpdate)

@@ -68,7 +68,6 @@ namespace EQTool
 					Header = timer.Title,
 					DataContext = timer.ID,
 				};
-				item.Click += (App.Current as App).OpenTimerWindow;
 
 				TimerWindowsMenu.Items.Add(item);
 			}

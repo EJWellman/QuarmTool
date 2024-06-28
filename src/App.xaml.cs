@@ -31,15 +31,15 @@ namespace EQTool
         private System.Windows.Forms.NotifyIcon SystemTrayIcon;
 
         private System.Windows.Forms.MenuItem MapMenuItem;
-        private System.Windows.Forms.MenuItem SpellsMenuItem;
-		private System.Windows.Forms.MenuItem TimerMenuItem;
-		private System.Windows.Forms.MenuItem ComboTimerMenuItem;
 		private System.Windows.Forms.MenuItem DpsMeterMenuItem;
         private System.Windows.Forms.MenuItem OverlayMenuItem;
         private System.Windows.Forms.MenuItem SettingsMenuItem;
         private System.Windows.Forms.MenuItem GroupSuggestionsMenuItem;
         private System.Windows.Forms.MenuItem MobInfoMenuItem;
+
         private LogParser logParser => container.Resolve<LogParser>();
+		private PipeCommandParser _pipeCommandParser => container.Resolve<PipeCommandParser>();
+		private PipeParser _pipeParser => container.Resolve<PipeParser>();
 		private ZealMessageService _zealMessageService => container.Resolve<ZealMessageService>();
         private System.Timers.Timer UITimer;
         private PlayerTrackerService PlayerTrackerService;
@@ -361,6 +361,7 @@ namespace EQTool
             ZoneActivityTrackingService = container.Resolve<ZoneActivityTrackingService>();
             audioService = container.Resolve<AudioService>();
             logParser.QuakeEvent += LogParser_QuakeEvent;
+			_pipeParser.Start();
             App.Current.Resources["GlobalFontSize"] = (double)(_settings?.FontSize ?? 12);
             ((App)System.Windows.Application.Current).UpdateBackgroundOpacity("MyWindowStyleDPS", _settings.DpsWindowState.Opacity.Value);
             ((App)System.Windows.Application.Current).UpdateBackgroundOpacity("MyWindowStyleMap", _settings.MapWindowState.Opacity.Value);
@@ -582,9 +583,50 @@ namespace EQTool
                 w?.CloseWindow();
                 _ = WindowList.Remove(w);
             }
-        }
+		}
 
-        private void OpenWindow<T>(System.Windows.Forms.MenuItem m) where T : BaseSaveStateWindow
+		private void HardToggleWindow<T>() where T : BaseSaveStateWindow
+		{
+			var w = WindowList.FirstOrDefault(a => a.GetType() == typeof(T));
+			if (w != null)
+			{
+				w?.CloseWindow();
+				_ = WindowList.Remove(w);
+			}
+			else
+			{
+				w?.Close();
+				w = container.Resolve<T>();
+				WindowList.Add(w);
+				w.Closed += (se, ee) =>
+				{
+					_ = WindowList.Remove(w);
+				};
+				w.Show();
+			}
+		}
+
+
+		//private void ToggleWindowBorder<T>() where T : BaseSaveStateWindow
+		//{
+		//	var w = WindowList.FirstOrDefault(a => a.GetType() == typeof(T));
+		//	if (w != null)
+		//	{
+		//		HardToggleWindow<T>();
+
+		//		var w2 = container.Resolve<T>();
+		//		w2.Closed += (se, ee) =>
+		//		{
+		//			_ = WindowList.Remove(w2);
+		//		};
+		//		w2.IsHitTestVisible = false;
+		//		w2.AllowsTransparency = true;
+		//		w2.Show();
+		//		w2.Opacity = 25;
+		//	}
+		//}
+
+		private void OpenWindow<T>(System.Windows.Forms.MenuItem m) where T : BaseSaveStateWindow
         {
             var w = WindowList.FirstOrDefault(a => a.GetType() == typeof(T));
             if (w != null)
@@ -681,25 +723,46 @@ namespace EQTool
             ToggleWindow<MappingWindow>(s);
         }
 
-        public void ToggleDPSWindow(object sender, EventArgs e)
+		public void HardToggleMapWindow()
+		{
+			HardToggleWindow<MappingWindow>();
+		}
+
+		public void ToggleDPSWindow(object sender, EventArgs e)
         {
             var s = (System.Windows.Forms.MenuItem)sender;
             ToggleWindow<DPSMeter>(s);
-        }
+		}
+		public void HardToggleDPSWindow()
+		{
+			HardToggleWindow<DPSMeter>();
+		}
 
-        public void ToggleOverlayWindow(object sender, EventArgs e)
+		public void ToggleOverlayWindow(object sender, EventArgs e)
         {
             var s = (System.Windows.Forms.MenuItem)sender;
             ToggleWindow<EventOverlay>(s);
-        }
+		}
+		public void HardToggleOverlayWindow()
+		{
+			HardToggleWindow<EventOverlay>();
+		}
 
-        public void ToggleMobInfoWindow(object sender, EventArgs e)
+		public void ToggleMobInfoWindow(object sender, EventArgs e)
         {
             var s = (System.Windows.Forms.MenuItem)sender;
             ToggleWindow<MobInfo>(s);
-        }
+		}
+		public void HardToggleMobInfoWindow()
+		{
+			HardToggleWindow<MobInfo>();
+		}
+		public void ToggleMobInfoWindowBorders()
+		{
+			//ToggleWindowBorder<MobInfo>();
+		}
 
-        public void ToggleSettingsWindow(object sender, EventArgs e)
+		public void ToggleSettingsWindow(object sender, EventArgs e)
         {
             var s = (System.Windows.Forms.MenuItem)sender;
             ToggleWindow<Settings>(s);
@@ -748,18 +811,27 @@ namespace EQTool
 				_timerWindowFactory = container.Resolve<TimerWindowFactory>();
 			}
 
-			if((sender as System.Windows.Controls.MenuItem)?.DataContext != null)
+			if ((sender as System.Windows.Forms.MenuItem)?.Tag != null)
 			{
-				var contextID = (sender as System.Windows.Controls.MenuItem).DataContext as int?;
+				var contextID = (sender as System.Windows.Forms.MenuItem).Tag as int?;
 				if (contextID != null)
 				{
 					var w = _timerWindowFactory.CreateTimerWindow((int)contextID);
 					(App.Current as App).OpenSpawnableWindow<BaseTimerWindow>(w);
 				}
 			}
-			else if((sender as System.Windows.Forms.MenuItem)?.Tag != null)
+			else if ((sender as System.Windows.Controls.MenuItem)?.Tag != null)
 			{
-				var contextID = (sender as System.Windows.Forms.MenuItem).Tag as int?;
+				var contextID = (sender as System.Windows.Controls.MenuItem).Tag as int?;
+				if (contextID != null)
+				{
+					var w = _timerWindowFactory.CreateTimerWindow((int)contextID);
+					(App.Current as App).OpenSpawnableWindow<BaseTimerWindow>(w);
+				}
+			}
+			else if ((sender as System.Windows.Controls.MenuItem)?.DataContext != null)
+			{
+				var contextID = (sender as System.Windows.Controls.MenuItem).DataContext as int?;
 				if (contextID != null)
 				{
 					var w = _timerWindowFactory.CreateTimerWindow((int)contextID);

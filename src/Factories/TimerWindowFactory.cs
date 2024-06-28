@@ -69,8 +69,9 @@ namespace EQTool.Factories
 			var playerTrackerService = App.container.Resolve<PlayerTrackerService>();
 			var quarmDataService = App.container.Resolve<QuarmDataService>();
 			var loggingService = App.container.Resolve<LoggingService>();
+			var pipeParser = App.container.Resolve<PipeParser>();
 
-			var newTimerWindow = new BaseTimerWindow(playerTrackerService, _settings, newTimerWindowViewModel, logParser, _toolSettingsLoad, _activePlayer, quarmDataService, loggingService)
+			var newTimerWindow = new BaseTimerWindow(playerTrackerService, _settings, newTimerWindowViewModel, logParser, pipeParser, _toolSettingsLoad, _activePlayer, quarmDataService, loggingService)
 			{
 				Title = timerWindow.Title,
 				Topmost = timerWindow.AlwaysOnTop
@@ -100,8 +101,9 @@ namespace EQTool.Factories
 				menuItem.Tag = timerWindow.ID;
 				menuItem.Click += (s, e) =>
 				{
-					var newTimerWindow = CreateTimerWindow((int)menuItem.Tag);
-					newTimerWindow.Show();
+					(App.Current as App).OpenTimerWindow(menuItem, e);
+					//var newTimerWindow = CreateTimerWindow((int)menuItem.Tag);
+					//newTimerWindow.Show();
 				};
 				menu.Items.Add(menuItem);
 			}

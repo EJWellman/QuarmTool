@@ -61,6 +61,7 @@ namespace EQTool.Services
         private bool Processing = false;
         private bool StillCamping = false;
         private bool HasUsedStartupEnterWorld = false;
+		public bool JustZoned = false;
 
         public LogParser(
 			ResistSpellParser resistSpellParser,
@@ -262,6 +263,7 @@ namespace EQTool.Services
                 if (pos.HasValue)
                 {
                     PlayerLocationEvent?.Invoke(this, new PlayerLocationEventArgs { Location = pos.Value, PlayerInfo = _activePlayer.Player });
+					JustZoned = false;
                     return;
                 }
 
@@ -381,7 +383,7 @@ namespace EQTool.Services
                 var matchedspell = _spellLogParse.MatchSpell(message);
                 if (matchedspell != null && matchedspell.Spell.name != "Modulation")
                 {
-                    StartCastingEvent?.Invoke(this, new SpellEventArgs { Spell = matchedspell });
+                    //StartCastingEvent?.Invoke(this, new SpellEventArgs { Spell = matchedspell });
                     return;
                 }
 
@@ -485,6 +487,7 @@ namespace EQTool.Services
                 }
 
                 _levelLogParse.MatchLevel(message);
+
                 var matchedzone = ZoneParser.Match(message);
                 if (matchedzone != null)
                 {
@@ -512,6 +515,7 @@ namespace EQTool.Services
                         _toolSettingsLoad.Save(_settings);
                     }
                     PlayerZonedEvent?.Invoke(this, new PlayerZonedEventArgs { ZoneInfo = matchedzone });
+					JustZoned = true;
                     return;
                 }
             }
@@ -591,7 +595,11 @@ namespace EQTool.Services
                                         HasUsedStartupEnterWorld = true;
                                         Debug.WriteLine("EnteredWorldEvent Player Changed");
                                         EnteredWorldEvent?.Invoke(this, new EnteredWorldArgs());
-                                        break;
+										if (_settings.SelectedCharacter == null)
+										{
+											_settings.SelectedCharacter = _activePlayer.Player.Name;
+										}
+										break;
                                     }
                                 }
                             }
@@ -610,7 +618,11 @@ namespace EQTool.Services
                         HasUsedStartupEnterWorld = true;
                         Debug.WriteLine("EnteredWorldEvent First Time");
                         EnteredWorldEvent?.Invoke(this, new EnteredWorldArgs());
-                    }
+						if (_settings.SelectedCharacter == null)
+						{
+							_settings.SelectedCharacter = _activePlayer.Player.Name;
+						}
+					}
                     foreach (var line in linelist)
                     {
                         MainRun(line);

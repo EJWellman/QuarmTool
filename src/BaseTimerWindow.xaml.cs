@@ -23,6 +23,7 @@ namespace EQTool
         private readonly System.Timers.Timer _uiTimer;
         private readonly BaseTimerWindowViewModel _baseTimerWindowViewModel;
         private readonly LogParser _logParser;
+		private readonly PipeParser _pipeParser;
         private readonly ActivePlayer _activePlayer;
         private readonly PlayerTrackerService _playerTrackerService;
 		private readonly QuarmDataService _quarmDataService;
@@ -33,6 +34,7 @@ namespace EQTool
             EQToolSettings settings,
             BaseTimerWindowViewModel baseTimerWindowViewModel,
             LogParser logParser,
+			PipeParser pipeParser,
             EQToolSettingsLoad toolSettingsLoad,
             ActivePlayer activePlayer,
 			QuarmDataService quarmDataService,
@@ -41,6 +43,7 @@ namespace EQTool
             loggingService.Log(string.Empty, EventType.OpenMap, activePlayer?.Player?.Server);
             _playerTrackerService = playerTrackerService;
             _logParser = logParser;
+			_pipeParser = pipeParser;
             _activePlayer = activePlayer;
 			_quarmDataService = quarmDataService;
 			_settings = settings;
@@ -58,6 +61,11 @@ namespace EQTool
 			_logParser.EnteredWorldEvent += LogParser_EnteredWorldEvent;
 			_logParser.SpellWornOffSelfEvent += LogParser_SpellWornOffSelfEvent;
 			_logParser.StartCastingEvent += LogParser_StartCastingEvent;
+			
+			_pipeParser.StartCastingEvent += _pipeParser_StartCastingEvent;
+			_pipeParser.FizzleCastingEvent += _pipeParser_FizzleCastingEvent;
+			_pipeParser.InterruptCastingEvent += _pipParser_InterruptCastingEvent;
+
 			_logParser.DeadEvent += LogParser_DeadEvent;
 			_logParser.StartTimerEvent += LogParser_StartTimerEvent;
 			_logParser.CancelTimerEvent += LogParser_CancelTimerEvent;
@@ -83,6 +91,20 @@ namespace EQTool
 			view.LiveSortingProperties.Add(nameof(UISpell.SecondsLeftOnSpell));
 
 			Topmost = baseTimerWindowViewModel._windowOptions.AlwaysOnTop;
+		}
+
+		private void _pipeParser_FizzleCastingEvent(object sender, PipeParser.FizzleEventArgs e)
+		{
+			_baseTimerWindowViewModel.RemoveCastingSpell(e.ExecutionTime);
+		}
+		private void _pipParser_InterruptCastingEvent(object sender, PipeParser.InterruptEventArgs e)
+		{
+			_baseTimerWindowViewModel.RemoveCastingSpell(e.ExecutionTime);
+		}
+
+		private void _pipeParser_StartCastingEvent(object sender, PipeParser.SpellEventArgs e)
+		{
+			_baseTimerWindowViewModel.TryAdd(e.Spell, false);
 		}
 
 		private void Window_SizeChanged(object sender, SizeChangedEventArgs e)
