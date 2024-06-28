@@ -3,6 +3,7 @@ using EQTool.Models;
 using EQTool.Services;
 using EQTool.ViewModels;
 using EQToolShared.Enums;
+using EQToolShared.ExtendedClasses;
 using EQToolShared.Map;
 using System;
 using System.ComponentModel;
@@ -200,7 +201,7 @@ namespace EQTool
 
 		private void LogParser_DeadEvent(object sender, LogParser.DeadEventArgs e)
 		{
-			string name = CleanUpZealName(e.Name);
+			string name = e.Name.CleanUpZealName(true);
 			if (playerTrackerService.IsPlayer(name))
             {
                 return;
@@ -215,11 +216,6 @@ namespace EQTool
 					mapViewModel.MoveToPlayerLocation(mw);
 				}
 			}
-		}
-		private string CleanUpZealName(string name)
-		{
-			string ret = name.Substring(0, name.Length - 3).Replace("_", " ");
-			return ret;
 		}
 
 		private void UITimer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
