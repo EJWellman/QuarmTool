@@ -21,16 +21,17 @@ namespace EQToolShared.Map
 	public class PlayerZonedInfo
 	{
 		public string ZoneName { get; set; }
+		public bool IsInstance { get; set; } = false;
 		public bool ForceUpdate { get; set; } = false;
 	}
 
 	public static class ZoneParser
 	{
-		private const string Youhaveentered = "You have entered ";
-		private const string Therearenoplayers = "There are no players ";
+		private const string YouHaveEntered = "You have entered ";
+		private const string ThereAreNoPlayers = "There are no players ";
 		private const string ThereAre = "There are ";
 		private const string ThereIs = "There is ";
-		private const string Youhaveenteredareapvp = "You have entered an Arena (PvP) area.";
+		private const string YouHaveEnteredAreaPVP = "You have entered an Arena (PvP) area.";
 		private const string spaceinspace = "in ";
 		public static readonly List<string> KaelFactionMobs = new List<string>() {
 			"Bygloirn Omorden",
@@ -1071,6 +1072,7 @@ namespace EQToolShared.Map
 			ZoneNames.Add(new ZoneNameInfo("western wastes", "westwastes"));
 			ZoneNames.Add(new ZoneNameInfo("nektulos forest", "nektulos"));
 			ZoneNames.Add(new ZoneNameInfo("the bazaar", "bazaar"));
+			ZoneNames.Add(new ZoneNameInfo("field of bone (alt)", "towerbone", null, null, "fieldofbone"));
 			ZoneNames.Add(new ZoneNameInfo("shard of decay", "sodecay", null, null, "codecay"));
 			ZoneNames.Add(new ZoneNameInfo("nagafen's lair (instanced)", "soldungb_tryout", null, null, "soldungb"));
 			ZoneNames.Add(new ZoneNameInfo("permafrost caverns (instanced)", "perma_tryout", null, null, "permafrost"));
@@ -1080,12 +1082,24 @@ namespace EQToolShared.Map
 			ZoneNames.Add(new ZoneNameInfo("plane of hate (instanced)", "hate_instanced", null, null, "hateplane"));
 			ZoneNames.Add(new ZoneNameInfo("plane of fear (instanced)", "fear_instanced", null, null, "fearplane"));
 			ZoneNames.Add(new ZoneNameInfo("plane of sky (instanced)", "air_instanced", null, null, "airplane"));
-			ZoneNames.Add(new ZoneNameInfo("oops, all icebones!", "towerfrost", null, null, "kurn"));
+			ZoneNames.Add(new ZoneNameInfo("kurn's tower (alternate)", "towerfrost", null, null, "kurn"));
 			ZoneNames.Add(new ZoneNameInfo("the hole (instanced)", "hole_instanced", null, null, "hole"));
 			ZoneNames.Add(new ZoneNameInfo("sunset home", "cshome2", null, null, "cshome"));
 			ZoneNames.Add(new ZoneNameInfo("house of mischief", "mischiefhouse", null, null, "mischiefplane"));
 			ZoneNames.Add(new ZoneNameInfo("bloodied kithicor", "kithicor_alt", null, null, "kithicor"));
 			ZoneNames.Add(new ZoneNameInfo("bloodied rivervale (instanced)", "rivervale_alt", null, null, "rivervale"));
+			ZoneNames.Add(new ZoneNameInfo("howling stones (instanced)", "charasis_instanced", null, null, "charasis"));
+			ZoneNames.Add(new ZoneNameInfo("chardok (instanced)", "chardok_instanced", null, null, "chardok"));
+			ZoneNames.Add(new ZoneNameInfo("dreadlands (instanced)", "dreadlands_instanced", null, null, "dreadlands"));
+			ZoneNames.Add(new ZoneNameInfo("emerald jungle (instanced)", "emeraldjungle_instanced", null, null, "emeraldjungle"));
+			ZoneNames.Add(new ZoneNameInfo("timorous deep (instanced)", "timorous_instanced", null, null, "timorous"));
+			ZoneNames.Add(new ZoneNameInfo("skyfire mountains (instanced)", "skyfire_instanced", null, null, "skyfire"));
+			ZoneNames.Add(new ZoneNameInfo("ruins of sebilis (instanced)", "sebilis_instanced", null, null, "sebilis"));
+			ZoneNames.Add(new ZoneNameInfo("karnor's castle (instanced)", "karnor_instanced", null, null, "karnor"));
+			ZoneNames.Add(new ZoneNameInfo("veeshan's peak (instanced)", "veeshan_instanced", null, null, "veeshan"));
+			ZoneNames.Add(new ZoneNameInfo("oops, all goos!", "plaguecrypt", null, null, "dalnir"));
+			ZoneNames.Add(new ZoneNameInfo("kithicor forest (instanced)", "kithicor_instanced", null, null, "kithicor"));
+			ZoneNames.Add(new ZoneNameInfo("the city of mist (instanced)", "citymist_instanced", null, null, "citymist"));
 
 			#endregion
 
@@ -1124,7 +1138,7 @@ namespace EQToolShared.Map
 		public static bool CheckWhoAgainstPreviousZone(string message, string name, string lastZone)
 		{
 			string messageZone = string.Empty;
-			if (message.StartsWith(Therearenoplayers) || message.StartsWith(Youhaveenteredareapvp) || message.StartsWith(Youhaveentered))
+			if (message.StartsWith(ThereAreNoPlayers) || message.StartsWith(YouHaveEnteredAreaPVP) || message.StartsWith(YouHaveEntered))
 			{
 				return false;
 			}
@@ -1172,15 +1186,20 @@ namespace EQToolShared.Map
 				ret.ForceUpdate = true;
 				message = message.Replace(" FORCECLEAR", string.Empty);
 			}
+			//Alt/Instance Check
+			var msgSplit = message.Split(' ');
+			if(msgSplit.Length > 1 && message.StartsWith(YouHaveEntered) && (msgSplit.Last().Contains("(Inst") || msgSplit.Last().Contains("(Alt")))
+			{
+				ret.IsInstance = true;
+			}
 
-			//Debug.WriteLine($"ZoneParse: "+ message);
-			if (message.StartsWith(Therearenoplayers) || message.StartsWith(Youhaveenteredareapvp))
+			if (message.StartsWith(ThereAreNoPlayers) || message.StartsWith(YouHaveEnteredAreaPVP))
 			{
 				return null;
 			}
-			else if (message.StartsWith(Youhaveentered))
+			else if (message.StartsWith(YouHaveEntered))
 			{
-				message = message.Replace(Youhaveentered, string.Empty).Trim().TrimEnd('.').ToLower();
+				message = message.Replace(YouHaveEntered, string.Empty).Trim().TrimEnd('.').ToLower();
 				ret.ZoneName = message;
 				return ret;
 			}

@@ -18,8 +18,9 @@ namespace EQTool
     public partial class MappingWindow : BaseSaveStateWindow
     {
         private readonly LogParser logParser;
+		private readonly PipeParser _pipeParser;
         private readonly MapViewModel mapViewModel;
-        private readonly ActivePlayer activePlayer;
+        private readonly ActivePlayer _activePlayer;
         private readonly PlayerTrackerService playerTrackerService;
         private readonly IAppDispatcher appDispatcher;
         private readonly ISignalrPlayerHub signalrPlayerHub;
@@ -28,12 +29,15 @@ namespace EQTool
 		private QuarmDataService _quarmDataService;
 		private TimerWindowFactory _timerWindowFactory;
 		private ZealMessageService _zealMessageService;
+		private LoggingService _logging;
+		private DateTime LastYouActivity { get; set; }
 
 		public MappingWindow(
             ISignalrPlayerHub signalrPlayerHub,
             MapViewModel mapViewModel,
             ActivePlayer activePlayer,
             LogParser logParser,
+			PipeParser pipeParser,
             EQToolSettings settings,
             PlayerTrackerService playerTrackerService,
             EQToolSettingsLoad toolSettingsLoad,
@@ -44,11 +48,13 @@ namespace EQTool
 			ZealMessageService zealMessageService) : base(settings.MapWindowState, toolSettingsLoad, settings)
         {
             loggingService.Log(string.Empty, EventType.OpenMap, activePlayer?.Player?.Server);
-            this.activePlayer = activePlayer;
+            this._activePlayer = activePlayer;
             this.signalrPlayerHub = signalrPlayerHub;
             this.playerTrackerService = playerTrackerService;
             this.appDispatcher = appDispatcher;
             this.logParser = logParser;
+			_pipeParser = pipeParser;
+			_logging = loggingService;
 			_quarmDataService = quarmDataService;
 			_timerWindowFactory = timerWindowFactory;
 			_settings = settings;
@@ -75,7 +81,7 @@ namespace EQTool
 			Map.ContextMenuClosing += Map_TimerMenu_ClosedEvent;
 			Map.TimerMenu_ClosedEvent += Map_TimerMenu_ClosedEvent;
             Map.TimerMenu_OpenedEvent += Map_TimerMenu_OpenedEvent;
-			_zealMessageService.OnPlayerMessageReceived += _zealMessageService_OnPlayerMessageReceived;
+			_pipeParser.ZealLocationEvent += _zealMessageService_ZealLocationEvent;
             this.signalrPlayerHub.PlayerLocationEvent += SignalrPlayerHub_PlayerLocationEvent;
             this.signalrPlayerHub.PlayerDisconnected += SignalrPlayerHub_PlayerDisconnected;
             UITimer = new System.Timers.Timer(1000);
@@ -97,27 +103,10 @@ namespace EQTool
 			}
 		}
 
-		private void _zealMessageService_OnPlayerMessageReceived(object sender, ZealMessageService.PlayerMessageReceivedEventArgs e)
+		private void _zealMessageService_ZealLocationEvent(object sender, ZealMessageService.PlayerMessageReceivedEventArgs e)
 		{
-			if (_settings.ZealProcessID == 0)
+			if(_settings.UseZealForThis(e.ProcessId, _settings.ZealMap_AutoUpdate))
 			{
-				if (string.IsNullOrWhiteSpace(_settings.SelectedCharacter))
-				{
-					_settings.ZealProcessID = e.ProcessId;
-				}
-			}
-			//adjust this logic
-			if (!string.IsNullOrWhiteSpace(_settings.SelectedCharacter) && string.Compare(_settings.SelectedCharacter, e.Message.Character, true) == 0)
-			{
-				_settings.ZealProcessID = e.ProcessId;
-			}
-
-			if (_settings.ZealEnabled && _settings.ZealMap_AutoUpdate)
-			{
-				if(_settings.ZealProcessID != 0 && _settings.ZealProcessID != e.ProcessId)
-				{
-					return;
-				}
 				var loc = new Point3D(e.Message.Data.Position.X, e.Message.Data.Position.Y, e.Message.Data.Position.Z);
 				appDispatcher.DispatchUI(() => mapViewModel.UpdateLocation(loc, e.Message.Data.heading));
 				logParser.PingSignalRLocationEvent(loc);
@@ -201,20 +190,27 @@ namespace EQTool
 
 		private void LogParser_DeadEvent(object sender, LogParser.DeadEventArgs e)
 		{
-			string name = e.Name.CleanUpZealName(true);
-			if (playerTrackerService.IsPlayer(name))
-            {
-                return;
-            }
-
-            if (activePlayer.Player?.MapKillTimers == true)
-            {
-				var deathTimer = _quarmDataService.GetMonsterTimer(name);
-				if(deathTimer != null)
+			try
+			{
+				string name = e.Name.CleanUpZealName(true);
+				if (playerTrackerService.IsPlayer(name))
 				{
-					var mw = mapViewModel.AddTimer(TimeSpan.FromSeconds(deathTimer.RespawnTimer), name, false);
-					mapViewModel.MoveToPlayerLocation(mw);
+					return;
 				}
+
+				if (_activePlayer.Player?.MapKillTimers == true)
+				{
+					var deathTimer = _quarmDataService.GetMonsterTimer(name);
+					if(deathTimer != null)
+					{
+						var mw = mapViewModel.AddTimer(TimeSpan.FromSeconds(deathTimer.RespawnTimer), name, false);
+						mapViewModel.MoveToPlayerLocation(mw);
+					}
+				}
+			}
+			catch(Exception ex)
+			{
+				_logging.Log(ex.Message, EventType.Error, _activePlayer?.Player?.Server);
 			}
 		}
 
@@ -309,7 +305,7 @@ namespace EQTool
 
 			this.MouseEnter -= ToggleMouseLocation_Event;
 			this.MouseLeave -= ToggleMouseLocation_Event;
-			_zealMessageService.OnPlayerMessageReceived -= _zealMessageService_OnPlayerMessageReceived;
+			_zealMessageService.OnPlayerMessageReceived -= _zealMessageService_ZealLocationEvent;
 
 			base.OnClosing(e);
         }

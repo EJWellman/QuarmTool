@@ -8,6 +8,7 @@ using System.Windows.Media;
 using System.Windows;
 using ZealPipes.Services;
 using System.Collections.ObjectModel;
+using System.Windows.Media.Media3D;
 
 namespace EQTool.Models
 {
@@ -415,6 +416,19 @@ namespace EQTool.Models
 				availableCharacters = value;
 				OnPropertyChanged();
 			}
+		}
+
+		public bool UseZealForThis(int processId, bool specificProperty)
+		{
+			if (ZealEnabled && specificProperty)
+			{
+				if (ZealProcessID != 0 && ZealProcessID != processId)
+				{
+					return false;
+				}
+				return true;
+			}
+			return false;
 		}
 
 		public event PropertyChangedEventHandler PropertyChanged;

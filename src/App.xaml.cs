@@ -16,6 +16,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Web.UI;
 using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Media;
@@ -31,15 +32,13 @@ namespace EQTool
         private System.Windows.Forms.NotifyIcon SystemTrayIcon;
 
         private System.Windows.Forms.MenuItem MapMenuItem;
-        private System.Windows.Forms.MenuItem SpellsMenuItem;
-		private System.Windows.Forms.MenuItem TimerMenuItem;
-		private System.Windows.Forms.MenuItem ComboTimerMenuItem;
 		private System.Windows.Forms.MenuItem DpsMeterMenuItem;
         private System.Windows.Forms.MenuItem OverlayMenuItem;
         private System.Windows.Forms.MenuItem SettingsMenuItem;
         private System.Windows.Forms.MenuItem GroupSuggestionsMenuItem;
         private System.Windows.Forms.MenuItem MobInfoMenuItem;
         private LogParser logParser => container.Resolve<LogParser>();
+		private PipeParser _pipeParser => container.Resolve<PipeParser>();
 		private ZealMessageService _zealMessageService => container.Resolve<ZealMessageService>();
         private System.Timers.Timer UITimer;
         private PlayerTrackerService PlayerTrackerService;
@@ -368,6 +367,7 @@ namespace EQTool
 			((App)System.Windows.Application.Current).UpdateBackgroundOpacity("MyMobWindowSyle", _settings.MobWindowState.Opacity.Value);
 
 			_zealMessageService.StartProcessing();
+			_pipeParser.Start();
         }
         private void GenerateTimerMenu(MenuItem timersMenu)
         {
@@ -748,18 +748,18 @@ namespace EQTool
 				_timerWindowFactory = container.Resolve<TimerWindowFactory>();
 			}
 
-			if((sender as System.Windows.Controls.MenuItem)?.DataContext != null)
+			if((sender as System.Windows.Controls.MenuItem)?.Tag != null)
 			{
-				var contextID = (sender as System.Windows.Controls.MenuItem).DataContext as int?;
+				var contextID = (sender as System.Windows.Controls.MenuItem).Tag as int?;
 				if (contextID != null)
 				{
 					var w = _timerWindowFactory.CreateTimerWindow((int)contextID);
 					(App.Current as App).OpenSpawnableWindow<BaseTimerWindow>(w);
 				}
 			}
-			else if((sender as System.Windows.Forms.MenuItem)?.Tag != null)
+			else if((sender as System.Windows.Controls.MenuItem)?.DataContext != null)
 			{
-				var contextID = (sender as System.Windows.Forms.MenuItem).Tag as int?;
+				var contextID = (sender as System.Windows.Controls.MenuItem).DataContext as int?;
 				if (contextID != null)
 				{
 					var w = _timerWindowFactory.CreateTimerWindow((int)contextID);

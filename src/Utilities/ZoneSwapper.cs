@@ -13,12 +13,33 @@ namespace EQTool.Utilities
 			Dictionary<string, string> zonesToSwapForMaps = new Dictionary<string, string>()
 			{
 				{ "air_instanced", "airplane" },
-				{ "hate_instanced", "hateplane" },
+				{ "charasis_instanced", "charasis" },
+				{ "chardok_instanced", "chardok" },
+				{ "citymist_instanced", "citymist" },
+				{ "cshome2", "cshome" },
+				{ "dreadlands_instanced", "dreadlands" },
+				{ "emeraldjungle_instanced", "emeraldjungle" },
 				{ "fear_instanced", "fearplane" },
+				{ "fireice", "arena" },
+				{ "hate_instanced", "hateplane" },
 				{ "hole_instanced", "hole" },
-				{ "soldungb_tryout", "soldungb" },
+				{ "karnor_instanced", "karnor" },
 				{ "kedge_tryout", "kedge" },
-				{ "perma_tryout", "permafrost" }
+				{ "kithicor_alt", "kithicor" },
+				{ "kithicor_instanced", "kithicor" },
+				{ "mischiefhouse", "mischiefplane" },
+				{ "myriah", "halas" },
+				{ "perma_tryout", "permafrost" },
+				{ "plaguecrypt", "dalnir" },
+				{ "rivervale_alt", "rivervale" },
+				{ "sebilis_instanced", "sebilis" },
+				{ "skyfire_instanced", "skyfire" },
+				{ "sodecay", "codecay" },
+				{ "soldungb_tryout", "soldungb" },
+				{ "timorous_instanced", "timorous" },
+				{ "towerbone", "fieldofbone" },
+				{ "towerfrost", "kurn" },
+				{ "veeshan_instanced", "veeshan" }
 			};
 
 			if (checkValue)
@@ -40,16 +61,34 @@ namespace EQTool.Utilities
 		{
 			Dictionary<string, string> zonesToSwapForMaps = new Dictionary<string, string>()
 			{
-				{ "towerfrost", "kurn" },
-				{ "myriah", "halas"},
-				{ "sodecay", "codecay"},
 				{ "air_instanced", "airplane" },
-				{ "hate_instanced", "hateplane" },
+				{ "charasis_instanced", "charasis" },
+				{ "chardok_instanced", "chardok" },
+				{ "citymist_instanced", "citymist" },
+				{ "cshome2", "cshome" },
+				{ "dreadlands_instanced", "dreadlands" },
+				{ "emeraldjungle_instanced", "emeraldjungle" },
 				{ "fear_instanced", "fearplane" },
+				{ "fireice", "arena" },
+				{ "hate_instanced", "hateplane" },
 				{ "hole_instanced", "hole" },
-				{ "soldungb_tryout", "soldungb" },
+				{ "karnor_instanced", "karnor" },
 				{ "kedge_tryout", "kedge" },
-				{ "perma_tryout", "permafrost" }
+				{ "kithicor_alt", "kithicor" },
+				{ "kithicor_instanced", "kithicor" },
+				{ "mischiefhouse", "mischiefplane" },
+				{ "myriah", "halas" },
+				{ "perma_tryout", "permafrost" },
+				{ "plaguecrypt", "dalnir" },
+				{ "rivervale_alt", "rivervale" },
+				{ "sebilis_instanced", "sebilis" },
+				{ "skyfire_instanced", "skyfire" },
+				{ "sodecay", "codecay" },
+				{ "soldungb_tryout", "soldungb" },
+				{ "timorous_instanced", "timorous" },
+				{ "towerbone", "fieldofbone" },
+				{ "towerfrost", "kurn" },
+				{ "veeshan_instanced", "veeshan" }
 			};
 
 			if(checkValue)
@@ -72,16 +111,35 @@ namespace EQTool.Utilities
 		{
 			Dictionary<string, string> zonesToSwapForMaps = new Dictionary<string, string>()
 			{
-				{ "oops, all icebones!", "kurn's tower" },
-				{ "domain of frost", "halas"},
-				{ "shard of decay", "the crypt of decay"},
-				{ "plane of sky (instanced)", "plane of sky" },
-				{ "plane of hate (instanced)", "plane of hate" },
-				{ "plane of fear (instanced)", "plane of fear" },
-				{ "the hole (instanced)", "the hole" },
-				{ "nagafen's lair (tryout)", "nagafens lair"},
-				{ "kedge keep (instanced)", "kedge keep" },
-				{ "permafrost caverns (instanced)", "permafrost caverns" }
+				{ "field of bone (alt)", "fieldofbone" },
+				{ "shard of decay", "codecay" },
+				{ "nagafen's lair (instanced)", "soldungb" },
+				{ "permafrost caverns (instanced)", "permafrost" },
+				{ "kedge keep (instanced)", "kedge" },
+				{ "domain of frost", "halas" },
+				{ "trial of fire and ice (instanced)", "arena" },
+				{ "plane of hate (instanced)", "hateplane" },
+				{ "plane of fear (instanced)", "fearplane" },
+				{ "plane of sky (instanced)", "airplane" },
+				{ "kurn's tower (alternate)", "kurn" },
+				{ "the hole (instanced)", "hole" },
+				{ "sunset home", "cshome" },
+				{ "house of mischief", "mischiefplane" },
+				{ "bloodied kithicor", "kithicor" },
+				{ "bloodied rivervale (instanced)", "rivervale" },
+				{ "howling stones (instanced)", "charasis" },
+				{ "chardok (instanced)", "chardok" },
+				{ "dreadlands (instanced)", "dreadlands" },
+				{ "emerald jungle (instanced)", "emeraldjungle" },
+				{ "timorous deep (instanced)", "timorous" },
+				{ "skyfire mountains (instanced)", "skyfire" },
+				{ "ruins of sebilis (instanced)", "sebilis" },
+				{ "karnor's castle (instanced)", "karnor" },
+				{ "veeshan's peak (instanced)", "veeshan" },
+				{ "oops, all goos!", "dalnir" },
+				{ "kithicor forest (instanced)", "kithicor" },
+				{ "the city of mist (instanced)", "citymist" }
+
 			};
 
 			if(checkValue)

@@ -591,7 +591,11 @@ namespace EQTool.Services
                                         HasUsedStartupEnterWorld = true;
                                         Debug.WriteLine("EnteredWorldEvent Player Changed");
                                         EnteredWorldEvent?.Invoke(this, new EnteredWorldArgs());
-                                        break;
+										if (_settings.SelectedCharacter == null)
+										{
+											_settings.SelectedCharacter = _activePlayer.Player.Name;
+										}
+										break;
                                     }
                                 }
                             }
@@ -610,7 +614,11 @@ namespace EQTool.Services
                         HasUsedStartupEnterWorld = true;
                         Debug.WriteLine("EnteredWorldEvent First Time");
                         EnteredWorldEvent?.Invoke(this, new EnteredWorldArgs());
-                    }
+						if (_settings.SelectedCharacter == null)
+						{
+							_settings.SelectedCharacter = _activePlayer.Player.Name;
+						}
+					}
                     foreach (var line in linelist)
                     {
                         MainRun(line);
