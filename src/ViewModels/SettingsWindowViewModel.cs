@@ -126,18 +126,18 @@ namespace EQTool.ViewModels
 		}
 
 		#region Zeal
-		public bool ZealEnabled
-		{
-			get
-			{
-				return _settings.ZealEnabled;
-			}
-			set
-			{
-				_settings.ZealEnabled = value;
-				OnPropertyChanged();
-			}
-		}
+		//public bool ZealEnabled
+		//{
+		//	get
+		//	{
+		//		return _settings.ZealEnabled;
+		//	}
+		//	set
+		//	{
+		//		_settings.ZealEnabled = value;
+		//		OnPropertyChanged();
+		//	}
+		//}
 		public bool ZealMap_AutoUpdate
 		{
 			get
@@ -147,6 +147,18 @@ namespace EQTool.ViewModels
 			set
 			{
 				_settings.ZealMap_AutoUpdate = value;
+				OnPropertyChanged();
+			}
+		}
+		public bool ZealZone_AutoUpdate
+		{
+			get
+			{
+				return _settings.ZealZone_AutoUpdate;
+			}
+			set
+			{
+				_settings.ZealZone_AutoUpdate = value;
 				OnPropertyChanged();
 			}
 		}

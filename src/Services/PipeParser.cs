@@ -38,6 +38,7 @@ namespace EQTool.Services
 		private readonly EQToolSettings _settings;
 		private readonly LevelLogParse _levelLogParse;
 		private readonly EQToolSettingsLoad _toolSettingsLoad;
+		private readonly ISignalrPlayerHub _signalrPlayerHub;
 
 		private bool StartingWhoOfZone = false;
 		private bool Processing = false;
@@ -59,7 +60,8 @@ namespace EQTool.Services
 			IAppDispatcher appDispatcher,
 			EQToolSettings settings,
 			EQSpells spells,
-			ZealMessageService zealMessageService
+			ZealMessageService zealMessageService,
+			ISignalrPlayerHub signalrPlayerHub
 			)
 		{
 			_toolSettingsLoad = toolSettingsLoad;
@@ -70,10 +72,21 @@ namespace EQTool.Services
 		
 			_spells = spells;
 			_zealMessageService = zealMessageService;
+			_signalrPlayerHub = signalrPlayerHub;
 
 			_zealMessageService.OnLabelMessageReceived += _zealMessageService_OnLabelMessageReceived;
 			_zealMessageService.OnLogMessageReceived += _zealMessageService_OnLogMessageReceived;
 			_zealMessageService.OnPlayerMessageReceived += _zealMessageService_OnPlayerMessageReceived;
+			_zealMessageService.OnConnectionTerminated += _zealMessageService_onConnectionTerminated;
+			
+		}
+
+		private void _zealMessageService_onConnectionTerminated(object sender, ConnectionTerminatedEventArgs e)
+		{
+			_settings.SelectedCharacter = null;
+			_settings.ZealProcessID = 0;
+			_activePlayer.Player.ZoneId = 0;
+			SignalRPushDisconnect();
 		}
 
 		private void _zealMessageService_OnLabelMessageReceived(object sender, ZealMessageService.LabelMessageReceivedEventArgs e)
@@ -149,6 +162,18 @@ namespace EQTool.Services
 				{
 					_settings.ZealProcessID = e.ProcessId;
 				}
+				if(e.Message.Data != null && e.Message.Data.ZoneId > 0 && e.Message.Data.ZoneId != _activePlayer.Player.ZoneId)
+				{
+					_activePlayer.Player.LastZoneEntered = _activePlayer.Player.Zone;
+					ZealZoneChangeEvent?.Invoke(this, new ZealLocationEventArgs() 
+						{ 
+							ZoneId = e.Message.Data.ZoneId, 
+							Previous_ZoneId = _activePlayer.Player.ZoneId, 
+							ProcessId = e.ProcessId 
+						}
+					);
+					_activePlayer.Player.ZoneId = e.Message.Data.ZoneId;
+				}
 				//if(e.Message.Data.ZoneId > 1000)
 				//{
 				//	_activePlayer.IsInInstance = true;
@@ -159,6 +184,24 @@ namespace EQTool.Services
 				//}
 				ZealLocationEvent?.Invoke(this, e);
 			}
+		}
+
+		private void SignalRPushDisconnect()
+		{
+			_appDispatcher.DispatchUI(() =>
+			{
+				var player = new SignalrPlayer
+				{
+					Zone = this._activePlayer.Player.Zone,
+					GuildName = this._activePlayer.Player.GuildName,
+					PlayerClass = this._activePlayer.Player.PlayerClass,
+					Server = this._activePlayer.Player.Server.Value,
+					MapLocationSharing = this._activePlayer.Player.MapLocationSharing,
+					Name = this._activePlayer.Player.Name,
+					TrackingDistance = this._activePlayer.Player.TrackingDistance
+				};
+				_signalrPlayerHub.PushPlayerDisconnected(player);
+			});
 		}
 
 		public class SpellEventArgs : EventArgs
@@ -180,12 +223,19 @@ namespace EQTool.Services
 		{
 			public DateTime ExecutionTime { get; set; }
 		}
+		public class ZealLocationEventArgs : EventArgs
+		{
+			public int ZoneId { get; set; }
+			public int Previous_ZoneId { get; set; }
+			public int ProcessId { get; set; }
+		}
 
 
 		public event EventHandler<SpellEventArgs> StartCastingEvent;
 		public event EventHandler<FizzleEventArgs> FizzleCastingEvent;
 		public event EventHandler<InterruptEventArgs> InterruptCastingEvent;
 		public event EventHandler<PlayerMessageReceivedEventArgs> ZealLocationEvent;
+		public event EventHandler<ZealLocationEventArgs> ZealZoneChangeEvent;
 
 
 

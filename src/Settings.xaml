@@ -83,11 +83,11 @@
                         <ComboBox  SelectedItem="{Binding SelectedCharacter}" ItemsSource="{Binding AvailableCharacters}" SelectionChanged="SaveSettings" MinWidth="150"/>
                     </StackPanel>
                     <Separator/>
-                    <StackPanel Orientation="Horizontal" Margin="0,2,0,0">
+                    <!--<StackPanel Orientation="Horizontal" Margin="0,2,0,0">
                         <TextBlock Text="Enable Zeal" VerticalAlignment="Center"  FontWeight="Bold"  MinWidth="100"/>
                         <CheckBox IsChecked="{Binding ZealEnabled}" Click="SaveAlwaysOntopCheckBoxSettings" ></CheckBox>
                     </StackPanel>
-                    <Separator Margin="0,10,0,0"/>
+                    <Separator Margin="0,10,0,0"/>-->
                     <TextBlock Text="Damage Window" HorizontalAlignment="Center" FontWeight="Bold" Margin="5,5,0,0"/>
                     <StackPanel Orientation="Vertical" Margin="0, 0, 0, 8">
                         <StackPanel Orientation="Horizontal">
@@ -458,11 +458,18 @@
                     <TextBlock Text="Hide Small Labels" ToolTip="Hides the small labels on the map (Non-Zone). This is a per character setting" VerticalAlignment="Center"  FontWeight="Bold"  MinWidth="100"/>
                     <CheckBox IsChecked="{Binding HideSmallLabels}" Click="MapVisibleTracking_Click"></CheckBox>
                 </StackPanel>
+                <Separator/>
                 <StackPanel Orientation="Horizontal" Margin="0,2,0,0">
-                    <TextBlock Text="Update via Zeal" VerticalAlignment="Center" FontWeight="Bold" MinWidth="100">
+                    <TextBlock Text="Location via Zeal" VerticalAlignment="Center" FontWeight="Bold" MinWidth="100">
                     </TextBlock>
                     <CheckBox IsChecked="{Binding ZealMap_AutoUpdate}" Click="SaveAlwaysOntopCheckBoxSettings" ></CheckBox>
                 </StackPanel>
+                <StackPanel Orientation="Horizontal" Margin="0,2,0,0">
+                    <TextBlock Text="Zone via Zeal" VerticalAlignment="Center" FontWeight="Bold" MinWidth="100">
+                    </TextBlock>
+                    <CheckBox IsChecked="{Binding ZealZone_AutoUpdate}" Click="SaveAlwaysOntopCheckBoxSettings" ></CheckBox>
+                </StackPanel>
+                <Separator/>
                 <StackPanel Orientation="Horizontal">
                     <TextBlock Text="Window Opacity" VerticalAlignment="Center"  FontWeight="Bold"  MinWidth="100"/>
                     <Slider Value="{Binding MapWindowOpacity}" Minimum=".01" Maximum="1" SmallChange=".1" TickFrequency=".1" ValueChanged="SaveSettings" MinWidth="150"/>

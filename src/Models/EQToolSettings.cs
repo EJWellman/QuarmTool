@@ -331,19 +331,19 @@ namespace EQTool.Models
 		}
 
 		#region Zeal
-		private bool _zealEnabled;
-		public bool ZealEnabled
-		{
-			get
-			{
-				return _zealEnabled;
-			}
-			set
-			{
-				_zealEnabled = value;
-				OnPropertyChanged();
-			}
-		}
+		//private bool _zealEnabled;
+		//public bool ZealEnabled
+		//{
+		//	get
+		//	{
+		//		return _zealEnabled;
+		//	}
+		//	set
+		//	{
+		//		_zealEnabled = value;
+		//		OnPropertyChanged();
+		//	}
+		//}
 		private bool _zealMap_AutoUpdate;
 		public bool ZealMap_AutoUpdate
 		{
@@ -357,6 +357,20 @@ namespace EQTool.Models
 				OnPropertyChanged();
 			}
 		}
+		public bool _zealZone_AutoUpdate;
+		public bool ZealZone_AutoUpdate
+		{
+			get
+			{
+				return _zealZone_AutoUpdate;
+			}
+			set
+			{
+				_zealZone_AutoUpdate = value;
+				OnPropertyChanged();
+			}
+		}
+
 		private bool _zealMobInfo_AutoUpdate;
 		public bool ZealMobInfo_AutoUpdate
 		{
@@ -420,7 +434,7 @@ namespace EQTool.Models
 
 		public bool UseZealForThis(int processId, bool specificProperty)
 		{
-			if (ZealEnabled && specificProperty)
+			if (specificProperty)
 			{
 				if (ZealProcessID != 0 && ZealProcessID != processId)
 				{

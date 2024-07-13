@@ -187,6 +187,17 @@ namespace EQTool.Models
             }
         }
 
+		private int _zoneId;
+		public int ZoneId
+		{
+			get => _zoneId;
+			set
+			{
+				_zoneId = value;
+				OnPropertyChanged();
+			}
+		}
+
 		private string _LastZoneEntered;
 		public string LastZoneEntered
 		{

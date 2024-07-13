@@ -82,7 +82,7 @@ namespace EQTool
 
 		private void ZealMessageService_OnCharacterUpdated(object sender, ZealCharacter.ZealCharacterUpdatedEventArgs e)
 		{
-			if (_settings.ZealEnabled && _settings.ZealMobInfo_AutoUpdate && e.Character.Detail.LabelData != null && e.Character.Detail.LabelData.Count > 0)
+			if (/*_settings.ZealEnabled &&*/ _settings.ZealMobInfo_AutoUpdate && e.Character.Detail.LabelData != null && e.Character.Detail.LabelData.Count > 0)
 			{
 				if(_activePlayer.Player.LastTarget != e.Character.Detail.LabelData[(int)ZealPipes.Common.LabelType.TargetName - 1]?.Value)
 				{

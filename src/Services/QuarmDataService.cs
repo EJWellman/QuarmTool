@@ -271,5 +271,14 @@ namespace EQTool.Services
 				return false;
 			}
 		}
+
+		public QuarmZone GetZoneByID(int zoneId)
+		{
+			var zone = DataService.GetData<QuarmZone>("SELECT * " +
+				"FROM Zones"
+				+ " WHERE Zone_ID = @Zone_ID", new { Zone_ID = zoneId}).FirstOrDefault();
+
+			return zone;
+		}
 	}
 }

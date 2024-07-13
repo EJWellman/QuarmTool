@@ -396,33 +396,6 @@ namespace EQTool.Models
 				};
 
 				InvokeAsync("PlayerLocationEvent", this.LastPlayer);
-
-				//if (this.NParseWebsocketConnection.State == WebSocketState.Open && this._activePlayer?.Player?.MapLocationSharing == MapLocationSharing.Everyone)
-				//{
-				//	var nparsezonename = TranslateZoneNameToNParse(LastPlayer.Zone);
-				//	var sendMessage = Newtonsoft.Json.JsonConvert.SerializeObject(new NParseLocationEvent
-				//	{
-				//		group_key = "public",
-				//		type = "location",
-				//		location = new NParseLocation
-				//		{
-				//			x = Math.Round(LastPlayer.X, 2),
-				//			y = Math.Round(LastPlayer.Y, 2),
-				//			z = Math.Round(LastPlayer.Z, 2),
-				//			zone = LastPlayer.Zone,
-				//			player = LastPlayer.Name + " (PP)",
-				//		}
-				//	});
-				//	var sendBuffer = new ArraySegment<byte>(Encoding.UTF8.GetBytes(sendMessage));
-				//	Task.Factory.StartNew(async () =>
-				//	{
-				//		try
-				//		{
-				//			await this.NParseWebsocketConnection.SendAsync(sendBuffer, WebSocketMessageType.Text, true, CancellationToken.None);
-				//		}
-				//		catch { }
-				//	});
-				//}
 			}
 		}
 

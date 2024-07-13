@@ -757,6 +757,15 @@ namespace EQTool
 					(App.Current as App).OpenSpawnableWindow<BaseTimerWindow>(w);
 				}
 			}
+			if ((sender as System.Windows.Forms.MenuItem)?.Tag != null)
+			{
+				var contextID = (sender as System.Windows.Forms.MenuItem).Tag as int?;
+				if (contextID != null)
+				{
+					var w = _timerWindowFactory.CreateTimerWindow((int)contextID);
+					(App.Current as App).OpenSpawnableWindow<BaseTimerWindow>(w);
+				}
+			}
 			else if((sender as System.Windows.Controls.MenuItem)?.DataContext != null)
 			{
 				var contextID = (sender as System.Windows.Controls.MenuItem).DataContext as int?;

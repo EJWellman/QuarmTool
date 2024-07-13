@@ -282,6 +282,10 @@ namespace EQTool.Services
 								{
 									_settings.SelectedCharacter = null;
 								}
+								if(_settings.ZealProcessID != 0)
+								{
+									_settings.ZealProcessID = 0;
+								}
                             });
                         }
                     });
