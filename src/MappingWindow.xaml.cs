@@ -340,7 +340,7 @@ namespace EQTool
 			base.OnClosing(e);
 		}
 
-		private void SetCenerMap()
+		private void SetMapCenter()
 		{
 			return;
 			var loc = new Point(MapWrapper.ActualWidth / 2, MapWrapper.ActualHeight / 2);
@@ -357,13 +357,13 @@ namespace EQTool
 
 		private void PanAndZoomCanvas_MouseMove(object sender, MouseEventArgs e)
 		{
-			this.SetCenerMap();
+			this.SetMapCenter();
 			this.mapViewModel.PanAndZoomCanvas_MouseMove(e.GetPosition(Map), e.LeftButton);
 		}
 
 		private void PanAndZoomCanvas_MouseWheel(object sender, MouseWheelEventArgs e)
 		{
-			this.SetCenerMap();
+			this.SetMapCenter();
 			this.mapViewModel.PanAndZoomCanvas_MouseWheel(e.GetPosition(Map), e.Delta);
 		}
 

@@ -342,31 +342,32 @@
                     <Separator/>
                     <Grid>
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="85"/>
-                            <ColumnDefinition Width="35"/>
-                            <ColumnDefinition Width="90"/>
-                            <ColumnDefinition Width="90"/>
-                            <ColumnDefinition Width="0"/>
+                            <ColumnDefinition Width="4*" MinWidth="90" MaxWidth="90"/>
+                            <ColumnDefinition Width="1*"/>
+                            <ColumnDefinition Width="4*"/>
+                            <ColumnDefinition Width="4*"/>
+                            <ColumnDefinition Width="1*"/>
                             <ColumnDefinition/>
                         </Grid.ColumnDefinitions>
-                        <TextBlock Text="Always On Top" VerticalAlignment="Center" FontWeight="Bold"  MaxWidth="125" Grid.Column="3"/>
+                        <TextBlock Text="Always On Top" VerticalAlignment="Center" FontWeight="Bold"  MaxWidth="125" Grid.Column="1"/>
                     </Grid>
                     <ListView ItemsSource="{Binding TimerWindows}">
                         <ListView.ItemTemplate>
                             <DataTemplate x:Name="TimerWindowsTemplate" DataType="local:TimerWindowOptions">
                                 <Grid>
                                     <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="85"/>
-                                        <ColumnDefinition Width="35"/>
-                                        <ColumnDefinition Width="90"/>
-                                        <ColumnDefinition Width="30"/>
-                                        <ColumnDefinition Width="60"/>
+                                        <ColumnDefinition Width="4*" MinWidth="110" MaxWidth="110"/>
+                                        <ColumnDefinition Width="1*"/>
+                                        <ColumnDefinition Width="4*"/>
+                                        <ColumnDefinition Width="4*"/>
+                                        <ColumnDefinition Width="1*"/>
                                         <ColumnDefinition/>
                                     </Grid.ColumnDefinitions>
                                     <TextBlock Text="{Binding Title}" VerticalAlignment="Center" FontWeight="Bold"  MaxWidth="125" Grid.Column="0"/>
-                                    <CheckBox IsChecked="{Binding AlwaysOnTop}" Margin="10,4,5,0" Click="TimerWindowAlwaysOnTop_Click" MinWidth="20" Grid.Column="3"/>
-                                    <Button Click="CreateTimerWindow_Click" HorizontalAlignment="Right" DataContext="{Binding ID}" Margin="10,0,0,0" Content="Edit" Width="50" Grid.Column="4"/>
-                                    <Button Click="DeleteTimerWindow_Click" DataContext="{Binding ID}" Margin="10,0,0,0" Grid.Column="5">
+                                    <CheckBox IsChecked="{Binding AlwaysOnTop}" Margin="10,4,5,0" Click="TimerWindowAlwaysOnTop_Click" MinWidth="20" Grid.Column="1"/>
+                                    <Button Click="TimerWindow_ResetPositionClick" HorizontalAlignment="Right" DataContext="{Binding ID}" Margin="10,0,0,0" Content="Reset" Width="50" Grid.Column="2"/>
+                                    <Button Click="CreateTimerWindow_Click" HorizontalAlignment="Right" DataContext="{Binding ID}" Margin="10,0,0,0" Content="Edit" Width="50" Grid.Column="3"/>
+                                    <Button Click="DeleteTimerWindow_Click" DataContext="{Binding ID}" Margin="10,0,0,0" Grid.Column="4">
                                         <TextBlock Foreground="Red">X</TextBlock>
                                     </Button>
                                 </Grid>

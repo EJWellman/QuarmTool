@@ -13,13 +13,13 @@ namespace EQTool.Constants
 		private const int RespawnReductionDungeonLowerBound = 360000; /// <summary> 6 minutes </summary>
 		private const int RespawnReductionDungeonHigherBoundMin = 900000; /// <summary> 10 minutes </summary> 
 		private const int RespawnReductionDungeonHigherBoundMax = 2400000; /// <summary> 40 minutes </summary> 
-		private const int RespawnReductionDungeonHigherBound = 720000; /// <summary> 12 minutes </summary> 
+		private const int RespawnReductionDungeonHigherBound = 480000; /// <summary> 8 minutes </summary> 
 
 		private const int RespawnReductionLowerBoundMin = 12001; /// <summary> 12 seconds </summary>
 		private const int RespawnReductionLowerBoundMax = 60000; /// <summary> 1 minute </summary>
 		private const int RespawnReductionLowerBound = 12000; /// <summary> 11.999 seconds </summary>
 		private const int RespawnReductionHigherBoundMin = 60001; /// <summary> 1 minute 1 second </summary>
-		private const int RespawnReductionHigherBoundMax = 300000; /// <summary> 5 minutes </summary>
+		private const int RespawnReductionHigherBoundMax = 900000; /// <summary> 15 minutes </summary>
 		private const int RespawnReductionHigherBound = 60000; /// <summary> 1 minute </summary>
 
 		public static double GetRespawnReductionDungeonLowerBoundMin() => RespawnReductionDungeonLowerBoundMin / 1000;
