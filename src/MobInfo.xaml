@@ -68,24 +68,42 @@
                         <ColumnDefinition Width="3*" />
                     </Grid.ColumnDefinitions>
                     <StackPanel Orientation="Vertical" Grid.Column="0" MinWidth="150" Margin="0, 0, 8, 0" Visibility="{Binding HasNoErrors}">
-                        <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="Name" Width="100"></TextBlock>
-                            <TextBlock>
-                            <Hyperlink NavigateUri="{Binding Url}" RequestNavigate="Hyperlink_RequestNavigate">
-                                <TextBlock Text="{Binding Name}"></TextBlock>     
-                                <Button Visibility="{Binding HasUrl}" Margin="1" FontSize="7" Width="14" Height="14" Padding="0" ToolTip="Open in Web Browser" Click="Hyperlink_RequestNavigatebutton">
-                                    <Image Source="pack://application:,,,/HyperlinkForward.png"/>
-                                </Button>
-                            </Hyperlink> 
-                        </TextBlock>
-                        </StackPanel>
-                        <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="Race" Width="100"></TextBlock>
-                            <TextBlock Text="{Binding Race}"></TextBlock>
-                        </StackPanel>
-                        <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="Level - Class" Width="100"></TextBlock>
-                            <TextBlock>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="2*" />
+                                <ColumnDefinition Width="3*" />
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+                            <TextBlock Text="Name" Grid.Column="0" Grid.Row="0"></TextBlock>
+                            <TextBlock Grid.Column="1" Grid.Row="0">
+                                <Hyperlink NavigateUri="{Binding Url}" RequestNavigate="Hyperlink_RequestNavigate">
+                                    <TextBlock Text="{Binding Name}"></TextBlock>     
+                                    <Button Visibility="{Binding HasUrl}" Margin="1" FontSize="7" Width="14" Height="14" Padding="0" ToolTip="Open in Web Browser" Click="Hyperlink_RequestNavigatebutton">
+                                        <Image Source="pack://application:,,,/HyperlinkForward.png"/>
+                                    </Button>
+                                </Hyperlink> 
+                            </TextBlock>
+
+                            <TextBlock Text="Race" Grid.Column="0" Grid.Row="1"></TextBlock>
+                            <TextBlock Text="{Binding Race}" Grid.Column="1" Grid.Row="1"></TextBlock>
+
+                            <TextBlock Text="Level - Class" Grid.Column="0" Grid.Row="2"/>
+                            <TextBlock Grid.Column="1" Grid.Row="2">
                                 <TextBlock.Text>
                                     <MultiBinding StringFormat="{}{0} - {1}">
                                         <Binding Path="Level"/>
@@ -93,46 +111,33 @@
                                     </MultiBinding>
                                 </TextBlock.Text>
                             </TextBlock>
-                        </StackPanel>
-                        <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="Primary Faction" Width="100"></TextBlock>
-                            <TextBlock Text="{Binding PrimaryFaction}"></TextBlock>
-                        </StackPanel>
-                        <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="Run Speed" Width="100"></TextBlock>
-                            <TextBlock Text="{Binding RunSpeed}"></TextBlock>
-                        </StackPanel>
-                        <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="AC" Width="100"></TextBlock>
-                            <TextBlock Text="{Binding AC}"></TextBlock>
-                        </StackPanel>
-                        <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="HP" Width="100"></TextBlock>
-                            <TextBlock Text="{Binding HP}"></TextBlock>
-                        </StackPanel>
-                        <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="HP Regen" Width="100"></TextBlock>
-                            <TextBlock Text="{Binding HPRegen}"></TextBlock>
-                        </StackPanel>
-                        <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="Mana Regen" Width="100"></TextBlock>
-                            <TextBlock Text="{Binding ManaRegen}"></TextBlock>
-                        </StackPanel>
-                        <!--<StackPanel Orientation="Horizontal">
-                        <TextBlock Text="AttacksPerRound" Width="100"></TextBlock>
-                        <TextBlock Text="{Binding AttacksPerRound}"></TextBlock>
-                    </StackPanel>-->
-                        <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="Attack Speed" Width="100"></TextBlock>
-                            <TextBlock Text="{Binding AttackSpeed}"></TextBlock>
-                        </StackPanel>
-                        <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="Damage Per Hit" Width="100"></TextBlock>
-                            <TextBlock Text="{Binding DamagePerHit}"></TextBlock>
-                        </StackPanel>
-                        <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="MR FR CR PR DR" Width="100"></TextBlock>
-                            <StackPanel Orientation="Horizontal">
+
+                            <TextBlock Text="Primary Faction" Grid.Column="0" Grid.Row="4"/>
+                            <TextBlock Text="{Binding PrimaryFaction}" Grid.Column="1" Grid.Row="4"/>
+
+                            <TextBlock Text="Run Speed" Grid.Column="0" Grid.Row="5"/>
+                            <TextBlock Text="{Binding RunSpeed}" Grid.Column="1" Grid.Row="5"/>
+
+                            <TextBlock Text="AC" Grid.Column="0" Grid.Row="6"/>
+                            <TextBlock Text="{Binding AC}" Grid.Column="1" Grid.Row="6"/>
+
+                            <TextBlock Text="HP" Grid.Column="0" Grid.Row="7"/>
+                            <TextBlock Text="{Binding HP}" Grid.Column="1" Grid.Row="7"/>
+
+                            <TextBlock Text="HP Regen" Grid.Column="0" Grid.Row="8"/>
+                            <TextBlock Text="{Binding HPRegen}" Grid.Column="1" Grid.Row="8"/>
+
+                            <TextBlock Text="Mana Regen" Grid.Column="0" Grid.Row="9"/>
+                            <TextBlock Text="{Binding ManaRegen}" Grid.Column="1" Grid.Row="9"/>
+                            
+                            <TextBlock Text="Attack Speed" Grid.Column="0" Grid.Row="10"/>
+                            <TextBlock Text="{Binding AttackSpeed}" Grid.Column="1" Grid.Row="10"/>
+                            
+                            <TextBlock Text="Damage Per Hit" Grid.Column="0" Grid.Row="11"/>
+                            <TextBlock Text="{Binding DamagePerHit}" Grid.Column="1" Grid.Row="11"/>
+
+                            <TextBlock Text="MR FR CR PR DR" Grid.Column="0" Grid.Row="12"/>
+                            <StackPanel Orientation="Horizontal" Grid.Column="1" Grid.Row="12">
                                 <Label Foreground="White" Content="{Binding Resist_Magic}"  Padding="5,0,5,0"/>
                                 <Label Foreground="Red" Content="{Binding Resist_Fire}"  Padding="5,0,5,0"/>
                                 <Label Foreground="Aqua" Content="{Binding Resist_Cold}"  Padding="5,0,5,0"/>
@@ -140,8 +145,8 @@
                                 <Label Foreground="ForestGreen" Content="{Binding Resist_Disease}"  Padding="5,0,5,0"/>
 
                             </StackPanel>
-                        </StackPanel>
-                        <StackPanel Orientation="Vertical">
+                        </Grid>
+                        <StackPanel Orientation="Vertical" Grid.Column="0" Grid.Row="13">
                             <StackPanel Orientation="Horizontal" Name="Sees_Invis_Stack">
                                 <TextBlock Text="Sees Invis"></TextBlock>
                             </StackPanel>
@@ -169,7 +174,6 @@
                         </StackPanel>
                     </StackPanel>
                     <StackPanel Orientation="Vertical" MinWidth="150" Grid.Column="1">
-
                         <StackPanel Name="FactionHitsStack">
                             <TextBlock>Factions</TextBlock>
                             <ListView Margin="10, 0, 0, 0" Style="{StaticResource MyListViewStyle}" ItemsSource="{Binding Factions}">
@@ -231,50 +235,6 @@
                                 </ListView.ItemContainerStyle>
                             </ListView>
                         </StackPanel>
-                        <StackPanel Name="KnownLootStack">
-                            <TextBlock>Known Loot</TextBlock>
-                            <ListView Margin="10, 0, 0, 0" Style="{StaticResource MyListViewStyle}" ItemsSource="{Binding KnownLoot}" 
-                              ScrollViewer.VerticalScrollBarVisibility="Visible" ScrollViewer.CanContentScroll="False"
-                              MaxHeight="145">
-                                <ListView.ItemTemplate>
-                                    <DataTemplate>
-                                        <StackPanel Orientation="Horizontal" MinWidth="100">
-                                            <TextBlock Visibility="{Binding HasUrl}">
-                                        <Hyperlink NavigateUri="{Binding Url}" RequestNavigate="Hyperlink_RequestNavigate">
-                                            <TextBlock Style="{StaticResource MyMobUrlSyle}">
-                                                        <TextBlock.Text>
-                                                            <MultiBinding StringFormat="{}{0} - {1}%">
-                                                                <Binding Path="Name"/>
-                                                                <Binding Path="Value"/>
-                                                            </MultiBinding>
-                                                        </TextBlock.Text>
-                                            </TextBlock>
-                                            <!--<TextBlock Text="{Binding Name}" Style="{StaticResource MyMobUrlSyle}"></TextBlock>-->     
-                                        </Hyperlink> 
-                                    </TextBlock>
-                                        </StackPanel>
-                                    </DataTemplate>
-                                </ListView.ItemTemplate>
-                            </ListView>
-                        </StackPanel>
-                        <StackPanel Name="MerchandiseStack">
-                            <TextBlock>Merchandise</TextBlock>
-                            <ListView Margin="10, 0, 0, 0" Style="{StaticResource MyListViewStyle}" ItemsSource="{Binding MerchantItems}" 
-                          ScrollViewer.VerticalScrollBarVisibility="Visible" ScrollViewer.CanContentScroll="False"
-                          MaxHeight="145">
-                                <ListView.ItemTemplate>
-                                    <DataTemplate>
-                                        <StackPanel Orientation="Horizontal" MinWidth="100">
-                                            <TextBlock Visibility="{Binding HasUrl}">
-                                            <Hyperlink NavigateUri="{Binding Url}" RequestNavigate="Hyperlink_RequestNavigate">
-                                                <TextBlock Text="{Binding Name}"  Style="{StaticResource MyMobUrlSyle}"></TextBlock> 
-                                            </Hyperlink> 
-                                        </TextBlock>
-                                        </StackPanel>
-                                    </DataTemplate>
-                                </ListView.ItemTemplate>
-                            </ListView>
-                        </StackPanel>
                         <StackPanel Name="SpecialAbilitiesStack">
                             <TextBlock>Specials</TextBlock>
                             <ListView Margin="10, 0, 0, 0" Style="{StaticResource MyListViewStyle}" ItemsSource="{Binding Specials}">
@@ -306,6 +266,50 @@
                                         </Setter>
                                     </Style>
                                 </ListView.ItemContainerStyle>
+                            </ListView>
+                        </StackPanel>
+                        <StackPanel Name="KnownLootStack">
+                            <TextBlock>Known Loot</TextBlock>
+                            <ListView Name="KnownLoot_ListView" Margin="10, 0, 0, 0" Style="{StaticResource MyListViewStyle}" ItemsSource="{Binding KnownLoot}" 
+                              ScrollViewer.VerticalScrollBarVisibility="Visible" ScrollViewer.CanContentScroll="False"
+                              MaxHeight="145">
+                                <ListView.ItemTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Orientation="Horizontal" MinWidth="100">
+                                            <TextBlock Visibility="{Binding HasUrl}">
+                                        <Hyperlink NavigateUri="{Binding Url}" RequestNavigate="Hyperlink_RequestNavigate">
+                                            <TextBlock Style="{StaticResource MyMobUrlSyle}">
+                                                        <TextBlock.Text>
+                                                            <MultiBinding StringFormat="{}{0} - {1}%">
+                                                                <Binding Path="Name"/>
+                                                                <Binding Path="Value"/>
+                                                            </MultiBinding>
+                                                        </TextBlock.Text>
+                                            </TextBlock>
+                                            <!--<TextBlock Text="{Binding Name}" Style="{StaticResource MyMobUrlSyle}"></TextBlock>-->     
+                                        </Hyperlink> 
+                                    </TextBlock>
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </ListView.ItemTemplate>
+                            </ListView>
+                        </StackPanel>
+                        <StackPanel Name="MerchandiseStack">
+                            <TextBlock>Merchandise</TextBlock>
+                            <ListView Name="KnownMerch_ListView" Margin="10, 0, 0, 0" Style="{StaticResource MyListViewStyle}" ItemsSource="{Binding MerchantItems}" 
+                          ScrollViewer.VerticalScrollBarVisibility="Visible" ScrollViewer.CanContentScroll="False"
+                          MaxHeight="145">
+                                <ListView.ItemTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Orientation="Horizontal" MinWidth="100">
+                                            <TextBlock Visibility="{Binding HasUrl}">
+                                            <Hyperlink NavigateUri="{Binding Url}" RequestNavigate="Hyperlink_RequestNavigate">
+                                                <TextBlock Text="{Binding Name}"  Style="{StaticResource MyMobUrlSyle}"></TextBlock> 
+                                            </Hyperlink> 
+                                        </TextBlock>
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </ListView.ItemTemplate>
                             </ListView>
                         </StackPanel>
                     </StackPanel>

@@ -62,6 +62,8 @@ namespace EQTool
 			ContextMenuOpening += MobInfo_TimerMenu_OpenedEvent;
 			_zealMessageService.OnCharacterUpdated += ZealMessageService_OnCharacterUpdated;
 
+			this.SizeChanged += MobInfo_OnWindowSizeChanged;
+
 			foreach (var timer in settings.TimerWindows)
 			{
 				var item = new System.Windows.Controls.MenuItem()
@@ -73,6 +75,15 @@ namespace EQTool
 
 				TimerWindowsMenu.Items.Add(item);
 			}
+		}
+
+		private void MobInfo_OnWindowSizeChanged(object sender, SizeChangedEventArgs e)
+		{
+			double lootHeight = Math.Max(this.Height - FactionHitsStack.ActualHeight - QuestsStack.ActualHeight - MerchandiseStack.ActualHeight - SpecialAbilitiesStack.ActualHeight - 50, 0);
+			KnownLoot_ListView.MaxHeight = lootHeight;
+			double merchHeight = Math.Max(this.Height - FactionHitsStack.ActualHeight - QuestsStack.ActualHeight - KnownLootStack.ActualHeight - SpecialAbilitiesStack.ActualHeight - 50, 0);
+			KnownMerch_ListView.MaxHeight = merchHeight;
+
 		}
 
 		protected override void OnPreviewMouseRightButtonDown(MouseButtonEventArgs e)
@@ -155,6 +166,8 @@ namespace EQTool
 			}
 
 			_zealMessageService.OnCharacterUpdated -= ZealMessageService_OnCharacterUpdated;
+			this.SizeChanged -= MobInfo_OnWindowSizeChanged;
+
 			base.OnClosing(e);
 		}
 
@@ -185,5 +198,7 @@ namespace EQTool
 				fe.ContextMenu.IsOpen = true;
 			}
 		}
+
+		
 	}
 }

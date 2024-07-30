@@ -258,7 +258,7 @@ namespace EQTool
 			MapMenuItem = new System.Windows.Forms.MenuItem("Map", ToggleMapWindow);
 			DpsMeterMenuItem = new System.Windows.Forms.MenuItem("Dps", ToggleDPSWindow);
 			OverlayMenuItem = new System.Windows.Forms.MenuItem("Overlay", ToggleOverlayWindow);
-			ImageOverlayMenuItem = new System.Windows.Forms.MenuItem("Image Overlay", ToggleImageOverlayWindow);
+			ImageOverlayMenuItem = new System.Windows.Forms.MenuItem("Static Overlay", ToggleImageOverlayWindow);
 			MobInfoMenuItem = new System.Windows.Forms.MenuItem("Mob Info", ToggleMobInfoWindow);
 			var gitHubMenuItem = new System.Windows.Forms.MenuItem("Suggestions", Suggestions);
 			//var whythepig = new System.Windows.Forms.MenuItem("Pigparse Discord", Discord);
