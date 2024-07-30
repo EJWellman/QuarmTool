@@ -496,9 +496,8 @@ namespace EQTool
         public void ToggleMenuButtons(bool value)
         {
             MapMenuItem.Enabled = value;
-            //SpellsMenuItem.Enabled = value;
-			//TimerMenuItem.Enabled = value;
-			//ComboTimerMenuItem.Enabled = value;
+			OverlayMenuItem.Enabled = value;
+			ImageOverlayMenuItem.Enabled = value;
             DpsMeterMenuItem.Enabled = value;
             MobInfoMenuItem.Enabled = value;
             GroupSuggestionsMenuItem.Enabled = value;
@@ -740,7 +739,7 @@ namespace EQTool
 
 		public void OpenImageOverLayWindow()
 		{
-			OpenWindow<ImageOverlay>(OverlayMenuItem);
+			OpenWindow<ImageOverlay>(ImageOverlayMenuItem);
 		}
 
 		public void OpenSettingsWindow()

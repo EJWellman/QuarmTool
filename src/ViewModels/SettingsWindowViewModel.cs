@@ -198,6 +198,10 @@ namespace EQTool.ViewModels
 			set
 			{
 				_settings.Zeal_HealthThresholdEnabled = value;
+				if (!value)
+				{
+
+				}
 				OnPropertyChanged();
 			}
 		}

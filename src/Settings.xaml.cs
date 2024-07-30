@@ -70,10 +70,12 @@ namespace EQTool
 		private readonly IAppDispatcher _appDispatcher;
 		private readonly ISignalrPlayerHub _signalrPlayerHub;
 		private readonly LogParser _logParser;
+		private readonly PipeParser _pipeParser;
 		private readonly MapLoad _mapLoad;
 
 		public Settings(
 			LogParser logParser,
+			PipeParser pipeParser,
 			MapLoad mapLoad,
 			IAppDispatcher appDispatcher,
 			ISignalrPlayerHub signalrPlayerHub,
@@ -88,6 +90,7 @@ namespace EQTool
 		{
 			_signalrPlayerHub = signalrPlayerHub;
 			_logParser = logParser;
+			_pipeParser = pipeParser;
 			_mapLoad = mapLoad;
 			_appDispatcher = appDispatcher;
 			_dPSLogParse = dPSLogParse;
@@ -240,6 +243,15 @@ namespace EQTool
 
 		private void SaveSettings(object sender, RoutedEventArgs e)
 		{
+			if (sender == Zeal_HealthThreshEnabledCheck)
+			{
+				_pipeParser.SendStaticOverlayOff(Zeal_StaticOverlayType.Health);
+			}
+			else if(sender == Zeal_ManaThreshEnabledCheck)
+			{
+				_pipeParser.SendStaticOverlayOff(Zeal_StaticOverlayType.Mana);
+			}
+
 			SaveConfig();
 		}
 

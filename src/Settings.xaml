@@ -147,13 +147,13 @@
                             <TextBlock Text="Health Threshold" VerticalAlignment="Center" FontWeight="Bold"  MinWidth="140"/>
                             <TextBox x:Name="HealthThreshold_Value" TextChanged="HealthThreshold_Value_TextChanged" MinWidth="60" 
                                 Text="{Binding Zeal_HealthThreshold}" PreviewTextInput="Threshold_Value_PreviewTextInput"/>
-                            <CheckBox IsChecked="{Binding Zeal_HealthThresholdEnabled}" Click="SaveSettings" MinWidth="20" Margin="15,0,0,0"></CheckBox>
+                            <CheckBox Name="Zeal_HealthThreshEnabledCheck" IsChecked="{Binding Zeal_HealthThresholdEnabled}" Click="SaveSettings" MinWidth="20" Margin="15,0,0,0"></CheckBox>
                         </StackPanel>
                         <StackPanel Orientation="Horizontal" Margin="0,4,0,0">
                             <TextBlock Text="Mana Threshold" VerticalAlignment="Center" FontWeight="Bold"  MinWidth="140"/>
                             <TextBox x:Name="ManaThreshold_Value" MinWidth="60" TextChanged="ManaThreshold_Value_TextChanged" 
                                 Text="{Binding Zeal_ManaThreshold}" PreviewTextInput="Threshold_Value_PreviewTextInput"/>
-                            <CheckBox IsChecked="{Binding Zeal_ManaThresholdEnabled}" Click="SaveSettings" MinWidth="20" Margin="15,0,0,0"></CheckBox>
+                            <CheckBox Name="Zeal_ManaThreshEnabledCheck" IsChecked="{Binding Zeal_ManaThresholdEnabled}" Click="SaveSettings" MinWidth="20" Margin="15,0,0,0"></CheckBox>
                         </StackPanel>
                     </StackPanel>
                 </Expander>

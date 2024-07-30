@@ -24,6 +24,7 @@ using static EQTool.Services.RandomParser;
 using static EQTool.Services.ResistSpellParser;
 using ZealPipes.Services;
 using static ZealPipes.Services.ZealMessageService;
+using EQToolShared.Enums;
 
 namespace EQTool.Services
 {
@@ -86,6 +87,8 @@ namespace EQTool.Services
 			_settings.ZealProcessID = 0;
 			_activePlayer.Player.ZoneId = 0;
 			SignalRPushDisconnect();
+			SendStaticOverlayOff(Zeal_StaticOverlayType.Health);
+			SendStaticOverlayOff(Zeal_StaticOverlayType.Mana);
 		}
 
 		private void _zealMessageService_OnLabelMessageReceived(object sender, ZealMessageService.LabelMessageReceivedEventArgs e)
@@ -230,6 +233,20 @@ namespace EQTool.Services
 				};
 				_signalrPlayerHub.PushPlayerDisconnected(player);
 			});
+		}
+
+		public void SendStaticOverlayOff(Zeal_StaticOverlayType overlayType)
+		{
+			if(overlayType == Zeal_StaticOverlayType.Health)
+			{
+
+				HealthThresholdEvent?.Invoke(this, new HealthThresholdEventArgs() { HealthPercent = 100, IsLow = false });
+			}
+			else if(overlayType == Zeal_StaticOverlayType.Mana)
+			{
+				ManaThresholdEvent?.Invoke(this, new ManaThresholdEventArgs() { ManaPercent = 100, IsLow = false });
+			}
+
 		}
 
 		public class SpellEventArgs : EventArgs
