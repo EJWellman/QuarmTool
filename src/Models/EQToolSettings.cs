@@ -9,6 +9,7 @@ using System.Windows;
 using ZealPipes.Services;
 using System.Collections.ObjectModel;
 using System.Windows.Media.Media3D;
+using System.Linq;
 
 namespace EQTool.Models
 {
@@ -143,6 +144,20 @@ namespace EQTool.Models
 				return _OverlayWindowState;
 			}
 			set => _OverlayWindowState = value ?? new WindowState();
+		}
+
+		private WindowState _imageOverlayWindowState;
+		public WindowState ImageOverlayWindowState
+		{
+			get
+			{
+				if (_imageOverlayWindowState == null)
+				{
+					_imageOverlayWindowState = new WindowState();
+				}
+				return _imageOverlayWindowState;
+			}
+			set => _imageOverlayWindowState = value ?? new WindowState();
 		}
 
 		private WindowState _DpsWindowState;
@@ -400,6 +415,61 @@ namespace EQTool.Models
 			}
 		}
 
+		private bool _zeal_HealthThresholdEnabled = false;
+		public bool Zeal_HealthThresholdEnabled
+		{
+			get
+			{
+				return _zeal_HealthThresholdEnabled;
+			}
+			set
+			{
+				_zeal_HealthThresholdEnabled = value;
+				OnPropertyChanged();
+			}
+		}
+
+		private decimal _zeal_HealthThreshold = 0;
+		public decimal Zeal_HealthThreshold
+		{
+			get
+			{
+				return _zeal_HealthThreshold;
+			}
+			set
+			{
+				_zeal_HealthThreshold = value;
+				OnPropertyChanged();
+			}
+		}
+
+		private bool _zealManaThresholdEnabled = false;
+		public bool Zeal_ManaThresholdEnabled
+		{
+			get
+			{
+				return _zealManaThresholdEnabled;
+			}
+			set
+			{
+				_zealManaThresholdEnabled = value;
+				OnPropertyChanged();
+			}
+		}
+
+		private decimal _zeal_ManaThreshold = 0;
+		public decimal Zeal_ManaThreshold
+		{
+			get
+			{
+				return _zeal_ManaThreshold;
+			}
+			set
+			{
+				_zeal_ManaThreshold = value;
+				OnPropertyChanged();
+			}
+		}
 		#endregion
 
 		private string selectedCharacter;
@@ -428,6 +498,22 @@ namespace EQTool.Models
 			set
 			{
 				availableCharacters = value;
+				OnPropertyChanged();
+			}
+		}
+
+		private bool lock_ImageOverlay_Position = false;
+		public bool Lock_ImageOverlay_Position
+		{
+			get
+			{
+				return lock_ImageOverlay_Position;
+			}
+			set
+			{
+				lock_ImageOverlay_Position = value;
+				(App.Current.Windows.Cast<Window>().FirstOrDefault(
+					x => x is ImageOverlay) as ImageOverlay)?.SetLockStatus(value);
 				OnPropertyChanged();
 			}
 		}

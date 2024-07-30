@@ -46,7 +46,6 @@ namespace EQTool.Services
 		private bool HasUsedStartupEnterWorld = false;
 		public bool JustZoned = false;
 
-
 		ZealMessageService _zealMessageService;
 
 
@@ -118,6 +117,35 @@ namespace EQTool.Services
 						}
 					}
 				}
+				if(e.Message.Type == ZealPipes.Common.PipeMessageType.Label &&
+					e.Message.Data != null && e.Message.Data.Length > 0)
+				{
+					var manaPercLabel = e.Message.Data.FirstOrDefault(x => x.Type == ZealPipes.Common.LabelType.ManaPerc);
+					if(manaPercLabel != null && _settings.Zeal_ManaThresholdEnabled && decimal.TryParse(manaPercLabel.Value, out decimal manaPercent))
+					{
+						if(manaPercent <= _settings.Zeal_ManaThreshold)
+						{
+							ManaThresholdEvent?.Invoke(this, new ManaThresholdEventArgs() { ManaPercent = manaPercent, IsLow = true });
+						}
+						else
+						{
+							ManaThresholdEvent?.Invoke(this, new ManaThresholdEventArgs() { ManaPercent = manaPercent, IsLow = false });
+						}
+					}
+
+					var healthPercLabel = e.Message.Data.FirstOrDefault(x => x.Type == ZealPipes.Common.LabelType.HPPerc);
+					if(healthPercLabel != null && _settings.Zeal_HealthThresholdEnabled && decimal.TryParse(healthPercLabel.Value, out decimal healthPercent))
+					{
+						if(healthPercent <= _settings.Zeal_HealthThreshold)
+						{
+							HealthThresholdEvent?.Invoke(this, new HealthThresholdEventArgs() { HealthPercent = healthPercent, IsLow = true });
+						}
+						else
+						{
+							HealthThresholdEvent?.Invoke(this, new HealthThresholdEventArgs() { HealthPercent = healthPercent, IsLow = false });
+						}
+					}
+				}
 			}
 		}
 
@@ -162,7 +190,7 @@ namespace EQTool.Services
 				{
 					_settings.ZealProcessID = e.ProcessId;
 				}
-				if(e.Message.Data != null && e.Message.Data.ZoneId > 0 && e.Message.Data.ZoneId != _activePlayer.Player.ZoneId)
+				if(e.Message.Data != null && _activePlayer.Player != null && e.Message.Data.ZoneId > 0 && e.Message.Data.ZoneId != _activePlayer.Player.ZoneId)
 				{
 					_activePlayer.Player.LastZoneEntered = _activePlayer.Player.Zone;
 					ZealZoneChangeEvent?.Invoke(this, new ZealLocationEventArgs() 
@@ -230,12 +258,26 @@ namespace EQTool.Services
 			public int ProcessId { get; set; }
 		}
 
+		public class ManaThresholdEventArgs : EventArgs
+		{
+			public decimal ManaPercent { get; set; }
+			public bool IsLow { get; set; }
+		}
+		public class HealthThresholdEventArgs : EventArgs
+		{
+			public decimal HealthPercent { get; set; }
+			public bool IsLow { get; set; }
+		}
+
 
 		public event EventHandler<SpellEventArgs> StartCastingEvent;
 		public event EventHandler<FizzleEventArgs> FizzleCastingEvent;
 		public event EventHandler<InterruptEventArgs> InterruptCastingEvent;
 		public event EventHandler<PlayerMessageReceivedEventArgs> ZealLocationEvent;
 		public event EventHandler<ZealLocationEventArgs> ZealZoneChangeEvent;
+
+		public event EventHandler<ManaThresholdEventArgs> ManaThresholdEvent;
+		public event EventHandler<HealthThresholdEventArgs> HealthThresholdEvent;
 
 
 

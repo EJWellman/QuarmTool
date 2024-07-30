@@ -16,6 +16,7 @@ using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Speech.Synthesis;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Timers;
@@ -1243,5 +1244,33 @@ namespace EQTool
 				}
 			}
 		}
-	}
+
+		private void HealthThreshold_Value_TextChanged(object sender, TextChangedEventArgs e)
+		{
+			if(decimal.TryParse(HealthThreshold_Value.Text, out decimal result))
+			{
+				_settings.Zeal_HealthThreshold = result;
+			}
+        }
+
+		private void ManaThreshold_Value_TextChanged(object sender, TextChangedEventArgs e)
+		{
+			if (decimal.TryParse(ManaThreshold_Value.Text, out decimal result))
+			{
+				_settings.Zeal_ManaThreshold = result;
+			}
+		}
+
+		private void ImageOverlay_ToggleLock(object sender, RoutedEventArgs e)
+		{
+			_settings.Lock_ImageOverlay_Position = !_settings.Lock_ImageOverlay_Position;
+
+		}
+
+		private void Threshold_Value_PreviewTextInput(object sender, System.Windows.Input.TextCompositionEventArgs e)
+		{
+			Regex regex = new Regex("[^0-9]+");
+			e.Handled = regex.IsMatch(e.Text);
+        }
+    }
 }

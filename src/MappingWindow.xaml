@@ -86,7 +86,7 @@
                     </Border>
                     <Border Grid.Column="2">
                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
-                            <Button Content="Lock" FontSize="12" Width="32" Height="16" Padding="0" Click="toggleCenterOnyou" ToolTip="Locks map to Your position"/>
+                            <ToggleButton IsChecked="{Binding CenterOnPlayer}" Content="Lock" FontSize="12" Width="32" Height="16" Padding="0" Click="toggleCenterOnyou" ToolTip="Locks map to Your position"/>
                         </StackPanel>
                     </Border>
                     <Border Grid.Column="3">

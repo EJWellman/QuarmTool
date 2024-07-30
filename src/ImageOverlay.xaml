@@ -1,0 +1,46 @@
+﻿<local:BaseSaveStateWindow x:Class="EQTool.ImageOverlay"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:EQTool"
+        mc:Ignorable="d" 
+        Style="{DynamicResource MyEventWindowStyle}"
+        Height="150" 
+        Width="640"  
+        WindowStyle="None"  
+        AllowsTransparency="True">
+    <!--<WindowChrome.WindowChrome>
+        <WindowChrome CaptionHeight="0" ResizeBorderThickness="0" x:Name="WindowResizeChrome" />
+    </WindowChrome.WindowChrome>-->
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="150"></RowDefinition>
+        </Grid.RowDefinitions>
+        <Grid Name="Mover" Grid.Row="0" HorizontalAlignment="Center" VerticalAlignment="Center" MouseLeftButtonDown="DragWindow" Width="24" Height="24">
+            <StackPanel Background="Red" Margin="4, 4, 4, 4"></StackPanel>
+        </Grid>
+        <Rectangle Visibility="{Binding HealthGradient_Visible}" x:Name="HealthGradient" Grid.Row="0" HorizontalAlignment="Stretch">
+            <Rectangle.Fill>
+                <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                    <GradientStop Color="#CCAA0000" Offset="0" />
+                    <GradientStop Color="#AAAA0000" Offset="0.05" />
+                    <GradientStop Color="#66AA0000" Offset="0.1" />
+                    <GradientStop Color="#44AA0000" Offset="0.25" />
+                    <GradientStop Color="#00AA0000" Offset="1.0" />
+                </LinearGradientBrush>
+            </Rectangle.Fill>
+        </Rectangle>
+        <Rectangle Visibility="{Binding ManaGradient_Visible}" x:Name="ManaGradient" Grid.Row="0" HorizontalAlignment="Stretch">
+            <Rectangle.Fill>
+                <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                    <GradientStop Color="#CC0000AA" Offset="0" />
+                    <GradientStop Color="#AA0000AA" Offset="0.05" />
+                    <GradientStop Color="#660000AA" Offset="0.1" />
+                    <GradientStop Color="#440000AA" Offset="0.25" />
+                    <GradientStop Color="#000000AA" Offset="1.0" />
+                </LinearGradientBrush>
+            </Rectangle.Fill>
+        </Rectangle>
+    </Grid>
+</local:BaseSaveStateWindow>

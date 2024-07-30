@@ -126,18 +126,6 @@ namespace EQTool.ViewModels
 		}
 
 		#region Zeal
-		//public bool ZealEnabled
-		//{
-		//	get
-		//	{
-		//		return _settings.ZealEnabled;
-		//	}
-		//	set
-		//	{
-		//		_settings.ZealEnabled = value;
-		//		OnPropertyChanged();
-		//	}
-		//}
 		public bool ZealMap_AutoUpdate
 		{
 			get
@@ -171,6 +159,58 @@ namespace EQTool.ViewModels
 			set
 			{
 				_settings.ZealMobInfo_AutoUpdate = value;
+				OnPropertyChanged();
+			}
+		}
+
+		public string Zeal_HealthThreshold
+		{
+			get
+			{
+				return _settings.Zeal_HealthThreshold.ToString();
+			}
+			set
+			{
+				_settings.Zeal_HealthThreshold = decimal.TryParse(value, out decimal result) ? result : 0;
+				OnPropertyChanged();
+			}
+		}
+
+		public string Zeal_ManaThreshold
+		{
+			get
+			{
+				return _settings.Zeal_ManaThreshold.ToString();
+			}
+			set
+			{
+				_settings.Zeal_ManaThreshold = decimal.TryParse(value, out decimal result) ? result : 0;
+				OnPropertyChanged();
+			}
+		}
+
+		public bool Zeal_HealthThresholdEnabled
+		{
+			get
+			{
+				return _settings.Zeal_HealthThresholdEnabled;
+			}
+			set
+			{
+				_settings.Zeal_HealthThresholdEnabled = value;
+				OnPropertyChanged();
+			}
+		}
+
+		public bool Zeal_ManaThresholdEnabled
+		{
+			get
+			{
+				return _settings.Zeal_ManaThresholdEnabled;
+			}
+			set
+			{
+				_settings.Zeal_ManaThresholdEnabled = value;
 				OnPropertyChanged();
 			}
 		}

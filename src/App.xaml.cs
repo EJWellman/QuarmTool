@@ -34,7 +34,8 @@ namespace EQTool
         private System.Windows.Forms.MenuItem MapMenuItem;
 		private System.Windows.Forms.MenuItem DpsMeterMenuItem;
         private System.Windows.Forms.MenuItem OverlayMenuItem;
-        private System.Windows.Forms.MenuItem SettingsMenuItem;
+		private System.Windows.Forms.MenuItem ImageOverlayMenuItem;
+		private System.Windows.Forms.MenuItem SettingsMenuItem;
         private System.Windows.Forms.MenuItem GroupSuggestionsMenuItem;
         private System.Windows.Forms.MenuItem MobInfoMenuItem;
         private LogParser logParser => container.Resolve<LogParser>();
@@ -257,6 +258,7 @@ namespace EQTool
 			MapMenuItem = new System.Windows.Forms.MenuItem("Map", ToggleMapWindow);
 			DpsMeterMenuItem = new System.Windows.Forms.MenuItem("Dps", ToggleDPSWindow);
 			OverlayMenuItem = new System.Windows.Forms.MenuItem("Overlay", ToggleOverlayWindow);
+			ImageOverlayMenuItem = new System.Windows.Forms.MenuItem("Image Overlay", ToggleImageOverlayWindow);
 			MobInfoMenuItem = new System.Windows.Forms.MenuItem("Mob Info", ToggleMobInfoWindow);
 			var gitHubMenuItem = new System.Windows.Forms.MenuItem("Suggestions", Suggestions);
 			//var whythepig = new System.Windows.Forms.MenuItem("Pigparse Discord", Discord);
@@ -298,6 +300,7 @@ namespace EQTool
 				ContextMenu = new System.Windows.Forms.ContextMenu(new System.Windows.Forms.MenuItem[]
 				{
                     OverlayMenuItem,
+					ImageOverlayMenuItem,
 					DpsMeterMenuItem,
 					MapMenuItem,
 					timersMenu,
@@ -336,6 +339,10 @@ namespace EQTool
 				if (!_settings.OverlayWindowState.Closed)
 				{
 					OpenOverLayWindow();
+				}
+				if(!_settings.ImageOverlayWindowState.Closed)
+				{
+					OpenImageOverLayWindow();
 				}
 				if (_settings.TimerWindows.Any(tw => !tw.Closed))
 				{
@@ -693,7 +700,13 @@ namespace EQTool
             ToggleWindow<EventOverlay>(s);
         }
 
-        public void ToggleMobInfoWindow(object sender, EventArgs e)
+		public void ToggleImageOverlayWindow(object sender, EventArgs e)
+		{
+			var s = (System.Windows.Forms.MenuItem)sender;
+			ToggleWindow<ImageOverlay>(s);
+		}
+
+		public void ToggleMobInfoWindow(object sender, EventArgs e)
         {
             var s = (System.Windows.Forms.MenuItem)sender;
             ToggleWindow<MobInfo>(s);
@@ -723,9 +736,14 @@ namespace EQTool
         public void OpenOverLayWindow()
         {
             OpenWindow<EventOverlay>(OverlayMenuItem);
-        }
+		}
 
-        public void OpenSettingsWindow()
+		public void OpenImageOverLayWindow()
+		{
+			OpenWindow<ImageOverlay>(OverlayMenuItem);
+		}
+
+		public void OpenSettingsWindow()
         {
             OpenWindow<Settings>(SettingsMenuItem);
         }
@@ -802,7 +820,12 @@ namespace EQTool
 					w6.Topmost = _settings.OverlayWindowState.AlwaysOnTop;
 					w6.Activate();
 				}
-            }
+				else if (item is ImageOverlay w7)
+				{
+					w7.Topmost = _settings.ImageOverlayWindowState.AlwaysOnTop;
+					w7.Activate();
+				}
+			}
         }
     }
 }

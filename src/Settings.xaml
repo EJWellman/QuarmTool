@@ -134,12 +134,36 @@
                     <Slider Value="{Binding AudioTriggerVolume}" ToolTip="{Binding AudioTriggerVolume}" Minimum="0" Maximum="100" SmallChange="1" TickFrequency="1" ValueChanged="SaveSettings" MinWidth="150"/>
                 </StackPanel>
                 <Separator/>
+                <Expander ExpandDirection="Down" IsExpanded="False" Header="Static Overlay Settings (Zeal Required)" FontWeight="Bold">
+                    <StackPanel Orientation="Vertical" Margin="0,2,0,0">
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                            <Button Content="Toggle Overlay Lock" Click="ImageOverlay_ToggleLock"></Button>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock VerticalAlignment="Center" FontWeight="Bold" MinWidth="205"/>
+                            <TextBlock Text="Enable" VerticalAlignment="Center" FontWeight="Bold"  />
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="Health Threshold" VerticalAlignment="Center" FontWeight="Bold"  MinWidth="140"/>
+                            <TextBox x:Name="HealthThreshold_Value" TextChanged="HealthThreshold_Value_TextChanged" MinWidth="60" 
+                                Text="{Binding Zeal_HealthThreshold}" PreviewTextInput="Threshold_Value_PreviewTextInput"/>
+                            <CheckBox IsChecked="{Binding Zeal_HealthThresholdEnabled}" Click="SaveSettings" MinWidth="20" Margin="15,0,0,0"></CheckBox>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal" Margin="0,4,0,0">
+                            <TextBlock Text="Mana Threshold" VerticalAlignment="Center" FontWeight="Bold"  MinWidth="140"/>
+                            <TextBox x:Name="ManaThreshold_Value" MinWidth="60" TextChanged="ManaThreshold_Value_TextChanged" 
+                                Text="{Binding Zeal_ManaThreshold}" PreviewTextInput="Threshold_Value_PreviewTextInput"/>
+                            <CheckBox IsChecked="{Binding Zeal_ManaThresholdEnabled}" Click="SaveSettings" MinWidth="20" Margin="15,0,0,0"></CheckBox>
+                        </StackPanel>
+                    </StackPanel>
+                </Expander>
+                <Separator/>
                 <Expander ExpandDirection="Down" IsExpanded="False" Header="Pre-built Triggers" FontWeight="Bold">
                     <StackPanel Orientation="Vertical">
                         <StackPanel Orientation="Horizontal">
                             <TextBlock VerticalAlignment="Center" FontWeight="Bold"  MinWidth="90"/>
                             <TextBlock Text="Visual" FontWeight="Bold"  MinWidth="95" Width="34"/>
-                            <TextBlock Text="Audio" VerticalAlignment="Center" FontWeight="Bold"  />
+                            <TextBlock Text="Audio" VerticalAlignment="Center" FontWeight="Bold"/>
                         </StackPanel>
                         <StackPanel Orientation="Horizontal">
                             <TextBlock Text="Enraged"  VerticalAlignment="Center" FontWeight="Bold"  MinWidth="100"/>
