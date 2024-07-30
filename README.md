@@ -1,10 +1,10 @@
 # QuarmTool
-<h2>THIS PROGRAM WORKS SOLELY BY READING YOUR LOG FILE.</h2>
+<h3>This program works by reading your Log File, and reading permitted (allowed by the Project Quarm server) data sent by Zeal.</h3>
  
 Instructions:
 <ul>
 <li>
-<h2>Project Quarm: Download <a href="https://github.com/EJWellman/QuarmTool/releases/latest/download/QuarmTool.zip">QuarmTool.zip</a>, Unzip it and run PQTool.exe</h2>
+<h2>Project Quarm: Download <a href="https://github.com/EJWellman/QuarmTool/releases/latest/download/QuarmTool.zip">QuarmTool.zip</a>, Unzip it and run QuarmTool.exe</h2>
 </li>
 <li>The program runs in the system tray. Look there to reopen spells window or settings!</li>
 <li><s>Program will check for updates on startup and self update if required, but if you want to check for a new Update, use the menu in the system tray!</s> This feature isn't available yet, but will be in the future!</li>
