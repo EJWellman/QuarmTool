@@ -4,43 +4,34 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:EQTool"
+        Loaded="Window_Loaded"
         mc:Ignorable="d" 
         Style="{DynamicResource MyEventWindowStyle}"
-        Height="150" 
-        Width="640"  
+        Height="320" 
+        Width="320"  
         WindowStyle="None"  
         AllowsTransparency="True">
-    <!--<WindowChrome.WindowChrome>
-        <WindowChrome CaptionHeight="0" ResizeBorderThickness="0" x:Name="WindowResizeChrome" />
-    </WindowChrome.WindowChrome>-->
     <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"></ColumnDefinition>
+            <ColumnDefinition Width="*"></ColumnDefinition>
+            <ColumnDefinition Width="*"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="150"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
         </Grid.RowDefinitions>
-        <Grid Name="Mover" Grid.Row="0" HorizontalAlignment="Center" VerticalAlignment="Center" MouseLeftButtonDown="DragWindow" Width="24" Height="24">
+        <Grid Name="Mover" Grid.Row="1" Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" MouseLeftButtonDown="DragWindow" Width="24" Height="24">
             <StackPanel Background="Red" Margin="4, 4, 4, 4"></StackPanel>
         </Grid>
-        <Rectangle Visibility="{Binding HealthGradient_Visible}" x:Name="HealthGradient" Grid.Row="0" HorizontalAlignment="Stretch">
-            <Rectangle.Fill>
-                <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
-                    <GradientStop Color="#CCAA0000" Offset="0" />
-                    <GradientStop Color="#AAAA0000" Offset="0.05" />
-                    <GradientStop Color="#66AA0000" Offset="0.1" />
-                    <GradientStop Color="#44AA0000" Offset="0.25" />
-                    <GradientStop Color="#00AA0000" Offset="1.0" />
-                </LinearGradientBrush>
-            </Rectangle.Fill>
-        </Rectangle>
-        <Rectangle Visibility="{Binding ManaGradient_Visible}" x:Name="ManaGradient" Grid.Row="0" HorizontalAlignment="Stretch">
-            <Rectangle.Fill>
-                <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
-                    <GradientStop Color="#CC0000AA" Offset="0" />
-                    <GradientStop Color="#AA0000AA" Offset="0.05" />
-                    <GradientStop Color="#660000AA" Offset="0.1" />
-                    <GradientStop Color="#440000AA" Offset="0.25" />
-                    <GradientStop Color="#000000AA" Offset="1.0" />
-                </LinearGradientBrush>
-            </Rectangle.Fill>
-        </Rectangle>
+        <Rectangle x:Name="Gradient_Top" Height="{Binding StaticOverlay_SizeTop}" Grid.Row="0" Grid.ColumnSpan="3" VerticalAlignment="Top"/>
+
+        <Rectangle x:Name="Gradient_Left" Width="{Binding StaticOverlay_SizeRight}" Grid.RowSpan="3" Grid.Column="0" HorizontalAlignment="Left"/>
+
+        <Rectangle x:Name="Gradient_Right" Width="{Binding StaticOverlay_SizeRight}" Grid.RowSpan="3" Grid.Column="2" HorizontalAlignment="Right"/>
+
+        <Rectangle x:Name="Gradient_Bottom" Height="{Binding StaticOverlay_SizeBottom}" Grid.Row="2" Grid.ColumnSpan="3" VerticalAlignment="Bottom"/>
+
     </Grid>
 </local:BaseSaveStateWindow>

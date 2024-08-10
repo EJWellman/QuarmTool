@@ -387,7 +387,7 @@ namespace EQTool.Models
 					GuildName = this._activePlayer.Player.GuildName,
 					PlayerClass = this._activePlayer.Player.PlayerClass,
 					Server = this._activePlayer.Player.Server.Value,
-					MapLocationSharing = this._activePlayer.Player.MapLocationSharing,
+					MapLocationSharing = (_activePlayer.Player.MapLocationSharing == MapLocationSharing.Everyone && (InstancedZones.Zones.Contains(_activePlayer.Player.Zone))) ? MapLocationSharing.GuildOnly : _activePlayer.Player.MapLocationSharing,
 					Name = this._activePlayer.Player.Name,
 					TrackingDistance = this._activePlayer.Player.TrackingDistance,
 					X = e.Location.X,

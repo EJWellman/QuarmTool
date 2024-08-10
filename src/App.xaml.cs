@@ -826,5 +826,16 @@ namespace EQTool
 				}
 			}
         }
+
+		public void UpdateStaticOverlayColors()
+		{
+			foreach (var item in WindowList)
+			{
+				if (item is ImageOverlay w)
+				{
+					w.UpdateGradientColors();
+				}
+			}
+		}
     }
 }

@@ -123,31 +123,37 @@ namespace EQTool.Services
 				if(e.Message.Type == ZealPipes.Common.PipeMessageType.Label &&
 					e.Message.Data != null && e.Message.Data.Length > 0)
 				{
-					var manaPercLabel = e.Message.Data.FirstOrDefault(x => x.Type == ZealPipes.Common.LabelType.ManaPerc);
-					if(manaPercLabel != null && _settings.Zeal_ManaThresholdEnabled && decimal.TryParse(manaPercLabel.Value, out decimal manaPercent))
+					var classLabel = e.Message.Data.FirstOrDefault(x => x.Type == ZealPipes.Common.LabelType.Class);
+					List<string> nonManaClasses = new List<string> { "Warrior", "Rogue", "Monk"};
+					if (!nonManaClasses.Contains(classLabel.Value))
 					{
-						if(manaPercent <= _settings.Zeal_ManaThreshold)
+						var manaPercLabel = e.Message.Data.FirstOrDefault(x => x.Type == ZealPipes.Common.LabelType.ManaPerc);
+						if(manaPercLabel != null && _settings.Zeal_ManaThresholdEnabled && decimal.TryParse(manaPercLabel.Value, out decimal manaPercent))
 						{
-							ManaThresholdEvent?.Invoke(this, new ManaThresholdEventArgs() { ManaPercent = manaPercent, IsLow = true });
+							if(manaPercent <= _settings.Zeal_ManaThreshold)
+							{
+								ManaThresholdEvent?.Invoke(this, new ManaThresholdEventArgs() { ManaPercent = manaPercent, IsLow = true });
+							}
+							else
+							{
+								ManaThresholdEvent?.Invoke(this, new ManaThresholdEventArgs() { ManaPercent = manaPercent, IsLow = false });
+							}
 						}
-						else
+
+						var healthPercLabel = e.Message.Data.FirstOrDefault(x => x.Type == ZealPipes.Common.LabelType.HPPerc);
+						if(healthPercLabel != null && _settings.Zeal_HealthThresholdEnabled && decimal.TryParse(healthPercLabel.Value, out decimal healthPercent))
 						{
-							ManaThresholdEvent?.Invoke(this, new ManaThresholdEventArgs() { ManaPercent = manaPercent, IsLow = false });
+							if(healthPercent <= _settings.Zeal_HealthThreshold)
+							{
+								HealthThresholdEvent?.Invoke(this, new HealthThresholdEventArgs() { HealthPercent = healthPercent, IsLow = true });
+							}
+							else
+							{
+								HealthThresholdEvent?.Invoke(this, new HealthThresholdEventArgs() { HealthPercent = healthPercent, IsLow = false });
+							}
 						}
 					}
 
-					var healthPercLabel = e.Message.Data.FirstOrDefault(x => x.Type == ZealPipes.Common.LabelType.HPPerc);
-					if(healthPercLabel != null && _settings.Zeal_HealthThresholdEnabled && decimal.TryParse(healthPercLabel.Value, out decimal healthPercent))
-					{
-						if(healthPercent <= _settings.Zeal_HealthThreshold)
-						{
-							HealthThresholdEvent?.Invoke(this, new HealthThresholdEventArgs() { HealthPercent = healthPercent, IsLow = true });
-						}
-						else
-						{
-							HealthThresholdEvent?.Invoke(this, new HealthThresholdEventArgs() { HealthPercent = healthPercent, IsLow = false });
-						}
-					}
 				}
 			}
 		}
@@ -181,18 +187,19 @@ namespace EQTool.Services
 					if (string.IsNullOrWhiteSpace(_settings.SelectedCharacter))
 					{
 						_settings.ZealProcessID = e.ProcessId;
+						_settings.SelectedCharacter = e.Message.Character;
 					}
+				}
+				else if (!string.IsNullOrWhiteSpace(_settings.SelectedCharacter)
+					&& string.Compare(_settings.SelectedCharacter, e.Message.Character, true) == 0)
+				{
+					_settings.ZealProcessID = e.ProcessId;
 				}
 				else if (_settings.ZealProcessID != 0 && _settings.ZealProcessID != e.ProcessId)
 				{
 					return;
 				}
-				//adjust this logic
-				if (!string.IsNullOrWhiteSpace(_settings.SelectedCharacter)
-					&& string.Compare(_settings.SelectedCharacter, e.Message.Character, true) == 0)
-				{
-					_settings.ZealProcessID = e.ProcessId;
-				}
+
 				if(e.Message.Data != null && _activePlayer.Player != null && e.Message.Data.ZoneId > 0 && e.Message.Data.ZoneId != _activePlayer.Player.ZoneId)
 				{
 					_activePlayer.Player.LastZoneEntered = _activePlayer.Player.Zone;
@@ -205,14 +212,6 @@ namespace EQTool.Services
 					);
 					_activePlayer.Player.ZoneId = e.Message.Data.ZoneId;
 				}
-				//if(e.Message.Data.ZoneId > 1000)
-				//{
-				//	_activePlayer.IsInInstance = true;
-				//}
-				//else
-				//{
-				//	_activePlayer.IsInInstance = false;
-				//}
 				ZealLocationEvent?.Invoke(this, e);
 			}
 		}

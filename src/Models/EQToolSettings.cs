@@ -130,8 +130,6 @@ namespace EQTool.Models
 			set => _EnrageOverlayColor = value; 
 		}
 
-
-
 		private WindowState _OverlayWindowState;
 		public WindowState OverlayWindowState
 		{
@@ -470,7 +468,200 @@ namespace EQTool.Models
 				OnPropertyChanged();
 			}
 		}
+
+		private Color _health_Color = Color.FromRgb(255, 0, 0); //Red
+
+		public System.Windows.Media.Color Health_Color
+		{
+			get => _health_Color;
+			set => _health_Color = value;
+		}
+		private System.Windows.Media.Color _mana_Color = Color.FromRgb(0, 0, 255); //Red
+		public System.Windows.Media.Color Mana_Color
+		{
+			get => _mana_Color;
+			set => _mana_Color = value;
+		}
+		private System.Windows.Media.Color _health_Mana_Color = Color.FromRgb(255, 0, 255); //Red
+		public System.Windows.Media.Color Health_Mana_Color
+		{
+			get => _health_Mana_Color;
+			set => _health_Mana_Color = value;
+		}
+
+		private bool _mana_ShowTop = false;
+		public bool Mana_ShowTop
+		{
+			get
+			{
+				return _mana_ShowTop;
+			}
+			set
+			{
+				_mana_ShowTop = value;
+				OnPropertyChanged();
+			}
+		}
+		private bool _mana_ShowLeft = false;
+		public bool Mana_ShowLeft
+		{
+			get
+			{
+				return _mana_ShowLeft;
+			}
+			set
+			{
+				_mana_ShowLeft = value;
+				OnPropertyChanged();
+			}
+		}
+		private bool _mana_ShowRight = false;
+		public bool Mana_ShowRight
+		{
+			get
+			{
+				return _mana_ShowRight;
+			}
+			set
+			{
+				_mana_ShowRight = value;
+				OnPropertyChanged();
+			}
+		}
+		private bool _mana_ShowBottom = false;
+		public bool Mana_ShowBottom
+		{
+			get
+			{
+				return _mana_ShowBottom;
+			}
+			set
+			{
+				_mana_ShowBottom = value;
+				OnPropertyChanged();
+			}
+		}
+		private bool _health_ShowTop = false;
+		public bool Health_ShowTop
+		{
+			get
+			{
+				return _health_ShowTop;
+			}
+			set
+			{
+				_health_ShowTop = value;
+				OnPropertyChanged();
+			}
+		}
+		private bool _health_ShowLeft = false;
+		public bool Health_ShowLeft
+		{
+			get
+			{
+				return _health_ShowLeft;
+			}
+			set
+			{
+				_health_ShowLeft = value;
+				OnPropertyChanged();
+			}
+		}
+		private bool _health_ShowRight = false;
+		public bool Health_ShowRight
+		{
+			get
+			{
+				return _health_ShowRight;
+			}
+			set
+			{
+				_health_ShowRight = value;
+				OnPropertyChanged();
+			}
+		}
+		private bool _health_ShowBottom = false;
+		public bool Health_ShowBottom
+		{
+			get
+			{
+				return _health_ShowBottom;
+			}
+			set
+			{
+				_health_ShowBottom = value;
+				OnPropertyChanged();
+			}
+		}
+
+		private decimal _staticOverlay_SizeTop = 150;
+		public decimal StaticOverlay_SizeTop
+		{
+			get
+			{
+				return _staticOverlay_SizeTop;
+			}
+			set
+			{
+				_staticOverlay_SizeTop = value;
+				OnPropertyChanged();
+			}
+		}
+		private decimal _staticOverlay_SizeLeft = 150;
+		public decimal StaticOverlay_SizeLeft
+		{
+			get
+			{
+				return _staticOverlay_SizeLeft;
+			}
+			set
+			{
+				_staticOverlay_SizeLeft = value;
+				OnPropertyChanged();
+			}
+		}
+		private decimal _staticOverlay_SizeRight = 150;
+		public decimal StaticOverlay_SizeRight
+		{
+			get
+			{
+				return _staticOverlay_SizeRight;
+			}
+			set
+			{
+				_staticOverlay_SizeRight = value;
+				OnPropertyChanged();
+			}
+		}
+		private decimal _staticOverlay_SizeBottom = 150;
+		public decimal StaticOverlay_SizeBottom
+		{
+			get
+			{
+				return _staticOverlay_SizeBottom;
+			}
+			set
+			{
+				_staticOverlay_SizeBottom = value;
+				OnPropertyChanged();
+			}
+		}
+
 		#endregion
+
+		private bool _guildInstance_Force = false;
+		public bool GuildInstance_Force
+		{
+			get
+			{
+				return _guildInstance_Force;
+			}
+			set
+			{
+				_guildInstance_Force = value;
+				OnPropertyChanged();
+			}
+		}
 
 		private string selectedCharacter;
 		[JsonIgnore]

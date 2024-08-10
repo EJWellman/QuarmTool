@@ -251,6 +251,39 @@ namespace EQTool
 			{
 				_pipeParser.SendStaticOverlayOff(Zeal_StaticOverlayType.Mana);
 			}
+			else if(sender == Health_ShowTop_Check)
+			{
+				_SettingsWindowData.Health_ShowTop = Health_ShowTop_Check.IsChecked ?? false;
+			}
+			else if(sender == Health_ShowLeft_Check)
+			{
+				_SettingsWindowData.Health_ShowLeft = Health_ShowLeft_Check.IsChecked ?? false;
+			}
+			else if(sender == Health_ShowRight_Check)
+			{
+				_SettingsWindowData.Health_ShowRight = Health_ShowRight_Check.IsChecked ?? false;
+			}
+			else if(sender == Health_ShowBottom_Check)
+			{
+				_SettingsWindowData.Health_ShowBottom = Health_ShowBottom_Check.IsChecked ?? false;
+			}
+			else if(sender == Mana_ShowTop_Check)
+			{
+				_SettingsWindowData.Mana_ShowTop = Mana_ShowTop_Check.IsChecked ?? false;
+			}
+			else if(sender == Mana_ShowLeft_Check)
+			{
+				_SettingsWindowData.Mana_ShowLeft = Mana_ShowLeft_Check.IsChecked ?? false;
+			}
+			else if(sender == Mana_ShowRight_Check)
+			{
+				_SettingsWindowData.Mana_ShowRight = Mana_ShowRight_Check.IsChecked ?? false;
+			}
+			else if(sender == Mana_ShowBottom_Check)
+			{
+				_SettingsWindowData.Mana_ShowBottom = Mana_ShowBottom_Check.IsChecked ?? false;
+			}
+
 
 			SaveConfig();
 		}
@@ -344,6 +377,22 @@ namespace EQTool
 			{
 				_settings.OtherTimerColor = s.SelectedColor.Value;
 			}
+			else if (s.Name == "Health_Color")
+			{
+				_settings.Health_Color = s.SelectedColor.Value;
+				((App)System.Windows.Application.Current).UpdateStaticOverlayColors();
+			}
+			else if (s.Name == "Mana_Color")
+			{
+				_settings.Mana_Color = s.SelectedColor.Value;
+				((App)System.Windows.Application.Current).UpdateStaticOverlayColors();
+			}
+			else if (s.Name == "Health_Mana_Color")
+			{
+				_settings.Health_Mana_Color = s.SelectedColor.Value;
+				((App)System.Windows.Application.Current).UpdateStaticOverlayColors();
+			}
+
 			SaveConfig();
 		}
 
@@ -1284,5 +1333,25 @@ namespace EQTool
 			Regex regex = new Regex("[^0-9]+");
 			e.Handled = regex.IsMatch(e.Text);
         }
-    }
+
+		private void StaticOverlay_SizeChanged(object sender, TextChangedEventArgs e)
+		{
+			if (sender == StaticOverlay_SizeTop && decimal.TryParse(StaticOverlay_SizeTop.Text, out decimal resultTop))
+			{
+				_settings.StaticOverlay_SizeTop = resultTop;
+			}
+			else if (sender == StaticOverlay_SizeLeft && decimal.TryParse(StaticOverlay_SizeLeft.Text, out decimal resultLeft))
+			{
+				_settings.StaticOverlay_SizeLeft = resultLeft;
+			}
+			else if (sender == StaticOverlay_SizeRight && decimal.TryParse(StaticOverlay_SizeRight.Text, out decimal resultRight))
+			{
+				_settings.StaticOverlay_SizeRight = resultRight;
+			}
+			else if (sender == StaticOverlay_SizeBottom && decimal.TryParse(StaticOverlay_SizeBottom.Text, out decimal resultBottom))
+			{
+				_settings.StaticOverlay_SizeBottom = resultBottom;
+			}
+		}
+	}
 }

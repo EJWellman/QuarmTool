@@ -272,7 +272,7 @@
                             <TextBlock>Known Loot</TextBlock>
                             <ListView Name="KnownLoot_ListView" Margin="10, 0, 0, 0" Style="{StaticResource MyListViewStyle}" ItemsSource="{Binding KnownLoot}" 
                               ScrollViewer.VerticalScrollBarVisibility="Visible" ScrollViewer.CanContentScroll="False"
-                              MaxHeight="145">
+                              MinHeight="65">
                                 <ListView.ItemTemplate>
                                     <DataTemplate>
                                         <StackPanel Orientation="Horizontal" MinWidth="100">

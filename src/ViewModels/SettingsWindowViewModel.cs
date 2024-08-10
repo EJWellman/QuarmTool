@@ -219,6 +219,191 @@ namespace EQTool.ViewModels
 			}
 		}
 
+		public bool Mana_ShowTop
+		{
+			get
+			{
+				return _settings.Mana_ShowTop;
+			}
+			set
+			{
+				_settings.Mana_ShowTop = value;
+				OnPropertyChanged();
+			}
+		}
+		public bool Mana_ShowLeft
+		{
+			get
+			{
+				return _settings.Mana_ShowLeft;
+			}
+			set
+			{
+				_settings.Mana_ShowLeft = value;
+				OnPropertyChanged();
+			}
+		}
+		public bool Mana_ShowRight
+		{
+			get
+			{
+				return _settings.Mana_ShowRight;
+			}
+			set
+			{
+				_settings.Mana_ShowRight = value;
+				OnPropertyChanged();
+			}
+		}
+		public bool Mana_ShowBottom
+		{
+			get
+			{
+				return _settings.Mana_ShowBottom;
+			}
+			set
+			{
+				_settings.Mana_ShowBottom = value;
+				OnPropertyChanged();
+			}
+		}
+		public bool Health_ShowTop
+		{
+			get
+			{
+				return _settings.Health_ShowTop;
+			}
+			set
+			{
+				_settings.Health_ShowTop = value;
+				OnPropertyChanged();
+			}
+		}
+		public bool Health_ShowLeft
+		{
+			get
+			{
+				return _settings.Health_ShowLeft;
+			}
+			set
+			{
+				_settings.Health_ShowLeft = value;
+				OnPropertyChanged();
+			}
+		}
+		public bool Health_ShowRight
+		{
+			get
+			{
+				return _settings.Health_ShowRight;
+			}
+			set
+			{
+				_settings.Health_ShowRight = value;
+				OnPropertyChanged();
+			}
+		}
+		public bool Health_ShowBottom
+		{
+			get
+			{
+				return _settings.Health_ShowBottom;
+			}
+			set
+			{
+				_settings.Health_ShowBottom = value;
+				OnPropertyChanged();
+			}
+		}
+
+		public Color Health_Color
+		{
+			get
+			{
+				return _settings.Health_Color;
+			}
+			set
+			{
+				_settings.Health_Color = value;
+				OnPropertyChanged();
+			}
+		}
+
+		public Color Mana_Color
+		{
+			get
+			{
+				return _settings.Mana_Color;
+			}
+			set
+			{
+				_settings.Mana_Color = value;
+				OnPropertyChanged();
+			}
+		}
+
+		public Color Health_Mana_Color
+		{
+			get
+			{
+				return _settings.Health_Mana_Color;
+			}
+			set
+			{
+				_settings.Health_Mana_Color = value;
+				OnPropertyChanged();
+			}
+		}
+
+		public decimal StaticOverlay_SizeTop
+		{
+			get
+			{
+				return _settings.StaticOverlay_SizeTop;
+			}
+			set
+			{
+				_settings.StaticOverlay_SizeTop = value;
+				OnPropertyChanged();
+			}
+		}
+		public decimal StaticOverlay_SizeLeft
+		{
+			get
+			{
+				return _settings.StaticOverlay_SizeLeft;
+			}
+			set
+			{
+				_settings.StaticOverlay_SizeLeft = value;
+				OnPropertyChanged();
+			}
+		}
+		public decimal StaticOverlay_SizeRight
+		{
+			get
+			{
+				return _settings.StaticOverlay_SizeRight;
+			}
+			set
+			{
+				_settings.StaticOverlay_SizeRight = value;
+				OnPropertyChanged();
+			}
+		}
+		public decimal StaticOverlay_SizeBottom
+		{
+			get
+			{
+				return _settings.StaticOverlay_SizeBottom;
+			}
+			set
+			{
+				_settings.StaticOverlay_SizeBottom = value;
+				OnPropertyChanged();
+			}
+		}
+
 		#endregion
 
 		public Color EnrageOverlayColor 
@@ -447,6 +632,19 @@ namespace EQTool.ViewModels
 			set
 			{
 				this._settings.OverlayWindowState.AlwaysOnTop = value;
+				OnPropertyChanged();
+			}
+		}
+
+		public bool GuildInstance_Force
+		{
+			get
+			{
+				return _settings.GuildInstance_Force;
+			}
+			set
+			{
+				_settings.GuildInstance_Force = value;
 				OnPropertyChanged();
 			}
 		}
