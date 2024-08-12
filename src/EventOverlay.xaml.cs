@@ -228,7 +228,7 @@ namespace EQTool
                 this.appDispatcher.DispatchUI(() =>
 				{
 					CenterText.FontSize = settings.OverlayFontSize.Value;
-					CenterText.Text = "Feign Failed Death!";
+					CenterText.Text = "Feign Death Failed!";
                     CenterText.Foreground = (Brush)converter.ConvertFromString(settings.FailedFeignOverlayColor.ToString());
 				});
                 System.Threading.Thread.Sleep(1000 * 5);

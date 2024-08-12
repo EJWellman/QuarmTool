@@ -584,6 +584,7 @@ namespace EQTool.ViewModels
 				OnPropertyChanged();
 			}
 		}
+
 		public bool MobAlwaysOnTop
         {
             get
@@ -596,6 +597,19 @@ namespace EQTool.ViewModels
                 OnPropertyChanged();
             }
         }
+
+		public bool MobInfo_ManualSizing
+		{
+			get
+			{
+				return _settings.MobInfo_ManualSizing;
+			}
+			set
+			{
+				_settings.MobInfo_ManualSizing = value;
+				OnPropertyChanged();
+			}
+		}
 
 		public bool MapTrackingVisiblity
 		{

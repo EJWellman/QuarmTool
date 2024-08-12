@@ -232,7 +232,7 @@ namespace EQTool.Services
 				else
 				{
 					var mob = GetSlimData(name.Replace(" ", "_"));
-					if (mob.Level > 0 && mob.MaxLevel < 15)
+					if (mob.Level > 0 && (mob.MaxLevel < 15 && mob.MaxLevel != 0))
 					{
 						if (timer.RespawnTimer >= QuarmRules.GetRespawnReductionHigherBoundMin() && timer.RespawnTimer <= QuarmRules.GetRespawnReductionHigherBoundMax())
 						{

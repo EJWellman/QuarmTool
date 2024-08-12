@@ -56,8 +56,15 @@ namespace EQTool
 			_timerWindowFactory = timerWindowFactory;
 			_settings = settings;
 			DataContext = _mobInfoViewModel = new ViewModels.MobInfoViewModel();
+
 			InitializeComponent();
 			base.Init();
+			
+			if (_settings.MobInfo_ManualSizing)
+			{
+				SizeToContent = SizeToContent.Manual;
+			}
+			
 			this._logParser.ConEvent += LogParser_ConEvent;
 			ContextMenuOpening += MobInfo_TimerMenu_OpenedEvent;
 			_zealMessageService.OnCharacterUpdated += ZealMessageService_OnCharacterUpdated;
@@ -80,9 +87,9 @@ namespace EQTool
 		private void MobInfo_OnWindowSizeChanged(object sender, SizeChangedEventArgs e)
 		{
 			double lootHeight = Math.Max(this.Height - FactionHitsStack.ActualHeight - QuestsStack.ActualHeight - MerchandiseStack.ActualHeight - SpecialAbilitiesStack.ActualHeight - 50, 0);
-			KnownLoot_ListView.MaxHeight = lootHeight;
+			KnownLoot_ListView.MaxHeight = Math.Max(lootHeight, 100);
 			double merchHeight = Math.Max(this.Height - FactionHitsStack.ActualHeight - QuestsStack.ActualHeight - KnownLootStack.ActualHeight - SpecialAbilitiesStack.ActualHeight - 50, 0);
-			KnownMerch_ListView.MaxHeight = merchHeight;
+			KnownMerch_ListView.MaxHeight = Math.Max(merchHeight, 100);
 
 		}
 

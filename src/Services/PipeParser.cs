@@ -45,6 +45,7 @@ namespace EQTool.Services
 		private bool Processing = false;
 		private bool StillCamping = false;
 		private bool HasUsedStartupEnterWorld = false;
+
 		public bool JustZoned = false;
 
 		ZealMessageService _zealMessageService;
@@ -212,6 +213,7 @@ namespace EQTool.Services
 					);
 					_activePlayer.Player.ZoneId = e.Message.Data.ZoneId;
 				}
+
 				ZealLocationEvent?.Invoke(this, e);
 			}
 		}

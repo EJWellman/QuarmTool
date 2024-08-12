@@ -42,10 +42,6 @@ namespace EQTool.Models
 		private ZealMessageService _zealMessageService;
 
 
-		private double LastX;
-		private double LastY;
-		private double LastZ;
-
         public SignalrPlayerHub(IAppDispatcher appDispatcher, LogParser logParser, ActivePlayer activePlayer, BaseTimerWindowViewModel spellWindowViewModel, ZealMessageService zealMessageService, EQToolSettings eQToolSettings)
         {
             this.appDispatcher = appDispatcher;
@@ -267,6 +263,7 @@ namespace EQTool.Models
                 Debug.WriteLine($"PlayerDisconnected {p.Name}");
                 this.appDispatcher.DispatchUI(() =>
                 {
+					connection.StopAsync();
                     PlayerDisconnected?.Invoke(this, p);
                 });
             }
@@ -345,6 +342,10 @@ namespace EQTool.Models
                 Debug.WriteLine($"PlayerLocationEvent {p.Name}");
                 this.appDispatcher.DispatchUI(() =>
                 {
+					if(connection.State == HubConnectionState.Disconnected)
+					{
+						connection.StartAsync();
+					}
                     PlayerLocationEvent?.Invoke(this, p);
                 });
             }

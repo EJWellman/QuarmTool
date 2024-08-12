@@ -107,6 +107,10 @@
                             <CheckBox IsChecked="{Binding MobAlwaysOnTop}" Click="SaveAlwaysOntopCheckBoxSettings" ></CheckBox>
                         </StackPanel>
                         <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="Manual Sizing" VerticalAlignment="Center"  FontWeight="Bold"  MinWidth="100"/>
+                            <CheckBox IsChecked="{Binding MobInfo_ManualSizing}" Click="SaveSettings" ></CheckBox>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
                             <TextBlock Text="Update Via Zeal" VerticalAlignment="Center"  FontWeight="Bold"  MinWidth="100"/>
                             <CheckBox IsChecked="{Binding ZealMobInfo_AutoUpdate}" Click="SaveSettings" ></CheckBox>
                         </StackPanel>

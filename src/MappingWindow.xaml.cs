@@ -33,6 +33,11 @@ namespace EQTool
 		private LoggingService _logging;
 		private DateTime LastYouActivity { get; set; }
 
+
+		private DateTime _lastZealLocationUpdate = DateTime.Now;
+		private float _lastZealLocationX = 0;
+		private float _lastZealLocationY = 0;
+
 		public MappingWindow(
 			ISignalrPlayerHub signalrPlayerHub,
 			MapViewModel mapViewModel,
@@ -111,7 +116,31 @@ namespace EQTool
 			{
 				var loc = new Point3D(e.Message.Data.Position.X, e.Message.Data.Position.Y, e.Message.Data.Position.Z);
 				appDispatcher.DispatchUI(() => mapViewModel.UpdateLocation(loc, e.Message.Data.heading));
-				logParser.PingSignalRLocationEvent(loc);
+
+				if (e.Message.Data != null && e.Message.Data.Position != null)
+				{
+					if (e.Message.Data.Position.X != _lastZealLocationX || e.Message.Data.Position.Y != _lastZealLocationY)
+					{
+						_lastZealLocationUpdate = DateTime.Now;
+						_lastZealLocationX = e.Message.Data.Position.X;
+						_lastZealLocationY = e.Message.Data.Position.Y;
+						logParser.PingSignalRLocationEvent(loc);
+					}
+					else if (DateTime.Now.Subtract(_lastZealLocationUpdate).TotalMinutes >= 1.5)
+					{
+						var player = new SignalrPlayer
+						{
+							Zone = this._activePlayer.Player.Zone,
+							GuildName = this._activePlayer.Player.GuildName,
+							PlayerClass = this._activePlayer.Player.PlayerClass,
+							Server = this._activePlayer.Player.Server.Value,
+							MapLocationSharing = this._activePlayer.Player.MapLocationSharing,
+							Name = this._activePlayer.Player.Name,
+							TrackingDistance = this._activePlayer.Player.TrackingDistance
+						};
+						signalrPlayerHub.PushPlayerDisconnected(player);
+					}
+				}
 			}
 		}
 

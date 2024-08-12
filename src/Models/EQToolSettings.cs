@@ -228,6 +228,19 @@ namespace EQTool.Models
 			}
 		}
 
+		private bool _mobInfo_ManualSizing = false;
+		public bool MobInfo_ManualSizing
+		{
+			get
+			{
+				return _mobInfo_ManualSizing;
+			}
+			set
+			{
+				_mobInfo_ManualSizing = value;
+				OnPropertyChanged();
+			}
+		}
 
 		private WindowState _MobWindowState;
 		public WindowState MobWindowState
