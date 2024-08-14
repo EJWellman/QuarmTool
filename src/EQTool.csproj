@@ -384,11 +384,11 @@
     </Reference>
     <Reference Include="ZealPipes.Common, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\ZealPipes\ZealPipes.ClientApp\bin\Debug\ZealPipes.Common.dll</HintPath>
+      <HintPath>..\..\ZealPipes\ZealPipes.Services\bin\Debug\netstandard2.0\ZealPipes.Common.dll</HintPath>
     </Reference>
     <Reference Include="ZealPipes.Services, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\ZealPipes\ZealPipes.ClientApp\bin\Debug\ZealPipes.Services.dll</HintPath>
+      <HintPath>..\..\ZealPipes\ZealPipes.Services\bin\Debug\netstandard2.0\ZealPipes.Services.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -400,6 +400,7 @@
       <DependentUpon>BaseTimerWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Constants\QuarmRules.cs" />
+    <Compile Include="Controls\DragCanvas.cs" />
     <Compile Include="EditTimerWindow.xaml.cs">
       <DependentUpon>EditTimerWindow.xaml</DependentUpon>
     </Compile>
@@ -437,6 +438,7 @@
     <Compile Include="Models\QuarmMonsterFaction.cs" />
     <Compile Include="Models\QuarmMonsterDrops.cs" />
     <Compile Include="Models\PlayerRequest.cs" />
+    <Compile Include="Models\QuarmAura.cs" />
     <Compile Include="Models\TimerWindowOptions.cs" />
     <Compile Include="PanAndZoomCanvas.xaml.cs">
       <DependentUpon>PanAndZoomCanvas.xaml</DependentUpon>
