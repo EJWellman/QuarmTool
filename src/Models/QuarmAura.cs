@@ -7,6 +7,7 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Media;
 using Xceed.Wpf.Toolkit.Core.Converters;
 
 namespace EQTool.Models
@@ -24,6 +25,41 @@ namespace EQTool.Models
 			set
 			{
 				_id = value;
+				OnPropertyChanged();
+			}
+		}
+
+		private ZealPipes.Common.LabelType? _zealLabel;
+		public ZealPipes.Common.LabelType? ZealLabel
+		{
+			get
+			{
+				return _zealLabel;
+			}
+			set
+			{
+				if (value != null & _zealGauge != null)
+				{
+					_zealLabel = null;
+				}
+				_zealLabel = value;
+				OnPropertyChanged();
+			}
+		}
+		private ZealPipes.Common.GaugeType? _zealGauge;
+		public ZealPipes.Common.GaugeType? ZealGauge
+		{
+			get
+			{
+				return _zealGauge;
+			}
+			set
+			{
+				if (value != null & _zealLabel != null)
+				{
+					_zealLabel = null;
+				}
+				_zealGauge = value;
 				OnPropertyChanged();
 			}
 		}
@@ -82,6 +118,99 @@ namespace EQTool.Models
 				OnPropertyChanged();
 			}
 		}
+
+		private bool _showEdgeAuras;
+		public bool ShowEdgeAuras
+		{
+			get
+			{
+				return _showEdgeAuras;
+			}
+			set
+			{
+				_showEdgeAuras = value;
+				OnPropertyChanged();
+			}
+		}
+		private double _edgeAuraSize;
+		public double EdgeAuraSize
+		{
+			get
+			{
+				return _edgeAuraSize;
+			}
+			set
+			{
+				_edgeAuraSize = value;
+				OnPropertyChanged();
+			}
+		}
+		private Color _edgeAuraColor; //A, R, G, B
+		public Color EdgeAuraColor
+		{
+			get
+			{
+				return _edgeAuraColor;
+			}
+			set
+			{
+				_edgeAuraColor = value;
+				OnPropertyChanged();
+			}
+		}
+		private bool _showTopEdgeAura;
+		public bool ShowTopEdgeAura
+		{
+			get
+			{
+				return _showTopEdgeAura;
+			}
+			set
+			{
+				_showTopEdgeAura = value;
+				OnPropertyChanged();
+			}
+		}
+		private bool _showBottomEdgeAura;
+		public bool ShowBottomEdgeAura
+		{
+			get
+			{
+				return _showBottomEdgeAura;
+			}
+			set
+			{
+				_showBottomEdgeAura = value;
+				OnPropertyChanged();
+			}
+		}
+		private bool _showLeftEdgeAura;
+		public bool ShowLeftEdgeAura
+		{
+			get
+			{
+				return _showLeftEdgeAura;
+			}
+			set
+			{
+				_showLeftEdgeAura = value;
+				OnPropertyChanged();
+			}
+		}
+		private bool _showRightEdgeAura;
+		public bool ShowRightEdgeAura
+		{
+			get
+			{
+				return _showRightEdgeAura;
+			}
+			set
+			{
+				_showRightEdgeAura = value;
+				OnPropertyChanged();
+			}
+		}
+
 		private bool _pulseEnabled;
 		public bool PulseEnabled
 		{

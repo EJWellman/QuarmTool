@@ -1,6 +1,8 @@
 ﻿using EQTool.Models;
 using EQTool.Services;
+using EQTool.Utilities;
 using EQTool.ViewModels;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
 using System.Linq;
@@ -10,6 +12,7 @@ using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
+using System.Windows.Shapes;
 using System.Xml.Linq;
 
 namespace EQTool
@@ -66,23 +69,30 @@ namespace EQTool
 				ID = 1,
 				TextColor = "200,255,0,0",
 				AuraDimensions = "100, 100",
-				AuraPosition = "500, 500",
+				AuraPosition = "1230, 125",
 				Opacity = 1.0,
 				AuraEnabled = true,
+				ShowEdgeAuras = false,
+				ShowTopEdgeAura = true,
+				ShowLeftEdgeAura = true,
+				ShowRightEdgeAura = true,
+				ShowBottomEdgeAura = true,
+				EdgeAuraColor = Color.FromRgb(255, 0, 0),
+				EdgeAuraSize = 200,
 				Name = "Auto_Attack",
 				FadeEnabled = true,
 				FadedOpacity = 0.4,
-				FadeSpeed = 2.5,
+				FadeSpeed = 3.5,
 				HasTextTrigger = false,
 				ImageEnabled = true,
 				ImagePath = "pack://application:,,,/dps.png",
 				PulseEnabled = true,
-				PulseSize = 2.0,
-				PulseSpeed = 2.5,
+				PulseSize = 1.5,
+				PulseSpeed = 3.5,
 				ShowText = true,
 				ShownText = "Auto Attack On",
 				TextSize = 18,
-				TextPosition = "50, -50",
+				TextPosition = "-10, -50",
 			};
 
 
@@ -95,19 +105,31 @@ namespace EQTool
 			{
 				if (e.IsAutoAttacking)
 				{
-					System.Windows.Controls.Image atkIndicator = AuraContainer.Children.OfType<Image>().FirstOrDefault(i => i.Name == "Auto_Attack");
-					if (atkIndicator != null)
+					var autoAtkIndicators = AuraContainer.Children.OfType<FrameworkElement>().Where(i => i.Name == "Auto_Attack");
+					foreach (var autoAtkIndicator in autoAtkIndicators)
 					{
-						((System.Windows.Controls.Image)atkIndicator)
+						((FrameworkElement)autoAtkIndicator)
+							.Visibility = Visibility.Visible;
+					}
+					var autoAtkEdges = AuraGrid.Children.OfType<FrameworkElement>().Where(i => i.Name == "Auto_Attack");
+					foreach (var autoAtkEdge in autoAtkEdges)
+					{
+						((FrameworkElement)autoAtkEdge)
 							.Visibility = Visibility.Visible;
 					}
 				}
 				else
 				{
-					System.Windows.Controls.Image atkIndicator = AuraContainer.Children.OfType<Image>().FirstOrDefault(i => i.Name == "Auto_Attack");
-					if (atkIndicator != null)
+					var autoAtkIndicators = AuraContainer.Children.OfType<FrameworkElement>().Where(i => i.Name == "Auto_Attack");
+					foreach (var autoAtkIndicator in autoAtkIndicators)
 					{
-						((System.Windows.Controls.Image)atkIndicator)
+						((FrameworkElement)autoAtkIndicator)
+							.Visibility = Visibility.Hidden;
+					}
+					var autoAtkEdges = AuraGrid.Children.OfType<FrameworkElement>().Where(i => i.Name == "Auto_Attack");
+					foreach (var autoAtkEdge in autoAtkEdges)
+					{
+						((FrameworkElement)autoAtkEdge)
 							.Visibility = Visibility.Hidden;
 					}
 				}
@@ -116,46 +138,74 @@ namespace EQTool
 
 		private void CreateAuraElement(QuarmAura aura)
 		{
-			if(aura != null & aura.AuraEnabled)
+			if (aura != null & aura.AuraEnabled)
 			{
 				bool isNewElementAssignable = false;
+				bool isEdgeElementAssignable = false;
 				FrameworkElement newElement = new FrameworkElement();
+				List<FrameworkElement> edgeElements = new List<FrameworkElement>();
 				Storyboard elementStoryboard = new Storyboard();
 				if (aura.ImageEnabled && aura.ShowText)
 				{
-					double[] imgSize = aura.AuraDimensions.Split(',').Select(double.Parse).ToArray();
-					double[] imgPos = aura.AuraPosition.Split(',').Select(double.Parse).ToArray();
+					double[] auraSize = aura.AuraDimensions.Split(',').Select(double.Parse).ToArray();
+					double[] auraPos = aura.AuraPosition.Split(',').Select(double.Parse).ToArray();
 					byte[] colorBytes = aura.TextColor.Split(',').Select(byte.Parse).ToArray();
 					double[] textPos = aura.TextPosition.Split(',').Select(double.Parse).ToArray();
 					var auraImage = new BitmapImage(new System.Uri(aura.ImagePath));
 					var visual = new DrawingVisual();
 					using (DrawingContext drawingContext = visual.RenderOpen())
 					{
-						drawingContext.DrawImage(auraImage, new Rect(0, 0, imgSize[0], imgSize[1]));
+						drawingContext.DrawImage(auraImage, new Rect(0, 0, auraSize[0], auraSize[1]));
 						drawingContext.DrawText(
 							new FormattedText(aura.ShownText, CultureInfo.InvariantCulture, FlowDirection.LeftToRight,
 								new Typeface("Segoe UI"), aura.TextSize, new SolidColorBrush(Color.FromArgb(colorBytes[0], colorBytes[1], colorBytes[2], colorBytes[3])), null, 1)
 									, new Point(textPos[0], textPos[1]));
 					}
-					double width = imgSize[0];
-					double height = imgSize[1];
+					double width = auraSize[0];
+					double height = auraSize[1];
 					if (textPos[0] < 0)
 					{
-						width = imgSize[0] + System.Math.Abs(textPos[0]);
+						width = auraSize[0] + System.Math.Abs(textPos[0]);
 					}
-					else if (textPos[0] > imgSize[0])
+					else if (textPos[0] > auraSize[0])
 					{
-						width = imgSize[0] + textPos[0];
+						width = auraSize[0] + textPos[0];
 					}
 					if (textPos[1] < 0)
 					{
-						height = imgSize[1] + System.Math.Abs(textPos[1]);
+						height = auraSize[1] + System.Math.Abs(textPos[1]);
 					}
-					else if (textPos[1] > imgSize[1])
+					else if (textPos[1] > auraSize[1])
 					{
-						height = imgSize[1] + textPos[1];
+						height = auraSize[1] + textPos[1];
 					}
 
+					newElement = new System.Windows.Controls.Image()
+					{
+						Source = new DrawingImage(visual.Drawing),
+						Width = width,
+						Height = height,
+						Name = aura.Name
+					};
+
+					Canvas.SetLeft(newElement, auraPos[0]);
+					Canvas.SetTop(newElement, auraPos[1]);
+
+					isNewElementAssignable = true;
+				}
+				else if (aura.ImageEnabled)
+				{
+					double[] imgSize = aura.AuraDimensions.Split(',').Select(double.Parse).ToArray();
+					double[] imgPos = aura.AuraPosition.Split(',').Select(double.Parse).ToArray();
+					byte[] colorBytes = aura.TextColor.Split(',').Select(byte.Parse).ToArray();
+					var auraImage = new BitmapImage(new System.Uri(aura.ImagePath));
+					var visual = new DrawingVisual();
+					using (DrawingContext drawingContext = visual.RenderOpen())
+					{
+						drawingContext.DrawImage(auraImage, new Rect(0, 0, imgSize[0], imgSize[1]));
+					}
+					double width = imgSize[0];
+					double height = imgSize[1];
 
 					newElement = new System.Windows.Controls.Image()
 					{
@@ -170,16 +220,167 @@ namespace EQTool
 
 					isNewElementAssignable = true;
 				}
-				else if (aura.ImageEnabled)
-				{
-
-				}
 				else if (aura.ShowText)
 				{
+					double[] auraPos = aura.AuraPosition.Split(',').Select(double.Parse).ToArray();
+					byte[] colorBytes = aura.TextColor.Split(',').Select(byte.Parse).ToArray();
+					double[] textPos = aura.TextPosition.Split(',').Select(double.Parse).ToArray();
+					var visual = new DrawingVisual();
+					using (DrawingContext drawingContext = visual.RenderOpen())
+					{
+						drawingContext.DrawText(
+							new FormattedText(aura.ShownText, CultureInfo.InvariantCulture, FlowDirection.LeftToRight,
+								new Typeface("Segoe UI"), aura.TextSize, new SolidColorBrush(Color.FromArgb(colorBytes[0], colorBytes[1], colorBytes[2], colorBytes[3])), null, 1)
+									, new Point(textPos[0], textPos[1]));
+					}
 
+					DrawingImage drawingImage = new DrawingImage(visual.Drawing);
+
+					newElement = new System.Windows.Controls.Image()
+					{
+						Source = drawingImage,
+						Width = drawingImage.Width,
+						Height = drawingImage.Height,
+						Name = aura.Name
+					};
+
+					Canvas.SetTop(newElement, auraPos[0]);
+					Canvas.SetLeft(newElement, auraPos[1]);
+
+					isNewElementAssignable = true;
+				}
+				if (aura.ShowEdgeAuras)
+				{
+					if (aura.ShowTopEdgeAura)
+					{
+						LinearGradientBrush gradient = new LinearGradientBrush();
+						gradient.GradientStops.Add(new GradientStop(Color.FromArgb(90, aura.EdgeAuraColor.R, aura.EdgeAuraColor.G, aura.EdgeAuraColor.B), 0));
+						gradient.GradientStops.Add(new GradientStop(Color.FromArgb(70, aura.EdgeAuraColor.R, aura.EdgeAuraColor.G, aura.EdgeAuraColor.B), 0.05));
+						gradient.GradientStops.Add(new GradientStop(Color.FromArgb(60, aura.EdgeAuraColor.R, aura.EdgeAuraColor.G, aura.EdgeAuraColor.B), 0.1));
+						gradient.GradientStops.Add(new GradientStop(Color.FromArgb(35, aura.EdgeAuraColor.R, aura.EdgeAuraColor.G, aura.EdgeAuraColor.B), 0.25));
+						gradient.GradientStops.Add(new GradientStop(Color.FromArgb(00, aura.EdgeAuraColor.R, aura.EdgeAuraColor.G, aura.EdgeAuraColor.B), 1.0));
+
+						gradient.StartPoint = new Point(0, 0);
+						gradient.EndPoint = new Point(0, 1);
+
+						Gradient_Top.Height = aura.EdgeAuraSize;
+						Gradient_Top.Fill = gradient;
+						Gradient_Top.Visibility = Visibility.Visible;
+
+						Rectangle topEdge = new Rectangle()
+						{
+							Width = this.Width,
+							Height = aura.EdgeAuraSize,
+							Fill = gradient,
+							VerticalAlignment = VerticalAlignment.Top,
+							Name = aura.Name
+						};
+
+						Grid.SetRow(topEdge, 0);
+						Grid.SetColumnSpan(topEdge, 3);
+						AuraGrid.Children.Add(topEdge);
+						edgeElements.Add(topEdge);
+						isEdgeElementAssignable = true;
+					}
+					if (aura.ShowLeftEdgeAura)
+					{
+						LinearGradientBrush gradient = new LinearGradientBrush();
+						gradient.GradientStops.Add(new GradientStop(Color.FromArgb(90, aura.EdgeAuraColor.R, aura.EdgeAuraColor.G, aura.EdgeAuraColor.B), 0));
+						gradient.GradientStops.Add(new GradientStop(Color.FromArgb(70, aura.EdgeAuraColor.R, aura.EdgeAuraColor.G, aura.EdgeAuraColor.B), 0.05));
+						gradient.GradientStops.Add(new GradientStop(Color.FromArgb(60, aura.EdgeAuraColor.R, aura.EdgeAuraColor.G, aura.EdgeAuraColor.B), 0.1));
+						gradient.GradientStops.Add(new GradientStop(Color.FromArgb(35, aura.EdgeAuraColor.R, aura.EdgeAuraColor.G, aura.EdgeAuraColor.B), 0.25));
+						gradient.GradientStops.Add(new GradientStop(Color.FromArgb(00, aura.EdgeAuraColor.R, aura.EdgeAuraColor.G, aura.EdgeAuraColor.B), 1.0));
+
+						gradient.StartPoint = new Point(0, 0);
+						gradient.EndPoint = new Point(1, 0);
+
+						Gradient_Left.Width = aura.EdgeAuraSize;
+						Gradient_Left.Fill = gradient;
+						Gradient_Left.Visibility = Visibility.Visible;
+
+						Rectangle leftEdge = new Rectangle()
+						{
+							Width = aura.EdgeAuraSize,
+							Height = this.Height,
+							Fill = gradient,
+							HorizontalAlignment = HorizontalAlignment.Left,
+							Name = aura.Name
+						};
+
+						Grid.SetColumn(leftEdge, 0);
+						Grid.SetRowSpan(leftEdge, 3);
+						AuraGrid.Children.Add(leftEdge);
+
+						edgeElements.Add(leftEdge);
+						isEdgeElementAssignable = true;
+					}
+					if (aura.ShowRightEdgeAura)
+					{
+						LinearGradientBrush gradient = new LinearGradientBrush();
+						gradient.GradientStops.Add(new GradientStop(Color.FromArgb(90, aura.EdgeAuraColor.R, aura.EdgeAuraColor.G, aura.EdgeAuraColor.B), 0));
+						gradient.GradientStops.Add(new GradientStop(Color.FromArgb(70, aura.EdgeAuraColor.R, aura.EdgeAuraColor.G, aura.EdgeAuraColor.B), 0.05));
+						gradient.GradientStops.Add(new GradientStop(Color.FromArgb(60, aura.EdgeAuraColor.R, aura.EdgeAuraColor.G, aura.EdgeAuraColor.B), 0.1));
+						gradient.GradientStops.Add(new GradientStop(Color.FromArgb(35, aura.EdgeAuraColor.R, aura.EdgeAuraColor.G, aura.EdgeAuraColor.B), 0.25));
+						gradient.GradientStops.Add(new GradientStop(Color.FromArgb(00, aura.EdgeAuraColor.R, aura.EdgeAuraColor.G, aura.EdgeAuraColor.B), 1.0));
+
+						gradient.StartPoint = new Point(1, 0);
+						gradient.EndPoint = new Point(0, 0);
+
+						Gradient_Right.Width = aura.EdgeAuraSize;
+						Gradient_Right.Fill = gradient;
+						Gradient_Right.Visibility = Visibility.Visible;
+
+						Rectangle rightEdge = new Rectangle()
+						{
+							Width = aura.EdgeAuraSize,
+							Height = this.Height,
+							Fill = gradient,
+							HorizontalAlignment = HorizontalAlignment.Right,
+							Name = aura.Name
+						};
+
+						Grid.SetColumn(rightEdge, 2);
+						Grid.SetRowSpan(rightEdge, 3);
+						AuraGrid.Children.Add(rightEdge);
+
+						edgeElements.Add(rightEdge);
+						isEdgeElementAssignable = true;
+					}
+					if (aura.ShowBottomEdgeAura)
+					{
+						LinearGradientBrush gradient = new LinearGradientBrush();
+						gradient.GradientStops.Add(new GradientStop(Color.FromArgb(90, aura.EdgeAuraColor.R, aura.EdgeAuraColor.G, aura.EdgeAuraColor.B), 0));
+						gradient.GradientStops.Add(new GradientStop(Color.FromArgb(70, aura.EdgeAuraColor.R, aura.EdgeAuraColor.G, aura.EdgeAuraColor.B), 0.05));
+						gradient.GradientStops.Add(new GradientStop(Color.FromArgb(60, aura.EdgeAuraColor.R, aura.EdgeAuraColor.G, aura.EdgeAuraColor.B), 0.1));
+						gradient.GradientStops.Add(new GradientStop(Color.FromArgb(35, aura.EdgeAuraColor.R, aura.EdgeAuraColor.G, aura.EdgeAuraColor.B), 0.25));
+						gradient.GradientStops.Add(new GradientStop(Color.FromArgb(00, aura.EdgeAuraColor.R, aura.EdgeAuraColor.G, aura.EdgeAuraColor.B), 1.0));
+
+						gradient.StartPoint = new Point(0, 1);
+						gradient.EndPoint = new Point(0, 0);
+
+
+						Gradient_Bottom.Height = aura.EdgeAuraSize;
+						Gradient_Bottom.Fill = gradient;
+						Gradient_Bottom.Visibility = Visibility.Visible;
+
+						Rectangle bottomEdge = new Rectangle()
+						{
+							Width = this.Width,
+							Height = aura.EdgeAuraSize,
+							Fill = gradient,
+							VerticalAlignment = VerticalAlignment.Bottom,
+							Name = aura.Name
+						};
+
+						Grid.SetRow(bottomEdge, 2);
+						Grid.SetColumnSpan(bottomEdge, 3);
+						AuraGrid.Children.Add(bottomEdge);
+						edgeElements.Add(bottomEdge);
+						isEdgeElementAssignable = true;
+					}
 				}
 
-				if(aura.PulseEnabled)
+				if (aura.PulseEnabled)
 				{
 					var heightAnimation = new System.Windows.Media.Animation.DoubleAnimation
 					{
@@ -201,12 +402,52 @@ namespace EQTool
 					elementStoryboard.Children.Add(heightAnimation);
 					elementStoryboard.Children.Add(widthAnimation);
 
-					newElement.RenderTransform = new ScaleTransform(1.0, 1.0, newElement.Width / 2, newElement.Height / 2);
+					if(isNewElementAssignable)
+					{
+						newElement.RenderTransform = new ScaleTransform(1.0, 1.0, newElement.Width / 2, newElement.Height / 2);
 
-					Storyboard.SetTarget(heightAnimation, newElement);
-					Storyboard.SetTargetProperty(heightAnimation, new PropertyPath("RenderTransform.ScaleY"));
-					Storyboard.SetTarget(widthAnimation, newElement);
-					Storyboard.SetTargetProperty(widthAnimation, new PropertyPath("RenderTransform.ScaleX"));
+						Storyboard.SetTarget(heightAnimation, newElement);
+						Storyboard.SetTargetProperty(heightAnimation, new PropertyPath("RenderTransform.ScaleY"));
+						Storyboard.SetTarget(widthAnimation, newElement);
+						Storyboard.SetTargetProperty(widthAnimation, new PropertyPath("RenderTransform.ScaleX"));
+					}
+					if(isEdgeElementAssignable)
+					{
+						var heightAnimation2 = new System.Windows.Media.Animation.DoubleAnimation
+						{
+							From = 1,
+							To = aura.PulseSize,
+							Duration = new Duration(System.TimeSpan.FromSeconds(aura.PulseSpeed)),
+							AutoReverse = true,
+							RepeatBehavior = RepeatBehavior.Forever
+						};
+						var widthAnimation2 = new System.Windows.Media.Animation.DoubleAnimation
+						{
+							From = 1,
+							To = aura.PulseSize,
+							Duration = new Duration(System.TimeSpan.FromSeconds(aura.PulseSpeed)),
+							AutoReverse = true,
+							RepeatBehavior = RepeatBehavior.Forever
+						};
+
+						foreach (var edgeElement in edgeElements)
+						{
+							int column = Grid.GetColumn(edgeElement);
+							int row = Grid.GetRow(edgeElement);
+							int colSpan = Grid.GetColumnSpan(edgeElement);
+							int rowSpan = Grid.GetRowSpan(edgeElement);
+							if (colSpan == 1)
+							{
+								Storyboard.SetTargetName(heightAnimation2, ((Grid)edgeElement.Parent).ColumnDefinitions[column].Name);
+								Storyboard.SetTargetProperty(heightAnimation2, new PropertyPath("Height"));
+							}
+							else if (rowSpan == 1)
+							{
+								Storyboard.SetTargetName(widthAnimation2, ((Grid)edgeElement.Parent).RowDefinitions[row].Name);
+								Storyboard.SetTargetProperty(widthAnimation2, new PropertyPath("Width"));
+							}
+						}
+					}
 				}
 				if (aura.FadeEnabled)
 				{
@@ -222,34 +463,31 @@ namespace EQTool
 
 					elementStoryboard.Children.Add(opacityAnimation);
 
-					Storyboard.SetTarget(opacityAnimation, newElement);
-					Storyboard.SetTargetProperty(opacityAnimation, new PropertyPath("Opacity"));
+					if (isNewElementAssignable)
+					{
+						Storyboard.SetTarget(opacityAnimation, newElement);
+						Storyboard.SetTargetProperty(opacityAnimation, new PropertyPath("Opacity"));
+					}
+					if (isEdgeElementAssignable)
+					{
+						foreach (var edgeElement in edgeElements)
+						{
+							Storyboard.SetTarget(opacityAnimation, edgeElement.Parent);
+							Storyboard.SetTargetProperty(opacityAnimation, new PropertyPath("Opacity"));
+						}
+					}
 				}
-
 
 				if (isNewElementAssignable)
 				{
 					AuraContainer.Children.Add(newElement);
-					if (elementStoryboard.Children.Count > 0)
-					{
-						elementStoryboard.Begin();
-					}
+				}
+
+				if (elementStoryboard.Children.Count > 0)
+				{
+					elementStoryboard.Begin();
 				}
 			}
-			//return;
-
-			//System.Windows.Controls.Image atkImage = new System.Windows.Controls.Image
-			//{
-			//	Width = 100,
-			//	Height = 100,
-			//	Name = "AttackIndicator",
-			//	Source = new BitmapImage(new System.Uri("pack://application:,,,/dps.png"))
-			//};
-
-			//Canvas.SetTop(atkImage, _settings.AtkIndicator_Top);
-			//Canvas.SetLeft(atkImage, _settings.AtkIndicator_Left);
-
-			//AuraContainer.Children.Add(atkImage);
 		}
 
 		public void UpdateGradientColors()

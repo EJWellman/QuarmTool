@@ -12,7 +12,7 @@
         Width="2560"  
         WindowStyle="None"  
         AllowsTransparency="True">
-        <Grid>
+        <Grid Name="AuraGrid">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"></ColumnDefinition>
                 <ColumnDefinition Width="*"></ColumnDefinition>
