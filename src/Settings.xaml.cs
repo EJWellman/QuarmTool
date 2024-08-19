@@ -1353,5 +1353,13 @@ namespace EQTool
 				_settings.StaticOverlay_SizeBottom = resultBottom;
 			}
 		}
+
+		private void DPS_KeepThreshold_ValueChanged(object sender, TextChangedEventArgs e)
+		{
+			if (int.TryParse(DpsRemovalTimerThreshold_Field.Text, out int result))
+			{
+				_settings.DpsRemovalTimerThreshold = result;
+			}
+		}
 	}
 }

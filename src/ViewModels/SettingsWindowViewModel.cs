@@ -541,7 +541,21 @@ namespace EQTool.ViewModels
             }
         }
 
-        public bool MapAlwaysOnTop
+		public int DpsRemovalTimerThreshold
+		{
+			get
+			{
+				return this._settings.DpsRemovalTimerThreshold;
+			}
+			set
+			{
+				this._settings.DpsRemovalTimerThreshold = value;
+				OnPropertyChanged();
+			}
+		}
+
+
+		public bool MapAlwaysOnTop
         {
             get
             {
