@@ -71,6 +71,7 @@ namespace EQTool
 				AuraDimensions = "100, 100",
 				AuraPosition = "1230, 125",
 				Opacity = 1.0,
+				AuraDuration = 3,
 				AuraEnabled = true,
 				ShowEdgeAuras = false,
 				ShowTopEdgeAura = true,

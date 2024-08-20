@@ -92,6 +92,20 @@ namespace EQTool.Models
 			}
 		}
 
+		private int _auraDuration; //Seconds
+		public int AuraDuration
+		{
+			get
+			{
+				return _auraDuration;
+			}
+			set
+			{
+				_auraDuration = value;
+				OnPropertyChanged();
+			}
+		}
+
 		private string _auraDimensions; //Width, Height
 		public string AuraDimensions
 		{
