@@ -28,7 +28,6 @@ namespace EQTool.Services
             builder.RegisterType<EQSpells>().AsSelf().SingleInstance();
             builder.RegisterType<ActivePlayer>().AsSelf().SingleInstance();
             builder.RegisterType<LogParser>().AsSelf().SingleInstance();
-			builder.RegisterType<PipeCommandParser>().AsSelf().SingleInstance();
 			builder.RegisterType<PipeParser>().AsSelf().SingleInstance();
 			builder.RegisterType<DPSWindowViewModel>().AsSelf().SingleInstance();
             builder.RegisterType<ZoneViewModel>().AsSelf().SingleInstance();

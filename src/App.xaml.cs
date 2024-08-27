@@ -40,7 +40,6 @@ namespace EQTool
         private System.Windows.Forms.MenuItem MobInfoMenuItem;
 
         private LogParser logParser => container.Resolve<LogParser>();
-		private PipeCommandParser _pipeCommandParser => container.Resolve<PipeCommandParser>();
 		private PipeParser _pipeParser => container.Resolve<PipeParser>();
 		private ZealMessageService _zealMessageService => container.Resolve<ZealMessageService>();
         private System.Timers.Timer UITimer;

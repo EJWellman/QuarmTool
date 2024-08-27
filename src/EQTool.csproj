@@ -460,7 +460,6 @@
     <Compile Include="Services\CHService.cs" />
     <Compile Include="Services\ColorService.cs" />
     <Compile Include="Services\PipeParser.cs" />
-    <Compile Include="Services\PipeCommandParser.cs" />
     <Compile Include="Services\TimerWindowService.cs" />
     <Compile Include="Services\CustomOverlayService.cs" />
     <Compile Include="Services\DataService.cs" />
