@@ -38,6 +38,7 @@ namespace EQTool
 		private System.Windows.Forms.MenuItem SettingsMenuItem;
         private System.Windows.Forms.MenuItem GroupSuggestionsMenuItem;
         private System.Windows.Forms.MenuItem MobInfoMenuItem;
+
         private LogParser logParser => container.Resolve<LogParser>();
 		private PipeParser _pipeParser => container.Resolve<PipeParser>();
 		private ZealMessageService _zealMessageService => container.Resolve<ZealMessageService>();
@@ -588,9 +589,50 @@ namespace EQTool
                 w?.CloseWindow();
                 _ = WindowList.Remove(w);
             }
-        }
+		}
 
-        private void OpenWindow<T>(System.Windows.Forms.MenuItem m) where T : BaseSaveStateWindow
+		private void HardToggleWindow<T>() where T : BaseSaveStateWindow
+		{
+			var w = WindowList.FirstOrDefault(a => a.GetType() == typeof(T));
+			if (w != null)
+			{
+				w?.CloseWindow();
+				_ = WindowList.Remove(w);
+			}
+			else
+			{
+				w?.Close();
+				w = container.Resolve<T>();
+				WindowList.Add(w);
+				w.Closed += (se, ee) =>
+				{
+					_ = WindowList.Remove(w);
+				};
+				w.Show();
+			}
+		}
+
+
+		//private void ToggleWindowBorder<T>() where T : BaseSaveStateWindow
+		//{
+		//	var w = WindowList.FirstOrDefault(a => a.GetType() == typeof(T));
+		//	if (w != null)
+		//	{
+		//		HardToggleWindow<T>();
+
+		//		var w2 = container.Resolve<T>();
+		//		w2.Closed += (se, ee) =>
+		//		{
+		//			_ = WindowList.Remove(w2);
+		//		};
+		//		w2.IsHitTestVisible = false;
+		//		w2.AllowsTransparency = true;
+		//		w2.Show();
+		//		w2.Opacity = 25;
+		//	}
+		//}
+
+		private void OpenWindow<T>(System.Windows.Forms.MenuItem m) where T : BaseSaveStateWindow
         {
             var w = WindowList.FirstOrDefault(a => a.GetType() == typeof(T));
             if (w != null)
@@ -687,31 +729,56 @@ namespace EQTool
             ToggleWindow<MappingWindow>(s);
         }
 
-        public void ToggleDPSWindow(object sender, EventArgs e)
+		public void HardToggleMapWindow()
+		{
+			HardToggleWindow<MappingWindow>();
+		}
+
+		public void ToggleDPSWindow(object sender, EventArgs e)
         {
             var s = (System.Windows.Forms.MenuItem)sender;
             ToggleWindow<DPSMeter>(s);
-        }
+		}
+		public void HardToggleDPSWindow()
+		{
+			HardToggleWindow<DPSMeter>();
+		}
 
-        public void ToggleOverlayWindow(object sender, EventArgs e)
+		public void ToggleOverlayWindow(object sender, EventArgs e)
         {
             var s = (System.Windows.Forms.MenuItem)sender;
             ToggleWindow<EventOverlay>(s);
-        }
+		}
+		public void HardToggleOverlayWindow()
+		{
+			HardToggleWindow<EventOverlay>();
+		}
 
 		public void ToggleImageOverlayWindow(object sender, EventArgs e)
 		{
 			var s = (System.Windows.Forms.MenuItem)sender;
 			ToggleWindow<ImageOverlay>(s);
 		}
+		public void HardToggleImageOverlayWindow()
+		{
+			HardToggleWindow<ImageOverlay>();
+		}
 
 		public void ToggleMobInfoWindow(object sender, EventArgs e)
         {
             var s = (System.Windows.Forms.MenuItem)sender;
             ToggleWindow<MobInfo>(s);
-        }
+		}
+		public void HardToggleMobInfoWindow()
+		{
+			HardToggleWindow<MobInfo>();
+		}
+		public void ToggleMobInfoWindowBorders()
+		{
+			//ToggleWindowBorder<MobInfo>();
+		}
 
-        public void ToggleSettingsWindow(object sender, EventArgs e)
+		public void ToggleSettingsWindow(object sender, EventArgs e)
         {
             var s = (System.Windows.Forms.MenuItem)sender;
             ToggleWindow<Settings>(s);

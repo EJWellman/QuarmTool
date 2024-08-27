@@ -89,8 +89,11 @@ namespace EQTool
 			Map.TimerMenu_OpenedEvent += Map_TimerMenu_OpenedEvent;
 			_pipeParser.ZealLocationEvent += ZealMessageService_ZealLocationEvent;
 			_pipeParser.ZealZoneChangeEvent += ZealMessageService_ZoneChangeEvent;
+			_pipeParser.AddPointOfInterestEvent += AddNewPointOfInterest;
+			_pipeParser.RemovePointOfInterestEvent += RemovePointOfInterest;
 			this.signalrPlayerHub.PlayerLocationEvent += SignalrPlayerHub_PlayerLocationEvent;
-			this.signalrPlayerHub.PlayerDisconnected += SignalrPlayerHub_PlayerDisconnected;
+			this.signalrPlayerHub.PlayerDisconnected += SignalrPlayerHub_PlayerDisconnected;	
+
 			UITimer = new System.Timers.Timer(1000);
 			UITimer.Elapsed += UITimer_Elapsed;
 			UITimer.Enabled = true;
@@ -143,6 +146,46 @@ namespace EQTool
 				}
 			}
 		}
+
+		private void AddNewPointOfInterest(object sender, PointOfInterestEventArgs e)
+		{
+			PointOfInterestData data = new PointOfInterestData()
+			{
+				Canvas = this.mapViewModel.canvas,
+				Name = e.Label,
+				Location = e.Location,
+				AABB = mapViewModel.AABB,
+				MapOffset = mapViewModel.GetMapOffset(),
+				ZoneID = _activePlayer.Player.ZoneId,
+				IsPermanent = e.IsPermanent,
+				MapLabelMultiplier = _settings.MapLabelMultiplier
+			};
+
+			appDispatcher.DispatchUI(() =>
+			{
+				MapViewModelService.AddPointOfInterest(data);
+			});
+		}
+
+		private void RemovePointOfInterest(object sender, PointOfInterestEventArgs e)
+		{
+			PointOfInterestData data = new PointOfInterestData()
+			{
+				Canvas = this.mapViewModel.canvas,
+				Name = e.Label,
+				Location = e.Location,
+				MapOffset = mapViewModel.GetMapOffset(),
+				ZoneID = _activePlayer.Player.ZoneId,
+				IsPermanent = e.IsPermanent,
+				MapLabelMultiplier = _settings.MapLabelMultiplier
+			};
+
+			appDispatcher.DispatchUI(() =>
+			{
+				MapViewModelService.RemovePointOfInterest(data);
+			});
+		}
+
 
 		private void ToggleMouseLocation_Event(object sender, MouseEventArgs e)
 		{
@@ -365,6 +408,9 @@ namespace EQTool
 			this.MouseLeave -= ToggleMouseLocation_Event;
 			_zealMessageService.OnPlayerMessageReceived -= ZealMessageService_ZealLocationEvent;
 			_pipeParser.ZealZoneChangeEvent -= ZealMessageService_ZoneChangeEvent;
+			_pipeParser.ZealLocationEvent -= ZealMessageService_ZealLocationEvent;
+			_pipeParser.AddPointOfInterestEvent -= AddNewPointOfInterest;
+
 
 			base.OnClosing(e);
 		}
