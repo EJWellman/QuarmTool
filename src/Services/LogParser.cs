@@ -387,7 +387,7 @@ namespace EQTool.Services
                 var matchedspell = _spellLogParse.MatchSpell(message);
                 if (matchedspell != null && matchedspell.Spell.name != "Modulation")
                 {
-                    //StartCastingEvent?.Invoke(this, new SpellEventArgs { Spell = matchedspell });
+                    StartCastingEvent?.Invoke(this, new SpellEventArgs { Spell = matchedspell });
                     return;
                 }
 
