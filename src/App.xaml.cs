@@ -368,7 +368,6 @@ namespace EQTool
             ZoneActivityTrackingService = container.Resolve<ZoneActivityTrackingService>();
             audioService = container.Resolve<AudioService>();
             logParser.QuakeEvent += LogParser_QuakeEvent;
-			_pipeParser.Start();
             App.Current.Resources["GlobalFontSize"] = (double)(_settings?.FontSize ?? 12);
             ((App)System.Windows.Application.Current).UpdateBackgroundOpacity("MyWindowStyleDPS", _settings.DpsWindowState.Opacity.Value);
             ((App)System.Windows.Application.Current).UpdateBackgroundOpacity("MyWindowStyleMap", _settings.MapWindowState.Opacity.Value);
@@ -844,7 +843,7 @@ namespace EQTool
 			}
 			if ((sender as System.Windows.Forms.MenuItem)?.Tag != null)
 			{
-				var contextID = (sender as System.Windows.Controls.MenuItem).DataContext as int?;
+				var contextID = (sender as System.Windows.Forms.MenuItem).Tag as int?;
 				if (contextID != null)
 				{
 					var w = _timerWindowFactory.CreateTimerWindow((int)contextID);

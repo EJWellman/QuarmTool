@@ -92,8 +92,7 @@ namespace EQTool
 			_pipeParser.AddPointOfInterestEvent += AddNewPointOfInterest;
 			_pipeParser.RemovePointOfInterestEvent += RemovePointOfInterest;
 			this.signalrPlayerHub.PlayerLocationEvent += SignalrPlayerHub_PlayerLocationEvent;
-			this.signalrPlayerHub.PlayerDisconnected += SignalrPlayerHub_PlayerDisconnected;
-			
+			this.signalrPlayerHub.PlayerDisconnected += SignalrPlayerHub_PlayerDisconnected;	
 
 			UITimer = new System.Timers.Timer(1000);
 			UITimer.Elapsed += UITimer_Elapsed;
@@ -108,6 +107,7 @@ namespace EQTool
 					Header = timer.Title,
 					DataContext = timer.ID,
 				};
+				item.Click += (App.Current as App).OpenTimerWindow;
 
 				TimerWindowsMenu.Items.Add(item);
 			}
