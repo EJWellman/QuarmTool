@@ -15,16 +15,20 @@ namespace EQTool.ViewModels
     {
         private readonly IAppDispatcher appDispatcher;
         private readonly FightLogService fightLogService;
-        public DPSWindowViewModel(IAppDispatcher appDispatcher, FightLogService fightLogService, ActivePlayer activePlayer, SessionPlayerDamage sessionPlayerDamage)
-        {
-            this.appDispatcher = appDispatcher;
-            this.fightLogService = fightLogService;
-            Title = "Dps Meter v" + App.Version;
-            this.ActivePlayer = activePlayer;
-            this.SessionPlayerDamage = sessionPlayerDamage;
-        }
+		private readonly EQToolSettings _settings;
 
-        public ObservableCollection<EntityDPS> _EntityList = new ObservableCollection<EntityDPS>();
+		public DPSWindowViewModel(IAppDispatcher appDispatcher, FightLogService fightLogService, ActivePlayer activePlayer, SessionPlayerDamage sessionPlayerDamage, EQToolSettings settings)
+		{
+			Title = "Dps Meter v" + App.Version;
+
+			this.appDispatcher = appDispatcher;
+			this.fightLogService = fightLogService;
+			this.ActivePlayer = activePlayer;
+			this.SessionPlayerDamage = sessionPlayerDamage;
+			_settings = settings;
+		}
+
+		public ObservableCollection<EntityDPS> _EntityList = new ObservableCollection<EntityDPS>();
         public ObservableCollection<EntityDPS> EntityList
         {
             get => _EntityList;
@@ -84,17 +88,15 @@ namespace EQTool.ViewModels
             }
         }
 
-        public static bool ShouldRemove(DateTime now, DateTime? lastdmgdone, DateTime startime, int groupcount)
-        {
-            var lasttime = lastdmgdone.HasValue && lastdmgdone.Value > startime ? lastdmgdone.Value : startime;
-            var timeup = Math.Abs((now - lasttime).TotalSeconds);
-            var secondstosubtract = groupcount * 20;
-            secondstosubtract = Math.Min(60, secondstosubtract);
-            var secthreshhold = 80 - secondstosubtract;
-            return timeup > 40;
-        }
+		public bool ShouldRemove(DateTime now, DateTime? lastdmgdone, DateTime startime, int groupcount)
+		{
+			var lasttime = lastdmgdone.HasValue && lastdmgdone.Value > startime ? lastdmgdone.Value : startime;
+			var timeup = Math.Abs((now - lasttime).TotalSeconds);
 
-        public void UpdateDPS()
+			return timeup > _settings.DpsRemovalTimerThreshold;
+		}
+
+		public void UpdateDPS()
         {
             appDispatcher.DispatchUI(() =>
             {

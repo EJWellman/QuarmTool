@@ -16,6 +16,8 @@
         OpenMap,
         OpenMobInfo,
         OpenDPS,
-        OpenTriggers
+        OpenTriggers,
+		OpenTimer,
+		QuarmData
     }
 }

@@ -102,8 +102,6 @@ namespace EQTool.Factories
 				menuItem.Click += (s, e) =>
 				{
 					(App.Current as App).OpenTimerWindow(menuItem, e);
-					//var newTimerWindow = CreateTimerWindow((int)menuItem.Tag);
-					//newTimerWindow.Show();
 				};
 				menu.Items.Add(menuItem);
 			}

@@ -42,10 +42,6 @@ namespace EQTool.Models
 		private ZealMessageService _zealMessageService;
 
 
-		private double LastX;
-		private double LastY;
-		private double LastZ;
-
         public SignalrPlayerHub(IAppDispatcher appDispatcher, LogParser logParser, ActivePlayer activePlayer, BaseTimerWindowViewModel spellWindowViewModel, ZealMessageService zealMessageService, EQToolSettings eQToolSettings)
         {
             this.appDispatcher = appDispatcher;
@@ -267,6 +263,7 @@ namespace EQTool.Models
                 Debug.WriteLine($"PlayerDisconnected {p.Name}");
                 this.appDispatcher.DispatchUI(() =>
                 {
+					connection.StopAsync();
                     PlayerDisconnected?.Invoke(this, p);
                 });
             }
@@ -345,6 +342,10 @@ namespace EQTool.Models
                 Debug.WriteLine($"PlayerLocationEvent {p.Name}");
                 this.appDispatcher.DispatchUI(() =>
                 {
+					if(connection.State == HubConnectionState.Disconnected)
+					{
+						connection.StartAsync();
+					}
                     PlayerLocationEvent?.Invoke(this, p);
                 });
             }
@@ -387,7 +388,7 @@ namespace EQTool.Models
 					GuildName = this._activePlayer.Player.GuildName,
 					PlayerClass = this._activePlayer.Player.PlayerClass,
 					Server = this._activePlayer.Player.Server.Value,
-					MapLocationSharing = this._activePlayer.Player.MapLocationSharing,
+					MapLocationSharing = (_activePlayer.Player.MapLocationSharing == MapLocationSharing.Everyone && (InstancedZones.Zones.Contains(_activePlayer.Player.Zone))) ? MapLocationSharing.GuildOnly : _activePlayer.Player.MapLocationSharing,
 					Name = this._activePlayer.Player.Name,
 					TrackingDistance = this._activePlayer.Player.TrackingDistance,
 					X = e.Location.X,
@@ -396,33 +397,6 @@ namespace EQTool.Models
 				};
 
 				InvokeAsync("PlayerLocationEvent", this.LastPlayer);
-
-				//if (this.NParseWebsocketConnection.State == WebSocketState.Open && this._activePlayer?.Player?.MapLocationSharing == MapLocationSharing.Everyone)
-				//{
-				//	var nparsezonename = TranslateZoneNameToNParse(LastPlayer.Zone);
-				//	var sendMessage = Newtonsoft.Json.JsonConvert.SerializeObject(new NParseLocationEvent
-				//	{
-				//		group_key = "public",
-				//		type = "location",
-				//		location = new NParseLocation
-				//		{
-				//			x = Math.Round(LastPlayer.X, 2),
-				//			y = Math.Round(LastPlayer.Y, 2),
-				//			z = Math.Round(LastPlayer.Z, 2),
-				//			zone = LastPlayer.Zone,
-				//			player = LastPlayer.Name + " (PP)",
-				//		}
-				//	});
-				//	var sendBuffer = new ArraySegment<byte>(Encoding.UTF8.GetBytes(sendMessage));
-				//	Task.Factory.StartNew(async () =>
-				//	{
-				//		try
-				//		{
-				//			await this.NParseWebsocketConnection.SendAsync(sendBuffer, WebSocketMessageType.Text, true, CancellationToken.None);
-				//		}
-				//		catch { }
-				//	});
-				//}
 			}
 		}
 

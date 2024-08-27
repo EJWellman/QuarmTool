@@ -31,48 +31,13 @@ namespace EQTool.Services
         private System.Timers.Timer _uiTimer;
         private readonly ActivePlayer _activePlayer;
         private readonly IAppDispatcher _appDispatcher;
-        private string _lastLogFilename = string.Empty;
         private readonly EQToolSettings _settings;
-        private readonly LevelLogParse _levelLogParse;
         private readonly EQToolSettingsLoad _toolSettingsLoad;
-        private readonly LocationParser _locationParser;
-        private readonly DPSLogParse _dpsLogParse;
-        private readonly LogDeathParse _logDeathParse;
-        private readonly ConLogParse _conLogParse;
-        private readonly LogCustomTimer _logCustomTimer;
-        private readonly SpellLogParse _spellLogParse;
-        private readonly SpellWornOffLogParse _spellWornOffLogParse;
-        private readonly PlayerWhoLogParse _playerWhoLogParse;
-        private readonly EnterWorldParser _enterWorldParser;
-        private readonly QuakeParser _quakeParser;
-        private readonly DTParser _pOFDTParser;
-        private readonly EnrageParser _enrageParser;
-        private readonly ChParser _chParser;
-        private readonly InvisParser _invisParser;
-        private readonly LevParser _levParser;
-		private readonly ModRodParser _modRodParser;
-        private readonly FTEParser _fTEParser;
-        private readonly CharmBreakParser _charmBreakParser;
-        private readonly FailedFeignParser _failedFeignParser;
-        private readonly GroupInviteParser _groupInviteParser;
-        private readonly ResistSpellParser _resistSpellParser;
-        private readonly RandomParser _randomParser;
-
-        private bool StartingWhoOfZone = false;
-        private bool Processing = false;
-        private bool StillCamping = false;
-        private bool HasUsedStartupEnterWorld = false;
-		public bool JustZoned = false;
-
 
 		ZealMessageService _zealMessageService;
 
 
 		public PipeCommandParser(
-			ResistSpellParser resistSpellParser,
-            LogCustomTimer logCustomTimer,
-			SpellWornOffLogParse spellWornOffLogParser,
-			SpellLogParse spellLogParser,
             EQToolSettingsLoad toolSettingsLoad,
             ActivePlayer activePlayer,
             IAppDispatcher appDispatcher,
@@ -80,35 +45,11 @@ namespace EQTool.Services
 			ZealMessageService zealMessageService
 			)
         {
-            _randomParser = new RandomParser();
-            _resistSpellParser = resistSpellParser;
-            _groupInviteParser = new GroupInviteParser();
-            _failedFeignParser = new FailedFeignParser(activePlayer);
-            _charmBreakParser = new CharmBreakParser();
-            _fTEParser = new FTEParser();
-            _invisParser = new InvisParser();
-            _levParser = new LevParser();
-            _chParser = new ChParser(activePlayer);
-            _enrageParser = new EnrageParser(activePlayer);
-            _pOFDTParser = new DTParser();
-            _quakeParser = new QuakeParser();
-            _enterWorldParser = new EnterWorldParser();
-            _spellWornOffLogParse = spellWornOffLogParser;
-            _spellLogParse = spellLogParser;
-            _logCustomTimer = logCustomTimer;
-            _conLogParse = new ConLogParse();
-            _logDeathParse = new LogDeathParse();
-            _dpsLogParse = new DPSLogParse(activePlayer);
-            _locationParser = new LocationParser();
             _toolSettingsLoad = toolSettingsLoad;
             _activePlayer = activePlayer;
             _appDispatcher = appDispatcher;
-            _levelLogParse = new LevelLogParse(activePlayer);
-			_modRodParser = new ModRodParser();
             _settings = settings;
-            _playerWhoLogParse = new PlayerWhoLogParse();
 			_zealMessageService = zealMessageService;
-
 
 			_zealMessageService.OnPipeCmdMessageReceived += _zealMessageService_OnPipeCmdMessageReceived;
 		}
@@ -121,22 +62,32 @@ namespace EQTool.Services
 				{
 					return;
 				}
-				if (ToggleMap(e))
+				else if (ToggleMap(e))
 				{
 					return;
 				}
-				if (ToggleMobInfo(e))
+				else if (ToggleMobInfo(e))
 				{
 					return;
 				}
-				if (ToggleOverlay(e))
+				else if (ToggleOverlay(e))
 				{
 					return;
 				}
-				if(ToggleDPS(e))
+				else if (ToggleAuraOverlay(e))
 				{
 					return;
 				}
+				else if(ToggleDPS(e))
+				{
+					return;
+				}
+
+				if(CreatePointOfInterest(e))
+				{
+					return;
+				}
+
 				//if(string.Compare(e.Message.Data.Text, "quto lock mobinfo", true) == 0)
 				//{
 				//	App.Current.Dispatcher.Invoke((Action)delegate
@@ -145,6 +96,40 @@ namespace EQTool.Services
 				//	});
 				//}
 			}
+		}
+
+		private bool CreatePointOfInterest(ZealMessageService.PipeCmdMessageReceivedEventArgs e)
+		{
+			if(e.Message.Data.Text.StartsWith("quto poi add", StringComparison.OrdinalIgnoreCase))
+			{
+				string stripped = e.Message.Data.Text.Substring(12).Trim();
+				string[] locParts = stripped.Split(',');
+				Point3D loc;
+				string label = locParts[0];
+				if (stripped.Length == 0)
+				{
+					return false;
+				}
+				else
+				{
+					if (locParts.Length != 4)
+					{
+						return false;
+					}
+					double.TryParse(locParts[2], out double x);
+					double.TryParse(locParts[1], out double y);
+					double.TryParse(locParts[3], out double z);
+
+					loc = new Point3D(x, y, z);
+				}
+
+				if (loc != null && label != string.Empty)
+				{
+					AddPointOfInterestEvent?.Invoke(this, new PointOfInterestEventArgs { Location = loc, Label = label });
+					return true;
+				}
+			}
+			return false;
 		}
 
 		private bool ToggleMap(ZealMessageService.PipeCmdMessageReceivedEventArgs e)
@@ -183,6 +168,18 @@ namespace EQTool.Services
 			}
 			return false;
 		}
+		private bool ToggleAuraOverlay(ZealMessageService.PipeCmdMessageReceivedEventArgs e)
+		{
+			if (string.Compare(e.Message.Data.Text, "quto toggle auras", true) == 0)
+			{
+				App.Current.Dispatcher.Invoke((Action)delegate
+				{
+					(App.Current as App).HardToggleImageOverlayWindow();
+				});
+				return true;
+			}
+			return false;
+		}
 		private bool ToggleDPS(ZealMessageService.PipeCmdMessageReceivedEventArgs e)
 		{
 			if (string.Compare(e.Message.Data.Text, "quto toggle dps", true) == 0)
@@ -195,7 +192,6 @@ namespace EQTool.Services
 			}
 			return false;
 		}
-
 		private bool LockCurrentCharacterCheck(ZealMessageService.PipeCmdMessageReceivedEventArgs e)
 		{
 			if (e.Message.Data.Text.StartsWith("quto lock character", StringComparison.OrdinalIgnoreCase))
@@ -207,111 +203,14 @@ namespace EQTool.Services
 			return false;
 		}
 
-		public DateTime LastYouActivity { get; private set; }
-
-        private long? LastLogReadOffset { get; set; } = null;
-
-        public class PlayerZonedEventArgs : EventArgs
-        {
-			public PlayerZonedInfo ZoneInfo { get; set;}
-        }
-        public class PlayerLocationEventArgs : EventArgs
-        {
-            public Point3D Location { get; set; }
-            public PlayerInfo PlayerInfo { get; set; }
-        }
-        public class FightHitEventArgs : EventArgs
-        {
-            public DPSParseMatch HitInformation { get; set; }
-        }
-        public class DeadEventArgs : EventArgs
-        {
-            public string Name { get; set; }
-			public DateTime ExecutionTime { get; set; }
-        }
-
-        public class ConEventArgs : EventArgs
-        {
-            public string Name { get; set; }
-        }
-
-        public class StartTimerEventArgs : EventArgs
-        {
-            public CustomTimer CustomTimer { get; set; }
-        }
-
-        public class CancelTimerEventArgs : EventArgs
-        {
-            public string Name { get; set; }
-        }
-
-        public class SpellEventArgs : EventArgs
-        {
-            public SpellParsingMatch Spell { get; set; }
-        }
-
-        public class SpellWornOffOtherEventArgs : EventArgs
-        {
-            public string SpellName { get; set; }
-        }
-
-        public class SpellWornOffSelfEventArgs : EventArgs
-        {
-            public List<string> SpellNames { get; set; }
-        }
-
-        public class WhoPlayerEventArgs : EventArgs
-        {
-            public EQToolShared.APIModels.PlayerControllerModels.Player PlayerInfo { get; set; }
-        }
-        public class RandomRollEventArgs : EventArgs
-        {
-            public RandomRollData RandomRollData { get; set; }
-			public DateTime ExecutionTime { get; set; }
-		}
-
-		public class WhoEventArgs : EventArgs { }
-        public class CampEventArgs : EventArgs { }
-        public class EnteredWorldArgs : EventArgs { }
-        public class QuakeArgs : EventArgs { }
-        public class CharmBreakArgs : EventArgs { }
-
-		public class SignalRLocationEventArgs : EventArgs
+		public event EventHandler<PointOfInterestEventArgs> AddPointOfInterestEvent;
+		public class PointOfInterestEventArgs : EventArgs
 		{
 			public Point3D Location { get; set; }
+			public string Label { get; set; }
 		}
 
-		public event EventHandler<RandomRollEventArgs> RandomRollEvent;
-        public event EventHandler<WhoEventArgs> WhoEvent;
-        public event EventHandler<WhoPlayerEventArgs> WhoPlayerEvent;
-        public event EventHandler<SpellWornOffSelfEventArgs> SpellWornOffSelfEvent;
-        public event EventHandler<QuakeArgs> QuakeEvent;
-        public event EventHandler<DT_Event> DTEvent;
-        public event EventHandler<EnrageEvent> EnrageEvent;
-        public event EventHandler<ChParseData> CHEvent;
-        public event EventHandler<LevStatus> LevEvent;
-        public event EventHandler<InvisStatus> InvisEvent;
-        public event EventHandler<FTEParserData> FTEEvent;
-        public event EventHandler<CharmBreakArgs> CharmBreakEvent;
-        public event EventHandler<string> FailedFeignEvent;
-        public event EventHandler<string> GroupInviteEvent;
-        public event EventHandler<SpellWornOffOtherEventArgs> SpellWornOtherOffEvent;
-        public event EventHandler<ResistSpellData> ResistSpellEvent;
-        public event EventHandler<SpellEventArgs> StartCastingEvent;
-        public event EventHandler<CancelTimerEventArgs> CancelTimerEvent;
-        public event EventHandler<StartTimerEventArgs> StartTimerEvent;
-        public event EventHandler<ConEventArgs> ConEvent;
-        public event EventHandler<DeadEventArgs> DeadEvent;
-        public event EventHandler<FightHitEventArgs> FightHitEvent;
-        public event EventHandler<PlayerZonedEventArgs> PlayerZonedEvent;
-        public event EventHandler<PlayerLocationEventArgs> PlayerLocationEvent;
-        public event EventHandler<CampEventArgs> CampEvent;
-        public event EventHandler<EnteredWorldArgs> EnteredWorldEvent;
-		public event EventHandler<ModRodUsageArgs> ModRodUsedEvent;
-		public event EventHandler<CustomOverlayEventArgs> CustomOverlayEvent;
-
-
-        public void Dispose()
+		public void Dispose()
         {
 			_zealMessageService.StopProcessing();
         }

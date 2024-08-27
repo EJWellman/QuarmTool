@@ -91,7 +91,7 @@ namespace EQTool.ViewModels
                     .FirstOrDefault();
 
 				var files = directory.GetFiles("eqlog*.txt", SearchOption.TopDirectoryOnly)
-					.OrderByDescending(a => a.Name)
+					.OrderByDescending(a => a.LastWriteTimeUtc)
 					.Select(f => f.Name).ToList();
 
 				if(files.Count != settings.AvailableCharacters.Count)

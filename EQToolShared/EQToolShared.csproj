@@ -84,10 +84,12 @@
     <Compile Include="Enums\SpellTypes.cs" />
     <Compile Include="Enums\PlayerClasses.cs" />
     <Compile Include="Enums\Servers.cs" />
+    <Compile Include="Enums\ZealPipeEnums.cs" />
     <Compile Include="ExtendedClasses\ObservableCollectionRange.cs" />
     <Compile Include="ExtendedClasses\StringExtensions.cs" />
     <Compile Include="HubModels\CustomTimer.cs" />
     <Compile Include="HubModels\PlayerLocation.cs" />
+    <Compile Include="Map\InstancedZones.cs" />
     <Compile Include="Map\SignalrPlayer.cs" />
     <Compile Include="Map\ZoneParser.cs" />
     <Compile Include="Map\ZoneSpawnTimes.cs" />

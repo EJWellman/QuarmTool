@@ -411,6 +411,9 @@
     <Compile Include="EventArgModels\CustomOverlayEditEventArgs.cs" />
     <Compile Include="EventArgModels\ModRodUsageArgs.cs" />
     <Compile Include="EventArgModels\CustomOverlayEventArgs.cs" />
+    <Compile Include="ImageOverlay.xaml.cs">
+      <DependentUpon>ImageOverlay.xaml</DependentUpon>
+    </Compile>
     <Compile Include="EventOverlay.xaml.cs">
       <DependentUpon>EventOverlay.xaml</DependentUpon>
     </Compile>
@@ -483,6 +486,7 @@
     <Compile Include="Services\PlayerGroupService.cs" />
     <Compile Include="Services\SignalrPlayerHub.cs" />
     <Compile Include="Services\QuarmDataService.cs" />
+    <Compile Include="Services\WindowServices.cs" />
     <Compile Include="Services\ZoneActivityTrackingService.cs" />
     <Compile Include="Services\PlayerTrackerService.cs" />
     <Compile Include="Services\Spells\Log\PlayerWhoLogParse.cs" />
@@ -561,6 +565,10 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="ImageOverlay.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="EventOverlay.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

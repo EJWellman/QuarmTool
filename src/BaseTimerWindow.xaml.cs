@@ -28,6 +28,7 @@ namespace EQTool
         private readonly PlayerTrackerService _playerTrackerService;
 		private readonly QuarmDataService _quarmDataService;
 		private readonly EQToolSettings _settings;
+		private readonly LoggingService _logging;
 
         public BaseTimerWindow(
             PlayerTrackerService playerTrackerService,
@@ -40,13 +41,14 @@ namespace EQTool
 			QuarmDataService quarmDataService,
             LoggingService loggingService) : base(baseTimerWindowViewModel.WindowState, toolSettingsLoad, settings)
         {
-            loggingService.Log(string.Empty, EventType.OpenMap, activePlayer?.Player?.Server);
+            loggingService.Log(string.Empty, EventType.OpenTriggers, activePlayer?.Player?.Server);
             _playerTrackerService = playerTrackerService;
             _logParser = logParser;
 			_pipeParser = pipeParser;
             _activePlayer = activePlayer;
 			_quarmDataService = quarmDataService;
 			_settings = settings;
+			_logging = loggingService;
             baseTimerWindowViewModel.SpellList = new System.Collections.ObjectModel.ObservableCollection<UISpell>();
             DataContext = _baseTimerWindowViewModel = baseTimerWindowViewModel;
             if (_activePlayer.Player != null)
@@ -277,36 +279,43 @@ namespace EQTool
 		private int deathcounter = 1;
 		private void LogParser_DeadEvent(object sender, LogParser.DeadEventArgs e)
 		{
-			_baseTimerWindowViewModel.TryRemoveTarget(e.Name);
-			string name = e.Name.CleanUpZealName();
-			string cleanName = e.Name.CleanUpZealName(true);
-			if (_playerTrackerService.IsPlayer(cleanName) || !MasterNPCList.NPCs.Contains(cleanName))
+			try
 			{
-				return;
-			}
-			var deathTimer = _quarmDataService.GetMonsterTimer(cleanName);
-			if (deathTimer != null)
-			{
-				var add = new CustomTimer
+				_baseTimerWindowViewModel.TryRemoveTarget(e.Name);
+				string name = e.Name.CleanUpZealName();
+				string cleanName = e.Name.CleanUpZealName(true);
+				if (_playerTrackerService.IsPlayer(cleanName) || !MasterNPCList.NPCs.Contains(cleanName))
 				{
-					Name = "--Dead-- " + name,
-					DurationInSeconds = (int)(deathTimer.RespawnTimer != 0 ? deathTimer.RespawnTimer : deathTimer.Min_RespawnTimer),
-					NegativeDurationToShow = (int)(deathTimer.Max_RespawnTimer),
-					SpellNameIcon = "Disease Cloud",
-					SpellType = SpellTypes.RespawnTimer,
-					TargetName = "Death Timers",
-					ExecutionTime = e.ExecutionTime,
-					IsNPC = true
-			};
-
-				var existingDeathEntry = _baseTimerWindowViewModel.SpellList.FirstOrDefault(a => a.SpellName == add.Name && a.TargetName == "Death Timers");
-				if (existingDeathEntry != null)
-				{
-					deathcounter = ++deathcounter > 999 ? 1 : deathcounter;
-					add.Name += "_" + deathcounter;
+					return;
 				}
+				var deathTimer = _quarmDataService.GetMonsterTimer(cleanName);
+				if (deathTimer != null)
+				{
+					var add = new CustomTimer
+					{
+						Name = "--Dead-- " + name,
+						DurationInSeconds = (int)(deathTimer.RespawnTimer != 0 ? deathTimer.RespawnTimer : deathTimer.Min_RespawnTimer),
+						NegativeDurationToShow = (int)(deathTimer.Max_RespawnTimer),
+						SpellNameIcon = "Disease Cloud",
+						SpellType = SpellTypes.RespawnTimer,
+						TargetName = "Death Timers",
+						ExecutionTime = e.ExecutionTime,
+						IsNPC = true
+				};
 
-				_baseTimerWindowViewModel.TryAddCustom(add);
+					var existingDeathEntry = _baseTimerWindowViewModel.SpellList.FirstOrDefault(a => a.SpellName == add.Name && a.TargetName == "Death Timers");
+					if (existingDeathEntry != null)
+					{
+						deathcounter = ++deathcounter > 999 ? 1 : deathcounter;
+						add.Name += "_" + deathcounter;
+					}
+
+					_baseTimerWindowViewModel.TryAddCustom(add);
+				}
+			}
+			catch(Exception ex)
+			{
+				_logging.Log(ex.Message, EventType.Error, _activePlayer?.Player?.Server);
 			}
 		}
 

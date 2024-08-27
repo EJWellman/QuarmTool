@@ -232,7 +232,7 @@ namespace EQTool.Services
 				else
 				{
 					var mob = GetSlimData(name.Replace(" ", "_"));
-					if (mob.Level > 0 && mob.MaxLevel < 15)
+					if (mob.Level > 0 && (mob.MaxLevel < 15 && mob.MaxLevel != 0))
 					{
 						if (timer.RespawnTimer >= QuarmRules.GetRespawnReductionHigherBoundMin() && timer.RespawnTimer <= QuarmRules.GetRespawnReductionHigherBoundMax())
 						{
@@ -270,6 +270,15 @@ namespace EQTool.Services
 			{
 				return false;
 			}
+		}
+
+		public QuarmZone GetZoneByID(int zoneId)
+		{
+			var zone = DataService.GetData<QuarmZone>("SELECT * " +
+				"FROM Zones"
+				+ " WHERE Zone_ID = @Zone_ID", new { Zone_ID = zoneId}).FirstOrDefault();
+
+			return zone;
 		}
 	}
 }

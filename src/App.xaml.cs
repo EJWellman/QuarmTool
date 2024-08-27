@@ -16,6 +16,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Web.UI;
 using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Media;
@@ -33,7 +34,8 @@ namespace EQTool
         private System.Windows.Forms.MenuItem MapMenuItem;
 		private System.Windows.Forms.MenuItem DpsMeterMenuItem;
         private System.Windows.Forms.MenuItem OverlayMenuItem;
-        private System.Windows.Forms.MenuItem SettingsMenuItem;
+		private System.Windows.Forms.MenuItem ImageOverlayMenuItem;
+		private System.Windows.Forms.MenuItem SettingsMenuItem;
         private System.Windows.Forms.MenuItem GroupSuggestionsMenuItem;
         private System.Windows.Forms.MenuItem MobInfoMenuItem;
 
@@ -258,6 +260,7 @@ namespace EQTool
 			MapMenuItem = new System.Windows.Forms.MenuItem("Map", ToggleMapWindow);
 			DpsMeterMenuItem = new System.Windows.Forms.MenuItem("Dps", ToggleDPSWindow);
 			OverlayMenuItem = new System.Windows.Forms.MenuItem("Overlay", ToggleOverlayWindow);
+			ImageOverlayMenuItem = new System.Windows.Forms.MenuItem("Static Overlay", ToggleImageOverlayWindow);
 			MobInfoMenuItem = new System.Windows.Forms.MenuItem("Mob Info", ToggleMobInfoWindow);
 			var gitHubMenuItem = new System.Windows.Forms.MenuItem("Suggestions", Suggestions);
 			//var whythepig = new System.Windows.Forms.MenuItem("Pigparse Discord", Discord);
@@ -299,6 +302,7 @@ namespace EQTool
 				ContextMenu = new System.Windows.Forms.ContextMenu(new System.Windows.Forms.MenuItem[]
 				{
                     OverlayMenuItem,
+					ImageOverlayMenuItem,
 					DpsMeterMenuItem,
 					MapMenuItem,
 					timersMenu,
@@ -338,6 +342,10 @@ namespace EQTool
 				{
 					OpenOverLayWindow();
 				}
+				if(!_settings.ImageOverlayWindowState.Closed)
+				{
+					OpenImageOverLayWindow();
+				}
 				if (_settings.TimerWindows.Any(tw => !tw.Closed))
 				{
 					_timerWindowFactory = container.Resolve<TimerWindowFactory>();
@@ -369,6 +377,7 @@ namespace EQTool
 			((App)System.Windows.Application.Current).UpdateBackgroundOpacity("MyMobWindowSyle", _settings.MobWindowState.Opacity.Value);
 
 			_zealMessageService.StartProcessing();
+			_pipeParser.Start();
         }
         private void GenerateTimerMenu(MenuItem timersMenu)
         {
@@ -490,9 +499,8 @@ namespace EQTool
         public void ToggleMenuButtons(bool value)
         {
             MapMenuItem.Enabled = value;
-            //SpellsMenuItem.Enabled = value;
-			//TimerMenuItem.Enabled = value;
-			//ComboTimerMenuItem.Enabled = value;
+			OverlayMenuItem.Enabled = value;
+			ImageOverlayMenuItem.Enabled = value;
             DpsMeterMenuItem.Enabled = value;
             MobInfoMenuItem.Enabled = value;
             GroupSuggestionsMenuItem.Enabled = value;
@@ -748,6 +756,16 @@ namespace EQTool
 			HardToggleWindow<EventOverlay>();
 		}
 
+		public void ToggleImageOverlayWindow(object sender, EventArgs e)
+		{
+			var s = (System.Windows.Forms.MenuItem)sender;
+			ToggleWindow<ImageOverlay>(s);
+		}
+		public void HardToggleImageOverlayWindow()
+		{
+			HardToggleWindow<ImageOverlay>();
+		}
+
 		public void ToggleMobInfoWindow(object sender, EventArgs e)
         {
             var s = (System.Windows.Forms.MenuItem)sender;
@@ -786,9 +804,14 @@ namespace EQTool
         public void OpenOverLayWindow()
         {
             OpenWindow<EventOverlay>(OverlayMenuItem);
-        }
+		}
 
-        public void OpenSettingsWindow()
+		public void OpenImageOverLayWindow()
+		{
+			OpenWindow<ImageOverlay>(ImageOverlayMenuItem);
+		}
+
+		public void OpenSettingsWindow()
         {
             OpenWindow<Settings>(SettingsMenuItem);
         }
@@ -811,16 +834,7 @@ namespace EQTool
 				_timerWindowFactory = container.Resolve<TimerWindowFactory>();
 			}
 
-			if ((sender as System.Windows.Forms.MenuItem)?.Tag != null)
-			{
-				var contextID = (sender as System.Windows.Forms.MenuItem).Tag as int?;
-				if (contextID != null)
-				{
-					var w = _timerWindowFactory.CreateTimerWindow((int)contextID);
-					(App.Current as App).OpenSpawnableWindow<BaseTimerWindow>(w);
-				}
-			}
-			else if ((sender as System.Windows.Controls.MenuItem)?.Tag != null)
+			if((sender as System.Windows.Controls.MenuItem)?.Tag != null)
 			{
 				var contextID = (sender as System.Windows.Controls.MenuItem).Tag as int?;
 				if (contextID != null)
@@ -829,7 +843,16 @@ namespace EQTool
 					(App.Current as App).OpenSpawnableWindow<BaseTimerWindow>(w);
 				}
 			}
-			else if ((sender as System.Windows.Controls.MenuItem)?.DataContext != null)
+			if ((sender as System.Windows.Forms.MenuItem)?.Tag != null)
+			{
+				var contextID = (sender as System.Windows.Controls.MenuItem).DataContext as int?;
+				if (contextID != null)
+				{
+					var w = _timerWindowFactory.CreateTimerWindow((int)contextID);
+					(App.Current as App).OpenSpawnableWindow<BaseTimerWindow>(w);
+				}
+			}
+			else if((sender as System.Windows.Controls.MenuItem)?.DataContext != null)
 			{
 				var contextID = (sender as System.Windows.Controls.MenuItem).DataContext as int?;
 				if (contextID != null)
@@ -865,7 +888,23 @@ namespace EQTool
 					w6.Topmost = _settings.OverlayWindowState.AlwaysOnTop;
 					w6.Activate();
 				}
-            }
+				else if (item is ImageOverlay w7)
+				{
+					w7.Topmost = _settings.ImageOverlayWindowState.AlwaysOnTop;
+					w7.Activate();
+				}
+			}
         }
+
+		public void UpdateStaticOverlayColors()
+		{
+			foreach (var item in WindowList)
+			{
+				if (item is ImageOverlay w)
+				{
+					w.UpdateGradientColors();
+				}
+			}
+		}
     }
 }

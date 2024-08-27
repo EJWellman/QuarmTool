@@ -56,11 +56,20 @@ namespace EQTool
 			_timerWindowFactory = timerWindowFactory;
 			_settings = settings;
 			DataContext = _mobInfoViewModel = new ViewModels.MobInfoViewModel();
+
 			InitializeComponent();
 			base.Init();
+			
+			if (_settings.MobInfo_ManualSizing)
+			{
+				SizeToContent = SizeToContent.Manual;
+			}
+			
 			this._logParser.ConEvent += LogParser_ConEvent;
 			ContextMenuOpening += MobInfo_TimerMenu_OpenedEvent;
 			_zealMessageService.OnCharacterUpdated += ZealMessageService_OnCharacterUpdated;
+
+			this.SizeChanged += MobInfo_OnWindowSizeChanged;
 
 			foreach (var timer in settings.TimerWindows)
 			{
@@ -74,6 +83,15 @@ namespace EQTool
 			}
 		}
 
+		private void MobInfo_OnWindowSizeChanged(object sender, SizeChangedEventArgs e)
+		{
+			double lootHeight = Math.Max(this.Height - FactionHitsStack.ActualHeight - QuestsStack.ActualHeight - MerchandiseStack.ActualHeight - SpecialAbilitiesStack.ActualHeight - 50, 0);
+			KnownLoot_ListView.MaxHeight = Math.Max(lootHeight, 100);
+			double merchHeight = Math.Max(this.Height - FactionHitsStack.ActualHeight - QuestsStack.ActualHeight - KnownLootStack.ActualHeight - SpecialAbilitiesStack.ActualHeight - 50, 0);
+			KnownMerch_ListView.MaxHeight = Math.Max(merchHeight, 100);
+
+		}
+
 		protected override void OnPreviewMouseRightButtonDown(MouseButtonEventArgs e)
 		{
 			e.Handled = true;
@@ -81,7 +99,7 @@ namespace EQTool
 
 		private void ZealMessageService_OnCharacterUpdated(object sender, ZealCharacter.ZealCharacterUpdatedEventArgs e)
 		{
-			if (_settings.ZealEnabled && _settings.ZealMobInfo_AutoUpdate && e.Character.Detail.LabelData != null && e.Character.Detail.LabelData.Count > 0)
+			if (/*_settings.ZealEnabled &&*/ _settings.ZealMobInfo_AutoUpdate && e.Character.Detail.LabelData != null && e.Character.Detail.LabelData.Count > 0)
 			{
 				if(_activePlayer.Player.LastTarget != e.Character.Detail.LabelData[(int)ZealPipes.Common.LabelType.TargetName - 1]?.Value)
 				{
@@ -154,6 +172,8 @@ namespace EQTool
 			}
 
 			_zealMessageService.OnCharacterUpdated -= ZealMessageService_OnCharacterUpdated;
+			this.SizeChanged -= MobInfo_OnWindowSizeChanged;
+
 			base.OnClosing(e);
 		}
 
@@ -184,5 +204,7 @@ namespace EQTool
 				fe.ContextMenu.IsOpen = true;
 			}
 		}
+
+		
 	}
 }
