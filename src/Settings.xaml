@@ -45,7 +45,7 @@
                     <Button Visibility="{Binding IsLoggingDisabled, Converter={StaticResource BooleanToVisibilityConverter}, FallbackValue=Collapsed}" Name="enableLogging" Margin="5,5,0,0" Click="enableLogging_Click">Enable Logging</Button>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" Visibility="{Binding IsLoggingDisabled, Converter={StaticResource BooleanToVisibilityConverter}, FallbackValue=Collapsed}"  >
-                    <TextBlock HorizontalAlignment="Center" Text="You must enable loogging!"  FontWeight="Bold" Foreground="Red"/>
+                    <TextBlock HorizontalAlignment="Center" Text="You must enable logging!"  FontWeight="Bold" Foreground="Red"/>
                 </StackPanel>
                 <StackPanel Orientation="Vertical" HorizontalAlignment="Stretch" Visibility="{Binding NotMissingConfiguration, Converter={StaticResource BooleanToVisibilityConverter}, FallbackValue=Visible}">
                     <TextBlock Visibility="{Binding HasNoCharName}" HorizontalAlignment="Center" Text="Functionality disabled until you log in!"  FontWeight="Bold" Foreground="Red"/>

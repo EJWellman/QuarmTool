@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:EQTool"
         xmlns:jsdrag="clr-namespace:EQTool.Controls"
+        xmlns:h="http://helix-toolkit.org/wpf"
         Loaded="Window_Loaded"
         mc:Ignorable="d" 
         Style="{DynamicResource MyEventWindowStyle}"
@@ -33,8 +34,9 @@
             <Rectangle x:Name="Gradient_Right" Width="{Binding StaticOverlay_SizeRight}" Grid.RowSpan="3" Grid.Column="2" HorizontalAlignment="Right"/>
 
             <Rectangle x:Name="Gradient_Bottom" Height="{Binding StaticOverlay_SizeBottom}" Grid.Row="2" Grid.ColumnSpan="3" VerticalAlignment="Bottom"/>
-            <jsdrag:DragCanvas x:Name="AuraContainer" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" Grid.RowSpan="3" Margin="0,0,0,0" Background="Transparent">
-
-            </jsdrag:DragCanvas>
+        <jsdrag:DragCanvas x:Name="AuraContainer" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" Grid.RowSpan="3" Margin="0,0,0,0" Background="Transparent">
+            <h:HelixViewport3D x:Name="ArrowContainer">
+            </h:HelixViewport3D>
+        </jsdrag:DragCanvas>
         </Grid>
 </local:BaseSaveStateWindow>

@@ -14,6 +14,9 @@ using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using System.Xml.Linq;
+using System.Windows.Media.Media3D;
+using HelixToolkit.Wpf;
+
 
 namespace EQTool
 {
@@ -23,6 +26,8 @@ namespace EQTool
 		private readonly EQToolSettings _settings;
 		private readonly IAppDispatcher _appDispatcher;
 		private readonly Models.WindowState _windowState;
+		private ArrowVisual3D _POIArrow = null;
+		private Matrix3D? _POIArrowMatrix = null;
 
 		private bool _healthLow = false;
 		private bool _manaLow = false;
@@ -98,6 +103,20 @@ namespace EQTool
 
 
 			CreateAuraElement(atkIndicatorAura);
+			Add3DArrowToScene();
+		}
+
+
+		private void Add3DArrowToScene()
+		{
+			ArrowContainer.Children.Add(new DefaultLights());
+			var arrow = new ArrowVisual3D();
+			_POIArrow = arrow;
+			Vector3D axis = new Vector3D(1, 0, 1);
+			_POIArrowMatrix = _POIArrow.Content.Transform.Value;
+
+			//ArrowContainer.Children.Add(_POIArrow);
+			ArrowContainer.Children.Add(arrow);
 		}
 
 		private void _pipeParser_AutoAttackStatusChangedEvent(object sender, PipeParser.AutoAttackStatusChangedEventArgs e)
