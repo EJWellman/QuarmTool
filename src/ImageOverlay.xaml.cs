@@ -16,6 +16,8 @@ using System.Windows.Shapes;
 using System.Xml.Linq;
 using System.Windows.Media.Media3D;
 using HelixToolkit.Wpf;
+using System.Windows.Threading;
+using System;
 
 
 namespace EQTool
@@ -26,8 +28,9 @@ namespace EQTool
 		private readonly EQToolSettings _settings;
 		private readonly IAppDispatcher _appDispatcher;
 		private readonly Models.WindowState _windowState;
-		private ArrowVisual3D _POIArrow = null;
+		private MeshElement3D _POIArrow = null;
 		private Matrix3D? _POIArrowMatrix = null;
+		private Point3D _POIArrowCenter;
 
 		private bool _healthLow = false;
 		private bool _manaLow = false;
@@ -104,19 +107,53 @@ namespace EQTool
 
 			CreateAuraElement(atkIndicatorAura);
 			Add3DArrowToScene();
+
+
+			int i = 0;
+			timer.Tick += (sender, e) =>
+			{
+				Wobble();
+			};
+			timer.Start();
 		}
 
 
 		private void Add3DArrowToScene()
 		{
 			ArrowContainer.Children.Add(new DefaultLights());
+			ArrowContainer.ShowViewCube = false;
+			ArrowContainer.Height = 200;
+			ArrowContainer.Width = 200;
 			var arrow = new ArrowVisual3D();
 			_POIArrow = arrow;
 			Vector3D axis = new Vector3D(1, 0, 1);
+
+			var x_mid = _POIArrow.Content.Bounds.SizeX / 2;
+			var y_mid = _POIArrow.Content.Bounds.SizeY / 2;
+			var z_mid = _POIArrow.Content.Bounds.SizeZ / 2;
+			_POIArrowCenter = new Point3D(x_mid, y_mid, z_mid);
+
 			_POIArrowMatrix = _POIArrow.Content.Transform.Value;
 
 			//ArrowContainer.Children.Add(_POIArrow);
 			ArrowContainer.Children.Add(arrow);
+		}
+
+		private DispatcherTimer timer = new DispatcherTimer
+		{
+			Interval = TimeSpan.FromSeconds(1),
+			IsEnabled = false
+		};
+
+		private void Wobble()
+		{
+			Vector3D axis = new Vector3D(1, 0, 0); //In case you want to rotate it about the x-axis
+			Matrix3D transformationMatrix = _POIArrow.Content.Transform.Value; //Gets the matrix indicating the current transformation value
+			transformationMatrix.RotateAt(new Quaternion(axis, 90), _POIArrowCenter); //Makes a rotation transformation over this matrix
+			DoubleAnimation animation = new DoubleAnimation();
+			animation.EasingFunction = new CubicEase() { EasingMode = EasingMode.EaseInOut };
+			_POIArrow.Content.Transform = new MatrixTransform3D(transformationMatrix); //Applies the transformation to your model
+			_POIArrow.Content.Transform.BeginAnimation(TranslateTransform3D.OffsetXProperty, animation); //Applies the animation to your model
 		}
 
 		private void _pipeParser_AutoAttackStatusChangedEvent(object sender, PipeParser.AutoAttackStatusChangedEventArgs e)
