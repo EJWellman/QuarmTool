@@ -95,6 +95,11 @@
                             <CheckBox IsChecked="{Binding DpsAlwaysOnTop}" Click="SaveAlwaysOntopCheckBoxSettings" ></CheckBox>
                         </StackPanel>
                         <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="Seconds to Keep" VerticalAlignment="Center"  FontWeight="Bold" MinWidth="100"/>
+                            <TextBox Name="DpsRemovalTimerThreshold_Field" MinWidth="150" Text="{Binding DpsRemovalTimerThreshold}" 
+                                TextChanged="DPS_KeepThreshold_ValueChanged" PreviewTextInput="Threshold_Value_PreviewTextInput"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
                             <TextBlock Text="Window Opacity"  VerticalAlignment="Center"  FontWeight="Bold"  MinWidth="100"/>
                             <Slider Value="{Binding DPSWindowOpacity}" Minimum=".01" Maximum="1" SmallChange=".1" TickFrequency=".1" ValueChanged="SaveSettings" MinWidth="150"/>
                         </StackPanel>
@@ -114,10 +119,6 @@
                             <TextBlock Text="Update Via Zeal" VerticalAlignment="Center"  FontWeight="Bold"  MinWidth="100"/>
                             <CheckBox IsChecked="{Binding ZealMobInfo_AutoUpdate}" Click="SaveSettings" ></CheckBox>
                         </StackPanel>
-                        <!--<StackPanel Orientation="Horizontal">
-                            <TextBlock Text="Window Opacity"  VerticalAlignment="Center"  FontWeight="Bold"  MinWidth="100"/>
-                            <Slider Value="{Binding MobWindowOpacity}" Minimum=".01" Maximum="1" SmallChange=".1" TickFrequency=".1" ValueChanged="SaveSettings" MinWidth="150"/>
-                        </StackPanel>-->
                     </StackPanel>
                 </StackPanel>
             </StackPanel>

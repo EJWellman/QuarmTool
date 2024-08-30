@@ -7,6 +7,7 @@ using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Media3D;
 using System.Windows.Shapes;
+using static EQTool.Services.MapLoad;
 
 namespace EQTool.Services
 {
@@ -17,6 +18,18 @@ namespace EQTool.Services
 		public MapLoad.AABB AABB { get; set; }
 		public Transform Transform { get; set; }
 		public Canvas Canvas { get; set; }
+	}
+	public class PointOfInterestData
+	{
+		public Point3D Location { get; set; }
+		public string Name { get; set; }
+		public int ZoneID { get; set; }
+		public Canvas Canvas { get; set; }
+		public MapLoad.AABB AABB { get; set;}
+		public Point3D MapOffset { get; set; }
+		public bool IsPermanent { get; set; }
+		public double MapLabelMultiplier { get; set; }
+		public Transform Transform { get; set; }
 	}
 	public class UpdateLocationData
 	{
@@ -185,7 +198,7 @@ namespace EQTool.Services
 			return playerloc;
 		}
 
-		static public void AddToCanvas(PlayerLocationCircle playerLocationCircle, Canvas canvas, MapLoad.AABB aabb)
+		public static void AddToCanvas(PlayerLocationCircle playerLocationCircle, Canvas canvas, MapLoad.AABB aabb)
 		{
 			var playerlocsize = MathHelper.ChangeRange(Math.Max(aabb.MaxWidth, aabb.MaxHeight), 500, 35000, 40, 1750);
 			if (playerLocationCircle.Ellipse != null)
@@ -212,6 +225,66 @@ namespace EQTool.Services
 				_ = canvas.Children.Add(playerLocationCircle.TrackingEllipse);
 				Canvas.SetLeft(playerLocationCircle.TrackingEllipse, aabb.Center.X + playerLocationCircle.TrackingEllipse.Height + (playerLocationCircle.TrackingEllipse.Height / 2));
 				Canvas.SetTop(playerLocationCircle.TrackingEllipse, aabb.Center.Y + playerLocationCircle.TrackingEllipse.Height + (playerLocationCircle.TrackingEllipse.Height / 2));
+			}
+		}
+
+        public static void AddPointOfInterest(PointOfInterestData data)
+        {
+			if(data.IsPermanent)
+			{
+				//TODO: Add handling for saving PoI to user DB
+			}
+
+            var label = new TextBlock
+            {
+				Tag = data,
+				Name = $"{data.Name}_Label",
+                Text = data.Name.Replace('_', ' '),
+                FontSize = OtherLabelFontSize(data.AABB) * data.MapLabelMultiplier,
+                Foreground = new SolidColorBrush(Color.FromRgb(255, 255, 255)),
+                RenderTransform = data.Transform
+			};
+
+			FormattedText markerText = new FormattedText("X",
+				System.Globalization.CultureInfo.CurrentCulture,
+				FlowDirection.LeftToRight,
+				new Typeface("Arial"),
+				OtherLabelFontSize(data.AABB), Brushes.White);
+
+			double markerHeight = markerText.Height;
+			double markerWidth = markerText.Width;
+
+            var marker = new TextBlock
+			{
+				Tag = data,
+				Name = $"{data.Name}_Marker",
+				Text = "X",
+                FontSize = OtherLabelFontSize(data.AABB) * data.MapLabelMultiplier * 0.65,
+                Foreground = new SolidColorBrush(Color.FromRgb(255, 0, 0)),
+                RenderTransform = data.Transform
+            };
+
+			_ = data.Canvas.Children.Add(label);
+            Canvas.SetTop(label, data.Location.Y + markerHeight - data.MapOffset.Y);
+            Canvas.SetLeft(label, data.Location.X + markerWidth - data.MapOffset.X);
+			_ = data.Canvas.Children.Add(marker);
+            Canvas.SetTop(marker, /*data.AABB.Center.Y + */data.Location.Y - data.MapOffset.Y);
+            Canvas.SetLeft(marker, /*data.AABB.Center.X + */data.Location.X - data.MapOffset.X);
+        }
+
+		public static void RemovePointOfInterest(PointOfInterestData data)
+		{
+			for(int i = 0; i < data.Canvas.Children.Count; i++)
+			{
+				if (data.Canvas.Children[i] is TextBlock tb)
+				{
+					if(string.Compare(tb.Name, $"{data.Name}_Label", true) == 0 ||
+												string.Compare(tb.Name, $"{data.Name}_Marker", true) == 0)
+					{
+						data.Canvas.Children.RemoveAt(i);
+						i--;
+					}
+				}
 			}
 		}
 	}

@@ -432,6 +432,8 @@ namespace EQTool.ViewModels
 
 		public int PercentLeftOnSpell { get; set; }
 
+		public bool IsYourCast { get; set; } = false;
+
         public event PropertyChangedEventHandler PropertyChanged;
 
         protected void OnPropertyChanged([CallerMemberName] string name = null)

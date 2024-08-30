@@ -61,6 +61,7 @@ namespace EQTool.Services
         private bool Processing = false;
         private bool StillCamping = false;
         private bool HasUsedStartupEnterWorld = false;
+		public bool JustZoned = false;
 
         public LogParser(
 			ResistSpellParser resistSpellParser,
@@ -262,6 +263,7 @@ namespace EQTool.Services
                 if (pos.HasValue)
                 {
                     PlayerLocationEvent?.Invoke(this, new PlayerLocationEventArgs { Location = pos.Value, PlayerInfo = _activePlayer.Player });
+					JustZoned = false;
                     return;
                 }
 
@@ -489,6 +491,7 @@ namespace EQTool.Services
                 }
 
                 _levelLogParse.MatchLevel(message);
+
                 var matchedzone = ZoneParser.Match(message);
                 if (matchedzone != null)
                 {
@@ -516,6 +519,7 @@ namespace EQTool.Services
                         _toolSettingsLoad.Save(_settings);
                     }
                     PlayerZonedEvent?.Invoke(this, new PlayerZonedEventArgs { ZoneInfo = matchedzone });
+					JustZoned = true;
                     return;
                 }
             }

@@ -199,6 +199,20 @@ namespace EQTool.Models
 			set => _DpsWindowState = value ?? new WindowState();
 		}
 
+		private int _dpsRemovalTimerThreshold = 45;
+		public int DpsRemovalTimerThreshold
+		{
+			get
+			{
+				return _dpsRemovalTimerThreshold;
+			}
+			set
+			{
+				_dpsRemovalTimerThreshold = value;
+				OnPropertyChanged();
+			}
+		}
+
 		private WindowState _MapWindowState;
 		public WindowState MapWindowState
 		{

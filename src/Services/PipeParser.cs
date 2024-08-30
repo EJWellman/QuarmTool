@@ -13,15 +13,6 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Windows.Media.Media3D;
-using static EQTool.Services.ChParser;
-using static EQTool.Services.EnrageParser;
-using static EQTool.Services.FindEq;
-using static EQTool.Services.FTEParser;
-using static EQTool.Services.InvisParser;
-using static EQTool.Services.LevParser;
-using static EQTool.Services.DTParser;
-using static EQTool.Services.RandomParser;
-using static EQTool.Services.ResistSpellParser;
 using ZealPipes.Services;
 using static ZealPipes.Services.ZealMessageService;
 using EQToolShared.Enums;
@@ -48,6 +39,7 @@ namespace EQTool.Services
 		private bool _IsAutoAttacking = false;
 
 		public bool JustZoned = false;
+
 
 		ZealMessageService _zealMessageService;
 
@@ -80,7 +72,8 @@ namespace EQTool.Services
 			_zealMessageService.OnLogMessageReceived += _zealMessageService_OnLogMessageReceived;
 			_zealMessageService.OnPlayerMessageReceived += _zealMessageService_OnPlayerMessageReceived;
 			_zealMessageService.OnConnectionTerminated += _zealMessageService_onConnectionTerminated;
-			
+			_zealMessageService.OnPipeCmdMessageReceived += _zealMessageService_OnPipeCmdMessageReceived;
+
 		}
 
 		private void _zealMessageService_onConnectionTerminated(object sender, ConnectionTerminatedEventArgs e)
@@ -116,7 +109,7 @@ namespace EQTool.Services
 								Spell = _spells.AllSpells.FirstOrDefault(a => a.name == spell.name),
 								TargetName = target,
 								MultipleMatchesFound = false,
-								//IsYourCast = true
+								IsYourCast = true
 							};
 							StartCastingEvent?.Invoke(this, new SpellEventArgs() { Spell = spellparse });
 						}
@@ -224,6 +217,165 @@ namespace EQTool.Services
 			}
 		}
 
+		private void _zealMessageService_OnPipeCmdMessageReceived(object sender, ZealMessageService.PipeCmdMessageReceivedEventArgs e)
+		{
+			if (e.Message != null && !string.IsNullOrWhiteSpace(e.Message.Data.Text))
+			{
+				if (LockCurrentCharacterCheck(e))
+				{
+					return;
+				}
+				else if (ToggleMap(e))
+				{
+					return;
+				}
+				else if (ToggleMobInfo(e))
+				{
+					return;
+				}
+				else if (ToggleOverlay(e))
+				{
+					return;
+				}
+				else if (ToggleAuraOverlay(e))
+				{
+					return;
+				}
+				else if (ToggleDPS(e))
+				{
+					return;
+				}
+
+				if (ManipulatePointOfInterest(e))
+				{
+					return;
+				}
+			}
+		}
+
+		private bool ManipulatePointOfInterest(ZealMessageService.PipeCmdMessageReceivedEventArgs e)
+		{
+			if (e.Message.Data.Text.StartsWith("quto poi add", StringComparison.OrdinalIgnoreCase))
+			{
+				string stripped = e.Message.Data.Text.Substring(12).Trim();
+				string[] locParts = stripped.Split(',');
+				Point3D loc;
+				string label = locParts[0];
+				if (stripped.Length == 0)
+				{
+					return false;
+				}
+				else
+				{
+					if (locParts.Length < 4)
+					{
+						return false;
+					}
+					double.TryParse(locParts[2], out double x);
+					double.TryParse(locParts[1], out double y);
+					double.TryParse(locParts[3], out double z);
+
+					loc = new Point3D(x, y, z);
+				}
+
+				if (loc != null && label != string.Empty)
+				{
+					if(locParts.Any(l => string.Compare(l, "perm") == 0))
+					{
+						AddPointOfInterestEvent?.Invoke(this, new PointOfInterestEventArgs { Location = loc, Label = label, IsPermanent = true });
+					}
+					else
+					{
+						AddPointOfInterestEvent?.Invoke(this, new PointOfInterestEventArgs { Location = loc, Label = label });
+					}
+					return true;
+				}
+			}
+			if(e.Message.Data.Text.StartsWith("quto poi remove", StringComparison.OrdinalIgnoreCase))
+			{
+				string stripped = e.Message.Data.Text.Substring(15).Trim();
+				if (stripped.Length == 0)
+				{
+					return false;
+				}
+				else
+				{
+					RemovePointOfInterestEvent?.Invoke(this, new PointOfInterestEventArgs { Label = stripped });
+					return true;
+				}
+			}
+			return false;
+		}
+		private bool ToggleMap(ZealMessageService.PipeCmdMessageReceivedEventArgs e)
+		{
+			if (string.Compare(e.Message.Data.Text, "quto toggle map", true) == 0)
+			{
+				App.Current.Dispatcher.Invoke((Action)delegate
+				{
+					(App.Current as App).HardToggleMapWindow();
+				});
+				return true;
+			}
+			return false;
+		}
+		private bool ToggleMobInfo(ZealMessageService.PipeCmdMessageReceivedEventArgs e)
+		{
+			if (string.Compare(e.Message.Data.Text, "quto toggle mobinfo", true) == 0)
+			{
+				App.Current.Dispatcher.Invoke((Action)delegate
+				{
+					(App.Current as App).HardToggleMobInfoWindow();
+				});
+				return true;
+			}
+			return false;
+		}
+		private bool ToggleOverlay(ZealMessageService.PipeCmdMessageReceivedEventArgs e)
+		{
+			if (string.Compare(e.Message.Data.Text, "quto toggle overlay", true) == 0)
+			{
+				App.Current.Dispatcher.Invoke((Action)delegate
+				{
+					(App.Current as App).HardToggleOverlayWindow();
+				});
+				return true;
+			}
+			return false;
+		}
+		private bool ToggleAuraOverlay(ZealMessageService.PipeCmdMessageReceivedEventArgs e)
+		{
+			if (string.Compare(e.Message.Data.Text, "quto toggle auras", true) == 0)
+			{
+				App.Current.Dispatcher.Invoke((Action)delegate
+				{
+					(App.Current as App).HardToggleImageOverlayWindow();
+				});
+				return true;
+			}
+			return false;
+		}
+		private bool ToggleDPS(ZealMessageService.PipeCmdMessageReceivedEventArgs e)
+		{
+			if (string.Compare(e.Message.Data.Text, "quto toggle dps", true) == 0)
+			{
+				App.Current.Dispatcher.Invoke((Action)delegate
+				{
+					(App.Current as App).HardToggleDPSWindow();
+				});
+				return true;
+			}
+			return false;
+		}
+		private bool LockCurrentCharacterCheck(ZealMessageService.PipeCmdMessageReceivedEventArgs e)
+		{
+			if (e.Message.Data.Text.StartsWith("quto lock character", StringComparison.OrdinalIgnoreCase))
+			{
+				_settings.SelectedCharacter = e.Message.Character;
+				_settings.ZealProcessID = e.ProcessId;
+				return true;
+			}
+			return false;
+		}
 		private void SignalRPushDisconnect()
 		{
 			_appDispatcher.DispatchUI(() =>
@@ -253,7 +405,6 @@ namespace EQTool.Services
 			{
 				ManaThresholdEvent?.Invoke(this, new ManaThresholdEventArgs() { ManaPercent = 100, IsLow = false });
 			}
-
 		}
 
 		public class SpellEventArgs : EventArgs
@@ -292,23 +443,29 @@ namespace EQTool.Services
 			public decimal HealthPercent { get; set; }
 			public bool IsLow { get; set; }
 		}
+		public class PointOfInterestEventArgs : EventArgs
+		{
+			public Point3D Location { get; set; }
+			public string Label { get; set; }
+			public bool IsPermanent { get; set; }
+		}
 		public class AutoAttackStatusChangedEventArgs : EventArgs
 		{
 			public bool IsAutoAttacking { get; set; }
 		}
-
 
 		public event EventHandler<SpellEventArgs> StartCastingEvent;
 		public event EventHandler<FizzleEventArgs> FizzleCastingEvent;
 		public event EventHandler<InterruptEventArgs> InterruptCastingEvent;
 		public event EventHandler<PlayerMessageReceivedEventArgs> ZealLocationEvent;
 		public event EventHandler<ZealLocationEventArgs> ZealZoneChangeEvent;
-
 		public event EventHandler<ManaThresholdEventArgs> ManaThresholdEvent;
 		public event EventHandler<HealthThresholdEventArgs> HealthThresholdEvent;
 		public event EventHandler<AutoAttackStatusChangedEventArgs> AutoAttackStatusChangedEvent;
 
 
+		public event EventHandler<PointOfInterestEventArgs> AddPointOfInterestEvent;
+		public event EventHandler<PointOfInterestEventArgs> RemovePointOfInterestEvent;
 
 		public void Dispose()
 		{

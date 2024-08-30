@@ -70,7 +70,7 @@ namespace EQTool.ViewModels
 		private readonly MapLoad mapLoad;
 		private readonly ActivePlayer activePlayer;
 		private readonly LoggingService loggingService;
-		private MatrixTransform Transform = new MatrixTransform();
+		public MatrixTransform Transform = new MatrixTransform();
 		private MatrixTransform EllipseTransform = new MatrixTransform();
 		private Point _initialMousePosition;
 		private Point _mouseuppoint;
@@ -78,7 +78,7 @@ namespace EQTool.ViewModels
 		private bool MapLoading = false;
 		private PlayerLocationCircle PlayerLocation;
 		public ObservableCollection<PlayerLocation> Players { get; set; }
-		private Canvas Canvas;
+		public Canvas canvas;
 		private float CurrentScaling = 1.0f;
 		private readonly float Zoomfactor = 1.1f;
 		private bool _dragging;
@@ -104,6 +104,11 @@ namespace EQTool.ViewModels
 				_ShowMouseLocation = value == Visibility.Visible;
 				OnPropertyChanged();
 			}
+		}
+
+		public Point3D GetMapOffset()
+		{
+			return MapOffset;
 		}
 
 		public AABB AABB = new AABB();
@@ -186,7 +191,7 @@ namespace EQTool.ViewModels
             Transform = new MatrixTransform();
             EllipseTransform = new MatrixTransform();
             CurrentScaling = 1.0f;
-            Canvas?.Children?.Clear();
+            canvas?.Children?.Clear();
             Players.Clear();
         }
 
@@ -211,7 +216,7 @@ namespace EQTool.ViewModels
             {
                 return false;
             }
-            Canvas = canvas;
+            this.canvas = canvas;
             MapLoading = true;
             var stop = new Stopwatch();
             stop.Start();
@@ -284,14 +289,14 @@ namespace EQTool.ViewModels
                         Canvas.SetTop(circle, item.Point.Y);
                     }
 
-                    PlayerLocation = MapViewModelService.AddPlayerToCanvas(new AddPlayerToCanvasData
-                    {
+					PlayerLocation = MapViewModelService.AddPlayerToCanvas(new AddPlayerToCanvasData
+					{
                         Name = "You",
-                        Canvas = Canvas,
+                        Canvas = this.canvas,
                         Trackingdistance = this.activePlayer?.Player?.TrackingDistance,
                         AABB = this.AABB,
                         Transform = Transform
-                    });
+					});
                     MapViewModelService.UpdateLocation(new UpdateLocationData
                     {
                         Trackingdistance = this.activePlayer?.Player?.TrackingDistance,
@@ -332,7 +337,7 @@ namespace EQTool.ViewModels
             var player = MapViewModelService.AddPlayerToCanvas(new AddPlayerToCanvasData
             {
                 Name = signalrPlayer.Name,
-                Canvas = Canvas,
+                Canvas = canvas,
                 Trackingdistance = signalrPlayer.TrackingDistance,
                 AABB = this.AABB,
                 Transform = Transform,
@@ -353,19 +358,19 @@ namespace EQTool.ViewModels
         {
             if (playerLocationCircle.Ellipse != null)
             {
-                this.Canvas.Children.Remove(playerLocationCircle.Ellipse);
+                this.canvas.Children.Remove(playerLocationCircle.Ellipse);
             }
             if (playerLocationCircle.PlayerName != null)
             {
-                this.Canvas.Children.Remove(playerLocationCircle.PlayerName);
+                this.canvas.Children.Remove(playerLocationCircle.PlayerName);
             }
             if (playerLocationCircle.ArrowLine != null)
             {
-                this.Canvas.Children.Remove(playerLocationCircle.ArrowLine);
+                this.canvas.Children.Remove(playerLocationCircle.ArrowLine);
             }
             if (playerLocationCircle.TrackingEllipse != null)
             {
-                this.Canvas.Children.Remove(playerLocationCircle.TrackingEllipse);
+                this.canvas.Children.Remove(playerLocationCircle.TrackingEllipse);
             }
         }
 
@@ -394,7 +399,7 @@ namespace EQTool.ViewModels
 
         public void UpdateLocation(Point3D value1, float? heading = null)
         {
-            if (MapLoading || PlayerLocation?.ArrowLine == null || Canvas == null || string.IsNullOrWhiteSpace(ZoneName))
+            if (MapLoading || PlayerLocation?.ArrowLine == null || canvas == null || string.IsNullOrWhiteSpace(ZoneName))
             {
                 return;
             }
@@ -425,10 +430,10 @@ namespace EQTool.ViewModels
 
 			Lastlocation = value1;
             OnPropertyChanged(nameof(Title));
-            if (!zoneinfo.ShowAllMapLevels && Canvas.Children.Count > 0)
+            if (!zoneinfo.ShowAllMapLevels && canvas.Children.Count > 0)
             {
                 var lastloc = new Point3D(-(value1.Y + MapOffset.X), -(value1.X + MapOffset.Y), Lastlocation.Z);
-                foreach (var child in Canvas.Children)
+                foreach (var child in canvas.Children)
                 {
                     if (child is Line a)
                     {
@@ -471,7 +476,7 @@ namespace EQTool.ViewModels
         public void UpdateTimerWidgest()
         {
             var removewidgets = new List<MapWidget>();
-            foreach (var item in Canvas.Children)
+            foreach (var item in canvas.Children)
             {
                 if (item is MapWidget m)
                 {
@@ -485,7 +490,7 @@ namespace EQTool.ViewModels
             foreach (var item in removewidgets)
             {
                 timersService.RemoveTimer(item.TimerInfo);
-                Canvas.Children.Remove(item);
+                canvas.Children.Remove(item);
             }
 
             var playerstoremove = new List<PlayerLocation>();
@@ -538,7 +543,7 @@ namespace EQTool.ViewModels
                 Location = mousePosition
             });
             mw.Tag = title;
-            _ = Canvas.Children.Add(mw);
+            _ = canvas.Children.Add(mw);
             Canvas.SetTop(mw, _mouseuppoint.Y - Transform.Value.OffsetY);
             Canvas.SetLeft(mw, _mouseuppoint.X - Transform.Value.OffsetX);
             mw.RenderTransform = Transform;
@@ -550,7 +555,7 @@ namespace EQTool.ViewModels
             if (_selectedElement is MapWidget w)
             {
                 timersService.RemoveTimer(w.TimerInfo);
-                Canvas.Children.Remove(w);
+                canvas.Children.Remove(w);
                 _dragging = false;
                 _selectedElement = null;
                 return w.TimerInfo;
@@ -564,7 +569,7 @@ namespace EQTool.ViewModels
             if (timer != null)
             {
                 MapWidget wremove = null;
-                foreach (var item in Canvas.Children)
+                foreach (var item in canvas.Children)
                 {
                     if (item is MapWidget w && w.TimerInfo.Name == name)
                     {
@@ -575,7 +580,7 @@ namespace EQTool.ViewModels
 
                 if (wremove != null)
                 {
-                    Canvas.Children.Remove(wremove);
+                    canvas.Children.Remove(wremove);
                 }
             }
         }
@@ -635,7 +640,7 @@ namespace EQTool.ViewModels
 					}
 				}
 			}
-			foreach (UIElement child in Canvas.Children)
+			foreach (UIElement child in canvas.Children)
 			{
 				if (child is ArrowLine c)
 				{
@@ -679,7 +684,7 @@ namespace EQTool.ViewModels
 					}
 				}
 			}
-            foreach (UIElement child in Canvas.Children)
+            foreach (UIElement child in canvas.Children)
             {
                 if (child is ArrowLine c)
                 {
@@ -725,7 +730,7 @@ namespace EQTool.ViewModels
                 var translation = new TranslateTransform(Transform.Value.OffsetX, Transform.Value.OffsetY);
                 EllipseTransform.Matrix = translation.Value;
 
-                foreach (FrameworkElement child in Canvas.Children)
+                foreach (FrameworkElement child in canvas.Children)
                 {
                     if (child is ArrowLine c)
                     {
@@ -795,7 +800,7 @@ namespace EQTool.ViewModels
             var otherLabelFontSize = MapViewModelService.OtherLabelFontSize(this.AABB) * _settings.MapLabelMultiplier;
             var translation = new TranslateTransform(Transform.Value.OffsetX, Transform.Value.OffsetY);
             EllipseTransform.Matrix = translation.Value;
-            foreach (FrameworkElement child in Canvas.Children)
+            foreach (FrameworkElement child in canvas.Children)
             {
                 if (child.Tag == null)
                 {

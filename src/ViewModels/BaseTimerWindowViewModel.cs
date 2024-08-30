@@ -441,7 +441,9 @@ namespace EQTool.ViewModels
 					SpellNameColor = new System.Windows.Media.SolidColorBrush(_settings.SpellTimerNameColor),
 					ProgressBarColor = _colorService.GetColorFromSpellType(match.Spell.type),
 					DropShadowVisibility = _settings.ShowTimerDropShadows ? Visibility.Visible : Visibility.Collapsed,
-					IsNPC = isnpc
+					IsNPC = isnpc,
+					IsYourCast = match.IsYourCast,
+					ExecutionTime = DateTime.Now
 				};
 				if (!ShouldProduceTimer(uispell))
 				{
@@ -731,6 +733,28 @@ namespace EQTool.ViewModels
 		protected void OnPropertyChanged([CallerMemberName] string name = null)
 		{
 			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
+		}
+
+		internal void RemoveCastingSpell(DateTime executionTime)
+		{
+			_appDispatcher.DispatchUI(() =>
+			{
+
+				var yourMostRecentSpell = SpellList.Where(s => s.IsYourCast).OrderBy(t => Math.Abs((t.ExecutionTime - executionTime).Ticks))
+							 .FirstOrDefault();
+				var lastExeTime = SpellList.Where(s => s.IsYourCast).OrderBy(t => Math.Abs((t.ExecutionTime - executionTime).Ticks)).FirstOrDefault()?.ExecutionTime;
+				var timeDelta = (DateTime.Now - lastExeTime).Value.TotalMilliseconds;
+
+				if (yourMostRecentSpell != null)
+				{
+					var latestSpell = _spells.AllSpells.FirstOrDefault(a => a.name == yourMostRecentSpell.SpellName);
+					if(timeDelta < latestSpell.casttime)
+					{
+						Debug.WriteLine($"Removing {yourMostRecentSpell.SpellName}");
+						_ = SpellList.Remove(yourMostRecentSpell);
+					}
+				}
+			});
 		}
 	}
 }

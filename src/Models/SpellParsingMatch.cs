@@ -1,4 +1,6 @@
-﻿namespace EQTool.Models
+﻿using System;
+
+namespace EQTool.Models
 {
     public class SpellParsingMatch
     {
@@ -13,6 +15,8 @@
         public int? TotalSecondsOverride { get; set; }
 
 		public bool IsGuess { get; set; }
+
+		public bool IsYourCast { get; set; } = false;
     }
 
 }
