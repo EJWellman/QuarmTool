@@ -78,6 +78,33 @@ namespace EQTool.Models
 		private Color _RootWarningOverlayColor = Color.FromRgb(255, 255, 0); //Red
 		private Color _ResistWarningOverlayColor = Color.FromRgb(255, 255, 0); //Red
 
+		private double _atkIndicator_Top = 400;
+		public double AtkIndicator_Top
+		{
+			get
+			{
+				return _atkIndicator_Top;
+			}
+			set
+			{
+				_atkIndicator_Top = value;
+				OnPropertyChanged();
+			}
+		}
+		private double _atkIndicator_Left = 400;
+		public double AtkIndicator_Left
+		{
+			get
+			{
+				return _atkIndicator_Left;
+			}
+			set
+			{
+				_atkIndicator_Left = value;
+				OnPropertyChanged();
+			}
+		}
+
 
 		public System.Windows.Media.Color ResistWarningOverlayColor
 		{ 
@@ -731,7 +758,7 @@ namespace EQTool.Models
 			{
 				lock_ImageOverlay_Position = value;
 				(App.Current.Windows.Cast<Window>().FirstOrDefault(
-					x => x is ImageOverlay) as ImageOverlay)?.SetLockStatus(value);
+					x => x is ImageOverlay) as ImageOverlay)?.SetWindowLockStatus(value);
 				OnPropertyChanged();
 			}
 		}

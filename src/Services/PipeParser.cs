@@ -36,6 +36,7 @@ namespace EQTool.Services
 		private bool Processing = false;
 		private bool StillCamping = false;
 		private bool HasUsedStartupEnterWorld = false;
+		private bool _IsAutoAttacking = false;
 
 		public bool JustZoned = false;
 
@@ -192,6 +193,11 @@ namespace EQTool.Services
 				else if (_settings.ZealProcessID != 0 && _settings.ZealProcessID != e.ProcessId)
 				{
 					return;
+				}
+				if(e.Message.Data != null && e.Message.Data.AutoAttack != _IsAutoAttacking)
+				{
+					_IsAutoAttacking = e.Message.Data.AutoAttack;
+					AutoAttackStatusChangedEvent?.Invoke(this, new AutoAttackStatusChangedEventArgs() { IsAutoAttacking = _IsAutoAttacking });
 				}
 
 				if(e.Message.Data != null && _activePlayer.Player != null && e.Message.Data.ZoneId > 0 && e.Message.Data.ZoneId != _activePlayer.Player.ZoneId)
@@ -443,6 +449,10 @@ namespace EQTool.Services
 			public string Label { get; set; }
 			public bool IsPermanent { get; set; }
 		}
+		public class AutoAttackStatusChangedEventArgs : EventArgs
+		{
+			public bool IsAutoAttacking { get; set; }
+		}
 
 		public event EventHandler<SpellEventArgs> StartCastingEvent;
 		public event EventHandler<FizzleEventArgs> FizzleCastingEvent;
@@ -451,6 +461,9 @@ namespace EQTool.Services
 		public event EventHandler<ZealLocationEventArgs> ZealZoneChangeEvent;
 		public event EventHandler<ManaThresholdEventArgs> ManaThresholdEvent;
 		public event EventHandler<HealthThresholdEventArgs> HealthThresholdEvent;
+		public event EventHandler<AutoAttackStatusChangedEventArgs> AutoAttackStatusChangedEvent;
+
+
 		public event EventHandler<PointOfInterestEventArgs> AddPointOfInterestEvent;
 		public event EventHandler<PointOfInterestEventArgs> RemovePointOfInterestEvent;
 
