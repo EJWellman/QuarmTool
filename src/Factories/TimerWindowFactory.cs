@@ -20,13 +20,15 @@ namespace EQTool.Factories
 		private readonly IAppDispatcher _appDispatcher;
 		private readonly ActivePlayer _activePlayer;
 		private readonly ColorService _colorService;
+		private readonly QuarmDataService _quarmService;
 
 		public TimerWindowFactory(EQToolSettings settings, 
 			EQToolSettingsLoad toolSettingsLoad, 
 			EQSpells spells, 
 			IAppDispatcher appDispatcher,
 			ActivePlayer activePlayer, 
-			ColorService colorService)
+			ColorService colorService,
+			QuarmDataService quarmDataService)
 		{
 			_settings = settings;
 			_toolSettingsLoad = toolSettingsLoad;
@@ -34,11 +36,12 @@ namespace EQTool.Factories
 			_appDispatcher = appDispatcher;
 			_activePlayer = activePlayer;
 			_colorService = colorService;
+			_quarmService = quarmDataService;
 		}
 
 		public BaseTimerWindow CreateTimerWindow(TimerWindowOptions timerWindow)
 		{
-			var newTimerWindowViewModel = new BaseTimerWindowViewModel(_activePlayer, _appDispatcher, _settings, _spells, _colorService, timerWindow);
+			var newTimerWindowViewModel = new BaseTimerWindowViewModel(_activePlayer, _appDispatcher, _settings, _spells, _colorService, timerWindow, _quarmService);
 
 			string[] rectParts = timerWindow.WindowRect?.Split(',');
 			Rect rect = new Rect();

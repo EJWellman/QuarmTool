@@ -142,7 +142,8 @@
                 <Expander ExpandDirection="Down" IsExpanded="False" Header="Static Overlay Settings (Zeal Required)" FontWeight="Bold">
                     <StackPanel Orientation="Vertical" Margin="0,2,0,0">
                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                            <Button Content="Toggle Overlay Lock" Click="ImageOverlay_ToggleLock"></Button>
+                            <Button Content="Maximize Window" Click="ImageOverlay_Maximize" Margin="0,0,4,0"></Button>
+                            <Button Content="Toggle Overlay Lock" Click="ImageOverlay_ToggleLock" Margin="4,0,0,0"></Button>
                         </StackPanel>
                         <StackPanel Orientation="Horizontal">
                             <TextBlock Text="Thresholds" VerticalAlignment="Center" FontWeight="Bold" MinWidth="80"/>
@@ -481,6 +482,10 @@
                     <StackPanel Orientation="Horizontal">
                         <TextBlock Text="Window Opacity"  VerticalAlignment="Center"  FontWeight="Bold"  MinWidth="100"/>
                         <Slider Value="{Binding TimerWindowOpacity}" Minimum=".01" Maximum="1" SmallChange=".1" TickFrequency=".1" ValueChanged="SaveSettings" MinWidth="150"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="Update Via Zeal" VerticalAlignment="Center"  FontWeight="Bold"  MinWidth="100"/>
+                        <CheckBox Name="Zeal_CastingEnabled_Check" IsChecked="{Binding Zeal_CastingEnabled}" Click="SaveSettings" ></CheckBox>
                     </StackPanel>
                 </StackPanel>
                 <Separator></Separator>

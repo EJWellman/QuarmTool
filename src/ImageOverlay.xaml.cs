@@ -3,6 +3,7 @@ using EQTool.Services;
 using EQTool.ViewModels;
 using System.ComponentModel;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Interop;
 using System.Windows.Media;
 
@@ -384,5 +385,27 @@ namespace EQTool
 
             base.OnClosing(e);
         }
-    }
+
+		private void Thumb_DragDelta(object sender, System.Windows.Controls.Primitives.DragDeltaEventArgs e)
+		{
+			double yAdjust = OverlayText.Height + e.VerticalChange;
+			double xAdjust = OverlayText.Width + e.HorizontalChange;
+			if((xAdjust >= 0) && (yAdjust >= 0))
+			{
+				OverlayText.Width = xAdjust;
+				OverlayText.Height = yAdjust;
+			}
+
+		}
+
+		private void Thumb_DragStarted(object sender, System.Windows.Controls.Primitives.DragStartedEventArgs e)
+		{
+			OverlayText.Background = new SolidColorBrush(Color.FromArgb(100, 40, 40, 40));
+		}
+
+		private void Thumb_DragCompleted(object sender, System.Windows.Controls.Primitives.DragCompletedEventArgs e)
+		{
+			OverlayText.Background = new SolidColorBrush(Color.FromArgb(180, 20, 20, 20));
+		}
+	}
 }

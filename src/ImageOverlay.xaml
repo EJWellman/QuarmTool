@@ -25,6 +25,9 @@
         <Grid Name="Mover" Grid.Row="1" Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" MouseLeftButtonDown="DragWindow" Width="24" Height="24">
             <StackPanel Background="Red" Margin="4, 4, 4, 4"></StackPanel>
         </Grid>
+        <TextBlock Name="OverlayText">
+            <Thumb DragDelta="Thumb_DragDelta" DragStarted="Thumb_DragStarted" DragCompleted="Thumb_DragCompleted" />
+        </TextBlock>
         <Rectangle x:Name="Gradient_Top" Height="{Binding StaticOverlay_SizeTop}" Grid.Row="0" Grid.ColumnSpan="3" VerticalAlignment="Top"/>
 
         <Rectangle x:Name="Gradient_Left" Width="{Binding StaticOverlay_SizeRight}" Grid.RowSpan="3" Grid.Column="0" HorizontalAlignment="Left"/>

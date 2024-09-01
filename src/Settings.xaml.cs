@@ -59,7 +59,7 @@ namespace EQTool
 
 	public partial class Settings : BaseSaveStateWindow
 	{
-		private readonly SettingsWindowViewModel _SettingsWindowData;
+		private readonly SettingsWindowViewModel _viewModel;
 		private readonly EQToolSettings _settings;
 		private readonly EQToolSettingsLoad _toolSettingsLoad;
 		private readonly BaseTimerWindowViewModel _spellWindowViewModel;
@@ -100,8 +100,8 @@ namespace EQTool
 			_toolSettingsLoad = toolSettingsLoad;
 			_timerWindowFactory = timerFactory;
 			_timerWindowService = timerWindowService;
-			DataContext = _SettingsWindowData = settingsWindowData;
-			_SettingsWindowData.EqPath = this._settings.DefaultEqDirectory;
+			DataContext = _viewModel = settingsWindowData;
+			_viewModel.EqPath = this._settings.DefaultEqDirectory;
 			InitializeComponent();
 			base.Init();
 			TryCheckLoggingEnabled();
@@ -133,23 +133,23 @@ namespace EQTool
 			if (logfounddata?.Found == true)
 			{
 				_settings.EqLogDirectory = logfounddata.Location;
-				_SettingsWindowData.EqLogPath = logfounddata.Location;
+				_viewModel.EqLogPath = logfounddata.Location;
 			}
-			_SettingsWindowData.Update();
+			_viewModel.Update();
 			//BestGuessSpells.IsChecked = _settings.BestGuessSpells;
 			//YouSpellsOnly.IsChecked = _settings.YouOnlySpells;
-			var player = _SettingsWindowData.ActivePlayer.Player;
+			var player = _viewModel.ActivePlayer.Player;
 
 			if (player?.ShowSpellsForClasses != null)
 			{
-				foreach (var item in _SettingsWindowData.SelectedPlayerClasses)
+				foreach (var item in _viewModel.SelectedPlayerClasses)
 				{
 					item.IsChecked = player.ShowSpellsForClasses.Contains(item.TheValue);
 				}
 			}
 			else
 			{
-				foreach (var item in _SettingsWindowData.SelectedPlayerClasses)
+				foreach (var item in _viewModel.SelectedPlayerClasses)
 				{
 					item.IsChecked = false;
 				}
@@ -172,7 +172,7 @@ namespace EQTool
 
 		private void TryCheckLoggingEnabled()
 		{
-			_SettingsWindowData.IsLoggingEnabled = FindEq.TryCheckLoggingEnabled(_settings.DefaultEqDirectory) ?? false;
+			_viewModel.IsLoggingEnabled = FindEq.TryCheckLoggingEnabled(_settings.DefaultEqDirectory) ?? false;
 		}
 
 		private void EqFolderButtonClicked(object sender, RoutedEventArgs e)
@@ -189,7 +189,7 @@ namespace EQTool
 				{
 					if (FindEq.IsValidEqFolder(fbd.SelectedPath))
 					{
-						_SettingsWindowData.EqPath = _settings.DefaultEqDirectory = fbd.SelectedPath;
+						_viewModel.EqPath = _settings.DefaultEqDirectory = fbd.SelectedPath;
 						this._appDispatcher.DispatchUI(() =>
 						{
 							TryUpdateSettings();
@@ -253,35 +253,39 @@ namespace EQTool
 			}
 			else if(sender == Health_ShowTop_Check)
 			{
-				_SettingsWindowData.Health_ShowTop = Health_ShowTop_Check.IsChecked ?? false;
+				_viewModel.Health_ShowTop = Health_ShowTop_Check.IsChecked ?? false;
 			}
 			else if(sender == Health_ShowLeft_Check)
 			{
-				_SettingsWindowData.Health_ShowLeft = Health_ShowLeft_Check.IsChecked ?? false;
+				_viewModel.Health_ShowLeft = Health_ShowLeft_Check.IsChecked ?? false;
 			}
 			else if(sender == Health_ShowRight_Check)
 			{
-				_SettingsWindowData.Health_ShowRight = Health_ShowRight_Check.IsChecked ?? false;
+				_viewModel.Health_ShowRight = Health_ShowRight_Check.IsChecked ?? false;
 			}
 			else if(sender == Health_ShowBottom_Check)
 			{
-				_SettingsWindowData.Health_ShowBottom = Health_ShowBottom_Check.IsChecked ?? false;
+				_viewModel.Health_ShowBottom = Health_ShowBottom_Check.IsChecked ?? false;
 			}
 			else if(sender == Mana_ShowTop_Check)
 			{
-				_SettingsWindowData.Mana_ShowTop = Mana_ShowTop_Check.IsChecked ?? false;
+				_viewModel.Mana_ShowTop = Mana_ShowTop_Check.IsChecked ?? false;
 			}
 			else if(sender == Mana_ShowLeft_Check)
 			{
-				_SettingsWindowData.Mana_ShowLeft = Mana_ShowLeft_Check.IsChecked ?? false;
+				_viewModel.Mana_ShowLeft = Mana_ShowLeft_Check.IsChecked ?? false;
 			}
 			else if(sender == Mana_ShowRight_Check)
 			{
-				_SettingsWindowData.Mana_ShowRight = Mana_ShowRight_Check.IsChecked ?? false;
+				_viewModel.Mana_ShowRight = Mana_ShowRight_Check.IsChecked ?? false;
 			}
 			else if(sender == Mana_ShowBottom_Check)
 			{
-				_SettingsWindowData.Mana_ShowBottom = Mana_ShowBottom_Check.IsChecked ?? false;
+				_viewModel.Mana_ShowBottom = Mana_ShowBottom_Check.IsChecked ?? false;
+			}
+			else if(sender == Zeal_CastingEnabled_Check)
+			{
+				_viewModel.Zeal_CastingEnabled = Zeal_CastingEnabled_Check.IsChecked ?? false;
 			}
 
 
@@ -449,7 +453,7 @@ namespace EQTool
 		private void CheckBoxZone_Checked(object sender, RoutedEventArgs e)
 		{
 			var chkZone = (System.Windows.Controls.CheckBox)sender;
-			var player = _SettingsWindowData.ActivePlayer.Player;
+			var player = _viewModel.ActivePlayer.Player;
 			if (player != null)
 			{
 				var item = (PlayerClasses)chkZone.Tag;
@@ -468,7 +472,7 @@ namespace EQTool
 
 		private void zoneselectionchanged(object sender, SelectionChangedEventArgs e)
 		{
-			var player = _SettingsWindowData.ActivePlayer.Player;
+			var player = _viewModel.ActivePlayer.Player;
 			if (player != null)
 			{
 				var t = DateTime.Now;
@@ -766,7 +770,7 @@ namespace EQTool
 				return;
 			}
 
-			var player = _SettingsWindowData.ActivePlayer?.Player;
+			var player = _viewModel.ActivePlayer?.Player;
 			if (player == null)
 			{
 				return;
@@ -848,103 +852,103 @@ namespace EQTool
 		}
 		private void testenrage(object sender, RoutedEventArgs e)
 		{
-			var z = _SettingsWindowData.ActivePlayer?.Player?.Zone;
+			var z = _viewModel.ActivePlayer?.Player?.Zone;
 			if (string.IsNullOrWhiteSpace(z))
 			{
 				return;
 			}
-			if (_SettingsWindowData.ActivePlayer?.Player == null)
+			if (_viewModel.ActivePlayer?.Player == null)
 			{
 				return;
 			}
-			_SettingsWindowData.ActivePlayer.Player.EnrageAudio = true;
-			_SettingsWindowData.ActivePlayer.Player.EnrageOverlay = true;
+			_viewModel.ActivePlayer.Player.EnrageAudio = true;
+			_viewModel.ActivePlayer.Player.EnrageOverlay = true;
 			((App)System.Windows.Application.Current).OpenOverLayWindow();
 			this.PushLog("Lord Nagafen has become ENRAGED.");
 		}
 
 		private void testlevfading(object sender, RoutedEventArgs e)
 		{
-			if (_SettingsWindowData.ActivePlayer?.Player == null)
+			if (_viewModel.ActivePlayer?.Player == null)
 			{
 				return;
 			}
-			_SettingsWindowData.ActivePlayer.Player.LevFadingAudio = true;
-			_SettingsWindowData.ActivePlayer.Player.LevFadingOverlay = true;
+			_viewModel.ActivePlayer.Player.LevFadingAudio = true;
+			_viewModel.ActivePlayer.Player.LevFadingOverlay = true;
 			((App)System.Windows.Application.Current).OpenOverLayWindow();
 			this.PushLog("You feel as if you are about to fall.");
 		}
 		private void testinvisfading(object sender, RoutedEventArgs e)
 		{
-			if (_SettingsWindowData.ActivePlayer?.Player == null)
+			if (_viewModel.ActivePlayer?.Player == null)
 			{
 				return;
 			}
-			_SettingsWindowData.ActivePlayer.Player.InvisFadingAudio = true;
-			_SettingsWindowData.ActivePlayer.Player.InvisFadingOverlay = true;
+			_viewModel.ActivePlayer.Player.InvisFadingAudio = true;
+			_viewModel.ActivePlayer.Player.InvisFadingOverlay = true;
 			((App)System.Windows.Application.Current).OpenOverLayWindow();
 			this.PushLog("You feel yourself starting to appear.");
 		}
 
 		private void testCharmBreak(object sender, RoutedEventArgs e)
 		{
-			if (_SettingsWindowData.ActivePlayer?.Player == null)
+			if (_viewModel.ActivePlayer?.Player == null)
 			{
 				return;
 			}
-			_SettingsWindowData.ActivePlayer.Player.CharmBreakAudio = true;
-			_SettingsWindowData.ActivePlayer.Player.CharmBreakOverlay = true;
+			_viewModel.ActivePlayer.Player.CharmBreakAudio = true;
+			_viewModel.ActivePlayer.Player.CharmBreakOverlay = true;
 			((App)System.Windows.Application.Current).OpenOverLayWindow();
 			this.PushLog("Your charm spell has worn off.");
 		}
 
 		private void testFailedFeign(object sender, RoutedEventArgs e)
 		{
-			if (_SettingsWindowData.ActivePlayer?.Player == null)
+			if (_viewModel.ActivePlayer?.Player == null)
 			{
 				return;
 			}
-			_SettingsWindowData.ActivePlayer.Player.FailedFeignAudio = true;
-			_SettingsWindowData.ActivePlayer.Player.FailedFeignOverlay = true;
+			_viewModel.ActivePlayer.Player.FailedFeignAudio = true;
+			_viewModel.ActivePlayer.Player.FailedFeignOverlay = true;
 			((App)System.Windows.Application.Current).OpenOverLayWindow();
-			this.PushLog($"{_SettingsWindowData.ActivePlayer?.Player?.Name} has fallen to the ground.");
+			this.PushLog($"{_viewModel.ActivePlayer?.Player?.Name} has fallen to the ground.");
 		}
 		private void testFTE(object sender, RoutedEventArgs e)
 		{
-			if (_SettingsWindowData.ActivePlayer?.Player == null)
+			if (_viewModel.ActivePlayer?.Player == null)
 			{
 				return;
 			}
-			_SettingsWindowData.ActivePlayer.Player.FTEOverlay = true;
-			_SettingsWindowData.ActivePlayer.Player.FTEAudio = true;
+			_viewModel.ActivePlayer.Player.FTEOverlay = true;
+			_viewModel.ActivePlayer.Player.FTEAudio = true;
 			((App)System.Windows.Application.Current).OpenOverLayWindow();
 			this.PushLog("Dagarn the Destroyer engages Tzvia!");
 		}
 		private void testGroupInvite(object sender, RoutedEventArgs e)
 		{
-			if (_SettingsWindowData.ActivePlayer?.Player == null)
+			if (_viewModel.ActivePlayer?.Player == null)
 			{
 				return;
 			}
-			_SettingsWindowData.ActivePlayer.Player.GroupInviteOverlay = true;
-			_SettingsWindowData.ActivePlayer.Player.GroupInviteAudio = true;
+			_viewModel.ActivePlayer.Player.GroupInviteOverlay = true;
+			_viewModel.ActivePlayer.Player.GroupInviteAudio = true;
 			((App)System.Windows.Application.Current).OpenOverLayWindow();
 			this.PushLog($"Tzvia invites you to join a group.");
 		}
 		private void testDragonRoar(object sender, RoutedEventArgs e)
 		{
-			if (_SettingsWindowData.ActivePlayer?.Player == null)
+			if (_viewModel.ActivePlayer?.Player == null)
 			{
 				return;
 			}
-			_SettingsWindowData.ActivePlayer.Player.DragonRoarAudio = true;
-			_SettingsWindowData.ActivePlayer.Player.DragonRoarOverlay = true;
+			_viewModel.ActivePlayer.Player.DragonRoarAudio = true;
+			_viewModel.ActivePlayer.Player.DragonRoarOverlay = true;
 			((App)System.Windows.Application.Current).OpenOverLayWindow();
 			this.PushLog($"You resist the Dragon Roar spell!");
 		}
 		private void textvoice(object sender, RoutedEventArgs e)
 		{
-			if (string.IsNullOrWhiteSpace(this._SettingsWindowData.SelectedVoice))
+			if (string.IsNullOrWhiteSpace(this._viewModel.SelectedVoice))
 			{
 				return;
 			}
@@ -952,7 +956,7 @@ namespace EQTool
 			System.Threading.Tasks.Task.Factory.StartNew(() =>
 			{
 				var synth = new SpeechSynthesizer();
-				synth.SelectVoice(this._SettingsWindowData.SelectedVoice);
+				synth.SelectVoice(this._viewModel.SelectedVoice);
 				synth.Speak($"You resist the Dragon Roar spell!");
 			});
 		}
@@ -964,20 +968,20 @@ namespace EQTool
 			{
 				return;
 			}
-			if (_SettingsWindowData.ActivePlayer?.Player == null)
+			if (_viewModel.ActivePlayer?.Player == null)
 			{
 				return;
 			}
-			_SettingsWindowData.ActivePlayer.Player.ChChainOverlay = true;
-			_SettingsWindowData.ActivePlayer.Player.ChChainWarningOverlay = true;
-			_SettingsWindowData.ActivePlayer.Player.ChChainWarningAudio = true;
+			_viewModel.ActivePlayer.Player.ChChainOverlay = true;
+			_viewModel.ActivePlayer.Player.ChChainWarningOverlay = true;
+			_viewModel.ActivePlayer.Player.ChChainWarningAudio = true;
 			((App)System.Windows.Application.Current).OpenOverLayWindow();
 			button.IsEnabled = false;
 			_ = Task.Factory.StartNew(() =>
 			{
 				try
 				{
-					var tag = _SettingsWindowData.ActivePlayer.Player.ChChainTagOverlay;
+					var tag = _viewModel.ActivePlayer.Player.ChChainTagOverlay;
 					var msg = $"You shout, '{tag} 001 CH -- Beefwich'";
 					PushLog(msg);
 					Thread.Sleep(2000);
@@ -1046,12 +1050,12 @@ namespace EQTool
 			{
 				return;
 			}
-			if (_SettingsWindowData.ActivePlayer?.Player == null)
+			if (_viewModel.ActivePlayer?.Player == null)
 			{
 				return;
 			}
-			_SettingsWindowData.ActivePlayer.Player.RootWarningAudio = true;
-			_SettingsWindowData.ActivePlayer.Player.RootWarningOverlay = true;
+			_viewModel.ActivePlayer.Player.RootWarningAudio = true;
+			_viewModel.ActivePlayer.Player.RootWarningOverlay = true;
 			((App)System.Windows.Application.Current).OpenOverLayWindow();
 			button.IsEnabled = false;
 			_ = Task.Factory.StartNew(() =>
@@ -1077,12 +1081,12 @@ namespace EQTool
 			{
 				return;
 			}
-			if (_SettingsWindowData.ActivePlayer?.Player == null)
+			if (_viewModel.ActivePlayer?.Player == null)
 			{
 				return;
 			}
-			_SettingsWindowData.ActivePlayer.Player.ResistWarningAudio = true;
-			_SettingsWindowData.ActivePlayer.Player.ResistWarningOverlay = true;
+			_viewModel.ActivePlayer.Player.ResistWarningAudio = true;
+			_viewModel.ActivePlayer.Player.ResistWarningOverlay = true;
 			((App)System.Windows.Application.Current).OpenOverLayWindow();
 			button.IsEnabled = false;
 			_ = Task.Factory.StartNew(() =>
@@ -1214,7 +1218,7 @@ namespace EQTool
 		private void ClearCachedMapsClicked(object sender, RoutedEventArgs e)
 		{
 			_mapLoad.ClearCachedMaps();
-			var player = _SettingsWindowData.ActivePlayer.Player;
+			var player = _viewModel.ActivePlayer.Player;
 			if (player != null)
 			{
 				var t = DateTime.Now;
@@ -1360,6 +1364,11 @@ namespace EQTool
 			{
 				_settings.DpsRemovalTimerThreshold = result;
 			}
+		}
+
+		private void ImageOverlay_Maximize(object sender, RoutedEventArgs e)
+		{
+			(System.Windows.Application.Current as App).ToggleImageOverlayWindowSize();
 		}
 	}
 }

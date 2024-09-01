@@ -384,6 +384,19 @@ namespace EQTool.Models
 		//		OnPropertyChanged();
 		//	}
 		//}
+		private bool _zealCastingEnabled;
+		public bool Zeal_CastingEnabled
+		{
+			get
+			{
+				return _zealCastingEnabled;
+			}
+			set
+			{
+				_zealCastingEnabled = value;
+				OnPropertyChanged();
+			}
+		}
 		private bool _zealMap_AutoUpdate;
 		public bool ZealMap_AutoUpdate
 		{

@@ -904,5 +904,18 @@ namespace EQTool
 				}
 			}
 		}
+
+		public void ToggleImageOverlayWindowSize()
+		{
+			var imgOverlay = WindowList.Where(a => a.GetType() == typeof(ImageOverlay)).FirstOrDefault();
+			if (imgOverlay != null && imgOverlay.WindowState == System.Windows.WindowState.Maximized)
+			{
+				imgOverlay.WindowState = System.Windows.WindowState.Normal;
+			}
+			else if (imgOverlay != null && imgOverlay.WindowState == System.Windows.WindowState.Normal)
+			{
+				imgOverlay.WindowState = System.Windows.WindowState.Maximized;
+			}
+		}
     }
 }

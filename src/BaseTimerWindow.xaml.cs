@@ -97,16 +97,24 @@ namespace EQTool
 
 		private void _pipeParser_FizzleCastingEvent(object sender, PipeParser.FizzleEventArgs e)
 		{
-			_baseTimerWindowViewModel.RemoveCastingSpell(e.ExecutionTime);
+			if (_settings.UseZealForThis(_settings.ZealProcessID, _settings.Zeal_CastingEnabled))
+			{
+				_baseTimerWindowViewModel.RemoveCastingSpell(e.ExecutionTime);
+			}
 		}
 		private void _pipParser_InterruptCastingEvent(object sender, PipeParser.InterruptEventArgs e)
 		{
-			_baseTimerWindowViewModel.RemoveCastingSpell(e.ExecutionTime);
+			if (_settings.UseZealForThis(_settings.ZealProcessID, _settings.Zeal_CastingEnabled))
+			{
+				_baseTimerWindowViewModel.RemoveCastingSpell(e.ExecutionTime);
+			}
 		}
-
 		private void _pipeParser_StartCastingEvent(object sender, PipeParser.SpellEventArgs e)
 		{
-			_baseTimerWindowViewModel.TryAdd(e.Spell, false);
+			if(_settings.UseZealForThis(_settings.ZealProcessID, _settings.Zeal_CastingEnabled))
+			{
+				_baseTimerWindowViewModel.TryAdd(e.Spell, false);
+			}
 		}
 
 		private void Window_SizeChanged(object sender, SizeChangedEventArgs e)
@@ -273,7 +281,10 @@ namespace EQTool
 
 		private void LogParser_StartCastingEvent(object sender, LogParser.SpellEventArgs e)
 		{
-			_baseTimerWindowViewModel.TryAdd(e.Spell, false);
+			if (!_settings.UseZealForThis(_settings.ZealProcessID, _settings.Zeal_CastingEnabled))
+			{
+				_baseTimerWindowViewModel.TryAdd(e.Spell, false);
+			}
 		}
 
 		private int deathcounter = 1;

@@ -264,7 +264,7 @@ namespace EQTool.Services
 		{
 			if(_monsters != null && _monsters.Count > 0)
 			{
-				return _monsters.Any(m => m.Name.Replace("_"," ") == mobName);
+				return _monsters.Any(m => m.Name.Replace("_"," ").Replace("#", "") == mobName);
 			}
 			else
 			{

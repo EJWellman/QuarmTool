@@ -23,15 +23,17 @@ namespace EQTool.ViewModels
         private readonly IAppDispatcher _appDispatcher;
         private readonly EQToolSettings _settings;
         private readonly EQSpells _spells;
+		private readonly QuarmDataService _quarmService;
 		private ColorService _colorService;
 		public TimerWindowOptions _windowOptions;
 
-		public BaseTimerWindowViewModel(ActivePlayer activePlayer, IAppDispatcher appDispatcher, EQToolSettings settings, EQSpells spells, ColorService colorService, TimerWindowOptions windowOptions)
+		public BaseTimerWindowViewModel(ActivePlayer activePlayer, IAppDispatcher appDispatcher, EQToolSettings settings, EQSpells spells, ColorService colorService, TimerWindowOptions windowOptions, QuarmDataService quarmDataService)
         {
 			_activePlayer = activePlayer;
 			_appDispatcher = appDispatcher;
             _settings = settings;
             _spells = spells;
+			_quarmService = quarmDataService;
 			_colorService = colorService;
 			_windowOptions = windowOptions;
 
@@ -424,7 +426,8 @@ namespace EQTool.ViewModels
 				var spellduration = TimeSpan.FromSeconds(SpellDurations.GetDuration_inSeconds(match.Spell, _activePlayer.Player));
 				var duration = match.TotalSecondsOverride ?? spellduration.TotalSeconds;
 				//var duration = needscount ? 0 : match.TotalSecondsOverride ?? spellduration.TotalSeconds;
-				var isnpc = MasterNPCList.NPCs.Contains(cleanTargetName) || cleanTargetName.Trim().Contains(' ');
+				var isnpc = _quarmService.DoesMonsterExistInZone(cleanTargetName);
+				//var isnpc = MasterNPCList.NPCs.Contains(cleanTargetName) || cleanTargetName.Trim().Contains(' ');
 				var uispell = new UISpell(DateTime.Now.AddSeconds((int)duration), DateTime.Now.AddSeconds((int)duration), isnpc, _windowOptions.ShowSimpleTimers)
 				{
 					UpdatedDateTime = DateTime.Now,
@@ -691,7 +694,10 @@ namespace EQTool.ViewModels
 
 			item.HideGuesses = !_windowOptions.BestGuessSpells;
 			item.ShowOnlyYou = _windowOptions.YouOnlySpells;
-			item.HideClasses = player != null && SpellUIExtensions.HideSpell(player.ShowSpellsForClasses, item.Classes) && item.TargetName != EQSpells.SpaceYou;
+			item.HideClasses = player != null 
+				&& SpellUIExtensions.HideSpell(player.ShowSpellsForClasses, item.Classes) 
+				&& item.TargetName != EQSpells.SpaceYou
+				&& !item.IsYourCast;
 			if (item.SpellType == SpellTypes.RandomRoll)
 			{
 				item.HideClasses = !ShowRandomRolls;

@@ -162,6 +162,18 @@ namespace EQTool.ViewModels
 				OnPropertyChanged();
 			}
 		}
+		public bool Zeal_CastingEnabled
+		{
+			get
+			{
+				return _settings.Zeal_CastingEnabled;
+			}
+			set
+			{
+				_settings.Zeal_CastingEnabled = value;
+				OnPropertyChanged();
+			}
+		}
 
 		public string Zeal_HealthThreshold
 		{
