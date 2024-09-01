@@ -9,8 +9,8 @@
         Loaded="Window_Loaded"
         mc:Ignorable="d" 
         Style="{DynamicResource MyEventWindowStyle}"
-        Height="1440" 
-        Width="2560"  
+        Height="400" 
+        Width="400"  
         WindowStyle="None"  
         AllowsTransparency="True">
         <Grid Name="AuraGrid">

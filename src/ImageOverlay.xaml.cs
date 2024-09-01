@@ -108,7 +108,7 @@ namespace EQTool
 				TextPosition = "-10, -50",
 			};
 
-
+			ArrowContainer.Visibility = Visibility.Hidden;
 			CreateAuraElement(atkIndicatorAura);
 			//Add3DArrowToScene();
 
