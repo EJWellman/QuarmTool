@@ -18,6 +18,7 @@ using System.Windows.Media.Media3D;
 using HelixToolkit.Wpf;
 using System.Windows.Threading;
 using System;
+using ZealPipes.Services;
 
 
 namespace EQTool
@@ -31,6 +32,8 @@ namespace EQTool
 		private MeshElement3D _POIArrow = null;
 		private Matrix3D? _POIArrowMatrix = null;
 		private Point3D _POIArrowCenter;
+
+		private Point3D _PlayerLocation;
 
 		private bool _healthLow = false;
 		private bool _manaLow = false;
@@ -69,6 +72,7 @@ namespace EQTool
 			_pipeParser.HealthThresholdEvent += _pipeParser_HealthThresholdEvent;
 			_pipeParser.ManaThresholdEvent += _pipeParser_ManaThresholdEvent;
 			_pipeParser.AutoAttackStatusChangedEvent += _pipeParser_AutoAttackStatusChangedEvent;
+			//_pipeParser.ZealLocationEvent += _pipeParser_ZealLocationEvent;
 
 			UpdateGradientColors();
 
@@ -80,7 +84,7 @@ namespace EQTool
 				AuraPosition = "1230, 125",
 				Opacity = 1.0,
 				AuraDuration = 3,
-				AuraEnabled = true,
+				AuraEnabled = false,
 				ShowEdgeAuras = false,
 				ShowTopEdgeAura = true,
 				ShowLeftEdgeAura = true,
@@ -106,7 +110,7 @@ namespace EQTool
 
 
 			CreateAuraElement(atkIndicatorAura);
-			Add3DArrowToScene();
+			//Add3DArrowToScene();
 
 
 			int i = 0;
@@ -114,9 +118,24 @@ namespace EQTool
 			{
 				Wobble();
 			};
-			timer.Start();
+			//timer.Start();
 		}
 
+		private void _pipeParser_ZealLocationEvent(object sender, ZealMessageService.PlayerMessageReceivedEventArgs e)
+		{
+			if(_PlayerLocation == null)
+			{
+				_PlayerLocation = new Point3D(e.Message.Data.Position.X, e.Message.Data.Position.Y, e.Message.Data.Position.Z);
+			}
+			else
+			{
+				_PlayerLocation.X = e.Message.Data.Position.Y;
+				_PlayerLocation.Y = e.Message.Data.Position.X;
+				_PlayerLocation.Z = e.Message.Data.Position.Z;
+			}
+
+			PointArrowToLocation(new Point3D(-309, -1702, 4), e.Message.Data.heading);
+		}
 
 		private void Add3DArrowToScene()
 		{
@@ -145,15 +164,19 @@ namespace EQTool
 			IsEnabled = false
 		};
 
+
+
 		private void Wobble()
 		{
-			Vector3D axis = new Vector3D(1, 0, 0); //In case you want to rotate it about the x-axis
-			Matrix3D transformationMatrix = _POIArrow.Content.Transform.Value; //Gets the matrix indicating the current transformation value
-			transformationMatrix.RotateAt(new Quaternion(axis, 90), _POIArrowCenter); //Makes a rotation transformation over this matrix
-			DoubleAnimation animation = new DoubleAnimation();
-			animation.EasingFunction = new CubicEase() { EasingMode = EasingMode.EaseInOut };
-			_POIArrow.Content.Transform = new MatrixTransform3D(transformationMatrix); //Applies the transformation to your model
-			_POIArrow.Content.Transform.BeginAnimation(TranslateTransform3D.OffsetXProperty, animation); //Applies the animation to your model
+			//PointArrowToLocation(new Point3D(0, 0, 0), new Point3D(-405 * -1, -1773 * -1, 9));
+
+			//Vector3D axis = new Vector3D(1, 0, 0); //In case you want to rotate it about the x-axis
+			//Matrix3D transformationMatrix = _POIArrow.Content.Transform.Value; //Gets the matrix indicating the current transformation value
+			//transformationMatrix.RotateAt(new Quaternion(axis, 90), _POIArrowCenter); //Makes a rotation transformation over this matrix
+			//DoubleAnimation animation = new DoubleAnimation();
+			//animation.EasingFunction = new CubicEase() { EasingMode = EasingMode.EaseInOut };
+			//_POIArrow.Content.Transform = new MatrixTransform3D(transformationMatrix); //Applies the transformation to your model
+			//_POIArrow.Content.Transform.BeginAnimation(TranslateTransform3D.OffsetXProperty, animation); //Applies the animation to your model
 		}
 
 		private void _pipeParser_AutoAttackStatusChangedEvent(object sender, PipeParser.AutoAttackStatusChangedEventArgs e)
@@ -884,5 +907,87 @@ namespace EQTool
 
 			base.OnClosing(e);
 		}
+        private void PointArrowToLocation(Point3D targetLocation, float heading)
+        {
+            if (_POIArrow != null && _POIArrowMatrix.HasValue)
+            {
+                this._appDispatcher.DispatchUI(() =>
+                {
+					Vector3D direction = targetLocation - _PlayerLocation;
+					direction.Normalize();
+
+					// Calculate the player's heading
+					float playerHeading2 = (heading / -512) * 360 + 180;
+
+					double angleInRadians = playerHeading2 * Math.PI / 180; // Convert the angle to radians
+					double x = Math.Cos(angleInRadians);
+					double y = Math.Sin(angleInRadians);
+
+					Vector3D playerHeading = new Vector3D(y, x, _PlayerLocation.Z);
+					playerHeading.Normalize();
+
+					// Calculate the rotation axis
+					Vector3D rotationAxis = Vector3D.CrossProduct(playerHeading, direction);
+					rotationAxis.X *= -1;
+					rotationAxis.Z = 0;
+					//rotationAxis.Y *= -1;
+					rotationAxis.Normalize();
+
+					// Calculate the rotation angle
+					double rotationAngle = Vector3D.AngleBetween(playerHeading, direction);
+
+					// Create the rotation matrix
+					Matrix3D rotationMatrix = new Matrix3D();
+					rotationMatrix.Rotate(new Quaternion(rotationAxis, rotationAngle));
+
+					// Apply the rotation to the transformation matrix
+					Matrix3D transformationMatrix = _POIArrowMatrix.Value * rotationMatrix;
+
+					_POIArrow.Content.Transform = new MatrixTransform3D(transformationMatrix);
+
+					//Vector3D playerVector = new Vector3D(_PlayerLocation.X, _PlayerLocation.Y, _PlayerLocation.Z);
+					//Vector3D targetVector = new Vector3D(targetLocation.X, targetLocation.Y, targetLocation.Z);
+
+					//Vector3D deltaVector = targetVector - playerVector;
+
+					//double theta = Math.Atan2(deltaVector.Y, deltaVector.X);
+					//double thetaDegrees = theta * (Math.PI / 180);
+
+
+					//Vector3D direction = targetLocation - _PlayerLocation;
+					//Vector3D direction2 = targetLocation - _PlayerLocation;
+					//direction.Normalize();
+
+					//// Calculate the player's heading
+					//float playerHeading2 = (heading / -512) * 360 + 180;
+
+					//double angleInRadians = playerHeading2 * Math.PI / 180; // Convert the angle to radians
+					//double x = Math.Cos(angleInRadians);
+					//double y = Math.Sin(angleInRadians);
+
+					////Vector3D playerHeading = new Vector3D(x, y, _PlayerLocation.Z);
+					////playerHeading.Normalize();
+
+					//direction2.X -= x;
+					//direction2.Y -= y;
+
+					//// Calculate the rotation axis
+					//Vector3D rotationAxis = new Vector3D(1, 0, 1); //Vector3D.CrossProduct(direction, direction2);
+					//rotationAxis.Normalize();
+
+					//// Calculate the rotation angle
+					//double rotationAngle = thetaDegrees; //Vector3D.AngleBetween(direction, direction2);
+
+					//// Create the rotation matrix
+					//Matrix3D rotationMatrix = new Matrix3D();
+					//rotationMatrix.Rotate(new Quaternion(rotationAxis, rotationAngle));
+
+					//// Apply the rotation to the transformation matrix
+					//Matrix3D transformationMatrix = _POIArrowMatrix.Value * rotationMatrix;
+
+					//_POIArrow.Content.Transform = new MatrixTransform3D(transformationMatrix);
+				});
+            }
+        }
 	}
 }
