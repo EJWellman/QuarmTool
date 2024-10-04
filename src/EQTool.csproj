@@ -1170,6 +1170,11 @@
       <Private>True</Private>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="map_files\pojustice.txt" />
+    <EmbeddedResource Include="map_files\pojustice_1.txt" />
+    <EmbeddedResource Include="map_files\pojustice_2.txt" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="AfterResolveReferences">
     <ItemGroup>

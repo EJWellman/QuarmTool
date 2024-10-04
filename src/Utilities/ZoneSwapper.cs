@@ -138,7 +138,8 @@ namespace EQTool.Utilities
 				{ "veeshan's peak (instanced)", "veeshan" },
 				{ "oops, all goos!", "dalnir" },
 				{ "kithicor forest (instanced)", "kithicor" },
-				{ "the city of mist (instanced)", "citymist" }
+				{ "the city of mist (instanced)", "citymist" },
+				{ "halls of injustice", "pojustice" }
 
 			};
 
