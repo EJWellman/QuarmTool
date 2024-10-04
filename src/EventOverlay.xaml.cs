@@ -60,31 +60,6 @@ namespace EQTool
 			logParser.CustomOverlayEvent += LogParser_CustomOverlayEvent;
         }
 
-        private void LogParser_ResistSpellEvent(object sender, ResistSpellParser.ResistSpellData e)
-        {
-            var overlay = this.activePlayer?.Player?.ResistWarningOverlay ?? false;
-            if (!overlay)
-            {
-                return;
-            }
-
-            System.Threading.Tasks.Task.Factory.StartNew(() =>
-            {
-                var target = e.isYou ? "You " : "Your target ";
-                this.appDispatcher.DispatchUI(() =>
-                {
-					CenterText.FontSize = settings.OverlayFontSize.Value;
-                    CenterText.Text = $"{target} resisted the {e.Spell.name} spell";
-                    CenterText.Foreground = (Brush)converter.ConvertFromString(settings.ResistWarningOverlayColor.ToString());
-				});
-                System.Threading.Thread.Sleep(3000);
-                this.appDispatcher.DispatchUI(() =>
-                {
-                    CenterText.Text = string.Empty;
-                    CenterText.Foreground = Brushes.Red;
-                });
-            });
-        }
 
         private List<string> RootSpells = new List<string>()
         {
@@ -129,68 +104,33 @@ namespace EQTool
             }
         }
 
-        private void LogParser_StartCastingEvent(object sender, LogParser.SpellEventArgs e)
-        {
-            var overlay = this.activePlayer?.Player?.DragonRoarOverlay ?? false;
-            if (!overlay || e.Spell.Spell.name != "Dragon Roar")
-            {
-                return;
-            }
+		private void LogParser_ResistSpellEvent(object sender, ResistSpellParser.ResistSpellData e)
+		{
+			var overlay = this.activePlayer?.Player?.ResistWarningOverlay ?? false;
+			if (!overlay)
+			{
+				return;
+			}
 
-            System.Threading.Tasks.Task.Factory.StartNew(() =>
-            {
-                System.Threading.Thread.Sleep(1000 * 30);
-                this.appDispatcher.DispatchUI(() =>
+			System.Threading.Tasks.Task.Factory.StartNew(() =>
+			{
+				var target = e.isYou ? "You " : "Your target ";
+				this.appDispatcher.DispatchUI(() =>
 				{
 					CenterText.FontSize = settings.OverlayFontSize.Value;
-					CenterText.Text = "Dragon Roar in 6 Seconds!";
-                    CenterText.Foreground = (Brush)converter.ConvertFromString(settings.DragonRoarOverlayColor.ToString());
-                });
-                System.Threading.Thread.Sleep(1000);
-                this.appDispatcher.DispatchUI(() =>
-				{
-					CenterText.FontSize = settings.OverlayFontSize.Value;
-					CenterText.Text = "Dragon Roar in 5 Seconds!";
-                    CenterText.Foreground = (Brush)converter.ConvertFromString(settings.DragonRoarOverlayColor.ToString());
-                });
-                System.Threading.Thread.Sleep(1000);
-                this.appDispatcher.DispatchUI(() =>
-				{
-					CenterText.FontSize = settings.OverlayFontSize.Value;
-					CenterText.Text = "Dragon Roar in 4 Seconds!";
-                    CenterText.Foreground = (Brush)converter.ConvertFromString(settings.DragonRoarOverlayColor.ToString());
-                });
-                System.Threading.Thread.Sleep(1000);
-                this.appDispatcher.DispatchUI(() =>
-				{
-					CenterText.FontSize = settings.OverlayFontSize.Value;
-					CenterText.Text = "Dragon Roar in 3 Seconds!";
-                    CenterText.Foreground = (Brush)converter.ConvertFromString(settings.DragonRoarOverlayColor.ToString());
-                });
-                System.Threading.Thread.Sleep(1000);
-                this.appDispatcher.DispatchUI(() =>
-				{
-					CenterText.FontSize = settings.OverlayFontSize.Value;
-					CenterText.Text = "Dragon Roar in 2 Seconds!";
-                    CenterText.Foreground = (Brush)converter.ConvertFromString(settings.DragonRoarOverlayColor.ToString());
-                });
-                System.Threading.Thread.Sleep(1000);
-                this.appDispatcher.DispatchUI(() =>
-				{
-					CenterText.FontSize = settings.OverlayFontSize.Value;
-					CenterText.Text = "Dragon Roar in 1 Seconds!";
-                    CenterText.Foreground = (Brush)converter.ConvertFromString(settings.DragonRoarOverlayColor.ToString());
+					CenterText.Text = $"{target} resisted the {e.Spell.name} spell";
+					CenterText.Foreground = (Brush)converter.ConvertFromString(settings.ResistWarningOverlayColor.ToString());
 				});
-                System.Threading.Thread.Sleep(1000);
-                this.appDispatcher.DispatchUI(() =>
-                {
-                    CenterText.Text = string.Empty;
-                    CenterText.Foreground = Brushes.Red;
-                });
-            });
-        }
+				System.Threading.Thread.Sleep(3000);
+				this.appDispatcher.DispatchUI(() =>
+				{
+					CenterText.Text = string.Empty;
+					CenterText.Foreground = Brushes.Red;
+				});
+			});
+		}
 
-        private void LogParser_GroupInviteEvent(object sender, string e)
+		private void LogParser_GroupInviteEvent(object sender, string e)
         {
             var overlay = this.activePlayer?.Player?.GroupInviteOverlay ?? false;
             if (!overlay)
@@ -348,9 +288,104 @@ namespace EQTool
                     CenterText.Foreground = Brushes.Red;
                 });
             });
-        }
+		}
 
-        private void LogParser_CHEvent(object sender, ChParser.ChParseData e)
+		private void LogParser_EnrageEvent(object sender, EnrageParser.EnrageEvent e)
+		{
+			var overlay = this.activePlayer?.Player?.EnrageOverlay ?? false;
+			if (!overlay)
+			{
+				return;
+			}
+			appDispatcher.DispatchUI(() =>
+			{
+				CenterText.FontSize = settings.OverlayFontSize.Value;
+				CenterText.Text = e.NpcName + " ENRAGED";
+				CenterText.Foreground = Brushes.Red;
+			});
+
+			System.Threading.Tasks.Task.Factory.StartNew(() =>
+			{
+				System.Threading.Thread.Sleep(1000 * 12);
+				this.appDispatcher.DispatchUI(() =>
+				{
+					CenterText.FontSize = settings.OverlayFontSize.Value;
+					CenterText.Text = "ENRAGE OFF";
+					CenterText.Foreground = Brushes.Red;
+				});
+				System.Threading.Thread.Sleep(1000 * 3);
+				this.appDispatcher.DispatchUI(() =>
+				{
+					CenterText.Text = string.Empty;
+					CenterText.Foreground = Brushes.Red;
+				});
+			});
+		}
+
+
+
+		private void LogParser_StartCastingEvent(object sender, LogParser.SpellEventArgs e)
+		{
+			var overlay = this.activePlayer?.Player?.DragonRoarOverlay ?? false;
+			if (!overlay || e.Spell.Spell.name != "Dragon Roar")
+			{
+				return;
+			}
+
+			System.Threading.Tasks.Task.Factory.StartNew(() =>
+			{
+				System.Threading.Thread.Sleep(1000 * 30);
+				this.appDispatcher.DispatchUI(() =>
+				{
+					CenterText.FontSize = settings.OverlayFontSize.Value;
+					CenterText.Text = "Dragon Roar in 6 Seconds!";
+					CenterText.Foreground = (Brush)converter.ConvertFromString(settings.DragonRoarOverlayColor.ToString());
+				});
+				System.Threading.Thread.Sleep(1000);
+				this.appDispatcher.DispatchUI(() =>
+				{
+					CenterText.FontSize = settings.OverlayFontSize.Value;
+					CenterText.Text = "Dragon Roar in 5 Seconds!";
+					CenterText.Foreground = (Brush)converter.ConvertFromString(settings.DragonRoarOverlayColor.ToString());
+				});
+				System.Threading.Thread.Sleep(1000);
+				this.appDispatcher.DispatchUI(() =>
+				{
+					CenterText.FontSize = settings.OverlayFontSize.Value;
+					CenterText.Text = "Dragon Roar in 4 Seconds!";
+					CenterText.Foreground = (Brush)converter.ConvertFromString(settings.DragonRoarOverlayColor.ToString());
+				});
+				System.Threading.Thread.Sleep(1000);
+				this.appDispatcher.DispatchUI(() =>
+				{
+					CenterText.FontSize = settings.OverlayFontSize.Value;
+					CenterText.Text = "Dragon Roar in 3 Seconds!";
+					CenterText.Foreground = (Brush)converter.ConvertFromString(settings.DragonRoarOverlayColor.ToString());
+				});
+				System.Threading.Thread.Sleep(1000);
+				this.appDispatcher.DispatchUI(() =>
+				{
+					CenterText.FontSize = settings.OverlayFontSize.Value;
+					CenterText.Text = "Dragon Roar in 2 Seconds!";
+					CenterText.Foreground = (Brush)converter.ConvertFromString(settings.DragonRoarOverlayColor.ToString());
+				});
+				System.Threading.Thread.Sleep(1000);
+				this.appDispatcher.DispatchUI(() =>
+				{
+					CenterText.FontSize = settings.OverlayFontSize.Value;
+					CenterText.Text = "Dragon Roar in 1 Seconds!";
+					CenterText.Foreground = (Brush)converter.ConvertFromString(settings.DragonRoarOverlayColor.ToString());
+				});
+				System.Threading.Thread.Sleep(1000);
+				this.appDispatcher.DispatchUI(() =>
+				{
+					CenterText.Text = string.Empty;
+					CenterText.Foreground = Brushes.Red;
+				});
+			});
+		}
+
+		private void LogParser_CHEvent(object sender, ChParser.ChParseData e)
         {
             var overlay = this.activePlayer?.Player?.ChChainOverlay ?? false;
             var warningoverlay = this.activePlayer?.Player?.ChChainWarningOverlay ?? false;
@@ -540,38 +575,6 @@ namespace EQTool
 
             }
             return chaindata;
-        }
-
-        private void LogParser_EnrageEvent(object sender, EnrageParser.EnrageEvent e)
-        {
-            var overlay = this.activePlayer?.Player?.EnrageOverlay ?? false;
-            if (!overlay)
-            {
-                return;
-            }
-            appDispatcher.DispatchUI(() =>
-			{
-				CenterText.FontSize = settings.OverlayFontSize.Value;
-				CenterText.Text = e.NpcName + " ENRAGED";
-                CenterText.Foreground = Brushes.Red;
-            });
-
-            System.Threading.Tasks.Task.Factory.StartNew(() =>
-            {
-                System.Threading.Thread.Sleep(1000 * 12);
-                this.appDispatcher.DispatchUI(() =>
-				{
-					CenterText.FontSize = settings.OverlayFontSize.Value;
-					CenterText.Text = "ENRAGE OFF";
-                    CenterText.Foreground = Brushes.Red;
-                });
-                System.Threading.Thread.Sleep(1000 * 3);
-                this.appDispatcher.DispatchUI(() =>
-                {
-                    CenterText.Text = string.Empty;
-                    CenterText.Foreground = Brushes.Red;
-                });
-            });
         }
 
 		private void LogParser_CustomOverlayEvent(object sender, CustomOverlayEventArgs e)

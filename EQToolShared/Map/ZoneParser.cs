@@ -637,6 +637,12 @@ namespace EQToolShared.Map
 				ShowAllMapLevels = false,
 				ZoneLevelHeight = 10
 			});
+			ZoneInfoMap.Add("pojustice", new ZoneInfo
+			{
+				Name = "pojustice",
+				ShowAllMapLevels = false,
+				ZoneLevelHeight = 10
+			});
 			ZoneInfoMap.Add("qcat", new ZoneInfo
 			{
 				Name = "qcat",
@@ -1100,6 +1106,16 @@ namespace EQToolShared.Map
 			ZoneNames.Add(new ZoneNameInfo("oops, all goos!", "plaguecrypt", null, null, "dalnir"));
 			ZoneNames.Add(new ZoneNameInfo("kithicor forest (instanced)", "kithicor_instanced", null, null, "kithicor"));
 			ZoneNames.Add(new ZoneNameInfo("the city of mist (instanced)", "citymist_instanced", null, null, "citymist"));
+			ZoneNames.Add(new ZoneNameInfo("plane of injustice", "pojustice"));
+			ZoneNames.Add(new ZoneNameInfo("plane of injustice 2", "pojustice"));
+			ZoneNames.Add(new ZoneNameInfo("plane of injustice 3", "pojustice"));
+			ZoneNames.Add(new ZoneNameInfo("plane of injustice 4", "pojustice"));
+			ZoneNames.Add(new ZoneNameInfo("plane of injustice 5", "pojustice"));
+			ZoneNames.Add(new ZoneNameInfo("plane of injustice 6", "pojustice"));
+			ZoneNames.Add(new ZoneNameInfo("plane of injustice, 30 ward", "pojustice"));
+			ZoneNames.Add(new ZoneNameInfo("plane of injustice, 40 ward", "pojustice"));
+			ZoneNames.Add(new ZoneNameInfo("plane of injustice, 50 ward", "pojustice"));
+
 
 			#endregion
 

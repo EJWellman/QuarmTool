@@ -125,6 +125,45 @@ namespace EQTool.ViewModels
 			}
 		}
 
+		public double BeneficialSpellDurationMultiplier
+		{
+			get
+			{
+				return _settings.BeneficialSpellDurationMultiplier;
+			}
+			set
+			{
+				_settings.BeneficialSpellDurationMultiplier = value;
+				OnPropertyChanged();
+			}
+		}
+		public double DetrimentalSpellDurationMultiplier
+		{
+			get
+			{
+				return _settings.DetrimentalSpellDurationMultiplier;
+			}
+			set
+			{
+				_settings.DetrimentalSpellDurationMultiplier = value;
+				OnPropertyChanged();
+			}
+		}
+
+		public double SpawnRateMultiplier
+		{
+			get
+			{
+				return _settings.SpawnRateMultiplier;
+			}
+			set
+			{
+				_settings.SpawnRateMultiplier = value;
+				OnPropertyChanged();
+			}
+		}
+
+
 		#region Zeal
 		public bool ZealMap_AutoUpdate
 		{
@@ -418,6 +457,7 @@ namespace EQTool.ViewModels
 
 		#endregion
 
+		#region Overlay Colors
 		public Color EnrageOverlayColor 
 		{
 			get
@@ -538,6 +578,7 @@ namespace EQTool.ViewModels
 				OnPropertyChanged();
 			}
 		}
+		#endregion Overlay Colors
 
 		public double DPSWindowOpacity
         {

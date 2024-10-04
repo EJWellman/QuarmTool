@@ -97,11 +97,15 @@ namespace EQTool.Services
             return level.Value;
         }
 
-        public static int GetDuration_inSeconds(Spell spell, PlayerInfo player)
+        public static int GetDuration_inSeconds(Spell spell, PlayerInfo player, bool useMaxLevel = false)
         {
             var duration = spell.buffduration;
             int spell_ticks;
-            var level = MatchClosestLevelToSpell(spell, player);
+            int level = MatchClosestLevelToSpell(spell, player);
+			if (useMaxLevel)
+			{
+				level = 65;
+			}
 
             switch (spell.buffdurationformula)
             {

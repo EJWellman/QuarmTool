@@ -376,7 +376,6 @@ namespace EQTool.ViewModels
 					});
 					return;
 				}
-
 				if (match.Spell.name.EndsWith("Discipline"))
 				{
 					var basetime = (int)(match.Spell.recastTime / 1000.0);
@@ -423,12 +422,36 @@ namespace EQTool.ViewModels
 					return;
 				}
 				//var needscount = SpellsThatNeedCounts.Contains(spellname);
-				var spellduration = TimeSpan.FromSeconds(SpellDurations.GetDuration_inSeconds(match.Spell, _activePlayer.Player));
-				var duration = match.TotalSecondsOverride ?? spellduration.TotalSeconds;
-				//var duration = needscount ? 0 : match.TotalSecondsOverride ?? spellduration.TotalSeconds;
-				var isnpc = _quarmService.DoesMonsterExistInZone(cleanTargetName);
-				//var isnpc = MasterNPCList.NPCs.Contains(cleanTargetName) || cleanTargetName.Trim().Contains(' ');
-				var uispell = new UISpell(DateTime.Now.AddSeconds((int)duration), DateTime.Now.AddSeconds((int)duration), isnpc, _windowOptions.ShowSimpleTimers)
+
+				TimeSpan spellDuration;
+
+				if(match.Spell.type == SpellTypes.Beneficial)
+				{
+					spellDuration = TimeSpan.FromSeconds(SpellDurations.GetDuration_inSeconds(match.Spell, _activePlayer.Player, _settings.BeneficialSpellDurationMultiplier != 1.0d));
+				}
+				else if(match.Spell.type == SpellTypes.Detrimental)
+				{
+					spellDuration = TimeSpan.FromSeconds(SpellDurations.GetDuration_inSeconds(match.Spell, _activePlayer.Player, _settings.DetrimentalSpellDurationMultiplier != 1.0d));
+				}
+				else
+				{
+					spellDuration = TimeSpan.FromSeconds(SpellDurations.GetDuration_inSeconds(match.Spell, _activePlayer.Player));
+				}
+
+				//var spellduration = TimeSpan.FromSeconds(SpellDurations.GetDuration_inSeconds(match.Spell, _activePlayer.Player, _settings.BeneficialSpellDurationMultiplier != 1.0d));
+				var duration = match.TotalSecondsOverride ?? spellDuration.TotalSeconds;
+				//var isNPCCast = match.
+				var isTargetNPC = _quarmService.DoesMonsterExistInZone(cleanTargetName);
+				if (_settings.BeneficialSpellDurationMultiplier != 1.0 && match.Spell.type == SpellTypes.Beneficial)
+				{
+					duration = Convert.ToInt32(duration * _settings.BeneficialSpellDurationMultiplier);
+				}
+				else if(_settings.BeneficialSpellDurationMultiplier != 1.0 && match.Spell.type == SpellTypes.Beneficial)
+				{
+					duration = Convert.ToInt32(duration * _settings.DetrimentalSpellDurationMultiplier);
+				}
+
+				var uispell = new UISpell(DateTime.Now.AddSeconds((int)duration), DateTime.Now.AddSeconds((int)duration), isTargetNPC, _windowOptions.ShowSimpleTimers)
 				{
 					UpdatedDateTime = DateTime.Now,
 					PercentLeftOnSpell = 100,
@@ -444,7 +467,7 @@ namespace EQTool.ViewModels
 					SpellNameColor = new System.Windows.Media.SolidColorBrush(_settings.SpellTimerNameColor),
 					ProgressBarColor = _colorService.GetColorFromSpellType(match.Spell.type),
 					DropShadowVisibility = _settings.ShowTimerDropShadows ? Visibility.Visible : Visibility.Collapsed,
-					IsNPC = isnpc,
+					IsNPC = isTargetNPC,
 					IsYourCast = match.IsYourCast,
 					ExecutionTime = DateTime.Now
 				};
@@ -727,6 +750,13 @@ namespace EQTool.ViewModels
 				&& item.SpellType != SpellTypes.RespawnTimer
 				&& item.SpellType != SpellTypes.ModRod 
 				&& !_windowOptions.ShowDeathTouches)
+			{
+				return false;
+			}
+			else if (!ShowSpells
+				&& (item.SpellType == SpellTypes.Other
+				|| item.SpellType == SpellTypes.Beneficial
+				|| item.SpellType == SpellTypes.Detrimental))
 			{
 				return false;
 			}

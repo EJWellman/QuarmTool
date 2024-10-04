@@ -25,6 +25,19 @@ namespace EQTool.Services
             }
 
             return null;
-        }
-    }
+		}
+
+		public bool EnrageCheck(string line, out EnrageEvent data)
+		{
+			data = null;
+
+			if (line.EndsWith(" has become ENRAGED.", System.StringComparison.OrdinalIgnoreCase))
+			{
+				var npcname = line.Replace(" has become ENRAGED.", string.Empty).Trim();
+				data = new EnrageEvent { NpcName = npcname };
+			}
+
+			return data == null;
+		}
+	}
 }

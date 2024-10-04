@@ -8,55 +8,55 @@ namespace EQTool.Services.Spells.Log
 {
     public class ParseHandleYouCasting
     {
-        private readonly ActivePlayer activePlayer;
-        private readonly IAppDispatcher appDispatcher;
-        private readonly EQSpells spells;
+        private readonly ActivePlayer _activePlayer;
+        private readonly IAppDispatcher _appDispatcher;
+        private readonly EQSpells _spells;
 
-        public ParseHandleYouCasting(ActivePlayer activePlayer, IAppDispatcher appDispatcher, EQSpells spells)
+		public ParseHandleYouCasting(ActivePlayer activePlayer, IAppDispatcher appDispatcher, EQSpells spells)
         {
-            this.activePlayer = activePlayer;
-            this.appDispatcher = appDispatcher;
-            this.spells = spells;
+            this._activePlayer = activePlayer;
+            this._appDispatcher = appDispatcher;
+            this._spells = spells;
         }
 
         public void HandleYouBeginCastingSpellStart(string message)
         {
             var spellname = message.Substring(EQSpells.YouBeginCasting.Length - 1).Trim().TrimEnd('.');
-            if (spells.YouCastSpells.TryGetValue(spellname, out var foundspells))
+            if (_spells.YouCastSpells.TryGetValue(spellname, out var foundspells))
             {
-                var foundspell = SpellDurations.MatchClosestLevelToSpell(foundspells, activePlayer.Player);
+                var foundspell = SpellDurations.MatchClosestLevelToSpell(foundspells, _activePlayer.Player);
                 Debug.WriteLine($"Self Casting Spell: {spellname} Delay: {foundspell.casttime}");
-                appDispatcher.DispatchUI(() =>
+                _appDispatcher.DispatchUI(() =>
                 {
-                    if (activePlayer.Player != null)
+                    if (_activePlayer.Player != null)
                     {
                         if (foundspell.Classes.Count == 1)
                         {
-                            if (!activePlayer.Player.PlayerClass.HasValue)
+                            if (!_activePlayer.Player.PlayerClass.HasValue)
                             {
-                                activePlayer.Player.PlayerClass = foundspell.Classes.FirstOrDefault().Key;
+                                _activePlayer.Player.PlayerClass = foundspell.Classes.FirstOrDefault().Key;
                             }
 
-                            if (activePlayer.Player.Level < foundspell.Classes.FirstOrDefault().Value)
+                            if (_activePlayer.Player.Level < foundspell.Classes.FirstOrDefault().Value)
                             {
-                                activePlayer.Player.Level = foundspell.Classes.FirstOrDefault().Value;
+                                _activePlayer.Player.Level = foundspell.Classes.FirstOrDefault().Value;
                             }
                         }
                     }
 
-                    activePlayer.UserCastingSpell = foundspell;
-                    if (activePlayer.UserCastingSpell.casttime > 0)
+                    _activePlayer.UserCastingSpell = foundspell;
+                    if (_activePlayer.UserCastingSpell.casttime > 0)
                     {
-                        activePlayer.UserCastingSpellCounter++;
-                        _ = Task.Delay(activePlayer.UserCastingSpell.casttime * 4).ContinueWith(a =>
+                        _activePlayer.UserCastingSpellCounter++;
+                        _ = Task.Delay(_activePlayer.UserCastingSpell.casttime * 4).ContinueWith(a =>
                         {
                             Debug.WriteLine($"Cleaning Spell");
-                            appDispatcher.DispatchUI(() =>
+                            _appDispatcher.DispatchUI(() =>
                             {
-                                if (--activePlayer.UserCastingSpellCounter <= 0)
+                                if (--_activePlayer.UserCastingSpellCounter <= 0)
                                 {
-                                    activePlayer.UserCastingSpellCounter = 0;
-                                    activePlayer.UserCastingSpell = null;
+                                    _activePlayer.UserCastingSpellCounter = 0;
+                                    _activePlayer.UserCastingSpell = null;
                                 }
                             });
                         });
@@ -67,9 +67,9 @@ namespace EQTool.Services.Spells.Log
 
         public SpellParsingMatch HandleYouSpell(string message)
         {
-            if (spells.CastOnYouSpells.TryGetValue(message, out var foundspells))
+            if (_spells.CastOnYouSpells.TryGetValue(message, out var foundspells))
             {
-                var foundspell = SpellDurations.MatchClosestLevelToSpell(foundspells, activePlayer.Player);
+                var foundspell = SpellDurations.MatchClosestLevelToSpell(foundspells, _activePlayer.Player);
                 Debug.WriteLine($"You Casting Spell: {message} Delay: {foundspell.casttime}");
                 return new SpellParsingMatch
                 {
@@ -83,9 +83,9 @@ namespace EQTool.Services.Spells.Log
 
         public SpellParsingMatch HandleYourSpell(string message)
         {
-            if (spells.CastOnYouSpells.TryGetValue(message, out var foundspells))
+            if (_spells.CastOnYouSpells.TryGetValue(message, out var foundspells))
             {
-                var foundspell = SpellDurations.MatchClosestLevelToSpell(foundspells, activePlayer.Player);
+                var foundspell = SpellDurations.MatchClosestLevelToSpell(foundspells, _activePlayer.Player);
                 Debug.WriteLine($"Your Casting Spell: {message} Delay: {foundspell.casttime}");
                 return new SpellParsingMatch
                 {
@@ -100,10 +100,10 @@ namespace EQTool.Services.Spells.Log
         public SpellParsingMatch HandleYouBeginCastingSpellEnd(string message)
         {
             Debug.WriteLine($"Self Finished Spell: {message}");
-            var spell = activePlayer.UserCastingSpell;
-            appDispatcher.DispatchUI(() =>
+            var spell = _activePlayer.UserCastingSpell;
+            _appDispatcher.DispatchUI(() =>
             {
-                activePlayer.UserCastingSpell = null;
+                _activePlayer.UserCastingSpell = null;
             });
             return new SpellParsingMatch
             {
@@ -115,9 +115,9 @@ namespace EQTool.Services.Spells.Log
 
         public SpellParsingMatch HandleYouBeginCastingSpellOtherEnd(string message)
         {
-            var targetname = message.Replace(activePlayer.UserCastingSpell.cast_on_other, string.Empty).Trim();
+            var targetname = message.Replace(_activePlayer.UserCastingSpell.cast_on_other, string.Empty).Trim();
             Debug.WriteLine($"Self Finished Spell: {message}");
-            var spell = activePlayer.UserCastingSpell;
+            var spell = _activePlayer.UserCastingSpell;
             return new SpellParsingMatch
             {
                 Spell = spell,

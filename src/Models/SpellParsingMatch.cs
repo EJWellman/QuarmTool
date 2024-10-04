@@ -6,6 +6,8 @@ namespace EQTool.Models
     {
         public string TargetName { get; set; }
 
+		public bool IsTargetNPC { get; set; }
+
         public bool IsYou { get; set; }
 
         public Spell Spell { get; set; }

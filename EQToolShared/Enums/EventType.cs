@@ -18,6 +18,7 @@
         OpenDPS,
         OpenTriggers,
 		OpenTimer,
-		QuarmData
+		QuarmData,
+		CustomOverlay
     }
 }

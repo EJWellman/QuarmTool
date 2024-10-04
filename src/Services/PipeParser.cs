@@ -16,6 +16,18 @@ using System.Windows.Media.Media3D;
 using ZealPipes.Services;
 using static ZealPipes.Services.ZealMessageService;
 using EQToolShared.Enums;
+using static Slapper.AutoMapper;
+using System.Text.RegularExpressions;
+using EQToolShared.ExtendedClasses;
+using static EQTool.Services.LogParser;
+using static EQTool.Services.ChParser;
+using static EQTool.Services.DTParser;
+using static EQTool.Services.EnrageParser;
+using static EQTool.Services.FTEParser;
+using static EQTool.Services.InvisParser;
+using static EQTool.Services.LevParser;
+using static EQTool.Services.ResistSpellParser;
+using System.Windows.Shapes;
 
 namespace EQTool.Services
 {
@@ -28,14 +40,30 @@ namespace EQTool.Services
 		private readonly IAppDispatcher _appDispatcher;
 		private string _lastLogFilename = string.Empty;
 		private readonly EQToolSettings _settings;
+		private readonly QuarmDataService _quarmService;
 		private readonly LevelLogParse _levelLogParse;
 		private readonly EQToolSettingsLoad _toolSettingsLoad;
 		private readonly ISignalrPlayerHub _signalrPlayerHub;
+		private readonly LoggingService _logging;
+
+		private readonly SpellLogParse _spellParser;
+		//private readonly SpellWornOffLogParse _spellWornOffLogParse;
+		private readonly DTParser _dtParser;
+		private readonly EnrageParser _enrageParser;
+		private readonly InvisParser _invisParser;
+		private readonly LevParser _levParser;
+		private readonly FailedFeignParser _failedFeignParser;
+		private readonly GroupInviteParser _groupInviteParser;
+		private readonly ResistSpellParser _resistSpellParser;
+		private readonly CustomOverlayParser _customOverlayParser;
 
 		private bool StartingWhoOfZone = false;
 		private bool Processing = false;
 		private bool StillCamping = false;
 		private bool HasUsedStartupEnterWorld = false;
+		private bool _IsAutoAttacking = false;
+
+		private string _petName = string.Empty;
 
 		public bool JustZoned = false;
 
@@ -45,16 +73,25 @@ namespace EQTool.Services
 
 		public PipeParser(
 			ResistSpellParser resistSpellParser,
-			LogCustomTimer logCustomTimer,
-			SpellWornOffLogParse spellWornOffLogParser,
-			SpellLogParse spellLogParser,
+			GroupInviteParser groupInviteParser,
+			FailedFeignParser failedFeignParser,
+			LevParser levParser,
+			InvisParser invisParser,
+			EnrageParser enrageParser,
+			DTParser dtParser,
+			SpellLogParse spellParser,
+			CustomOverlayParser customOverlayParser,
+			//SpellWornOffLogParse spellWornOffLogParse,
+
 			EQToolSettingsLoad toolSettingsLoad,
 			ActivePlayer activePlayer,
 			IAppDispatcher appDispatcher,
 			EQToolSettings settings,
+			QuarmDataService quarmService,
 			EQSpells spells,
 			ZealMessageService zealMessageService,
-			ISignalrPlayerHub signalrPlayerHub
+			ISignalrPlayerHub signalrPlayerHub,
+			LoggingService logging
 			)
 		{
 			_toolSettingsLoad = toolSettingsLoad;
@@ -62,10 +99,24 @@ namespace EQTool.Services
 			_appDispatcher = appDispatcher;
 			_levelLogParse = new LevelLogParse(activePlayer);
 			_settings = settings;
+			_quarmService = quarmService;
 		
 			_spells = spells;
 			_zealMessageService = zealMessageService;
 			_signalrPlayerHub = signalrPlayerHub;
+
+			_logging = logging;
+
+			//_spellWornOffLogParse = _spellWornOffLogParse;
+			_spellParser = spellParser;
+			_dtParser = dtParser;
+			_enrageParser = enrageParser;
+			_invisParser = invisParser;
+			_levParser = levParser;
+			_failedFeignParser = failedFeignParser;
+			_groupInviteParser = groupInviteParser;
+			_resistSpellParser = resistSpellParser;
+			_customOverlayParser = customOverlayParser;
 
 			_zealMessageService.OnLabelMessageReceived += _zealMessageService_OnLabelMessageReceived;
 			_zealMessageService.OnLogMessageReceived += _zealMessageService_OnLogMessageReceived;
@@ -92,6 +143,23 @@ namespace EQTool.Services
 				if (e.Message.Type == ZealPipes.Common.PipeMessageType.Label &&
 					e.Message.Data != null && e.Message.Data.Length > 0)
 				{
+					if(_petName == string.Empty)
+					{
+						var petName = e.Message.Data.FirstOrDefault(x => x.Type == ZealPipes.Common.LabelType.PlayerPetName);
+						if (petName != null && !string.IsNullOrWhiteSpace(petName.Value))
+						{
+							_petName = petName.Value;
+						}
+					}
+					else
+					{
+						var petName = e.Message.Data.FirstOrDefault(x => x.Type == ZealPipes.Common.LabelType.PlayerPetName);
+						if (petName == null || string.IsNullOrWhiteSpace(petName.Value))
+						{
+							_petName = string.Empty;
+						}
+					}
+
 					var spellLabel = e.Message.Data.FirstOrDefault(x => x.Type == ZealPipes.Common.LabelType.CastingName);
 					if (!string.IsNullOrWhiteSpace(spellLabel.Value))
 					{
@@ -163,11 +231,71 @@ namespace EQTool.Services
 					if (string.Compare(e.Message.Data.Text, yourFizzle) == 0)
 					{
 						FizzleCastingEvent?.Invoke(this, new FizzleEventArgs() { ExecutionTime = DateTime.Now });
+						return;
 					}
 					else if (string.Compare(e.Message.Data.Text, yourInterrupt) == 0)
 					{
 						InterruptCastingEvent?.Invoke(this, new InterruptEventArgs() { ExecutionTime = DateTime.Now });
+						return;
 					}
+
+					else if (_spellParser.MatchSpell(e.Message.Data.Text, out SpellParsingMatch spellMatch))
+					{
+						if (spellMatch != null && spellMatch.Spell.name != "Modulation")
+						{
+							StartCastingEvent?.Invoke(this, new SpellEventArgs { Spell = spellMatch });
+							return;
+						}
+					}
+
+					#region Prebuilt Event Overlays
+					else if (_activePlayer?.Player?.CharmBreakOverlay ?? false && string.Compare(e.Message.Data.Text, "Your charm spell has worn off.", true) == 0)
+					{
+						CharmBreakEvent?.Invoke(this, new CharmBreakArgs());
+						return;
+					}
+					else if ((_activePlayer?.Player?.ResistWarningOverlay ?? false) && _resistSpellParser.ParseNPCSpell(e.Message.Data.Text, out ResistSpellData resist_data))
+					{
+						ResistSpellEvent?.Invoke(this, resist_data);
+						return;
+					}
+					else if ((_activePlayer?.Player?.GroupInviteOverlay ?? false) && e.Message.Data.Text.EndsWith(" invites you to join a group."))
+					{
+						GroupInviteEvent?.Invoke(this, e.Message.Data.Text);
+						return;
+					}
+					else if ((_activePlayer?.Player?.FailedFeignOverlay ?? false) && e.Message.Data.Text == $"{_activePlayer?.Player?.Name} has fallen to the ground.")
+					{
+						FailedFeignEvent?.Invoke(this, string.Empty);
+						return;
+					}
+					//else if((_activePlayer?.Player?.overlay ?? false) && _dtParser.DtCheck(e.Message.Data.Text, out DT_Event dt_data))
+					//{
+					//	DTEvent?.Invoke(this, dt_data);
+					//}
+					else if((_activePlayer?.Player?.EnrageOverlay ?? false) && _enrageParser.EnrageCheck(e.Message.Data.Text, out EnrageEvent enrage_data))
+					{
+						EnrageEvent?.Invoke(this, enrage_data);
+						return;
+					}
+					else if ((_activePlayer?.Player?.InvisFadingOverlay ?? false) && _invisParser.Parse(e.Message.Data.Text) == InvisStatus.Fading)
+					{
+						InvisEvent?.Invoke(this, InvisStatus.Fading);
+						return;
+					}
+					else if ((_activePlayer?.Player?.LevFadingOverlay ?? false) && _levParser.Parse(e.Message.Data.Text) == LevStatus.Fading)
+					{
+						LevEvent?.Invoke(this, LevStatus.Fading);
+						return;
+					}
+					#endregion
+
+					else if(_customOverlayParser.Parse(e.Message.Data.Text, _settings.CustomOverlays, out CustomOverlay customOverlay))
+					{
+						CustomOverlayEvent?.Invoke(this, new CustomOverlayEventArgs { CustomOverlay = customOverlay });
+						return;
+					}
+
 				}
 			}
 		}
@@ -192,6 +320,11 @@ namespace EQTool.Services
 				else if (_settings.ZealProcessID != 0 && _settings.ZealProcessID != e.ProcessId)
 				{
 					return;
+				}
+				if(e.Message.Data != null && e.Message.Data.AutoAttack != _IsAutoAttacking)
+				{
+					_IsAutoAttacking = e.Message.Data.AutoAttack;
+					AutoAttackStatusChangedEvent?.Invoke(this, new AutoAttackStatusChangedEventArgs() { IsAutoAttacking = _IsAutoAttacking });
 				}
 
 				if(e.Message.Data != null && _activePlayer.Player != null && e.Message.Data.ZoneId > 0 && e.Message.Data.ZoneId != _activePlayer.Player.ZoneId)
@@ -443,6 +576,10 @@ namespace EQTool.Services
 			public string Label { get; set; }
 			public bool IsPermanent { get; set; }
 		}
+		public class AutoAttackStatusChangedEventArgs : EventArgs
+		{
+			public bool IsAutoAttacking { get; set; }
+		}
 
 		public event EventHandler<SpellEventArgs> StartCastingEvent;
 		public event EventHandler<FizzleEventArgs> FizzleCastingEvent;
@@ -451,6 +588,20 @@ namespace EQTool.Services
 		public event EventHandler<ZealLocationEventArgs> ZealZoneChangeEvent;
 		public event EventHandler<ManaThresholdEventArgs> ManaThresholdEvent;
 		public event EventHandler<HealthThresholdEventArgs> HealthThresholdEvent;
+		public event EventHandler<AutoAttackStatusChangedEventArgs> AutoAttackStatusChangedEvent;
+		public event EventHandler<CustomOverlayEventArgs> CustomOverlayEvent;
+
+		//public event EventHandler<SpellWornOffSelfEventArgs> SpellWornOffSelfEvent;
+		//public event EventHandler<SpellWornOffOtherEventArgs> SpellWornOtherOffEvent;
+		public event EventHandler<DT_Event> DTEvent;
+		public event EventHandler<EnrageEvent> EnrageEvent;
+		public event EventHandler<LevStatus> LevEvent;
+		public event EventHandler<InvisStatus> InvisEvent;
+		public event EventHandler<CharmBreakArgs> CharmBreakEvent;
+		public event EventHandler<string> FailedFeignEvent;
+		public event EventHandler<string> GroupInviteEvent;
+		public event EventHandler<ResistSpellData> ResistSpellEvent;
+
 		public event EventHandler<PointOfInterestEventArgs> AddPointOfInterestEvent;
 		public event EventHandler<PointOfInterestEventArgs> RemovePointOfInterestEvent;
 

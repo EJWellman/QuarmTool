@@ -19,6 +19,7 @@ namespace EQTool.Services
 	public class QuarmDataService
 	{
 		private readonly ActivePlayer _activePlayer;
+		private readonly EQToolSettings _settings;
 		private static List<QuarmMonster> _monsters;
 		private static List<QuarmMonsterFaction> _factions;
 		private static List<QuarmMonsterDrops> _drops;
@@ -26,9 +27,10 @@ namespace EQTool.Services
 		private static List<QuarmMonsterTimer> _monsterTimers;
 		private static QuarmZone _currentZone;
 		private static DataFileInfo _fileLocations;
-		public QuarmDataService(ActivePlayer activePlayer)
+		public QuarmDataService(ActivePlayer activePlayer, EQToolSettings settings)
 		{
 			_activePlayer = activePlayer;
+			_settings = settings;
 		}
 
 		public bool LoadMobDataForZone(string zoneCode)
@@ -252,6 +254,12 @@ namespace EQTool.Services
 
 			if (timer != null)
 			{
+				if (_settings.SpawnRateMultiplier != 1.0)
+				{
+					timer.RespawnTimer = Convert.ToInt32(timer.RespawnTimer * _settings.SpawnRateMultiplier);
+					timer.Min_RespawnTimer = Convert.ToInt32(timer.Min_RespawnTimer * _settings.SpawnRateMultiplier);
+					timer.Max_RespawnTimer = Convert.ToInt32(timer.Max_RespawnTimer * _settings.SpawnRateMultiplier);
+				}
 				return timer;
 			}
 			else

@@ -20,6 +20,6 @@
                 return InvisStatus.Fading;
             }
             return null;
-        }
-    }
+		}
+	}
 }

@@ -78,6 +78,33 @@ namespace EQTool.Models
 		private Color _RootWarningOverlayColor = Color.FromRgb(255, 255, 0); //Red
 		private Color _ResistWarningOverlayColor = Color.FromRgb(255, 255, 0); //Red
 
+		private double _atkIndicator_Top = 400;
+		public double AtkIndicator_Top
+		{
+			get
+			{
+				return _atkIndicator_Top;
+			}
+			set
+			{
+				_atkIndicator_Top = value;
+				OnPropertyChanged();
+			}
+		}
+		private double _atkIndicator_Left = 400;
+		public double AtkIndicator_Left
+		{
+			get
+			{
+				return _atkIndicator_Left;
+			}
+			set
+			{
+				_atkIndicator_Left = value;
+				OnPropertyChanged();
+			}
+		}
+
 
 		public System.Windows.Media.Color ResistWarningOverlayColor
 		{ 
@@ -157,6 +184,36 @@ namespace EQTool.Models
 			}
 			set => _imageOverlayWindowState = value ?? new WindowState();
 		}
+
+		private bool _imageOverlay_TriggersEnabled = true;
+		public bool ImageOverlay_TriggersEnabled
+		{
+			get
+			{
+				return _imageOverlay_TriggersEnabled;
+			}
+			set
+			{
+				_imageOverlay_TriggersEnabled = value;
+				OnPropertyChanged();
+			}
+		}
+
+		private Rect _imageOverlay_TriggersRect = new Rect(new Point(0, 0), new Size(300, 60));
+		public Rect ImageOverlay_TriggersRect
+		{
+			get
+			{
+				return _imageOverlay_TriggersRect;
+			}
+			set
+			{
+				_imageOverlay_TriggersRect = value;
+				OnPropertyChanged();
+			}
+		}
+		
+
 
 		private WindowState _DpsWindowState;
 		public WindowState DpsWindowState
@@ -703,6 +760,61 @@ namespace EQTool.Models
 			}
 		}
 
+		private double _BeneficialSpellDurationMultiplier = 1.0;
+		public double BeneficialSpellDurationMultiplier
+		{
+			get
+			{
+				return _BeneficialSpellDurationMultiplier;
+			}
+			set
+			{
+				_BeneficialSpellDurationMultiplier = value;
+				OnPropertyChanged();
+			}
+		}
+		private double _DetrimentalSpellDurationMultiplier = 1.0;
+		public double DetrimentalSpellDurationMultiplier
+		{
+			get
+			{
+				return _DetrimentalSpellDurationMultiplier;
+			}
+			set
+			{
+				_DetrimentalSpellDurationMultiplier = value;
+				OnPropertyChanged();
+			}
+		}
+
+		private double _NPCSpellDurationMultiplier = 1.0;
+		public double NPCSpellDurationMultiplier
+		{
+			get
+			{
+				return _NPCSpellDurationMultiplier;
+			}
+			set
+			{
+				_NPCSpellDurationMultiplier = value;
+				OnPropertyChanged();
+			}
+		}
+
+		private double _SpawnRateMultiplier = 1.0;
+		public double SpawnRateMultiplier
+		{
+			get
+			{
+				return _SpawnRateMultiplier;
+			}
+			set
+			{
+				_SpawnRateMultiplier = value;
+				OnPropertyChanged();
+			}
+		}
+
 		private string selectedCharacter;
 		[JsonIgnore]
 		public string SelectedCharacter
@@ -744,7 +856,7 @@ namespace EQTool.Models
 			{
 				lock_ImageOverlay_Position = value;
 				(App.Current.Windows.Cast<Window>().FirstOrDefault(
-					x => x is ImageOverlay) as ImageOverlay)?.SetLockStatus(value);
+					x => x is ImageOverlay) as ImageOverlay)?.SetWindowLockStatus(value);
 				OnPropertyChanged();
 			}
 		}

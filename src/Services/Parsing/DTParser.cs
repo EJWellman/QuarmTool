@@ -31,5 +31,24 @@ namespace EQTool.Services
 			}
             return null;
         }
-    }
+
+		public bool DtCheck(string line, out DT_Event event_data)
+		{
+			string mobShoutRegex = "^(\\w.+) shouts '([A-z]+)!'$";
+			event_data = null;
+
+			if (Regex.IsMatch(line, mobShoutRegex))
+			{
+				var match = Regex.Match(line, mobShoutRegex);
+				if (match.Success)
+				{
+					string mobName = match.Groups[1].Value.Trim();
+					string dtReceiver = match.Groups[2].Value;
+
+					event_data = new DT_Event { NpcName = mobName, DTReceiver = dtReceiver };
+				}
+			}
+			return event_data == null;
+		}
+	}
 }

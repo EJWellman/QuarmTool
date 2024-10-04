@@ -42,6 +42,36 @@ namespace EQTool.Services
             }
 
             return null;
-        }
-    }
+		}
+
+		public bool ParseNPCSpell(string line, out ResistSpellData data)
+		{
+			data = null;
+			var resistmessage = line.StartsWith("You resist the ");
+			if (resistmessage)
+			{
+				var spellname = line.Replace("You resist the ", string.Empty).Replace(" spell!", string.Empty).Trim();
+				var spell = this.spells.AllSpells.FirstOrDefault(a => a.name == spellname);
+				if (spell != null)
+				{
+					data = new ResistSpellData { Spell = spell, isYou = true };
+					return true;
+				}
+			}
+
+			resistmessage = line.StartsWith("Your target resisted the ");
+			if (resistmessage)
+			{
+				var spellname = line.Replace("Your target resisted the ", string.Empty).Replace(" spell.", string.Empty).Trim();
+				var spell = this.spells.AllSpells.FirstOrDefault(a => a.name == spellname);
+				if (spell != null)
+				{
+					data = new ResistSpellData { Spell = spell, isYou = false };
+					return true;
+				}
+			}
+
+			return false;
+		}
+	}
 }

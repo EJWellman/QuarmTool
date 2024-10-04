@@ -1338,8 +1338,20 @@ namespace EQTool
 			e.Handled = regex.IsMatch(e.Text);
         }
 
-		private void StaticOverlay_SizeChanged(object sender, TextChangedEventArgs e)
+		private void NumberValue_FieldChanged(object sender, TextChangedEventArgs e)
 		{
+			if(sender == RespawnMultiplier_Value && double.TryParse(RespawnMultiplier_Value.Text, out double spawnMulti))
+			{
+				_settings.SpawnRateMultiplier = spawnMulti;
+			}
+			else if (sender == BeneSpellDurationMultiplier_Value && double.TryParse(BeneSpellDurationMultiplier_Value.Text, out double durationBeneMulti))
+			{
+				_settings.BeneficialSpellDurationMultiplier = durationBeneMulti;
+			}
+			else if (sender == DetrSpellDurationMultiplier_Value && double.TryParse(DetrSpellDurationMultiplier_Value.Text, out double durationDetrMulti))
+			{
+				_settings.DetrimentalSpellDurationMultiplier = durationDetrMulti;
+			}
 			if (sender == StaticOverlay_SizeTop && decimal.TryParse(StaticOverlay_SizeTop.Text, out decimal resultTop))
 			{
 				_settings.StaticOverlay_SizeTop = resultTop;
