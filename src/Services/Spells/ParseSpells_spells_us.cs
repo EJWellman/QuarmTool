@@ -232,7 +232,7 @@ namespace EQTool.Services
                         }
                     }
 
-                    if (spell.Classes.Any() && spell.Classes.All(a => a.Value > 60 && a.Value <= 255))
+                    if (spell.Classes.Any() && spell.Classes.All(a => a.Value > 65 && a.Value <= 255))
                     {
                         //Debug.WriteLine($"Skipping {spell.name} Class Level Out of range");
                         continue;

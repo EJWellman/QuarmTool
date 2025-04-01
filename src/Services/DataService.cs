@@ -178,6 +178,7 @@ namespace EQTool.Services
 					queryBuilder.AppendLine("ALTER TABLE CustomOverlays ADD COLUMN IsAudioEnabled BOOL;");
 
 					cnn.Execute(queryBuilder.ToString());
+					version = 1;
 				}
 
 				if (version == 1)
@@ -201,6 +202,7 @@ namespace EQTool.Services
 					queryBuilder.AppendLine("ALTER TABLE TimerWindows ADD COLUMN ShowDeathTouches BOOL;");
 
 					cnn.Execute(queryBuilder.ToString());
+					version = 3;
 				}
 
 
@@ -283,8 +285,9 @@ namespace EQTool.Services
 						"Name TEXT, Message TEXT, DisplayColor TEXT, IsEnabled BOOL, AudioMessage TEXT, IsAudioEnabled BOOL);");
 					queryBuilder.AppendLine("CREATE TABLE IF NOT EXISTS TimerWindows (ID INTEGER PRIMARY KEY, Title TEXT, BestGuessSpells BOOL, " +
 						"ShowModRodTimers BOOL, ShowSpells BOOL, ShowTimers BOOL, ShowRandomRolls BOOL, YouOnlySpells BOOL, WindowRect TEXT, State INTEGER," +
-						"Closed BOOL, AlwaysOnTop BOOL, Opacity DOUBLE);");
-					queryBuilder.AppendLine("PRAGMA user_version = 2;");
+						"Closed BOOL, AlwaysOnTop BOOL, Opacity DOUBLE, ShowSimpleTimers BOOL, ShowNPCs BOOL, ShowPCs BOOL, ShowDeathTouches BOOL);");
+
+					queryBuilder.AppendLine("PRAGMA user_version = 3;");
 					cnn.Execute(queryBuilder.ToString());
 				}
 			}
