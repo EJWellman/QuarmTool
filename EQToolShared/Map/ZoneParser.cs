@@ -875,18 +875,170 @@ namespace EQToolShared.Map
 				ShowAllMapLevels = false,
 				ZoneLevelHeight = 10
 			});
-			ZoneInfoMap.Add("myriah", new ZoneInfo
-			{
-				Name = "myriah",
-				ShowAllMapLevels = true,
-				ZoneLevelHeight = 10,
-			});
 			ZoneInfoMap.Add("soldungb_tryout", new ZoneInfo
 			{
 				Name = "soldungb_tryout",
 				ShowAllMapLevels = false,
 				ZoneLevelHeight = 10
 			});
+			ZoneInfoMap.Add("acrylia", new ZoneInfo
+			{
+				Name = "acrylia",
+				ShowAllMapLevels = true,
+				ZoneLevelHeight = 10
+			});
+			ZoneInfoMap.Add("akheva", new ZoneInfo
+			{
+				Name = "akheva",
+				ShowAllMapLevels = true,
+				ZoneLevelHeight = 10
+			});
+			ZoneInfoMap.Add("echo", new ZoneInfo
+			{
+				Name = "echo",
+				ShowAllMapLevels = true,
+				ZoneLevelHeight = 10
+			});
+			ZoneInfoMap.Add("griegsend", new ZoneInfo
+			{
+				Name = "griegsend",
+				ShowAllMapLevels = true,
+				ZoneLevelHeight = 10
+			});
+			ZoneInfoMap.Add("grimling", new ZoneInfo
+			{
+				Name = "grimling",
+				ShowAllMapLevels = true,
+				ZoneLevelHeight = 10
+			});
+			ZoneInfoMap.Add("hollowshade", new ZoneInfo
+			{
+				Name = "hollowshade",
+				ShowAllMapLevels = true,
+				ZoneLevelHeight = 10
+			});
+			ZoneInfoMap.Add("jaggedpine", new ZoneInfo
+			{
+				Name = "jaggedpine",
+				ShowAllMapLevels = true,
+				ZoneLevelHeight = 10
+			});
+			ZoneInfoMap.Add("katta", new ZoneInfo
+			{
+				Name = "katta",
+				ShowAllMapLevels = true,
+				ZoneLevelHeight = 10
+			});
+			ZoneInfoMap.Add("mseru", new ZoneInfo
+			{
+				Name = "mseru",
+				ShowAllMapLevels = true,
+				ZoneLevelHeight = 10
+			});
+			ZoneInfoMap.Add("letalis", new ZoneInfo
+			{
+				Name = "letalis",
+				ShowAllMapLevels = true,
+				ZoneLevelHeight = 10
+			});
+			ZoneInfoMap.Add("nexus", new ZoneInfo
+			{
+				Name = "nexus",
+				ShowAllMapLevels = true,
+				ZoneLevelHeight = 10
+			});
+			ZoneInfoMap.Add("sseru", new ZoneInfo
+			{
+				Name = "sseru",
+				ShowAllMapLevels = true,
+				ZoneLevelHeight = 10
+			});
+			ZoneInfoMap.Add("scarlet", new ZoneInfo
+			{
+				Name = "scarlet",
+				ShowAllMapLevels = true,
+				ZoneLevelHeight = 10
+			});
+			ZoneInfoMap.Add("shadeweaver", new ZoneInfo
+			{
+				Name = "shadeweaver",
+				ShowAllMapLevels = true,
+				ZoneLevelHeight = 10
+			});
+			ZoneInfoMap.Add("shadowhaven", new ZoneInfo
+			{
+				Name = "shadowhaven",
+				ShowAllMapLevels = true,
+				ZoneLevelHeight = 10
+			});
+			ZoneInfoMap.Add("ssratemple", new ZoneInfo
+			{
+				Name = "ssratemple",
+				ShowAllMapLevels = true,
+				ZoneLevelHeight = 10
+			});
+			ZoneInfoMap.Add("sharvahl", new ZoneInfo
+			{
+				Name = "sharvahl",
+				ShowAllMapLevels = true,
+				ZoneLevelHeight = 10
+			});
+			ZoneInfoMap.Add("dawnshroud", new ZoneInfo
+			{
+				Name = "dawnshroud",
+				ShowAllMapLevels = true,
+				ZoneLevelHeight = 10
+			});
+			ZoneInfoMap.Add("thedeep", new ZoneInfo
+			{
+				Name = "thedeep",
+				ShowAllMapLevels = true,
+				ZoneLevelHeight = 10
+			});
+			ZoneInfoMap.Add("fungusgrove", new ZoneInfo
+			{
+				Name = "fungusgrove",
+				ShowAllMapLevels = true,
+				ZoneLevelHeight = 10
+			});
+			ZoneInfoMap.Add("thegrey", new ZoneInfo
+			{
+				Name = "thegrey",
+				ShowAllMapLevels = true,
+				ZoneLevelHeight = 10
+			});
+			ZoneInfoMap.Add("maiden", new ZoneInfo
+			{
+				Name = "maiden",
+				ShowAllMapLevels = true,
+				ZoneLevelHeight = 10
+			});
+			ZoneInfoMap.Add("paludal", new ZoneInfo
+			{
+				Name = "paludal",
+				ShowAllMapLevels = true,
+				ZoneLevelHeight = 10
+			});
+			ZoneInfoMap.Add("tenebrous", new ZoneInfo
+			{
+				Name = "tenebrous",
+				ShowAllMapLevels = true,
+				ZoneLevelHeight = 10
+			});
+			ZoneInfoMap.Add("twilight", new ZoneInfo
+			{
+				Name = "twilight",
+				ShowAllMapLevels = true,
+				ZoneLevelHeight = 10
+			});
+			ZoneInfoMap.Add("vexthal", new ZoneInfo
+			{
+				Name = "vexthal",
+				ShowAllMapLevels = true,
+				ZoneLevelHeight = 10
+			});
+
+
 			#endregion
 
 			#region ZoneNames
@@ -913,7 +1065,6 @@ namespace EQToolShared.Map
 			ZoneNames.Add(new ZoneNameInfo("loading", "clz"));
 			ZoneNames.Add(new ZoneNameInfo("cobaltscar", "cobaltscar"));
 			ZoneNames.Add(new ZoneNameInfo("the crypt of decay", "codecay"));
-			ZoneNames.Add(new ZoneNameInfo("tower of bone (gm)", "towerbone", "fieldofbone"));
 			ZoneNames.Add(new ZoneNameInfo("west commonlands", "commons"));
 			ZoneNames.Add(new ZoneNameInfo("crushbone", "crushbone", "clan crushbone"));
 			ZoneNames.Add(new ZoneNameInfo("crystal caverns", "crystal"));
@@ -937,7 +1088,6 @@ namespace EQToolShared.Map
 			ZoneNames.Add(new ZoneNameInfo("northern felwithe", "felwithea", "felwithe"));
 			ZoneNames.Add(new ZoneNameInfo("southern felwithe", "felwitheb", "felwithe"));
 			ZoneNames.Add(new ZoneNameInfo("field of bone", "fieldofbone", "the field of bone"));
-			ZoneNames.Add(new ZoneNameInfo("field of bone (alt)", "fieldofbone", "the field of bone"));
 			ZoneNames.Add(new ZoneNameInfo("firiona vie", "firiona"));
 			ZoneNames.Add(new ZoneNameInfo("east freeport", "freporte"));
 			ZoneNames.Add(new ZoneNameInfo("north freeport", "freportn"));
@@ -1078,13 +1228,9 @@ namespace EQToolShared.Map
 			ZoneNames.Add(new ZoneNameInfo("western wastes", "westwastes"));
 			ZoneNames.Add(new ZoneNameInfo("nektulos forest", "nektulos"));
 			ZoneNames.Add(new ZoneNameInfo("the bazaar", "bazaar"));
-			ZoneNames.Add(new ZoneNameInfo("field of bone (alt)", "towerbone", null, null, "fieldofbone"));
-			ZoneNames.Add(new ZoneNameInfo("shard of decay", "sodecay", null, null, "codecay"));
 			ZoneNames.Add(new ZoneNameInfo("nagafen's lair (instanced)", "soldungb_tryout", null, null, "soldungb"));
 			ZoneNames.Add(new ZoneNameInfo("permafrost caverns (instanced)", "perma_tryout", null, null, "permafrost"));
 			ZoneNames.Add(new ZoneNameInfo("kedge keep (instanced)", "kedge_tryout", null, null, "kedge"));
-			ZoneNames.Add(new ZoneNameInfo("domain of frost", "myriah", null, null, "halas"));
-			ZoneNames.Add(new ZoneNameInfo("trial of fire and ice (instanced)", "fireice", null, null, "arena"));
 			ZoneNames.Add(new ZoneNameInfo("plane of hate (instanced)", "hate_instanced", null, null, "hateplane"));
 			ZoneNames.Add(new ZoneNameInfo("plane of fear (instanced)", "fear_instanced", null, null, "fearplane"));
 			ZoneNames.Add(new ZoneNameInfo("plane of sky (instanced)", "air_instanced", null, null, "airplane"));
@@ -1092,8 +1238,6 @@ namespace EQToolShared.Map
 			ZoneNames.Add(new ZoneNameInfo("the hole (instanced)", "hole_instanced", null, null, "hole"));
 			ZoneNames.Add(new ZoneNameInfo("sunset home", "cshome2", null, null, "cshome"));
 			ZoneNames.Add(new ZoneNameInfo("house of mischief", "mischiefhouse", null, null, "mischiefplane"));
-			ZoneNames.Add(new ZoneNameInfo("bloodied kithicor", "kithicor_alt", null, null, "kithicor"));
-			ZoneNames.Add(new ZoneNameInfo("bloodied rivervale (instanced)", "rivervale_alt", null, null, "rivervale"));
 			ZoneNames.Add(new ZoneNameInfo("howling stones (instanced)", "charasis_instanced", null, null, "charasis"));
 			ZoneNames.Add(new ZoneNameInfo("chardok (instanced)", "chardok_instanced", null, null, "chardok"));
 			ZoneNames.Add(new ZoneNameInfo("dreadlands (instanced)", "dreadlands_instanced", null, null, "dreadlands"));
@@ -1103,18 +1247,8 @@ namespace EQToolShared.Map
 			ZoneNames.Add(new ZoneNameInfo("ruins of sebilis (instanced)", "sebilis_instanced", null, null, "sebilis"));
 			ZoneNames.Add(new ZoneNameInfo("karnor's castle (instanced)", "karnor_instanced", null, null, "karnor"));
 			ZoneNames.Add(new ZoneNameInfo("veeshan's peak (instanced)", "veeshan_instanced", null, null, "veeshan"));
-			ZoneNames.Add(new ZoneNameInfo("oops, all goos!", "plaguecrypt", null, null, "dalnir"));
 			ZoneNames.Add(new ZoneNameInfo("kithicor forest (instanced)", "kithicor_instanced", null, null, "kithicor"));
 			ZoneNames.Add(new ZoneNameInfo("the city of mist (instanced)", "citymist_instanced", null, null, "citymist"));
-			ZoneNames.Add(new ZoneNameInfo("plane of injustice", "pojustice"));
-			ZoneNames.Add(new ZoneNameInfo("plane of injustice 2", "pojustice"));
-			ZoneNames.Add(new ZoneNameInfo("plane of injustice 3", "pojustice"));
-			ZoneNames.Add(new ZoneNameInfo("plane of injustice 4", "pojustice"));
-			ZoneNames.Add(new ZoneNameInfo("plane of injustice 5", "pojustice"));
-			ZoneNames.Add(new ZoneNameInfo("plane of injustice 6", "pojustice"));
-			ZoneNames.Add(new ZoneNameInfo("plane of injustice, 30 ward", "pojustice"));
-			ZoneNames.Add(new ZoneNameInfo("plane of injustice, 40 ward", "pojustice"));
-			ZoneNames.Add(new ZoneNameInfo("plane of injustice, 50 ward", "pojustice"));
 
 
 			#endregion
@@ -1197,14 +1331,14 @@ namespace EQToolShared.Map
 			{
 				return null;
 			}
-			else if(message.Contains(" FORCECLEAR"))
+			else if (message.Contains(" FORCECLEAR"))
 			{
 				ret.ForceUpdate = true;
 				message = message.Replace(" FORCECLEAR", string.Empty);
 			}
 			//Alt/Instance Check
 			var msgSplit = message.Split(' ');
-			if(msgSplit.Length > 1 && message.StartsWith(YouHaveEntered) && (msgSplit.Last().Contains("(Inst") || msgSplit.Last().Contains("(Alt")))
+			if (msgSplit.Length > 1 && message.StartsWith(YouHaveEntered) && (msgSplit.Last().Contains("(Inst") || msgSplit.Last().Contains("(Alt")))
 			{
 				ret.IsInstance = true;
 			}
