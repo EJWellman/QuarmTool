@@ -117,7 +117,7 @@ namespace EQTool.Services.Spells.Log
                     Spell = foundspell,
                     TargetName = targetname,
                     MultipleMatchesFound = multiplematches,
-					IsGuess = true
+					IsGuess = multiplematches
                 };
             }
 

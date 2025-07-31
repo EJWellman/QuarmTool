@@ -80,12 +80,12 @@ namespace EQTool.Services
             " II",
             " III",
             " IV",
-           " V",
-           " VI",
-           " VII",
-           " VIII",
-           " IX",
-           " X",
+			" V",
+			" VI",
+			" VII",
+			" VIII",
+			" IX",
+			" X",
             " X",
             " XI",
             " XII",
@@ -348,7 +348,7 @@ namespace EQTool.Services
             {
                 var splits = line.Split('^');
                 var classes = new Dictionary<PlayerClasses, int>();
-                for (var i = 104 - offset; i < 104 - offset + (int)PlayerClasses.Enchanter + 1; i++)
+                for (var i = 104 - offset; i < 104 - offset + (int)PlayerClasses.Beastlord + 1; i++)
                 {
                     if (int.TryParse(splits[i], out var l))
                     {

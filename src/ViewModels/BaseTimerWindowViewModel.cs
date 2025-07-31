@@ -257,28 +257,9 @@ namespace EQTool.ViewModels
 				var groupedspells = SpellList.GroupBy(a => a.TargetName).ToList();
 				foreach (var spells in groupedspells)
 				{
-					var allspellshidden = true;
 					foreach (var spell in spells)
 					{
-						if (spell.ColumnVisibility != System.Windows.Visibility.Collapsed)
-						{
-							allspellshidden = false;
-						}
-					}
-
-					if (allspellshidden)
-					{
-						foreach (var spell in spells)
-						{
-							spell.HeaderVisibility = System.Windows.Visibility.Collapsed;
-						}
-					}
-					else
-					{
-						foreach (var spell in spells)
-						{
-							spell.HeaderVisibility = System.Windows.Visibility.Visible;
-						}
+						spell.HeaderVisibility = System.Windows.Visibility.Visible;
 					}
 				}
 

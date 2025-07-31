@@ -8,7 +8,7 @@
     <ProjectGuid>{10E99313-7361-4503-A314-14BC052A6CAC}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <RootNamespace>EQTool</RootNamespace>
-    <AssemblyName>EQTool</AssemblyName>
+    <AssemblyName>QuarmTool</AssemblyName>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -181,8 +181,8 @@
     <AssemblyName>QuarmTool</AssemblyName>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Autofac, Version=7.1.0.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
-      <HintPath>..\packages\Autofac.7.1.0\lib\netstandard2.0\Autofac.dll</HintPath>
+    <Reference Include="Autofac, Version=8.3.0.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
+      <HintPath>..\packages\Autofac.8.3.0\lib\netstandard2.0\Autofac.dll</HintPath>
     </Reference>
     <Reference Include="Dapper, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Dapper.2.1.35\lib\net461\Dapper.dll</HintPath>
@@ -222,6 +222,9 @@
     </Reference>
     <Reference Include="Microsoft.Bcl.TimeProvider, Version=8.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Bcl.TimeProvider.8.0.0\lib\net462\Microsoft.Bcl.TimeProvider.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Extensions.Configuration.Abstractions, Version=8.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Extensions.Configuration.Abstractions.8.0.0\lib\net462\Microsoft.Extensions.Configuration.Abstractions.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Extensions.DependencyInjection, Version=8.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Extensions.DependencyInjection.8.0.0\lib\net462\Microsoft.Extensions.DependencyInjection.dll</HintPath>
@@ -274,8 +277,8 @@
       <HintPath>..\packages\System.Data.SQLite.Linq.1.0.118.0\lib\net46\System.Data.SQLite.Linq.dll</HintPath>
     </Reference>
     <Reference Include="System.Deployment" />
-    <Reference Include="System.Diagnostics.DiagnosticSource, Version=8.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Diagnostics.DiagnosticSource.8.0.0\lib\net462\System.Diagnostics.DiagnosticSource.dll</HintPath>
+    <Reference Include="System.Diagnostics.DiagnosticSource, Version=8.0.0.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Diagnostics.DiagnosticSource.8.0.1\lib\net462\System.Diagnostics.DiagnosticSource.dll</HintPath>
     </Reference>
     <Reference Include="System.Drawing" />
     <Reference Include="System.Drawing.Common, Version=8.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
@@ -345,8 +348,8 @@
     <Reference Include="System.Text.Encodings.Web, Version=8.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Text.Encodings.Web.8.0.0\lib\net462\System.Text.Encodings.Web.dll</HintPath>
     </Reference>
-    <Reference Include="System.Text.Json, Version=8.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Text.Json.8.0.0\lib\net462\System.Text.Json.dll</HintPath>
+    <Reference Include="System.Text.Json, Version=8.0.0.5, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Text.Json.8.0.5\lib\net462\System.Text.Json.dll</HintPath>
     </Reference>
     <Reference Include="System.Threading.Channels, Version=8.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Threading.Channels.8.0.0\lib\net462\System.Threading.Channels.dll</HintPath>
@@ -1177,6 +1180,127 @@
       <Name>EQToolShared</Name>
       <Private>True</Private>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="map_files\scarlet.txt" />
+    <EmbeddedResource Include="map_files\scarlet_1.txt" />
+    <EmbeddedResource Include="map_files\shadeweaver.txt" />
+    <EmbeddedResource Include="map_files\shadeweaver_1.txt" />
+    <EmbeddedResource Include="map_files\shadowhaven.txt" />
+    <EmbeddedResource Include="map_files\shadowhaven_1.txt" />
+    <EmbeddedResource Include="map_files\sharvahl.txt" />
+    <EmbeddedResource Include="map_files\sharvahl_1.txt" />
+    <EmbeddedResource Include="map_files\solrotower.txt" />
+    <EmbeddedResource Include="map_files\solrotower_1.txt" />
+    <EmbeddedResource Include="map_files\sseru.txt" />
+    <EmbeddedResource Include="map_files\sseru_1.txt" />
+    <EmbeddedResource Include="map_files\ssratemple.txt" />
+    <EmbeddedResource Include="map_files\ssratemple_1.txt" />
+    <EmbeddedResource Include="map_files\tenebrous.txt" />
+    <EmbeddedResource Include="map_files\tenebrous_1.txt" />
+    <EmbeddedResource Include="map_files\thedeep.txt" />
+    <EmbeddedResource Include="map_files\thedeep_1.txt" />
+    <EmbeddedResource Include="map_files\thegrey.txt" />
+    <EmbeddedResource Include="map_files\thegrey_1.txt" />
+    <EmbeddedResource Include="map_files\twilight.txt" />
+    <EmbeddedResource Include="map_files\twilight_1.txt" />
+    <EmbeddedResource Include="map_files\umbral.txt" />
+    <EmbeddedResource Include="map_files\umbral_1.txt" />
+    <EmbeddedResource Include="map_files\veksar.txt" />
+    <EmbeddedResource Include="map_files\veksar_1.txt" />
+    <EmbeddedResource Include="map_files\vexthal.txt" />
+    <EmbeddedResource Include="map_files\vexthal_1.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="map_files\poair.txt" />
+    <EmbeddedResource Include="map_files\poair_1.txt" />
+    <EmbeddedResource Include="map_files\podisease.txt" />
+    <EmbeddedResource Include="map_files\podisease_1.txt" />
+    <EmbeddedResource Include="map_files\poeartha.txt" />
+    <EmbeddedResource Include="map_files\poeartha_1.txt" />
+    <EmbeddedResource Include="map_files\poearthb.txt" />
+    <EmbeddedResource Include="map_files\poearthb_1.txt" />
+    <EmbeddedResource Include="map_files\pofire.txt" />
+    <EmbeddedResource Include="map_files\pofire_1.txt" />
+    <EmbeddedResource Include="map_files\poinnovation.txt" />
+    <EmbeddedResource Include="map_files\poinnovation_1.txt" />
+    <EmbeddedResource Include="map_files\pojustice.txt" />
+    <EmbeddedResource Include="map_files\pojustice_1.txt" />
+    <EmbeddedResource Include="map_files\poknowledge.txt" />
+    <EmbeddedResource Include="map_files\poknowledge_1.txt" />
+    <EmbeddedResource Include="map_files\ponightmare.txt" />
+    <EmbeddedResource Include="map_files\ponightmare_1.txt" />
+    <EmbeddedResource Include="map_files\postorms.txt" />
+    <EmbeddedResource Include="map_files\postorms_1.txt" />
+    <EmbeddedResource Include="map_files\potactics.txt" />
+    <EmbeddedResource Include="map_files\potactics_1.txt" />
+    <EmbeddedResource Include="map_files\potimea.txt" />
+    <EmbeddedResource Include="map_files\potimea_1.txt" />
+    <EmbeddedResource Include="map_files\potimeb.txt" />
+    <EmbeddedResource Include="map_files\potimeb_1.txt" />
+    <EmbeddedResource Include="map_files\potorment.txt" />
+    <EmbeddedResource Include="map_files\potorment_1.txt" />
+    <EmbeddedResource Include="map_files\potranquility.txt" />
+    <EmbeddedResource Include="map_files\potranquility_1.txt" />
+    <EmbeddedResource Include="map_files\povalor.txt" />
+    <EmbeddedResource Include="map_files\povalor_1.txt" />
+    <EmbeddedResource Include="map_files\powar.txt" />
+    <EmbeddedResource Include="map_files\powar_1.txt" />
+    <EmbeddedResource Include="map_files\powater.txt" />
+    <EmbeddedResource Include="map_files\powater_1.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="map_files\acrylia.txt" />
+    <EmbeddedResource Include="map_files\acrylia_1.txt" />
+    <EmbeddedResource Include="map_files\akheva.txt" />
+    <EmbeddedResource Include="map_files\akheva_1.txt" />
+    <EmbeddedResource Include="map_files\bazaar.txt" />
+    <EmbeddedResource Include="map_files\bothunder.txt" />
+    <EmbeddedResource Include="map_files\bothunder_1.txt" />
+    <EmbeddedResource Include="map_files\commons_1.txt" />
+    <EmbeddedResource Include="map_files\cshome.txt" />
+    <EmbeddedResource Include="map_files\cshome_1.txt" />
+    <EmbeddedResource Include="map_files\dawnshroud.txt" />
+    <EmbeddedResource Include="map_files\dawnshroud_1.txt" />
+    <EmbeddedResource Include="map_files\echo.txt" />
+    <EmbeddedResource Include="map_files\echo_1.txt" />
+    <EmbeddedResource Include="map_files\fungusgrove.txt" />
+    <EmbeddedResource Include="map_files\fungusgrove_1.txt" />
+    <EmbeddedResource Include="map_files\griegsend.txt" />
+    <EmbeddedResource Include="map_files\griegsend_1.txt" />
+    <EmbeddedResource Include="map_files\grimling.txt" />
+    <EmbeddedResource Include="map_files\grimling_1.txt" />
+    <EmbeddedResource Include="map_files\gunthak.txt" />
+    <EmbeddedResource Include="map_files\gunthak_1.txt" />
+    <EmbeddedResource Include="map_files\highpass_1.txt" />
+    <EmbeddedResource Include="map_files\hohonora.txt" />
+    <EmbeddedResource Include="map_files\hohonora_1.txt" />
+    <EmbeddedResource Include="map_files\hohonorb.txt" />
+    <EmbeddedResource Include="map_files\hohonorb_1.txt" />
+    <EmbeddedResource Include="map_files\hollowshade.txt" />
+    <EmbeddedResource Include="map_files\hollowshade_1.txt" />
+    <EmbeddedResource Include="map_files\innothule_1.txt" />
+    <EmbeddedResource Include="map_files\jaggedpine.txt" />
+    <EmbeddedResource Include="map_files\jaggedpine_1.txt" />
+    <EmbeddedResource Include="map_files\katta.txt" />
+    <EmbeddedResource Include="map_files\katta_1.txt" />
+    <EmbeddedResource Include="map_files\kerraridge_1.txt" />
+    <EmbeddedResource Include="map_files\lavastorm.txt" />
+    <EmbeddedResource Include="map_files\letalis.txt" />
+    <EmbeddedResource Include="map_files\letalis_1.txt" />
+    <EmbeddedResource Include="map_files\maiden.txt" />
+    <EmbeddedResource Include="map_files\maiden_1.txt" />
+    <EmbeddedResource Include="map_files\mseru.txt" />
+    <EmbeddedResource Include="map_files\mseru_1.txt" />
+    <EmbeddedResource Include="map_files\netherbian.txt" />
+    <EmbeddedResource Include="map_files\netherbian_1.txt" />
+    <EmbeddedResource Include="map_files\nexus.txt" />
+    <EmbeddedResource Include="map_files\nexus_1.txt" />
+    <EmbeddedResource Include="map_files\nightmareb.txt" />
+    <EmbeddedResource Include="map_files\nightmareb_1.txt" />
+    <EmbeddedResource Include="map_files\oot_1.txt" />
+    <EmbeddedResource Include="map_files\paludal.txt" />
+    <EmbeddedResource Include="map_files\paludal_1.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="AfterResolveReferences">
