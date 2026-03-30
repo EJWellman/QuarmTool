@@ -1338,6 +1338,18 @@ namespace EQTool
 			e.Handled = regex.IsMatch(e.Text);
         }
 
+		private void DecimalValue_PreviewTextInput(object sender, System.Windows.Input.TextCompositionEventArgs e)
+		{
+			var textBox = sender as System.Windows.Controls.TextBox;
+			if (e.Text == "." && !textBox.Text.Contains("."))
+			{
+				e.Handled = false;
+				return;
+			}
+			Regex regex = new Regex("[^0-9]+");
+			e.Handled = regex.IsMatch(e.Text);
+		}
+
 		private void NumberValue_FieldChanged(object sender, TextChangedEventArgs e)
 		{
 			if(sender == RespawnMultiplier_Value && double.TryParse(RespawnMultiplier_Value.Text, out double spawnMulti))
